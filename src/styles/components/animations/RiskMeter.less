@@ -1,0 +1,52 @@
+@import '../../variables.less';
+
+.risk-meter {
+  margin-bottom: 16px;
+  
+  &-title {
+    font-size: 16px;
+    margin: 0 0 8px 0;
+    color: @text-dark;
+    font-weight: 600;
+  }
+  
+  &-bar {
+    position: relative;
+    height: 24px;
+    background-color: @light-gray;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  &-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #FFC107 0%, #FF5722 60%, #F44336 100%);
+    border-radius: 12px;
+    transition: width 1s ease-in-out;
+  }
+  
+  &-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  &-info {
+    font-size: 14px;
+    margin-top: 8px;
+    color: @text-muted;
+  }
+} 

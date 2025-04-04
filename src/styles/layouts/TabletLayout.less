@@ -1,0 +1,188 @@
+@import '../base/variables.less';
+
+// Main tablet container
+.tablet-container {
+  position: relative;
+  width: 375px;
+  max-width: 90vw;
+  height: 700px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  border-radius: 36px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+// Tablet frame
+.tablet-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  border: 10px solid #333;
+  border-radius: 36px;
+  overflow: hidden;
+}
+
+// Tablet screen
+.tablet-screen {
+  position: relative;
+  width: 95%;
+  height: 97%;
+  margin: 0 auto;
+  background-color: @light-text;
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 0.5625; /* 9:16 aspect ratio */
+  display: flex;
+  flex-direction: column;
+}
+
+// Tablet notch
+.tablet-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 20px;
+  background-color: #333;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  z-index: @z-index-above;
+}
+
+// Status bar
+.tablet-status-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: @spacing-xs @spacing-md;
+  background-color: @light-text;
+  border-bottom: 1px solid @light-gray;
+  font-size: @font-xs;
+  color: @gray-text;
+  
+  .left-icons, .right-icons {
+    display: flex;
+    align-items: center;
+    gap: @spacing-xs;
+  }
+  
+  .time {
+    font-weight: 600;
+  }
+}
+
+// App header
+.tablet-app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: @spacing-md;
+  background-color: @light-text;
+  border-bottom: 1px solid @light-gray;
+  
+  .app-title {
+    font-size: @font-lg;
+    font-weight: 600;
+    color: @dark-text;
+  }
+  
+  .app-controls {
+    display: flex;
+    align-items: center;
+    gap: @spacing-md;
+  }
+  
+  .user-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: @primary-blue;
+    color: @light-text;
+    font-weight: 500;
+  }
+}
+
+// App content
+.tablet-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+// Metrics row
+.metrics-row {
+  display: flex;
+  justify-content: space-between;
+  padding: @spacing-md;
+  background-color: rgba(240, 240, 240, 0.5);
+  
+  .metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .metric-value {
+      font-size: @font-xl;
+      font-weight: 600;
+      color: @dark-text;
+    }
+    
+    .metric-label {
+      font-size: @font-xs;
+      color: @gray-text;
+      margin-top: @spacing-xs;
+    }
+    
+    &.alert {
+      color: #E63946;
+      
+      .metric-value {
+        color: #E63946;
+      }
+    }
+  }
+}
+
+// Bottom navigation
+.tablet-bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  padding: @spacing-sm 0;
+  background-color: @light-text;
+  border-top: 1px solid @light-gray;
+  
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: @spacing-xs;
+    cursor: pointer;
+    
+    .nav-icon {
+      height: 24px;
+      width: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: @spacing-xs;
+    }
+    
+    .nav-label {
+      font-size: @font-xs;
+      color: @gray-text;
+    }
+    
+    &.active {
+      color: @vayyar-blue;
+      
+      .nav-label {
+        color: @vayyar-blue;
+      }
+    }
+  }
+} 

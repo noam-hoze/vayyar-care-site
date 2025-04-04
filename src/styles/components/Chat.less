@@ -1,0 +1,198 @@
+@import '../base/variables.less';
+
+// Chat container
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  padding: @spacing-md;
+  overflow-y: auto;
+  height: 100%;
+}
+
+// Message bubbles
+.message-bubble {
+  max-width: 70%;
+  padding: @spacing-sm @spacing-md;
+  margin-bottom: @spacing-sm;
+  position: relative;
+  box-shadow: @shadow-sm;
+  
+  // Timestamp
+  .timestamp {
+    font-size: @font-xs;
+    margin-top: @spacing-xs;
+    text-align: right;
+  }
+}
+
+// User message (right-aligned)
+.user-message-bubble {
+  .message-bubble();
+  align-self: flex-end;
+  background-color: @vayyar-blue;
+  border-radius: @border-radius-lg 0 @border-radius-lg @border-radius-lg;
+  color: @light-text;
+  animation: slideInFromRight 0.3s ease forwards;
+  
+  .timestamp {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+// Bot message (left-aligned)
+.bot-message-bubble {
+  .message-bubble();
+  align-self: flex-start;
+  background-color: @light-text;
+  border-radius: 0 @border-radius-lg @border-radius-lg @border-radius-lg;
+  color: @dark-text;
+  animation: fadeIn 0.3s ease forwards;
+  
+  .timestamp {
+    color: @gray-text;
+  }
+}
+
+// Typing indicator container
+.typing-indicator-container {
+  align-self: flex-start;
+  background-color: @light-text;
+  border-radius: 0 @border-radius-lg @border-radius-lg @border-radius-lg;
+  padding: @spacing-sm @spacing-md;
+  margin-bottom: @spacing-sm;
+  box-shadow: @shadow-sm;
+  display: flex;
+  align-items: center;
+  max-width: 70%;
+}
+
+// Animated typing dots
+.typing-dots {
+  display: flex;
+  align-items: center;
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    background-color: @gray-text;
+    border-radius: 50%;
+    margin: 0 2px;
+    display: inline-block;
+    
+    &:nth-child(1) {
+      animation: pulseDot 1.4s infinite;
+    }
+    
+    &:nth-child(2) {
+      animation: pulseDot 1.4s infinite 0.2s;
+    }
+    
+    &:nth-child(3) {
+      animation: pulseDot 1.4s infinite 0.4s;
+    }
+  }
+}
+
+// Chat input area
+.chat-input-container {
+  display: flex;
+  padding: @spacing-sm;
+  background-color: @light-text;
+  border-top: 1px solid @light-gray;
+  align-items: center;
+  
+  .input-field {
+    flex: 1;
+    border: 1px solid @light-gray;
+    border-radius: @border-radius-lg;
+    padding: @spacing-sm @spacing-md;
+    font-size: @font-sm;
+    margin-right: @spacing-sm;
+    
+    &:focus {
+      outline: none;
+      border-color: @primary-blue;
+    }
+  }
+  
+  .send-button {
+    background-color: @vayyar-blue;
+    color: @light-text;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: darken(@vayyar-blue, 10%);
+    }
+  }
+}
+
+// Summary section
+.summary-section {
+  margin-top: @spacing-md;
+  
+  .summary-title {
+    margin: @spacing-lg 0 @spacing-sm;
+    font-weight: bold;
+    font-size: @font-md;
+  }
+  
+  .summary-card {
+    background-color: @light-text;
+    border-radius: @border-radius-md;
+    box-shadow: @shadow-md;
+    padding: @spacing-md;
+    margin: @spacing-sm 0;
+  }
+  
+  .summary-item {
+    padding: @spacing-sm 0;
+    border-bottom: 1px solid @light-gray;
+    font-size: @font-sm;
+    position: relative;
+    padding-left: @spacing-lg;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .bullet {
+      position: absolute;
+      left: 0;
+      top: 10px;
+    }
+  }
+}
+
+// Action button
+.action-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: @spacing-md;
+  margin-bottom: @spacing-md;
+  
+  .action-button {
+    background-color: @vayyar-blue;
+    color: @light-text;
+    border: none;
+    border-radius: @border-radius-md;
+    padding: @spacing-sm @spacing-lg;
+    font-size: @font-sm;
+    font-weight: bold;
+    cursor: pointer;
+    
+    &.pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    &:hover {
+      background-color: darken(@vayyar-blue, 10%);
+    }
+  }
+} 
