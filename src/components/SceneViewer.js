@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import SceneInstructions from './SceneInstructions';
 import AnimatedTablet from './animations/AnimatedTablet';
 import AnimatedTabletScene1_5 from './animations/AnimatedTabletScene1_5';
@@ -16,10 +16,45 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
   // Calculate sub-scroll progress for animations
   const [animationProgress, setAnimationProgress] = useState(0);
   
+  // State to track if callout should be visible
+  const [showCallout, setShowCallout] = useState(false);
+  
+  // Track previous scene index to detect changes
+  const prevIndexRef = useRef(index);
+  
+  // State to control scene card animation
+  const [animateCard, setAnimateCard] = useState(true);
+  
+  // Reset animations when scene changes
+  useEffect(() => {
+    if (prevIndexRef.current !== index) {
+      // Scene has changed
+      setAnimateCard(false); // Remove animation classes
+      setShowCallout(false); // Hide callout when scene changes
+      
+      // Reset them after a brief delay to trigger re-animation
+      setTimeout(() => {
+        setAnimateCard(true);
+      }, 50);
+      
+      prevIndexRef.current = index;
+    }
+  }, [index]);
+  
   // Use the passed subScrollProgress or calculate it if not provided
   useEffect(() => {
     setAnimationProgress(Math.min(100, Math.max(0, subScrollProgress * 100)));
-  }, [subScrollProgress]);
+    
+    // Get the callout display percentage from the scene
+    const calloutDisplayPercentage = parseFloat(scene.calloutDisplayPercentage || 80);
+    
+    // Show callout when we reach that percentage
+    if (animationProgress >= calloutDisplayPercentage) {
+      setShowCallout(true);
+    } else {
+      setShowCallout(false);
+    }
+  }, [subScrollProgress, scene, animationProgress]);
   
   // Define tablet components map
   const tabletComponentsMap = useMemo(() => ({
@@ -49,7 +84,12 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
   return (
     <div className="scene-container" style={{ color: scene.color || '#000' }}>
       {/* Debug info */}
-      
+      <DebugOverlay 
+        scrollProgress={subScrollProgress}
+        animationProgress={animationProgress}
+        scene={scene}
+        sceneIndex={index}
+      />
 
       {/* Scene content */}
       <div className="scene-content">
@@ -67,18 +107,23 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
           
           {/* Right column - Scene description and marketing callout */}
           <div className="scene-content-column">
-            {/* Scene description container */}
-            <div className="scene-description-container">
+            {/* Scene description container with animation reset on scene change */}
+            <div className={`scene-description-container ${animateCard ? 'animate-in' : 'reset-animation'}`}>
               <p className="scene-description-text">
                 {scene.description}
               </p>
             </div>
             
-            {/* Marketing callout - moved outside the container */}
-            <div className="scene-callout">
-              <h3>{scene.subtitle}</h3>
-              <div className="scene-callout-underline"></div>
-            </div>
+            {/* Only render the callout wrapper when there is a subtitle */}
+            {scene.subtitle && scene.subtitle.trim() !== "" && (
+              <div className="scene-callout-wrapper">
+                {/* Marketing callout - only shown when showCallout is true */}
+                <div className={`scene-callout ${showCallout ? 'visible' : 'hidden'} ${animateCard ? 'animate-in' : 'reset-animation'}`}>
+                  <h3>{scene.subtitle}</h3>
+                  <div className="scene-callout-underline"></div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         

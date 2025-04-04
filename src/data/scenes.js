@@ -4,8 +4,9 @@ export const scenes = [
     description: "Nurse Alice just got to her morning shift. Upon entering her desk she picks her phone and starts talking with VayyarCare.",
     cameraDirection: "Push in from entrance to nurse station. Tablet floats mid-frame.",
     sceneEmotion: "Prepared, clear-headed",
-    subtitle: "Start your shift already knowing who needs you most.",
+    subtitle: "Start your shift already knowing who needs you most!",
     backgroundImage: "/images/scenes/1.png",
+    calloutDisplayPercentage: "80",
     content: [
       
     ]
@@ -15,7 +16,7 @@ export const scenes = [
     description: "Alice reviews the priority watchlist of residents requiring attention.",
     cameraDirection: "Steady view of nurse at station reviewing the watchlist.",
     sceneEmotion: "Focused, organized, ready",
-    subtitle: "Know the moment someone gets up, falls, or needs help — without being in the room",
+    subtitle: "",
     backgroundImage: "/images/scenes/1.png",
     content: [
      
@@ -23,11 +24,12 @@ export const scenes = [
   },
   {
     title: "",
-    description: "The camera follows the nurse down a hallway. Alert appears. She redirects just in time. Movement is smooth but slightly faster.",
+    description: "Alice immediatley sees Ray is trying to get up in his room and heads over to assit him.",
     cameraDirection: "Tracking shot behind the nurse, then pan into a resident room.",
     sceneEmotion: "Reactive support, calm urgency",
-    subtitle: "You don’t need to track movement — VayyarCare already did.",
+    subtitle: "<Add killer callout>",
     backgroundImage: "/images/scenes/2.png",
+    calloutDisplayPercentage: "80",
     content: [
      
     ]
@@ -39,6 +41,7 @@ export const scenes = [
     sceneEmotion: "Subtle awareness, intelligent observation",
     subtitle: "Log a full shift’s worth of movement with two taps.",
     backgroundImage: "/images/scenes/3.png",
+    calloutDisplayPercentage: "80",
     content: [
     
     ]
@@ -50,6 +53,7 @@ export const scenes = [
     sceneEmotion: "Discreet surveillance, confidence",
     subtitle: "Know when something’s wrong — before it becomes a problem.",
     backgroundImage: "/images/scenes/4.png",
+    calloutDisplayPercentage: "80",
     content: [
      
     ]
@@ -61,6 +65,7 @@ export const scenes = [
     sceneEmotion: "Relief, efficiency, clarity",
     subtitle: "Even when it’s quiet, you’ll know everything.",
     backgroundImage: "/images/scenes/5.png",
+    calloutDisplayPercentage: "80",
     content: [
      
     ]
@@ -72,6 +77,7 @@ export const scenes = [
     sceneEmotion: "Team trust, collaboration, proactive mindset",
     subtitle: "One tap, and your whole shift is passed on.",
     backgroundImage: "/images/scenes/6.png",
+    calloutDisplayPercentage: "80",
     content: [
      
     ]
@@ -83,6 +89,7 @@ export const scenes = [
     sceneEmotion: "Completion, confidence, trust",
     subtitle: "",
     backgroundImage: "/images/scenes/7.png",
+    calloutDisplayPercentage: "80",
     content: [
     
     ]
@@ -95,6 +102,7 @@ export const scenes = [
     subtitle: "",
     backgroundImage: "/images/scenes/8.png",
     color: "#ffffff",
+    calloutDisplayPercentage: "80",
     content: [
       
     ]
@@ -106,6 +114,7 @@ export const scenes = [
     sceneEmotion: "Continuity, stability, calm readiness",
     subtitle: "",
     backgroundImage: "/images/scenes/9.png",
+    calloutDisplayPercentage: "80",
     content: [
       "All overnight data summarized",
       "Watchlist auto-prioritized",
