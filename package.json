@@ -21,7 +21,9 @@
     "eject": "react-scripts eject",
     "compile-less": "lessc src/styles/main.less src/styles/main.css",
     "watch-less": "less-watch-compiler src/styles src/styles main.less",
-    "dev": "concurrently \"pnpm watch-less\" \"pnpm start\""
+    "dev": "concurrently \"pnpm watch-less\" \"pnpm start\"",
+    "deploy": "pnpm build && firebase deploy",
+    "deploy:preview": "pnpm build && firebase hosting:channel:deploy preview"
   },
   "eslintConfig": {
     "extends": [
