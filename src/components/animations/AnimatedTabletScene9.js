@@ -115,7 +115,7 @@ const AnimatedTabletScene9 = ({ scrollProgress = 0, scene }) => {
             },
             { 
               room: "306", 
-              name: "Sarah M.", 
+              name: "Alice M.", 
               status: "Stable", 
               statusColor: "#3498db",
               lastIncident: "One bathroom visit at 2:15 AM",

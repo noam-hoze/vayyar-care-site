@@ -32,7 +32,7 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
     },
     {
       title: "Mobility Analysis",
-      patient: "Sarah M. (Room 306)",
+      patient: "Alice M. (Room 306)",
       summary: "Gait decline of approximately 60% over past week. Speed reduced from 0.7m/s to 0.4m/s.",
       recommendation: "Schedule physical therapy evaluation and review medication side effects."
     },

@@ -1,7 +1,7 @@
 export const scenes = [
   {
     title: "",
-    description: "The nurse logs in to the system. Tablet screen shows overnight alerts and a prioritized watchlist. Calm lighting, slow camera dolly forward.",
+    description: "Nurse Alice just got to her morning shift. Upon entering her desk she picks her phone and starts talking with VayyarCare.",
     cameraDirection: "Push in from entrance to nurse station. Tablet floats mid-frame.",
     sceneEmotion: "Prepared, clear-headed",
     subtitle: "Start your shift already knowing who needs you most.",
@@ -12,7 +12,7 @@ export const scenes = [
   },
   {
     title: "",
-    description: "The nurse reviews the priority watchlist of residents requiring attention. The watchlist is organized by priority level.",
+    description: "Alice reviews the priority watchlist of residents requiring attention.",
     cameraDirection: "Steady view of nurse at station reviewing the watchlist.",
     sceneEmotion: "Focused, organized, ready",
     subtitle: "Know the moment someone gets up, falls, or needs help — without being in the room",

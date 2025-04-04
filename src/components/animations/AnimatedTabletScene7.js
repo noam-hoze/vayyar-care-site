@@ -93,7 +93,7 @@ const AnimatedTabletScene7 = ({ scrollProgress = 0, scene }) => {
             },
             {
               room: "306",
-              name: "Sarah M.",
+              name: "Alice M.",
               type: "Mobility",
               time: "10:25 AM",
               summary: "Gait speed decline noted. PT evaluation scheduled for tomorrow."
@@ -218,7 +218,7 @@ const AnimatedTabletScene7 = ({ scrollProgress = 0, scene }) => {
         }}>
           <div>
             <div style={{ fontSize: '14px', color: '#2c3e50', fontWeight: 'bold' }}>
-              Sarah N.
+              Alice N.
             </div>
             <div style={{ fontSize: '12px', color: '#7f8c8d' }}>
               Day Shift Lead

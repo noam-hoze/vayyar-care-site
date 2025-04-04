@@ -138,7 +138,7 @@ const StartShift = ({ data, onViewWatchlist }) => {
         {/* Greeting Message */}
         <div style={styles.messageBox}>
           <div style={styles.greeting}>
-            Good morning, Sarah. Here's your shift summary.
+            Good morning, Alice. Here's your shift summary.
           </div>
         </div>
 

@@ -72,12 +72,12 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
               <p className="scene-description-text">
                 {scene.description}
               </p>
-              
-              {/* Marketing callout */}
-              <div className="scene-callout">
-                <h3>{scene.subtitle}</h3>
-                <div className="scene-callout-underline"></div>
-              </div>
+            </div>
+            
+            {/* Marketing callout - moved outside the container */}
+            <div className="scene-callout">
+              <h3>{scene.subtitle}</h3>
+              <div className="scene-callout-underline"></div>
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ const AnimatedTablet = ({ scrollProgress = 0, scene }) => {
   // Animation state based on scroll position
   const [animationState, setAnimationState] = useState({
     showEmptyTablet: false,
-    showTypingInInput: false,  // Sarah typing in the input field
+    showTypingInInput: false,  // Alice typing in the input field
     showUserMessage: false,    // User message bubble appears
     showBotTypingIndicator: false,
     showBotGreeting: false,
@@ -28,7 +28,7 @@ const AnimatedTablet = ({ scrollProgress = 0, scene }) => {
 
   // Mock data
   const userMessage = "Show me yesterday's summary";
-  const botGreeting = "Good morning, Sarah. Here's your shift summary.";
+  const botGreeting = "Good morning Alice! Here's your shift summary.";
   const summaryItems = scene.content || [];
 
   // Update animation state based on scroll progress

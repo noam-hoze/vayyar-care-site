@@ -210,7 +210,7 @@ const AnimatedTabletScene8 = ({ scrollProgress = 0, scene }) => {
               {/* Sleep quality visualization - horizontal bars */}
               {[
                 { room: "208", quality: 85, name: "John D." },
-                { room: "306", quality: 72, name: "Sarah M." },
+                { room: "306", quality: 72, name: "Alice M." },
                 { room: "115", quality: 90, name: "Robert J." },
                 { room: "410", quality: 60, name: "Emily L." }
               ].map((resident, index) => (
@@ -362,7 +362,7 @@ const AnimatedTabletScene8 = ({ scrollProgress = 0, scene }) => {
                 fontSize: '14px',
                 marginBottom: '15px'
               }}>
-                Sarah showing signs of restlessness for past 35 minutes.
+                Alice showing signs of restlessness for past 35 minutes.
               </div>
               <div style={{
                 display: 'flex',
