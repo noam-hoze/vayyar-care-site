@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SceneInstructions from './SceneInstructions';
 import AnimatedTablet from './animations/AnimatedTablet';
 import AnimatedTabletScene1_5 from './animations/AnimatedTabletScene1_5';
@@ -11,6 +13,10 @@ import AnimatedTabletScene7 from './animations/AnimatedTabletScene7';
 import AnimatedTabletScene8 from './animations/AnimatedTabletScene8';
 import AnimatedTabletScene9 from './animations/AnimatedTabletScene9';
 import DebugOverlay from './DebugOverlay';
+import { videoConfig } from '../config/videoConfig';
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger);
 
 const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
   // Calculate sub-scroll progress for animations
@@ -25,14 +31,57 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
   // State to control scene card animation
   const [animateCard, setAnimateCard] = useState(true);
   
+  // Video reference
+  const videoRef = useRef(null);
+  
+  // Set up video scroll control
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Create GSAP timeline for video scrubbing
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".scenes-container",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: videoConfig.scrubSmoothness
+      }
+    });
+
+    // Set up video time control
+    const setupVideoControl = () => {
+      tl.fromTo(
+        video,
+        {
+          currentTime: 0
+        },
+        {
+          currentTime: video.duration || 1,
+          ease: "none"
+        }
+      );
+    };
+
+    // Wait for video metadata to load before setting up the timeline
+    if (video.readyState >= 2) {
+      setupVideoControl();
+    } else {
+      video.addEventListener('loadedmetadata', setupVideoControl);
+    }
+
+    return () => {
+      video.removeEventListener('loadedmetadata', setupVideoControl);
+      tl.kill();
+    };
+  }, []);
+  
   // Reset animations when scene changes
   useEffect(() => {
     if (prevIndexRef.current !== index) {
-      // Scene has changed
-      setAnimateCard(false); // Remove animation classes
-      setShowCallout(false); // Hide callout when scene changes
+      setAnimateCard(false);
+      setShowCallout(false);
       
-      // Reset them after a brief delay to trigger re-animation
       setTimeout(() => {
         setAnimateCard(true);
       }, 50);
@@ -41,14 +90,12 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     }
   }, [index]);
   
-  // Use the passed subScrollProgress or calculate it if not provided
+  // Handle animation progress and callout visibility
   useEffect(() => {
     setAnimationProgress(Math.min(100, Math.max(0, subScrollProgress * 100)));
     
-    // Get the callout display percentage from the scene
     const calloutDisplayPercentage = parseFloat(scene.calloutDisplayPercentage || 80);
     
-    // Show callout when we reach that percentage
     if (animationProgress >= calloutDisplayPercentage) {
       setShowCallout(true);
     } else {
@@ -83,7 +130,6 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
   
   return (
     <div className="scene-container" style={{ color: scene.color || '#000' }}>
-      {/* Debug info */}
       <DebugOverlay 
         scrollProgress={subScrollProgress}
         animationProgress={animationProgress}
@@ -91,33 +137,30 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         sceneIndex={index}
       />
 
-      {/* Scene content */}
       <div className="scene-content">
-        
-        {/* Two-column layout container */}
         <div className="scene-layout">
-          {/* Left column - Image (full size) */}
+          {/* Left column - Video */}
           <div className="scene-image-column">
-            <img 
-              src={scene.backgroundImage} 
-              alt={scene.title}
-              className="scene-image-column-image"
+            <video 
+              ref={videoRef}
+              src={videoConfig.videoSrc}
+              className="scene-video"
+              playsInline
+              preload="auto"
+              muted
             />
           </div>
           
           {/* Right column - Scene description and marketing callout */}
           <div className="scene-content-column">
-            {/* Scene description container with animation reset on scene change */}
             <div className={`scene-description-container ${animateCard ? 'animate-in' : 'reset-animation'}`}>
               <p className="scene-description-text">
                 {scene.description}
               </p>
             </div>
             
-            {/* Only render the callout wrapper when there is a subtitle */}
             {scene.subtitle && scene.subtitle.trim() !== "" && (
               <div className="scene-callout-wrapper">
-                {/* Marketing callout - only shown when showCallout is true */}
                 <div className={`scene-callout ${showCallout ? 'visible' : 'hidden'} ${animateCard ? 'animate-in' : 'reset-animation'}`}>
                   <h3>{scene.subtitle}</h3>
                   <div className="scene-callout-underline"></div>
@@ -127,7 +170,6 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
           </div>
         </div>
         
-        {/* Animated tablet in the center */}
         <div className="tablet-wrapper">
           {tabletComponent}
         </div>

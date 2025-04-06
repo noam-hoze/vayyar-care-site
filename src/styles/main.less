@@ -100,4 +100,17 @@ code {
 
 .alert-flicker {
   animation: alert-flicker 1s infinite;
+}
+
+.scene-image-column {
+  .scene-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Set the total scroll height based on config
+.scenes-container {
+  height: ~"calc(100vh * @{videoConfig.scrollMultiplier})";
 } 
