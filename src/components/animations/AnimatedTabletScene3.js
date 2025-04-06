@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TabletLayout from "./TabletLayout";
 import "./animations.css";
 
-const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
+const AnimatedTabletScene3 = ({ scrollProgress = 0, scene }) => {
     const [showReport, setShowReport] = useState(false);
     const [buttonActive, setButtonActive] = useState(false);
     const [isApproved, setIsApproved] = useState(false);
@@ -176,4 +176,4 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
     );
 };
 
-export default AnimatedTabletScene5;
+export default AnimatedTabletScene3;

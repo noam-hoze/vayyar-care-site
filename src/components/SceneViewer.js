@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTablet1 from "./animations/AnimatedTablet1";
 import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
-import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
+import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
 import AnimatedTabletScene6 from "./animations/AnimatedTabletScene6";
 import ContinuousChatScene from "./animations/ContinuousChatScene";
 import DebugOverlay from "./DebugOverlay";
@@ -107,7 +107,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         () => ({
             [SCENES.MORNING_SHIFT]: ContinuousChatScene,
             [SCENES.FALL_CHART]: AnimatedTabletScene2,
-            [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene5,
+            [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
             [SCENES.VC_CLINICAL]: AnimatedTabletScene6,
         }),
         [SCENES]
