@@ -881,4 +881,169 @@
   padding: 10px 15px;
   border-radius: 18px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* VP_FAMILY scene styles */
+.data-visualization-container {
+  margin-bottom: 15px;
+  transition: all 0.5s ease;
+}
+
+.chart-title {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 500;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.bar-chart-container {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  margin-bottom: 15px;
+  padding-top: 15px;
+}
+
+.bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bar-value {
+  font-size: 11px;
+  color: #555;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s ease;
+}
+
+.bar-label {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #666;
+}
+
+.secondary-label {
+  font-size: 10px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.chart-insights {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 8px;
+  background-color: #f8f9fa;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.insight-item {
+  flex: 1;
+  min-width: 30%;
+  margin-bottom: 3px;
+}
+
+.insight-label {
+  font-size: 11px;
+  color: #666;
+  display: block;
+}
+
+.insight-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+.insight-value.declining {
+  color: #e63946;
+}
+
+.risk-factors-container {
+  margin-bottom: 15px;
+}
+
+.risk-factor {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.risk-factor-label {
+  width: 120px;
+  font-size: 12px;
+  color: #555;
+}
+
+.risk-factor-bar-container {
+  flex: 1;
+  height: 12px;
+  background-color: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0 10px;
+}
+
+.risk-factor-bar {
+  height: 100%;
+  transition: width 0.8s ease;
+}
+
+.risk-factor-value {
+  width: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  text-align: right;
+}
+
+.overall-risk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.overall-risk-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.overall-risk-value {
+  font-size: 16px;
+}
+
+.previous-falls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.previous-falls-label {
+  font-size: 14px;
+  color: #333;
+}
+
+.previous-falls-count {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e63946;
 } 

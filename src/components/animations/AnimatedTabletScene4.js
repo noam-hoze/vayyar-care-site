@@ -6,8 +6,8 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
     // Current scene query (which is a continuation from scene 3)
     const currentQuery = "Break down for me all of this month's trends";
 
-    // No bridge query needed for the last scene
-    const nextQuery = "";
+    // Bridge query to scene 5 (VP_FAMILY)
+    const nextQuery = "Show me Ray's full diagnosis";
 
     // Sample trend data
     const trends = [
@@ -23,8 +23,7 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
     const maxGait = Math.max(...trends.map((t) => t.gait));
 
     // Check if specific components should be shown based on scroll progress
-    const showHeader = scrollProgress >= 5;
-    const showSummary = scrollProgress >= 15;
+    const showSummary = scrollProgress >= 5;
     const showTrends = scrollProgress >= 30;
     const showComparison = scrollProgress >= 50;
     const showCallout = scrollProgress >= 70;
@@ -613,8 +612,9 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
             queryStartThreshold={-50} // Negative value far below 0 to ensure it never shows typing
             queryCompleteThreshold={0} // Show query bubble immediately from the start
             responseStartThreshold={10}
-            transitionStartThreshold={999} // Set very high since there's no next scene
-            contentTransitionThreshold={999} // Set very high since there's no next scene
+            transitionStartThreshold={85} // Show next query towards the end of this scene
+            contentTransitionThreshold={95} // Transition content near the very end
+            scene={scene}
         >
             {visualResponse}
         </TabletLayout>

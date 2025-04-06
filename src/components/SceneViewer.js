@@ -5,6 +5,7 @@ import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
 import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
 import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
+import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import DebugOverlay from "./DebugOverlay";
 import { videoConfig } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
@@ -108,6 +109,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
             [SCENES.FALL_CHART]: AnimatedTabletScene2,
             [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
             [SCENES.VC_CLINICAL]: AnimatedTabletScene4,
+            [SCENES.VP_FAMILY]: AnimatedTabletScene5,
         }),
         [SCENES]
     );
