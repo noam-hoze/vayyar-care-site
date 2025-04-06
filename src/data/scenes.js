@@ -5,8 +5,6 @@ export const scenes = [
         scene: SCENES.MORNING_SHIFT,
         description:
             "Nurse Alice just got to her morning shift. Upon entering her desk she picks her phone and starts talking with VayyarCare.",
-        sceneEmotion: "Prepared, clear-headed",
-        subtitle: "Start your shift already knowing who needs you most!",
         calloutDisplayPercentage: "80",
         content: [
             "Room 302: Resident shows signs of unsteady walking",
@@ -16,29 +14,27 @@ export const scenes = [
     },
     {
         scene: SCENES.FALL_CHART,
-        description: "Alice checks the fall chart of John",
-        sceneEmotion: "Focused, organized, ready",
-        subtitle: "",
+        description: "During her morning walk, Alice checks John's fall chart.",
+        extraDescription: {
+            70: {
+                text: "Suddenly she receives a fall alert.",
+            },
+            82: {
+                text: "And she solves it!"
+            }
+        },
     },
     {
         scene: SCENES.DOCUMENT_EVENT,
-        description: "Alice asks VayyarCare to document the event.",
-        sceneEmotion: "Subtle awareness, intelligent observation",
-        subtitle: "Log a full shift's worth of movement with two taps.",
+        description: "Instead of writing a report herself, Alice askss VayyarCare document the event for her.",
         calloutDisplayPercentage: "80",
     },
     {
         scene: SCENES.VC_CLINICAL,
-        description: "Alice meets with the VC Clinical",
-        sceneEmotion: "Discreet surveillance, confidence",
-        subtitle: "Know when something's wrong — before it becomes a problem.",
-        calloutDisplayPercentage: "80",
+        description: "Alice meets with the VP Clinical to discuss the past month.",
     },
     {
         scene: SCENES.VP_FAMILY,
-        description: "VP Clinical meets with family",
-        sceneEmotion: "Discreet surveillance, confidence",
-        subtitle: "Know when something's wrong — before it becomes a problem.",
-        calloutDisplayPercentage: "80",
+        description: "The VP Clinical meets with Toni's family and explains why it is better for Toni to get extra care.",
     },
 ];

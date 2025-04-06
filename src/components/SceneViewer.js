@@ -29,6 +29,38 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     // Video reference
     const videoRef = useRef(null);
 
+    // State for extra descriptions shown based on scroll percentage
+    const [extraDescriptionText, setExtraDescriptionText] = useState("");
+
+    // Handle extra descriptions that show at specific scroll percentages
+    useEffect(() => {
+        // Check if there's an extraDescription property in the scene
+        if (scene.extraDescription) {
+            // Get the scroll percentage (0-100)
+            const scrollPercentage = Math.floor(subScrollProgress * 100);
+
+            // Find all percentages that are less than or equal to the current percentage
+            const matchingPercentages = Object.keys(scene.extraDescription)
+                .map(Number)
+                .filter((percentage) => percentage <= scrollPercentage)
+                .sort((a, b) => b - a); // Sort in descending order
+
+            // Get the highest matching percentage
+            const highestMatch = matchingPercentages[0];
+
+            // Set the extra description text if there's a match
+            if (highestMatch !== undefined) {
+                setExtraDescriptionText(
+                    scene.extraDescription[highestMatch].text
+                );
+            } else {
+                setExtraDescriptionText("");
+            }
+        } else {
+            setExtraDescriptionText("");
+        }
+    }, [scene, subScrollProgress]);
+
     // Set up video scroll control
     useEffect(() => {
         const video = videoRef.current;
@@ -160,6 +192,21 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                         >
                             <p className="scene-description-text">
                                 {scene.description}
+                                {extraDescriptionText && (
+                                    <span
+                                        className="extra-description-text"
+                                        style={{
+                                            display: "block",
+                                            marginTop: "15px",
+                                            animation:
+                                                "fadeIn 0.8s ease forwards",
+                                            opacity: 0,
+                                            animationFillMode: "forwards",
+                                        }}
+                                    >
+                                        {extraDescriptionText}
+                                    </span>
+                                )}
                             </p>
                         </div>
 

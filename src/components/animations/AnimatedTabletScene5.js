@@ -484,9 +484,10 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                         ? "translateY(0)"
                         : "translateY(20px)",
                     transition: "opacity 0.5s ease, transform 0.5s ease",
-                    marginTop: "20px",
+                    marginTop: "0",
+                    marginBottom: "0",
                     backgroundColor: "#f8f9fa",
-                    padding: "15px",
+                    padding: "15px 15px 0px 15px",
                     borderRadius: "8px",
                     border: "1px solid #e0e0e0",
                 }}
@@ -515,11 +516,13 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                         <div
                             className="risk-indicator high"
                             style={{
-                                width: "12px",
-                                height: "12px",
+                                width: "14px",
+                                height: "14px",
                                 borderRadius: "50%",
                                 backgroundColor: "#e63946",
                                 marginRight: "10px",
+                                display: "block",
+                                minWidth: "14px",
                             }}
                         ></div>
                         <div className="risk-summary-text">
@@ -552,11 +555,13 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                         <div
                             className="risk-indicator high"
                             style={{
-                                width: "12px",
-                                height: "12px",
+                                width: "14px",
+                                height: "14px",
                                 borderRadius: "50%",
                                 backgroundColor: "#e63946",
                                 marginRight: "10px",
+                                display: "block",
+                                minWidth: "14px",
                             }}
                         ></div>
                         <div className="risk-summary-text">
@@ -589,11 +594,13 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                         <div
                             className="risk-indicator medium"
                             style={{
-                                width: "12px",
-                                height: "12px",
+                                width: "14px",
+                                height: "14px",
                                 borderRadius: "50%",
                                 backgroundColor: "#f4a261",
                                 marginRight: "10px",
+                                display: "block",
+                                minWidth: "14px",
                             }}
                         ></div>
                         <div className="risk-summary-text">
@@ -610,38 +617,6 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                                 }}
                             >
                                 57% decline in steps over past 6 months
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        className="risk-summary-item"
-                        style={{ display: "flex", alignItems: "center" }}
-                    >
-                        <div
-                            className="risk-indicator high"
-                            style={{
-                                width: "12px",
-                                height: "12px",
-                                borderRadius: "50%",
-                                backgroundColor: "#e63946",
-                                marginRight: "10px",
-                            }}
-                        ></div>
-                        <div className="risk-summary-text">
-                            <div
-                                style={{ fontWeight: "500", fontSize: "14px" }}
-                            >
-                                Nighttime Activity: High Risk
-                            </div>
-                            <div
-                                style={{
-                                    fontSize: "12px",
-                                    color: "#666",
-                                    marginTop: "2px",
-                                }}
-                            >
-                                7 nighttime bathroom visits weekly
                             </div>
                         </div>
                     </div>
@@ -662,8 +637,11 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
 
     // Visual response content that will be displayed
     const visualResponse = (
-        <div className="scene-content-container" style={{ padding: "0" }}>
-            <div style={{ padding: "20px 15px 15px 15px" }}>
+        <div
+            className="scene-content-container"
+            style={{ padding: "0", height: "auto" }}
+        >
+            <div style={{ padding: "20px 15px 15px 15px", height: "auto" }}>
                 <div
                     className="resident-header"
                     style={{
@@ -701,7 +679,7 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                     </div>
                 </div>
 
-                <div style={{ margin: "0 0 60px 0" }}>
+                <div style={{ margin: "0 0 20px 0", padding: "0 0 0 0" }}>
                     {/* Show only the active report based on scroll position */}
                     {activeReport === "mobility" && renderMobilityChart()}
                     {activeReport === "sleep" && renderSleepData()}
