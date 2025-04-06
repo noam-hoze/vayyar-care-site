@@ -112,15 +112,14 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     const tabletComponentsMap = useMemo(
         () => ({
             0: ContinuousChatScene,
-            1: AnimatedTabletScene2,
+            1: AnimatedTabletScene1_5,
             2: AnimatedTabletScene2,
             3: AnimatedTabletScene3,
             4: AnimatedTabletScene4,
             5: AnimatedTabletScene5,
             6: AnimatedTabletScene6,
             7: AnimatedTabletScene7,
-            8: AnimatedTabletScene8,
-            9: AnimatedTabletScene9,
+            8: AnimatedTabletScene9,
         }),
         []
     );

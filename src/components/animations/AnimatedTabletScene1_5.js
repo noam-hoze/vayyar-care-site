@@ -7,6 +7,7 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
     const [animationState, setAnimationState] = useState({
         showQueryResponse: false,
         showNote: false,
+        focusedChart: false,
     });
 
     // Update animation state based on scroll progress
@@ -14,6 +15,7 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
         setAnimationState({
             showQueryResponse: scrollProgress >= 20,
             showNote: scrollProgress >= 60,
+            focusedChart: scrollProgress >= 30 && scrollProgress <= 70,
         });
     }, [scrollProgress]);
 
@@ -33,29 +35,50 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
         const chartHeight = 120;
         const barWidth = 28;
         const barSpacing = 8;
+        const focusScaleFactor = animationState.focusedChart ? 1.25 : 1;
 
         return (
             <div
-                className={animationState.showQueryResponse ? "visible" : ""}
+                className={`fall-chart ${
+                    animationState.showQueryResponse ? "visible" : ""
+                } ${animationState.focusedChart ? "focused" : ""}`}
                 style={{
                     marginTop: "16px",
                     position: "relative",
-                    height: `${chartHeight}px`,
-                    marginBottom: "16px",
+                    height: `${chartHeight * focusScaleFactor}px`,
+                    marginBottom: animationState.focusedChart ? "24px" : "16px",
                     opacity: animationState.showQueryResponse ? 1 : 0,
-                    transition: "opacity 0.8s ease",
+                    transition:
+                        "opacity 0.8s ease, height 0.5s ease, margin 0.5s ease, transform 0.5s ease",
+                    transform: animationState.focusedChart
+                        ? "scale(1.1)"
+                        : "scale(1)",
+                    transformOrigin: "center center",
+                    zIndex: animationState.focusedChart ? 10 : 1,
+                    boxShadow: animationState.focusedChart
+                        ? "0 4px 12px rgba(0,0,0,0.15)"
+                        : "none",
+                    borderRadius: animationState.focusedChart ? "8px" : "0",
+                    padding: animationState.focusedChart ? "12px" : "0",
+                    backgroundColor: animationState.focusedChart
+                        ? "rgba(255,255,255,0.95)"
+                        : "transparent",
                 }}
             >
                 {/* Y-axis label */}
                 <div
                     style={{
                         position: "absolute",
-                        left: "-18px",
+                        left: animationState.focusedChart ? "-24px" : "-18px",
                         top: "50%",
                         transform: "rotate(-90deg) translateX(50%)",
-                        fontSize: "10px",
+                        fontSize: animationState.focusedChart ? "12px" : "10px",
                         color: "#6C757D",
                         whiteSpace: "nowrap",
+                        fontWeight: animationState.focusedChart
+                            ? "bold"
+                            : "normal",
+                        transition: "all 0.5s ease",
                     }}
                 >
                     Falls
@@ -73,7 +96,10 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                         borderBottom: "1px solid #E0E0E0",
                         backgroundImage:
                             "linear-gradient(to bottom, #F8F9FA 1px, transparent 1px)",
-                        backgroundSize: `100% ${chartHeight / 3}px`,
+                        backgroundSize: `100% ${
+                            (chartHeight * focusScaleFactor) / 3
+                        }px`,
+                        transition: "all 0.5s ease",
                     }}
                 />
 
@@ -86,23 +112,29 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                         left: "15px",
                         height: "100%",
                         alignItems: "flex-end",
+                        transition: "all 0.5s ease",
                     }}
                 >
                     {fallData.map((fall, index) => (
                         <div
                             key={index}
                             style={{
-                                width: `${barWidth}px`,
-                                marginRight: `${barSpacing}px`,
+                                width: `${barWidth * focusScaleFactor}px`,
+                                marginRight: `${
+                                    barSpacing * focusScaleFactor
+                                }px`,
                                 display: "flex",
                                 flexDirection: "column",
                                 alignItems: "center",
+                                transition: "all 0.5s ease",
                             }}
                         >
                             <div
                                 style={{
                                     width: "100%",
-                                    height: `${fall.height}px`,
+                                    height: `${
+                                        fall.height * focusScaleFactor
+                                    }px`,
                                     backgroundColor: fall.detected
                                         ? "#3EBD93"
                                         : "#E63946",
@@ -116,7 +148,9 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                                         : "translateY(20px)",
                                     transition: `opacity 0.8s ease ${
                                         0.1 * index
-                                    }s, transform 0.8s ease ${0.1 * index}s`,
+                                    }s, transform 0.8s ease ${
+                                        0.1 * index
+                                    }s, height 0.5s ease, width 0.5s ease`,
                                 }}
                             >
                                 {!fall.detected && (
@@ -128,8 +162,13 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                                             transform: "translateX(-50%)",
                                             backgroundColor: "#E63946",
                                             color: "white",
-                                            fontSize: "8px",
-                                            padding: "1px 4px",
+                                            fontSize:
+                                                animationState.focusedChart
+                                                    ? "10px"
+                                                    : "8px",
+                                            padding: animationState.focusedChart
+                                                ? "2px 6px"
+                                                : "1px 4px",
                                             borderRadius: "3px",
                                             whiteSpace: "nowrap",
                                             opacity:
@@ -138,7 +177,7 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                                                     : 0,
                                             transition: `opacity 0.8s ease ${
                                                 0.1 * index + 0.3
-                                            }s`,
+                                            }s, font-size 0.5s ease, padding 0.5s ease`,
                                         }}
                                     >
                                         Hidden
@@ -148,23 +187,30 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                             <div
                                 style={{
                                     transform: "rotate(-45deg)",
-                                    fontSize: "8px",
+                                    fontSize: animationState.focusedChart
+                                        ? "10px"
+                                        : "8px",
                                     marginTop: "4px",
                                     whiteSpace: "nowrap",
                                     color: "#343A40",
+                                    fontWeight: animationState.focusedChart
+                                        ? "bold"
+                                        : "normal",
                                     opacity: animationState.showQueryResponse
                                         ? 1
                                         : 0,
                                     transition: `opacity 0.8s ease ${
                                         0.1 * index + 0.2
-                                    }s`,
+                                    }s, font-size 0.5s ease, font-weight 0.5s ease`,
                                 }}
                             >
                                 {fall.day}
                             </div>
                             <div
                                 style={{
-                                    fontSize: "7px",
+                                    fontSize: animationState.focusedChart
+                                        ? "9px"
+                                        : "7px",
                                     color: "#6C757D",
                                     marginTop: "1px",
                                     opacity: animationState.showQueryResponse
@@ -172,7 +218,7 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                                         : 0,
                                     transition: `opacity 0.8s ease ${
                                         0.1 * index + 0.2
-                                    }s`,
+                                    }s, font-size 0.5s ease`,
                                 }}
                             >
                                 {fall.time}
@@ -190,8 +236,9 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                         top: "-5px",
                         right: "0",
                         opacity: animationState.showQueryResponse ? 1 : 0,
-                        transition: "opacity 0.8s ease 0.7s",
-                        fontSize: "9px",
+                        transition:
+                            "opacity 0.8s ease 0.7s, font-size 0.5s ease",
+                        fontSize: animationState.focusedChart ? "11px" : "9px",
                     }}
                 >
                     <div
@@ -199,15 +246,21 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                             display: "flex",
                             alignItems: "center",
                             marginRight: "8px",
+                            transition: "all 0.5s ease",
                         }}
                     >
                         <div
                             style={{
-                                width: "8px",
-                                height: "8px",
+                                width: animationState.focusedChart
+                                    ? "10px"
+                                    : "8px",
+                                height: animationState.focusedChart
+                                    ? "10px"
+                                    : "8px",
                                 backgroundColor: "#E63946",
                                 marginRight: "4px",
                                 borderRadius: "2px",
+                                transition: "all 0.5s ease",
                             }}
                         ></div>
                         <span>Hidden</span>
@@ -215,46 +268,75 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <div
                             style={{
-                                width: "8px",
-                                height: "8px",
+                                width: animationState.focusedChart
+                                    ? "10px"
+                                    : "8px",
+                                height: animationState.focusedChart
+                                    ? "10px"
+                                    : "8px",
                                 backgroundColor: "#3EBD93",
                                 marginRight: "4px",
                                 borderRadius: "2px",
+                                transition: "all 0.5s ease",
                             }}
                         ></div>
                         <span>Detected</span>
                     </div>
                 </div>
+
+                {/* Focus indicator text */}
+                {animationState.focusedChart && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "-30px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            color: "#2D7DD2",
+                            fontSize: "12px",
+                            fontWeight: "bold",
+                            backgroundColor: "rgba(45, 125, 210, 0.1)",
+                            padding: "4px 8px",
+                            borderRadius: "4px",
+                            opacity: 1,
+                            animation: "pulse 2s infinite",
+                        }}
+                    >
+                    </div>
+                )}
             </div>
         );
     };
 
-    // Render the user note
-    const renderUserNote = () => (
-        <div
-            className={`fade-in ${animationState.showNote ? "visible" : ""}`}
-            style={{
-                padding: "10px",
-                marginTop: "10px",
-                borderRadius: "6px",
-                backgroundColor: "#F8F9FA",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
-                borderLeft: "3px solid #2D7DD2",
-                animation: "fadeIn 0.5s ease",
-                fontSize: "12px",
-            }}
-        >
-            <div
-                style={{
-                    fontWeight: "bold",
-                    marginBottom: "3px",
-                }}
-            >
-                Note to self:
-            </div>
-            <div>Enter Joe to a program that strengthens his muscle</div>
-        </div>
-    );
+ 
+
+    // Add some keyframe animations to CSS
+    useEffect(() => {
+        const style = document.createElement("style");
+        style.textContent = `
+            @keyframes pulse {
+                0% { opacity: 0.7; }
+                50% { opacity: 1; }
+                100% { opacity: 0.7; }
+            }
+            
+            .fall-chart.focused::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.1);
+                z-index: -1;
+                pointer-events: none;
+            }
+        `;
+        document.head.appendChild(style);
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
 
     return (
         <TabletLayout
@@ -270,13 +352,16 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                     display: "flex",
                     flexDirection: "column",
                     padding: "0 8px",
+                    overflow: animationState.focusedChart ? "hidden" : "auto",
                 }}
             >
                 <h3
                     style={{
-                        fontSize: "16px",
+                        fontSize: animationState.focusedChart ? "18px" : "16px",
                         margin: "0 0 4px 0",
                         color: "#333",
+                        transition: "font-size 0.5s ease",
+                        opacity: animationState.focusedChart ? 0.7 : 1,
                     }}
                 >
                     Fall Analysis for Joe (Room 208)
@@ -287,6 +372,8 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                         fontSize: "12px",
                         color: "#6C757D",
                         marginBottom: "10px",
+                        opacity: animationState.focusedChart ? 0.7 : 1,
+                        transition: "opacity 0.5s ease",
                     }}
                 >
                     May 1 - May 30, 2023
@@ -294,27 +381,6 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
 
                 {/* Falls chart */}
                 {renderFallsChart()}
-
-                {/* Summary */}
-                <div
-                    className={`fade-in ${
-                        animationState.showQueryResponse ? "visible" : ""
-                    }`}
-                    style={{
-                        fontSize: "12px",
-                        color: "#343A40",
-                        lineHeight: "1.3",
-                        animation: "fadeIn 0.8s ease",
-                    }}
-                >
-                    <strong>Analysis:</strong> Joe has experienced 7 falls in
-                    the past month, with 5 of them being undetected by staff.
-                    All incidents occurred during nighttime hours, primarily
-                    between 12 AM and 4 AM.
-                </div>
-
-                {/* User note */}
-                {animationState.showNote && renderUserNote()}
             </div>
         </TabletLayout>
     );

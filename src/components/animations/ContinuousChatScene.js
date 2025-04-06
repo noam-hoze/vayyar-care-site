@@ -67,8 +67,6 @@ const ContinuousChatScene = ({ scrollProgress = 0, scene }) => {
             // Direct transition to response with a slight delay (was 75, now 72)
             showFallsResponse: progress >= 72,
             showFallsChart: progress >= 76, // Small delay after response appears
-            showFallsAnalysis: progress >= 82,
-            showUserNote: progress >= 88,
         };
     };
 
@@ -110,24 +108,69 @@ const ContinuousChatScene = ({ scrollProgress = 0, scene }) => {
 
         // Auto-scroll chat container based on content
         if (chatContainerRef.current) {
-            // Calculate scroll amount based on which messages are showing
             let scrollAmount = 0;
+            const maxScroll =
+                chatContainerRef.current.scrollHeight -
+                chatContainerRef.current.clientHeight;
 
-            if (scrollProgress > 50) {
-                // Gradually scroll up as second sequence progresses
-                // Cap at 200px to prevent over-scrolling
-                scrollAmount = Math.min(200, (scrollProgress - 50) * 4);
+            // Element heights (approximate)
+            const headerHeight = 180; // Increased - Header + metrics height
+            const summaryHeight = 280; // Increased - Shift summary height
+            const questionHeight = 80; // User question height
 
-                // If we're approaching the end of this scene, start fading out
-                if (scrollProgress > 95) {
-                    chatContainerRef.current.style.opacity =
-                        1 - (scrollProgress - 95) * 20;
-                } else {
-                    chatContainerRef.current.style.opacity = 1;
+            // Total height to the bottom of question (before falls response)
+            const questionBottomPosition =
+                headerHeight + summaryHeight + questionHeight;
+
+            if (scrollProgress > 50 && scrollProgress < 65) {
+                // Initial phase - gradually scroll to show the second user question as it appears
+                scrollAmount = Math.min(100, (scrollProgress - 50) * 6);
+            } else if (scrollProgress >= 65 && scrollProgress < 72) {
+                // Question is fully visible - maintain this position
+                scrollAmount = 100;
+            } else if (scrollProgress >= 72 && scrollProgress < 76) {
+                // Transition phase: falls response header appears
+                // Start aggressive pushing of content up
+                scrollAmount = 100 + Math.min(300, (scrollProgress - 72) * 40);
+            } else if (scrollProgress >= 76 && scrollProgress < 90) {
+                // Key phase: graph appears and COMPLETELY pushes summary out of view
+                // Only the question and graph should be visible
+
+                // Use a much larger value to ensure everything above the question is hidden
+                // The full header + summary + extra padding to ensure it's gone
+                scrollAmount = headerHeight + summaryHeight + 100;
+
+                // This extended range (76-90) provides ample time to view just question+graph
+                // Maintain this position for most of the range
+
+                // Only add slight adjustment near the end
+                if (scrollProgress > 85) {
+                    scrollAmount += Math.min(30, (scrollProgress - 85) * 6);
                 }
+            } else if (scrollProgress >= 90) {
+                // Final transition out
+                const baseScrollForGraph = headerHeight + summaryHeight * 1.2;
+                scrollAmount =
+                    baseScrollForGraph +
+                    Math.min(100, (scrollProgress - 90) * 20);
             }
 
-            chatContainerRef.current.scrollTop = scrollAmount;
+            // Ensure we don't scroll beyond content
+            scrollAmount = Math.min(scrollAmount, maxScroll);
+
+            // If we're approaching the end of this scene, start fading out
+            if (scrollProgress > 95) {
+                chatContainerRef.current.style.opacity =
+                    1 - (scrollProgress - 95) * 20;
+            } else {
+                chatContainerRef.current.style.opacity = 1;
+            }
+
+            // Apply the scroll with smooth behavior
+            chatContainerRef.current.scrollTo({
+                top: scrollAmount,
+                behavior: "smooth",
+            });
         }
     }, [scrollProgress, scene.content]);
 
@@ -556,126 +599,6 @@ const ContinuousChatScene = ({ scrollProgress = 0, scene }) => {
                         </div>
                     )}
 
-                    {/* Bot Falls Response */}
-                    {animationState.showFallsResponse && (
-                        <div
-                            className="bot-message-bubble"
-                            style={{
-                                alignSelf: "flex-start",
-                                backgroundColor: "white",
-                                padding: "10px 12px",
-                                borderRadius: "12px",
-                                borderTopLeftRadius: "4px",
-                                width: "85%",
-                                marginBottom: "8px",
-                                boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
-                                fontSize: "14px",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    fontWeight: "bold",
-                                    marginBottom: "6px",
-                                    fontSize: "15px",
-                                    opacity: animationState.showFallsResponse
-                                        ? 1
-                                        : 0,
-                                    transition: "opacity 0.3s ease",
-                                }}
-                            >
-                                Fall Analysis for Joe (Room 208)
-                            </div>
-                            <div
-                                style={{
-                                    color: "#666",
-                                    fontSize: "12px",
-                                    marginBottom: "10px",
-                                    opacity: animationState.showFallsResponse
-                                        ? 1
-                                        : 0,
-                                    transition: "opacity 0.3s ease 0.1s",
-                                }}
-                            >
-                                May 1 - May 30, 2023
-                            </div>
-
-                            {/* Falls Chart */}
-                            {renderFallsChart()}
-
-                            {/* Falls Analysis Text */}
-                            {animationState.showFallsAnalysis && (
-                                <div
-                                    style={{
-                                        marginTop: "12px",
-                                        fontSize: "13px",
-                                        lineHeight: "1.3",
-                                        opacity:
-                                            animationState.showFallsAnalysis
-                                                ? 1
-                                                : 0,
-                                        transform:
-                                            animationState.showFallsAnalysis
-                                                ? "translateY(0)"
-                                                : "translateY(10px)",
-                                        transition:
-                                            "opacity 0.5s ease, transform 0.5s ease",
-                                    }}
-                                >
-                                    <strong>Analysis:</strong> Joe has
-                                    experienced 7 falls in the past month, with
-                                    5 of them being undetected by staff. All
-                                    incidents occurred during nighttime hours,
-                                    primarily between 12 AM and 4 AM.
-                                </div>
-                            )}
-
-                            {/* User note */}
-                            {animationState.showUserNote && (
-                                <div
-                                    style={{
-                                        marginTop: "15px",
-                                        padding: "8px 10px",
-                                        backgroundColor: "#F8F9FA",
-                                        borderRadius: "6px",
-                                        borderLeft: "3px solid #2D7DD2",
-                                        fontSize: "12px",
-                                        opacity: animationState.showUserNote
-                                            ? 1
-                                            : 0,
-                                        transform: animationState.showUserNote
-                                            ? "translateY(0)"
-                                            : "translateY(10px)",
-                                        transition:
-                                            "opacity 0.5s ease, transform 0.5s ease",
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            fontWeight: "bold",
-                                            marginBottom: "3px",
-                                        }}
-                                    >
-                                        Note to self:
-                                    </div>
-                                    <div>
-                                        Enter Joe to a program that strengthens
-                                        his muscle
-                                    </div>
-                                </div>
-                            )}
-
-                            <div
-                                style={{
-                                    fontSize: "10px",
-                                    color: "#8E8E93",
-                                    marginTop: "10px",
-                                    textAlign: "left",
-                                }}
-                            >
-                                9:46 AM
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
         </TabletLayout>
