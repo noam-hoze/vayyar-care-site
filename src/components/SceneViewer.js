@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SceneInstructions from "./SceneInstructions";
 import AnimatedTablet from "./animations/AnimatedTablet";
 import AnimatedTabletScene1_5 from "./animations/AnimatedTabletScene1_5";
-import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
-import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
-import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
 import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import AnimatedTabletScene6 from "./animations/AnimatedTabletScene6";
-import AnimatedTabletScene7 from "./animations/AnimatedTabletScene7";
-import AnimatedTabletScene8 from "./animations/AnimatedTabletScene8";
-import AnimatedTabletScene9 from "./animations/AnimatedTabletScene9";
 import ContinuousChatScene from "./animations/ContinuousChatScene";
 import DebugOverlay from "./DebugOverlay";
 import { videoConfig } from "../config/videoConfig";
@@ -113,13 +106,8 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         () => ({
             0: ContinuousChatScene,
             1: AnimatedTabletScene1_5,
-            2: AnimatedTabletScene2,
-            3: AnimatedTabletScene3,
-            4: AnimatedTabletScene4,
-            5: AnimatedTabletScene5,
-            6: AnimatedTabletScene6,
-            7: AnimatedTabletScene7,
-            8: AnimatedTabletScene9,
+            2: AnimatedTabletScene5,
+            3: AnimatedTabletScene6,
         }),
         []
     );
