@@ -3,7 +3,7 @@ import { scenes } from "./data/scenes";
 import SceneViewer from "./components/SceneViewer";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { MAX_SCENES, isValidScene } from "./data/sceneRegistry";
+import { MAX_SCENES, isValidScene, SCENES } from "./data/sceneRegistry";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -33,8 +33,33 @@ export default function App() {
             // Prevent default scrolling
             e.preventDefault();
 
+            // Get current scene and sub-scroll progress
+            const windowHeight = window.innerHeight;
+            const currentSceneIndex = Math.min(
+                MAX_SCENES - 1,
+                Math.floor(window.scrollY / windowHeight)
+            );
+            const sceneStartY = currentSceneIndex * windowHeight;
+            const currentSubScroll =
+                (window.scrollY - sceneStartY) / windowHeight;
+
+            // Check if we're in the FALL_CHART scene
+            const isFallChartScene = currentSceneIndex === SCENES.FALL_CHART;
+
+            // Determine scroll speed multiplier
+            let speedMultiplier = 0.1; // Default reduced speed
+
+            // If in FALL_CHART scene between 75% and 84%, slow down dramatically
+            if (
+                isFallChartScene &&
+                currentSubScroll >= 0.75 &&
+                currentSubScroll <= 0.84
+            ) {
+                // Super slow scrolling for the alert resolution phase (25x slower)
+                speedMultiplier = 0.004;
+            }
+
             // Update target position with reduced speed
-            const speedMultiplier = 0.1; // Reduce scroll speed
             targetY = Math.max(
                 0,
                 Math.min(

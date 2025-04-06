@@ -52,6 +52,9 @@ const TabletLayout = ({
         bubbleAnimating: false,
     });
 
+    // State for alert resolution
+    const [alertResolved, setAlertResolved] = useState(false);
+
     // Calculate animation state based on scroll progress
     useEffect(() => {
         // Calculate how much of the current query to show as typing progresses
@@ -109,6 +112,22 @@ const TabletLayout = ({
             currentInputValue,
             nextInputValue,
         }));
+
+        // Check for scene object or scene ID
+        const sceneId =
+            typeof scene === "object" && scene !== null ? scene.scene : scene;
+
+        // Auto resolve the alert after a much longer delay
+        // This provides more time to simulate the nurse taking care of the patient
+        // Alert appears at 75% and resolves closer to the transition
+        if (
+            sceneId === SCENES.FALL_CHART &&
+            scrollProgress >= 83 &&
+            scrollProgress <= 84 &&
+            !alertResolved
+        ) {
+            setAlertResolved(true);
+        }
     }, [
         scrollProgress,
         currentQuery,
@@ -119,6 +138,8 @@ const TabletLayout = ({
         transitionStartThreshold,
         contentTransitionThreshold,
         animationState.buttonClicked,
+        scene,
+        alertResolved,
     ]);
 
     // Handle the send button click
@@ -171,16 +192,23 @@ const TabletLayout = ({
 
     // Render Fall Alert Banner
     const renderFallAlert = () => {
-        // Only check for scrollProgress >= 75 for now (removing scene check for testing)
-        const showFallAlert = scrollProgress >= 75;
+        // Check for scene object or scene ID
+        const sceneId =
+            typeof scene === "object" && scene !== null ? scene.scene : scene;
+
+        // Show the fall alert in the FALL_CHART scene when scrollProgress is >= 75
+        const showFallAlert =
+            sceneId === SCENES.FALL_CHART && scrollProgress >= 75;
 
         if (!showFallAlert) return null;
 
         return (
             <div
-                className="tablet-layout-alert alert-banner alert-flicker"
+                className={`tablet-layout-alert alert-banner ${
+                    alertResolved ? "resolved" : "alert-flicker"
+                }`}
                 style={{
-                    backgroundColor: "#E63946",
+                    backgroundColor: alertResolved ? "#4caf50" : "#E63946",
                     color: "white",
                     padding: "12px 15px",
                     margin: "0",
@@ -188,36 +216,63 @@ const TabletLayout = ({
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    boxShadow: "0 4px 8px rgba(230, 57, 70, 0.3)",
+                    boxShadow: alertResolved
+                        ? "0 2px 4px rgba(76, 175, 80, 0.3)"
+                        : "0 4px 8px rgba(230, 57, 70, 0.3)",
                     zIndex: 1000,
                     position: "relative",
                     opacity: showFallAlert ? 1 : 0,
                     transform: showFallAlert
                         ? "translateY(0)"
                         : "translateY(-100%)",
-                    transition: "opacity 0.3s ease, transform 0.3s ease",
+                    transition:
+                        "opacity 0.3s ease, transform 0.3s ease, background-color 0.5s ease, box-shadow 0.5s ease",
                 }}
             >
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <span style={{ marginRight: "10px", fontSize: "18px" }}>
-                        ⚠️
+                        {alertResolved ? "✅" : "⚠️"}
                     </span>
                     <div>
-                        <div style={{ fontSize: "14px" }}>FALL DETECTED</div>
+                        <div style={{ fontSize: "14px" }}>
+                            {alertResolved ? "FALL RESOLVED" : "FALL DETECTED"}
+                        </div>
                         <div style={{ fontSize: "12px", opacity: "0.9" }}>
-                            Room 208 - John Smith - Just now
+                            Room 208 - John Smith -{" "}
+                            {alertResolved ? "Resolved just now" : "Just now"}
                         </div>
                     </div>
                 </div>
                 <div
                     style={{
-                        backgroundColor: "rgba(255,255,255,0.2)",
+                        backgroundColor: alertResolved
+                            ? "rgba(255,255,255,0.3)"
+                            : "rgba(255,255,255,0.2)",
                         padding: "5px 8px",
                         borderRadius: "4px",
                         fontSize: "12px",
+                        cursor: alertResolved ? "default" : "pointer",
+                        transition: "all 0.5s ease",
+                        transform: alertResolved ? "scale(1.05)" : "scale(1)",
+                        boxShadow: alertResolved
+                            ? "0 2px 4px rgba(255,255,255,0.2)"
+                            : "none",
+                    }}
+                    onClick={() => {
+                        if (!alertResolved) {
+                            // Simulate clicking action
+                            const btn = document.activeElement;
+                            if (btn) btn.blur();
+
+                            // Resolve after a longer delay to simulate nurse response time
+                            // This would represent the time it takes to check on the patient
+                            setTimeout(() => {
+                                setAlertResolved(true);
+                            }, 800);
+                        }
                     }}
                 >
-                    URGENT
+                    {alertResolved ? "RESOLVED" : "RESOLVE"}
                 </div>
             </div>
         );
