@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import AnimatedTablet from "./animations/AnimatedTablet";
+import AnimatedTablet1 from "./animations/AnimatedTablet1";
 import AnimatedTabletScene1_5 from "./animations/AnimatedTabletScene1_5";
 import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import AnimatedTabletScene6 from "./animations/AnimatedTabletScene6";
@@ -118,7 +118,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         // Get the scene index rather than using the array index
         const sceneIndex = scene.scene;
         const TabletComponent =
-            tabletComponentsMap[sceneIndex] || AnimatedTablet;
+            tabletComponentsMap[sceneIndex] || AnimatedTablet1;
         return (
             <TabletComponent scene={scene} scrollProgress={animationProgress} />
         );

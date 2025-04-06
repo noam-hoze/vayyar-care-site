@@ -9,7 +9,7 @@ import "./animations.css";
 // Define the Vayyar blue color as a constant for reuse
 const VAYYAR_BLUE = "rgba(5, 170, 233, 1)";
 
-const AnimatedTablet = ({ scrollProgress = 0, scene }) => {
+const AnimatedTablet1 = ({ scrollProgress = 0, scene }) => {
     // Animation state based on scroll position
     const [animationState, setAnimationState] = useState({
         showEmptyTablet: false,
@@ -177,4 +177,4 @@ const AnimatedTablet = ({ scrollProgress = 0, scene }) => {
     );
 };
 
-export default AnimatedTablet;
+export default AnimatedTablet1;
