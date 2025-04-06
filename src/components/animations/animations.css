@@ -208,9 +208,17 @@
   box-sizing: border-box;
 }
 
-/* Add transition for content being pushed by new bubble */
+/* Animation for all content when button is triggered */
 .chat-content-container.bubble-pushing {
+  animation: slideUpFromBottom 2s ease-out forwards;
+  position: relative;
+  z-index: 10;
   transition: transform 2s ease-out;
+}
+
+/* New class for sliding content out of view */
+.chat-content-container.content-sliding-out {
+  transition: transform 0.8s ease-out;
 }
 
 .chat-content-container.transition-out {
@@ -236,7 +244,6 @@
 
 /* Button-triggered animation for query bubble */
 .animated-tablet-user-message.button-triggered {
-  animation: slideUpFromBottom 2s ease-out forwards;
   position: relative;
   z-index: 10;
 }
@@ -836,4 +843,34 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* New animation for fresh message appearing at the top */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Class for fresh message animation */
+.animated-tablet-user-message.fresh-message {
+  align-self: flex-end;
+  margin-left: auto;
+  margin-right: 10px;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInDown 0.5s ease-out forwards 0.2s;
+  position: relative;
+  max-width: 80%;
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 } 

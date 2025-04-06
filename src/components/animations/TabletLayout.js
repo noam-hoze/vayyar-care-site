@@ -42,6 +42,7 @@ const TabletLayout = ({
         showTypingNextQuery: false,
         showNextQueryBubble: false,
         contentTransitioning: false,
+        contentSliding: false,
         currentInputValue: "",
         nextInputValue: "",
         buttonClicked: false,
@@ -87,9 +88,7 @@ const TabletLayout = ({
         // Only show bubble after typing is complete AND when we're not in the next query transition yet
         // or if the send button was clicked
         const showCurrentQueryBubble =
-            (scrollProgress >= queryCompleteThreshold &&
-                scrollProgress < transitionStartThreshold &&
-                !isTypingCurrentQuery) ||
+            scrollProgress >= queryCompleteThreshold ||
             animationState.buttonClicked;
 
         setAnimationState((prevState) => ({
@@ -132,25 +131,24 @@ const TabletLayout = ({
                 currentInputValue: currentQuery,
             }));
 
-            // Short delay before triggering bubble animation
+            // Short delay before triggering animation
             setTimeout(() => {
-                // Start the animation sequence
+                // Start the animation sequence - slide everything up
                 setAnimationState((prevState) => ({
                     ...prevState,
                     buttonClicked: true,
                     bubbleAnimating: true,
-                    showResponse: true, // Ensure response is visible
-                    // Clear the input field after clicking the button
-                    currentInputValue: "",
+                    showResponse: true, // Keep response visible for animation
+                    currentInputValue: "", // Clear the input field
                 }));
 
-                // After animation is complete, remove the animating state
+                // After animation is complete, reset states
                 setTimeout(() => {
                     setAnimationState((prevState) => ({
                         ...prevState,
                         bubbleAnimating: false,
                     }));
-                }, 2000); // Match this with the animation duration in CSS
+                }, 2000); // Match animation duration
             }, 300);
         }
     };
@@ -242,8 +240,6 @@ const TabletLayout = ({
                             style={{
                                 transform: animationState.contentTransitioning
                                     ? "translateY(-100%)"
-                                    : animationState.bubbleAnimating
-                                    ? "translateY(-70px)"
                                     : "translateY(0)",
                                 transition: "transform 1.5s ease-out",
                             }}
@@ -305,6 +301,43 @@ const TabletLayout = ({
                                 </div>
                                 <div className="animated-tablet-user-message-timestamp">
                                     {time}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* New bubble container that appears after content slides out */}
+                        {animationState.bubbleAnimating && (
+                            <div
+                                className="new-message-container"
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    padding: "15px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    opacity: animationState.contentSliding
+                                        ? 0
+                                        : 1,
+                                    transition: "opacity 0.3s ease-out",
+                                    zIndex: 10,
+                                }}
+                            >
+                                <div
+                                    className={`animated-tablet-user-message ${
+                                        animationState.bubbleAnimating
+                                            ? "fresh-message"
+                                            : ""
+                                    }`}
+                                >
+                                    <div className="animated-tablet-user-message-text">
+                                        {currentQuery}
+                                    </div>
+                                    <div className="animated-tablet-user-message-timestamp">
+                                        {time}
+                                    </div>
                                 </div>
                             </div>
                         )}
