@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTablet1 from "./animations/AnimatedTablet1";
-import AnimatedTabletScene1_5 from "./animations/AnimatedTabletScene1_5";
+import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import AnimatedTabletScene6 from "./animations/AnimatedTabletScene6";
 import ContinuousChatScene from "./animations/ContinuousChatScene";
@@ -106,7 +106,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     const tabletComponentsMap = useMemo(
         () => ({
             [SCENES.MORNING_SHIFT]: ContinuousChatScene,
-            [SCENES.FALL_CHART]: AnimatedTabletScene1_5,
+            [SCENES.FALL_CHART]: AnimatedTabletScene2,
             [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene5,
             [SCENES.VC_CLINICAL]: AnimatedTabletScene6,
         }),

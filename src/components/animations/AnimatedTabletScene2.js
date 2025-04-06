@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TabletLayout from "./TabletLayout";
 import "./animations.css";
 
-const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
+const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
     // Animation state based on scroll position
     const [animationState, setAnimationState] = useState({
         showQueryResponse: false,
@@ -189,4 +189,4 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
     );
 };
 
-export default AnimatedTabletScene1_5;
+export default AnimatedTabletScene2;
