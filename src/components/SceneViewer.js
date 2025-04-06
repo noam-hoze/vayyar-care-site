@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import AnimatedTablet1 from "./animations/AnimatedTablet1";
+import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
 import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
-import AnimatedTabletScene6 from "./animations/AnimatedTabletScene6";
+import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
 import DebugOverlay from "./DebugOverlay";
 import { videoConfig } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
@@ -104,10 +104,10 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
         () => ({
-            [SCENES.MORNING_SHIFT]: AnimatedTablet1,
+            [SCENES.MORNING_SHIFT]: AnimatedTabletScene1,
             [SCENES.FALL_CHART]: AnimatedTabletScene2,
             [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
-            [SCENES.VC_CLINICAL]: AnimatedTabletScene6,
+            [SCENES.VC_CLINICAL]: AnimatedTabletScene4,
         }),
         [SCENES]
     );
@@ -117,7 +117,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         // Get the scene index rather than using the array index
         const sceneIndex = scene.scene;
         const TabletComponent =
-            tabletComponentsMap[sceneIndex] || AnimatedTablet1;
+            tabletComponentsMap[sceneIndex] || AnimatedTabletScene1;
         return (
             <TabletComponent scene={scene} scrollProgress={animationProgress} />
         );
