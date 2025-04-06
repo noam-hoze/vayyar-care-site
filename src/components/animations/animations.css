@@ -7,6 +7,16 @@
    @import '../../../styles/components/animations/TabletSceneAnimations.less';
 */
 
+/* Hide scrollbars for all elements inside tablet */
+.tablet-screen *::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.tablet-screen * {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
 /* Animation styles */
 
 @keyframes blink {
@@ -144,20 +154,24 @@
   width: 100%;
   height: 100%;
   background-color: #333;
-  border: 10px solid #333;
+  border: 12px solid #333;
   border-radius: 36px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 .tablet-screen {
   position: relative;
-  width: 95%;
-  height: 97%;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
   background-color: #fff;
   border-radius: 24px;
   overflow: hidden;
-  aspect-ratio: 0.5625; /* 9:16 aspect ratio */
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .tablet-notch {

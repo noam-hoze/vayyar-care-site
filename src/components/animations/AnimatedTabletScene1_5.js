@@ -1,219 +1,323 @@
-import React, { useState, useEffect } from 'react';
-import TabletLayout from './TabletLayout';
-import './animations.css';
+import React, { useState, useEffect } from "react";
+import TabletLayout from "./TabletLayout";
+import "./animations.css";
 
 const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
-  // Animation state based on scroll position
-  const [animationState, setAnimationState] = useState({
-    showWatchlist: false,
-    showCriticalAlert: false
-  });
-
-  // Update animation state based on scroll progress
-  useEffect(() => {
-    setAnimationState({
-      showWatchlist: scrollProgress >= 0,
-      showCriticalAlert: scrollProgress >= 80 // Show critical alert near end of scene
+    // Animation state based on scroll position
+    const [animationState, setAnimationState] = useState({
+        showQueryResponse: false,
+        showNote: false,
     });
-  }, [scrollProgress]);
 
-  // Watchlist items with priority levels
-  const watchlistItems = [
-    { room: "208", priority: "high", reason: "Fall detected at 3:18 AM", status: "Requires follow-up" },
-    { room: "306", priority: "medium", reason: "Gait decline (60%)", status: "PT evaluation recommended" },
-    { room: "115", priority: "medium", reason: "Bathroom visits increased", status: "Check for UTI symptoms" },
-    { room: "410", priority: "low", reason: "Immobility flagged", status: "Monitor mobility" }
-  ];
+    // Update animation state based on scroll progress
+    useEffect(() => {
+        setAnimationState({
+            showQueryResponse: scrollProgress >= 20,
+            showNote: scrollProgress >= 60,
+        });
+    }, [scrollProgress]);
 
-  // Render watchlist item
-  const renderWatchlistItem = (item, index) => {
-    const priorityColors = {
-      high: '#E63946',
-      medium: '#F39C12',
-      low: '#3EBD93'
+    // Fall data for the chart
+    const fallData = [
+        { day: "May 2", time: "2:34 AM", detected: false, height: 60 },
+        { day: "May 5", time: "3:12 AM", detected: false, height: 50 },
+        { day: "May 9", time: "4:05 AM", detected: true, height: 45 },
+        { day: "May 14", time: "1:47 AM", detected: false, height: 75 },
+        { day: "May 18", time: "2:52 AM", detected: false, height: 42 },
+        { day: "May 23", time: "3:28 AM", detected: true, height: 55 },
+        { day: "May 27", time: "12:19 AM", detected: false, height: 35 },
+    ];
+
+    // Render the bar chart for falls
+    const renderFallsChart = () => {
+        const chartHeight = 120;
+        const barWidth = 28;
+        const barSpacing = 8;
+
+        return (
+            <div
+                className={animationState.showQueryResponse ? "visible" : ""}
+                style={{
+                    marginTop: "16px",
+                    position: "relative",
+                    height: `${chartHeight}px`,
+                    marginBottom: "16px",
+                    opacity: animationState.showQueryResponse ? 1 : 0,
+                    transition: "opacity 0.8s ease",
+                }}
+            >
+                {/* Y-axis label */}
+                <div
+                    style={{
+                        position: "absolute",
+                        left: "-18px",
+                        top: "50%",
+                        transform: "rotate(-90deg) translateX(50%)",
+                        fontSize: "10px",
+                        color: "#6C757D",
+                        whiteSpace: "nowrap",
+                    }}
+                >
+                    Falls
+                </div>
+
+                {/* Chart grid lines */}
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: "15px",
+                        right: 0,
+                        height: "100%",
+                        borderLeft: "1px solid #E0E0E0",
+                        borderBottom: "1px solid #E0E0E0",
+                        backgroundImage:
+                            "linear-gradient(to bottom, #F8F9FA 1px, transparent 1px)",
+                        backgroundSize: `100% ${chartHeight / 3}px`,
+                    }}
+                />
+
+                {/* Bars for fall events */}
+                <div
+                    style={{
+                        display: "flex",
+                        position: "absolute",
+                        bottom: 0,
+                        left: "15px",
+                        height: "100%",
+                        alignItems: "flex-end",
+                    }}
+                >
+                    {fallData.map((fall, index) => (
+                        <div
+                            key={index}
+                            style={{
+                                width: `${barWidth}px`,
+                                marginRight: `${barSpacing}px`,
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: "100%",
+                                    height: `${fall.height}px`,
+                                    backgroundColor: fall.detected
+                                        ? "#3EBD93"
+                                        : "#E63946",
+                                    borderRadius: "3px 3px 0 0",
+                                    position: "relative",
+                                    opacity: animationState.showQueryResponse
+                                        ? 1
+                                        : 0,
+                                    transform: animationState.showQueryResponse
+                                        ? "translateY(0)"
+                                        : "translateY(20px)",
+                                    transition: `opacity 0.8s ease ${
+                                        0.1 * index
+                                    }s, transform 0.8s ease ${0.1 * index}s`,
+                                }}
+                            >
+                                {!fall.detected && (
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            top: "-16px",
+                                            left: "50%",
+                                            transform: "translateX(-50%)",
+                                            backgroundColor: "#E63946",
+                                            color: "white",
+                                            fontSize: "8px",
+                                            padding: "1px 4px",
+                                            borderRadius: "3px",
+                                            whiteSpace: "nowrap",
+                                            opacity:
+                                                animationState.showQueryResponse
+                                                    ? 1
+                                                    : 0,
+                                            transition: `opacity 0.8s ease ${
+                                                0.1 * index + 0.3
+                                            }s`,
+                                        }}
+                                    >
+                                        Hidden
+                                    </div>
+                                )}
+                            </div>
+                            <div
+                                style={{
+                                    transform: "rotate(-45deg)",
+                                    fontSize: "8px",
+                                    marginTop: "4px",
+                                    whiteSpace: "nowrap",
+                                    color: "#343A40",
+                                    opacity: animationState.showQueryResponse
+                                        ? 1
+                                        : 0,
+                                    transition: `opacity 0.8s ease ${
+                                        0.1 * index + 0.2
+                                    }s`,
+                                }}
+                            >
+                                {fall.day}
+                            </div>
+                            <div
+                                style={{
+                                    fontSize: "7px",
+                                    color: "#6C757D",
+                                    marginTop: "1px",
+                                    opacity: animationState.showQueryResponse
+                                        ? 1
+                                        : 0,
+                                    transition: `opacity 0.8s ease ${
+                                        0.1 * index + 0.2
+                                    }s`,
+                                }}
+                            >
+                                {fall.time}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Legend */}
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        position: "absolute",
+                        top: "-5px",
+                        right: "0",
+                        opacity: animationState.showQueryResponse ? 1 : 0,
+                        transition: "opacity 0.8s ease 0.7s",
+                        fontSize: "9px",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginRight: "8px",
+                        }}
+                    >
+                        <div
+                            style={{
+                                width: "8px",
+                                height: "8px",
+                                backgroundColor: "#E63946",
+                                marginRight: "4px",
+                                borderRadius: "2px",
+                            }}
+                        ></div>
+                        <span>Hidden</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <div
+                            style={{
+                                width: "8px",
+                                height: "8px",
+                                backgroundColor: "#3EBD93",
+                                marginRight: "4px",
+                                borderRadius: "2px",
+                            }}
+                        ></div>
+                        <span>Detected</span>
+                    </div>
+                </div>
+            </div>
+        );
     };
-    
-    const priorityLabels = {
-      high: 'HIGH',
-      medium: 'MEDIUM',
-      low: 'LOW'
-    };
-    
-    return (
-      <div 
-        key={index}
-        className="fade-in"
-        style={{
-          padding: '16px',
-          marginBottom: '16px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          border: '1px solid #F0F0F0',
-          backgroundColor: 'white',
-          animation: `fadeIn 0.3s ease-out ${index * 0.1}s both`,
-          opacity: animationState.showCriticalAlert ? 0.5 : 1,
-          filter: animationState.showCriticalAlert ? 'blur(1px)' : 'none',
-          transition: 'opacity 0.3s ease, filter 0.3s ease'
-        }}
-      >
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '8px'
-        }}>
-          <div style={{
-            fontSize: '16px',
-            fontWeight: 'bold'
-          }}>
-            Room {item.room}
-          </div>
-          <div style={{
-            fontSize: '12px',
-            fontWeight: 'bold',
-            color: 'white',
-            backgroundColor: priorityColors[item.priority],
-            padding: '4px 8px',
-            borderRadius: '12px'
-          }}>
-            {priorityLabels[item.priority]}
-          </div>
+
+    // Render the user note
+    const renderUserNote = () => (
+        <div
+            className={`fade-in ${animationState.showNote ? "visible" : ""}`}
+            style={{
+                padding: "10px",
+                marginTop: "10px",
+                borderRadius: "6px",
+                backgroundColor: "#F8F9FA",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                borderLeft: "3px solid #2D7DD2",
+                animation: "fadeIn 0.5s ease",
+                fontSize: "12px",
+            }}
+        >
+            <div
+                style={{
+                    fontWeight: "bold",
+                    marginBottom: "3px",
+                }}
+            >
+                Note to self:
+            </div>
+            <div>Enter Joe to a program that strengthens his muscle</div>
         </div>
-        <div style={{
-          fontSize: '14px',
-          marginBottom: '8px'
-        }}>
-          {item.reason}
-        </div>
-        <div style={{
-          fontSize: '13px',
-          color: '#6C757D'
-        }}>
-          {item.status}
-        </div>
-      </div>
     );
-  };
 
-  // Critical Alert Banner
-  const renderCriticalAlertBanner = () => (
-    <div 
-      className="slideInDown alert-flicker"
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 10,
-        backgroundColor: '#E63946',
-        color: 'white',
-        padding: '16px',
-        boxShadow: '0 4px 12px rgba(230, 57, 70, 0.5)'
-      }}
-    >
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '8px'
-        }}>
-          <span style={{
-            fontSize: '18px',
-            fontWeight: 'bold',
-            marginRight: '8px'
-          }}>
-            ⚠️ CRITICAL ALERT: BED EXIT
-          </span>
-        </div>
-        <div style={{
-          fontSize: '14px'
-        }}>
-          ROOM 302 - HIGH PRIORITY
-        </div>
-        
-        <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginTop: '8px'
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            color: '#E63946',
-            fontSize: '14px',
-            fontWeight: 'bold',
-            padding: '6px 12px',
-            borderRadius: '20px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer'
-          }}>
-            RESPOND
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    return (
+        <TabletLayout
+            showMetrics={true}
+            time="10:15 AM"
+            showChatInput={true}
+            inputValue=""
+        >
+            <div
+                style={{
+                    position: "relative",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0 8px",
+                }}
+            >
+                <h3
+                    style={{
+                        fontSize: "16px",
+                        margin: "0 0 4px 0",
+                        color: "#333",
+                    }}
+                >
+                    Fall Analysis for Joe (Room 208)
+                </h3>
 
-  return (
-    <TabletLayout 
-      showMetrics={true} 
-      time="9:45 AM"
-      showChatInput={true}
-      criticalMetric={animationState.showCriticalAlert ? 1 : 0}
-    >
-      <div style={{
-        position: 'relative',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        {/* Critical Alert Banner */}
-        {animationState.showCriticalAlert && renderCriticalAlertBanner()}
-        
-        {/* Main content */}
-        <div style={{
-          position: 'relative',
-          height: '100%',
-          opacity: animationState.showCriticalAlert ? 0.8 : 1,
-          filter: animationState.showCriticalAlert ? 'blur(1px)' : 'none',
-          transition: 'opacity 0.3s ease, filter 0.3s ease'
-        }}>
-          <h3 style={{
-            fontSize: '18px',
-            margin: '0 0 16px 0',
-            color: '#333'
-          }}>
-            Resident Watchlist
-          </h3>
-          
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '16px'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#6C757D'
-            }}>
-              {watchlistItems.length} residents require attention
+                <div
+                    style={{
+                        fontSize: "12px",
+                        color: "#6C757D",
+                        marginBottom: "10px",
+                    }}
+                >
+                    May 1 - May 30, 2023
+                </div>
+
+                {/* Falls chart */}
+                {renderFallsChart()}
+
+                {/* Summary */}
+                <div
+                    className={`fade-in ${
+                        animationState.showQueryResponse ? "visible" : ""
+                    }`}
+                    style={{
+                        fontSize: "12px",
+                        color: "#343A40",
+                        lineHeight: "1.3",
+                        animation: "fadeIn 0.8s ease",
+                    }}
+                >
+                    <strong>Analysis:</strong> Joe has experienced 7 falls in
+                    the past month, with 5 of them being undetected by staff.
+                    All incidents occurred during nighttime hours, primarily
+                    between 12 AM and 4 AM.
+                </div>
+
+                {/* User note */}
+                {animationState.showNote && renderUserNote()}
             </div>
-            <div style={{
-              fontSize: '14px',
-              color: '#2D7DD2',
-              fontWeight: 'bold'
-            }}>
-              Sort: Priority ↓
-            </div>
-          </div>
-          
-          {/* Regular watchlist items */}
-          {animationState.showWatchlist && watchlistItems.map((item, index) => renderWatchlistItem(item, index))}
-        </div>
-      </div>
-    </TabletLayout>
-  );
+        </TabletLayout>
+    );
 };
 
-export default AnimatedTabletScene1_5; 
+export default AnimatedTabletScene1_5;
