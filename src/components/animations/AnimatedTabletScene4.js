@@ -4,7 +4,7 @@ import "./animations.css";
 
 const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
     // Current scene query (which is a continuation from scene 3)
-    const currentQuery = "Show me John's monthly health trends";
+    const currentQuery = "Break down for me all of this month's trends";
 
     // No bridge query needed for the last scene
     const nextQuery = "";
@@ -32,26 +32,6 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
     // Visual response that includes all the health report components
     const visualResponse = (
         <>
-            <div
-                className="documentation-header"
-                style={{
-                    opacity: showHeader ? 1 : 0,
-                    transform: showHeader
-                        ? "translateY(0)"
-                        : "translateY(-20px)",
-                    transition: "opacity 0.5s ease, transform 0.5s ease",
-                    padding: "15px",
-                    borderBottom: "1px solid #eee",
-                }}
-            >
-                <h2 style={{ margin: "0 0 5px 0", color: "#2c3e50" }}>
-                    Monthly Health Report
-                </h2>
-                <p style={{ margin: "0", color: "#7f8c8d", fontSize: "14px" }}>
-                    Key metrics and trends for resident John Smith
-                </p>
-            </div>
-
             {showSummary && (
                 <div
                     style={{

@@ -7,7 +7,7 @@ const AnimatedTabletScene3 = ({ scrollProgress = 0, scene }) => {
     const currentQuery = "Show me the fall report for John in Room 208";
 
     // Bridge query to scene 4
-    const nextQuery = "Show me John's monthly health trends";
+    const nextQuery = "Break down for me all of this month's trends";
 
     // Check if specific components should be shown based on scroll progress
     const showReport = scrollProgress >= 30;

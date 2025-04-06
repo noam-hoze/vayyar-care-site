@@ -7,7 +7,7 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
     const currentQuery = "Show me Joe's fall analysis for May";
 
     // Bridge query to scene 3
-    const nextQuery = "Show me the fall report for John in Room 208";
+    const nextQuery = "Document John's fall event in Room 208";
 
     // Fall data for the chart
     const fallData = [
