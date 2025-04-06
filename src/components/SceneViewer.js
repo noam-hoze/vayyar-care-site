@@ -66,42 +66,70 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         const video = videoRef.current;
         if (!video) return;
 
-        // Create GSAP timeline for video scrubbing
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".scenes-container",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: videoConfig.scrubSmoothness,
-            },
+        // Debug current scene
+        console.log("Current scene:", scene.scene, "Scene index:", index);
+
+        // Function to update video time based on scroll progress
+        const updateVideoTime = () => {
+            // Map the scroll position directly to video time
+            const sceneTimings = videoConfig.sceneTiming;
+
+            if (!sceneTimings || !video.duration) return;
+
+            console.log("Current scroll progress:", subScrollProgress);
+            console.log("Current scene index:", index);
+
+            // Get current and next scene timings
+            const currentSceneTiming = sceneTimings.find(
+                (t) => t.scene === index
+            );
+            const nextSceneIndex = index + 1;
+            const nextSceneTiming = sceneTimings.find(
+                (t) => t.scene === nextSceneIndex
+            );
+
+            // If we found current scene timing
+            if (currentSceneTiming) {
+                let videoTime;
+
+                if (nextSceneTiming) {
+                    // Interpolate between current and next scene times
+                    const startTime = currentSceneTiming.videoTime;
+                    const endTime = nextSceneTiming.videoTime;
+                    videoTime =
+                        startTime + (endTime - startTime) * subScrollProgress;
+                } else {
+                    // Last scene - interpolate to the end of the video
+                    const startTime = currentSceneTiming.videoTime;
+                    const endTime = video.duration;
+                    videoTime =
+                        startTime + (endTime - startTime) * subScrollProgress;
+                }
+
+                // Set the video time
+                if (!isNaN(videoTime)) {
+                    video.currentTime = videoTime;
+                    console.log("Setting video time to:", videoTime);
+                }
+            }
+        };
+
+        // Set up a scroll trigger to update the video
+        const scrollTrigger = ScrollTrigger.create({
+            trigger: ".scenes-container",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: updateVideoTime,
+            scrub: videoConfig.scrubSmoothness,
         });
 
-        // Set up video time control
-        const setupVideoControl = () => {
-            tl.fromTo(
-                video,
-                {
-                    currentTime: 0,
-                },
-                {
-                    currentTime: video.duration || 1,
-                    ease: "none",
-                }
-            );
-        };
-
-        // Wait for video metadata to load before setting up the timeline
-        if (video.readyState >= 2) {
-            setupVideoControl();
-        } else {
-            video.addEventListener("loadedmetadata", setupVideoControl);
-        }
+        // Initial update
+        updateVideoTime();
 
         return () => {
-            video.removeEventListener("loadedmetadata", setupVideoControl);
-            tl.kill();
+            scrollTrigger.kill();
         };
-    }, []);
+    }, [scene, index, subScrollProgress]);
 
     // Reset animations when scene changes
     useEffect(() => {

@@ -9,14 +9,14 @@ export const videoConfig = {
     scrubSmoothness: 1,
 
     // Video source path
-    videoSrc: "/videos/output_vid_9600.mp4", // Update this with your video path
+    videoSrc: "/videos/output_vid_960.mp4", // Update this with your video path
 
     // Timing configuration for each scene
     // These times should match your video timestamps
     sceneTiming: [
         { scene: SCENES.MORNING_SHIFT, videoTime: 0 }, // Scene 0 starts at 0s
-        { scene: SCENES.FALL_CHART, videoTime: 3 }, // Scene 1 starts at 3s
-        { scene: SCENES.DOCUMENT_EVENT, videoTime: 9 },
-        { scene: SCENES.VC_CLINICAL, videoTime: 12 },
+        { scene: SCENES.FALL_CHART, videoTime: 5 }, // Scene 1 starts at 3s
+        { scene: SCENES.DOCUMENT_EVENT, videoTime: 10 },
+        { scene: SCENES.VC_CLINICAL, videoTime: 30 },
     ],
 };
