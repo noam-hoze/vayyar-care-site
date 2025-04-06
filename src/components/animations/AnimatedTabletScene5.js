@@ -11,9 +11,28 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
 
     // Check if specific components should be shown based on scroll progress
     const showMobility = scrollProgress >= 10;
-    const showSleepData = scrollProgress >= 30;
-    const showFallRisk = scrollProgress >= 50;
-    const showRecommendation = scrollProgress >= 75;
+    const showSleepData = scrollProgress >= 40; // Shown later in the scroll
+    const showBathroomVisits = scrollProgress >= 65; // New section for bathroom visits
+    const showSummary = scrollProgress >= 85; // Final summary shown at the end
+
+    // Get scroll-based animation progress for each section
+    const getMobilityProgress = () => {
+        if (scrollProgress < 10) return 0;
+        if (scrollProgress > 30) return 100; // Complete earlier
+        return ((scrollProgress - 10) / 20) * 100;
+    };
+
+    const getSleepProgress = () => {
+        if (scrollProgress < 40) return 0;
+        if (scrollProgress > 55) return 100; // Complete earlier
+        return ((scrollProgress - 40) / 15) * 100;
+    };
+
+    const getBathroomProgress = () => {
+        if (scrollProgress < 65) return 0;
+        if (scrollProgress > 75) return 100; // Complete earlier
+        return ((scrollProgress - 65) / 10) * 100;
+    };
 
     // Mobility data for Ray
     const mobilityData = [
@@ -37,22 +56,25 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
         { day: "Sun", hours: 4.7, interruptions: 7 },
     ];
 
-    // Fall risk factors and scores
-    const fallRiskData = {
-        mobilityScore: 72,
-        balanceScore: 65,
-        medicationRisk: 58,
-        nighttimeActivity: 86,
-        previousFalls: 3,
-        overall: 78,
-    };
+    // Bathroom visits data
+    const bathroomVisits = [
+        { timeRange: "12am-3am", visits: 2 },
+        { timeRange: "3am-6am", visits: 3 },
+        { timeRange: "6am-9am", visits: 1 },
+        { timeRange: "9am-12pm", visits: 1 },
+        { timeRange: "12pm-3pm", visits: 0 },
+        { timeRange: "3pm-6pm", visits: 1 },
+        { timeRange: "6pm-9pm", visits: 1 },
+        { timeRange: "9pm-12am", visits: 2 },
+    ];
 
     // Render mobility chart
     const renderMobilityChart = () => {
         const maxSteps = Math.max(...mobilityData.map((d) => d.steps));
         const barWidth = 25;
         const barSpacing = 10;
-        const chartHeight = 120;
+        const chartHeight = 140;
+        const mobileProgress = getMobilityProgress();
 
         return (
             <div
@@ -63,14 +85,31 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                         ? "translateY(0)"
                         : "translateY(20px)",
                     transition: "opacity 0.5s ease, transform 0.5s ease",
+                    marginBottom: "20px",
                 }}
             >
+                <h3
+                    className="chart-title"
+                    style={{
+                        margin: "0 0 60px 0",
+                        paddingBottom: "10px",
+                        borderBottom: "1px solid #ddd",
+                        fontSize: "18px",
+                        fontWeight: "500",
+                        textAlign: "center",
+                        clear: "both",
+                    }}
+                >
+                    Mobility Report
+                </h3>
+
                 <div
                     className="bar-chart-container"
                     style={{
                         height: `${chartHeight}px`,
                         position: "relative",
-                        paddingTop: "10px",
+                        paddingTop: "60px",
+                        marginTop: "40px",
                     }}
                 >
                     {mobilityData.map((data, index) => (
@@ -80,6 +119,14 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                             style={{
                                 width: `${barWidth}px`,
                                 marginRight: `${barSpacing}px`,
+                                opacity: mobileProgress > index * 14 ? 1 : 0,
+                                transform:
+                                    mobileProgress > index * 14
+                                        ? "translateY(0)"
+                                        : "translateY(10px)",
+                                transition: `opacity 0.5s ease ${
+                                    index * 0.1
+                                }s, transform 0.5s ease ${index * 0.1}s`,
                             }}
                         >
                             <div
@@ -87,6 +134,11 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                                 style={{
                                     marginBottom: "8px",
                                     fontWeight: "500",
+                                    position: "absolute",
+                                    top: "-40px",
+                                    width: "100%",
+                                    textAlign: "center",
+                                    fontSize: "14px",
                                 }}
                             >
                                 {data.steps}
@@ -111,7 +163,13 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                     ))}
                 </div>
 
-                <div className="chart-insights">
+                <div
+                    className="chart-insights"
+                    style={{
+                        opacity: mobileProgress > 80 ? 1 : 0,
+                        transition: "opacity 0.5s ease",
+                    }}
+                >
                     <div className="insight-item">
                         <span className="insight-label">Average Steps:</span>
                         <span className="insight-value">
@@ -148,9 +206,10 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
     // Render sleep data
     const renderSleepData = () => {
         const maxHours = 8; // For scale
-        const barWidth = 25; // Reduced from 30
-        const barSpacing = 10; // Reduced from 15
-        const chartHeight = 120; // Reduced from 150
+        const barWidth = 25;
+        const barSpacing = 10;
+        const chartHeight = 140;
+        const sleepProgress = getSleepProgress();
 
         return (
             <div
@@ -161,12 +220,20 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                         ? "translateY(0)"
                         : "translateY(20px)",
                     transition: "opacity 0.5s ease, transform 0.5s ease",
-                    marginTop: "10px",
+                    marginBottom: "20px",
                 }}
             >
                 <h3
                     className="chart-title"
-                    style={{ marginBottom: "15px", fontSize: "14px" }}
+                    style={{
+                        margin: "0 0 60px 0",
+                        paddingBottom: "10px",
+                        borderBottom: "1px solid #ddd",
+                        fontSize: "18px",
+                        fontWeight: "500",
+                        textAlign: "center",
+                        clear: "both",
+                    }}
                 >
                     Sleep Quality Analysis
                 </h3>
@@ -175,9 +242,9 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                     className="bar-chart-container"
                     style={{
                         height: `${chartHeight}px`,
-                        marginTop: "5px",
+                        marginTop: "40px",
                         position: "relative",
-                        paddingTop: "10px",
+                        paddingTop: "60px",
                     }}
                 >
                     {sleepData.map((day, index) => (
@@ -187,6 +254,14 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                             style={{
                                 width: `${barWidth}px`,
                                 marginRight: `${barSpacing}px`,
+                                opacity: sleepProgress > index * 14 ? 1 : 0,
+                                transform:
+                                    sleepProgress > index * 14
+                                        ? "translateY(0)"
+                                        : "translateY(10px)",
+                                transition: `opacity 0.5s ease ${
+                                    index * 0.1
+                                }s, transform 0.5s ease ${index * 0.1}s`,
                             }}
                         >
                             <div
@@ -194,6 +269,11 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                                 style={{
                                     marginBottom: "8px",
                                     fontWeight: "500",
+                                    position: "absolute",
+                                    top: "-40px",
+                                    width: "100%",
+                                    textAlign: "center",
+                                    fontSize: "14px",
                                 }}
                             >
                                 {day.hours}h
@@ -218,14 +298,22 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                     ))}
                 </div>
 
-                <div className="chart-insights">
+                <div
+                    className="chart-insights"
+                    style={{
+                        opacity: sleepProgress > 80 ? 1 : 0,
+                        transition: "opacity 0.5s ease",
+                    }}
+                >
                     <div className="insight-item">
                         <span className="insight-label">Average Sleep:</span>
                         <span className="insight-value">
-                            {sleepData.reduce(
-                                (acc, day) => acc + day.hours,
-                                0
-                            ) / sleepData.length}
+                            {(
+                                sleepData.reduce(
+                                    (acc, day) => acc + day.hours,
+                                    0
+                                ) / sleepData.length
+                            ).toFixed(1)}
                             h
                         </span>
                     </div>
@@ -252,96 +340,337 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
         );
     };
 
-    // Render fall risk assessment
-    const renderFallRisk = () => {
+    // Render bathroom visits
+    const renderBathroomVisits = () => {
+        const maxVisits = Math.max(...bathroomVisits.map((d) => d.visits));
+        const barWidth = 25;
+        const barSpacing = 5;
+        const chartHeight = 140;
+        const bathroomProgress = getBathroomProgress();
+
         return (
             <div
                 className="data-visualization-container"
                 style={{
-                    opacity: showFallRisk ? 1 : 0,
-                    transform: showFallRisk
+                    opacity: showBathroomVisits ? 1 : 0,
+                    transform: showBathroomVisits
                         ? "translateY(0)"
                         : "translateY(20px)",
                     transition: "opacity 0.5s ease, transform 0.5s ease",
-                    marginTop: "10px",
+                    marginBottom: "20px",
                 }}
             >
                 <h3
                     className="chart-title"
-                    style={{ marginBottom: "15px", fontSize: "14px" }}
+                    style={{
+                        margin: "0 0 60px 0",
+                        paddingBottom: "10px",
+                        borderBottom: "1px solid #ddd",
+                        fontSize: "18px",
+                        fontWeight: "500",
+                        textAlign: "center",
+                        clear: "both",
+                    }}
                 >
-                    Fall Risk Assessment
+                    Bathroom Visit Pattern
                 </h3>
 
                 <div
-                    className="risk-factors-container"
-                    style={{ marginTop: "5px" }}
+                    className="bar-chart-container"
+                    style={{
+                        height: `${chartHeight}px`,
+                        marginTop: "40px",
+                        position: "relative",
+                        paddingTop: "60px",
+                    }}
                 >
-                    {Object.entries(fallRiskData).map(([key, value], index) => {
-                        if (key === "overall") return null;
-
-                        const label = key
-                            .replace(/([A-Z])/g, " $1")
-                            .replace(/^./, (str) => str.toUpperCase());
-
-                        const getColor = (score) => {
-                            if (score >= 70) return "#e63946";
-                            if (score >= 50) return "#f4a261";
-                            return "#2a9d8f";
-                        };
-
-                        return (
-                            <div key={index} className="risk-factor">
-                                <div className="risk-factor-label">{label}</div>
-                                <div className="risk-factor-bar-container">
-                                    <div
-                                        className="risk-factor-bar"
-                                        style={{
-                                            width: `${value}%`,
-                                            backgroundColor: getColor(value),
-                                            transition: "width 0.8s ease",
-                                        }}
-                                    ></div>
-                                </div>
-                                <div className="risk-factor-value">{value}</div>
+                    {bathroomVisits.map((data, index) => (
+                        <div
+                            key={index}
+                            className="bar-column"
+                            style={{
+                                width: `${barWidth}px`,
+                                marginRight: `${barSpacing}px`,
+                                opacity: bathroomProgress > index * 12 ? 1 : 0,
+                                transform:
+                                    bathroomProgress > index * 12
+                                        ? "translateY(0)"
+                                        : "translateY(10px)",
+                                transition: `opacity 0.5s ease ${
+                                    index * 0.1
+                                }s, transform 0.5s ease ${index * 0.1}s`,
+                            }}
+                        >
+                            <div
+                                className="bar-value"
+                                style={{
+                                    marginBottom: "8px",
+                                    fontWeight: "500",
+                                    position: "absolute",
+                                    top: "-40px",
+                                    width: "100%",
+                                    textAlign: "center",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                {data.visits}
                             </div>
-                        );
-                    })}
+                            <div
+                                className="bar"
+                                style={{
+                                    height: `${
+                                        (data.visits / maxVisits) *
+                                        chartHeight *
+                                        0.8
+                                    }px`,
+                                    backgroundColor: "#26a69a",
+                                    transition: "height 0.5s ease",
+                                }}
+                            ></div>
+                            <div
+                                className="bar-label"
+                                style={{ fontSize: "10px" }}
+                            >
+                                {data.timeRange}
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
-                <div className="overall-risk">
-                    <div className="overall-risk-label">Overall Fall Risk:</div>
-                    <div
-                        className="overall-risk-value"
-                        style={{ color: "#e63946", fontWeight: "bold" }}
-                    >
-                        {fallRiskData.overall}% - HIGH
+                <div
+                    className="chart-insights"
+                    style={{
+                        opacity: bathroomProgress > 80 ? 1 : 0,
+                        transition: "opacity 0.5s ease",
+                    }}
+                >
+                    <div className="insight-item">
+                        <span className="insight-label">Total Visits:</span>
+                        <span className="insight-value">
+                            {bathroomVisits.reduce(
+                                (acc, data) => acc + data.visits,
+                                0
+                            )}
+                        </span>
                     </div>
-                </div>
-
-                <div className="previous-falls">
-                    <div className="previous-falls-label">
-                        Previous Falls (90 days):
+                    <div className="insight-item">
+                        <span className="insight-label">Night Visits:</span>
+                        <span className="insight-value">
+                            {bathroomVisits
+                                .slice(0, 2)
+                                .concat(bathroomVisits.slice(7))
+                                .reduce((acc, data) => acc + data.visits, 0)}
+                        </span>
                     </div>
-                    <div className="previous-falls-count">
-                        {fallRiskData.previousFalls}
+                    <div className="insight-item">
+                        <span className="insight-label">Pattern:</span>
+                        <span className="insight-value warning">
+                            Frequent night visits
+                        </span>
                     </div>
                 </div>
             </div>
         );
     };
 
+    // Render summary
+    const renderSummary = () => {
+        return (
+            <div
+                className="data-visualization-container risk-summary"
+                style={{
+                    opacity: showSummary ? 1 : 0,
+                    transform: showSummary
+                        ? "translateY(0)"
+                        : "translateY(20px)",
+                    transition: "opacity 0.5s ease, transform 0.5s ease",
+                    marginTop: "20px",
+                    backgroundColor: "#f8f9fa",
+                    padding: "15px",
+                    borderRadius: "8px",
+                    border: "1px solid #e0e0e0",
+                }}
+            >
+                <h3
+                    className="chart-title"
+                    style={{
+                        marginBottom: "15px",
+                        fontSize: "15px",
+                        borderBottom: "1px solid #e0e0e0",
+                        paddingBottom: "8px",
+                    }}
+                >
+                    Risk Assessment Summary
+                </h3>
+
+                <div className="risk-summary-items">
+                    <div
+                        className="risk-summary-item"
+                        style={{
+                            marginBottom: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        <div
+                            className="risk-indicator high"
+                            style={{
+                                width: "12px",
+                                height: "12px",
+                                borderRadius: "50%",
+                                backgroundColor: "#e63946",
+                                marginRight: "10px",
+                            }}
+                        ></div>
+                        <div className="risk-summary-text">
+                            <div
+                                style={{ fontWeight: "500", fontSize: "14px" }}
+                            >
+                                Fall Risk: High (78%)
+                            </div>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    color: "#666",
+                                    marginTop: "2px",
+                                }}
+                            >
+                                Declining mobility and frequent night bathroom
+                                visits
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className="risk-summary-item"
+                        style={{
+                            marginBottom: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        <div
+                            className="risk-indicator high"
+                            style={{
+                                width: "12px",
+                                height: "12px",
+                                borderRadius: "50%",
+                                backgroundColor: "#e63946",
+                                marginRight: "10px",
+                            }}
+                        ></div>
+                        <div className="risk-summary-text">
+                            <div
+                                style={{ fontWeight: "500", fontSize: "14px" }}
+                            >
+                                Sleep Quality: Poor
+                            </div>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    color: "#666",
+                                    marginTop: "2px",
+                                }}
+                            >
+                                Averaging only 4.8 hours with 6 interruptions
+                                nightly
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className="risk-summary-item"
+                        style={{
+                            marginBottom: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        <div
+                            className="risk-indicator medium"
+                            style={{
+                                width: "12px",
+                                height: "12px",
+                                borderRadius: "50%",
+                                backgroundColor: "#f4a261",
+                                marginRight: "10px",
+                            }}
+                        ></div>
+                        <div className="risk-summary-text">
+                            <div
+                                style={{ fontWeight: "500", fontSize: "14px" }}
+                            >
+                                Mobility: Moderate Risk
+                            </div>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    color: "#666",
+                                    marginTop: "2px",
+                                }}
+                            >
+                                57% decline in steps over past 6 months
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className="risk-summary-item"
+                        style={{ display: "flex", alignItems: "center" }}
+                    >
+                        <div
+                            className="risk-indicator high"
+                            style={{
+                                width: "12px",
+                                height: "12px",
+                                borderRadius: "50%",
+                                backgroundColor: "#e63946",
+                                marginRight: "10px",
+                            }}
+                        ></div>
+                        <div className="risk-summary-text">
+                            <div
+                                style={{ fontWeight: "500", fontSize: "14px" }}
+                            >
+                                Nighttime Activity: High Risk
+                            </div>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    color: "#666",
+                                    marginTop: "2px",
+                                }}
+                            >
+                                7 nighttime bathroom visits weekly
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    // Determine which report to show based on scroll progress
+    const determineActiveReport = () => {
+        if (scrollProgress >= 85) return "summary";
+        if (scrollProgress >= 65) return "bathroom";
+        if (scrollProgress >= 40) return "sleep";
+        return "mobility"; // default
+    };
+
+    const activeReport = determineActiveReport();
+
     // Visual response content that will be displayed
     const visualResponse = (
-        <div className="scene-content-container">
-            <div style={{ padding: "15px" }}>
+        <div className="scene-content-container" style={{ padding: "0" }}>
+            <div style={{ padding: "20px 15px 15px 15px" }}>
                 <div
                     className="resident-header"
                     style={{
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        marginBottom: "20px",
+                        marginBottom: "40px",
                         marginTop: "10px",
                     }}
                 >
@@ -372,14 +701,13 @@ const AnimatedTabletScene5 = ({ scrollProgress = 0, scene }) => {
                     </div>
                 </div>
 
-                {/* Mobility Chart */}
-                {renderMobilityChart()}
-
-                {/* Sleep Data */}
-                {renderSleepData()}
-
-                {/* Fall Risk */}
-                {renderFallRisk()}
+                <div style={{ margin: "0 0 60px 0" }}>
+                    {/* Show only the active report based on scroll position */}
+                    {activeReport === "mobility" && renderMobilityChart()}
+                    {activeReport === "sleep" && renderSleepData()}
+                    {activeReport === "bathroom" && renderBathroomVisits()}
+                    {activeReport === "summary" && renderSummary()}
+                </div>
             </div>
         </div>
     );

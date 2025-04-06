@@ -970,6 +970,11 @@
   color: #e63946;
 }
 
+.insight-value.warning {
+  color: #f4a261;
+  font-weight: 500;
+}
+
 .risk-factors-container {
   margin-bottom: 15px;
 }

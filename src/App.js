@@ -45,6 +45,8 @@ export default function App() {
 
             // Check if we're in the FALL_CHART scene
             const isFallChartScene = currentSceneIndex === SCENES.FALL_CHART;
+            // Check if we're in the VC_CLINICAL scene
+            const isVpFamilyScene = currentSceneIndex === SCENES.VP_FAMILY;
 
             // Determine scroll speed multiplier
             let speedMultiplier = 0.1; // Default reduced speed
@@ -57,6 +59,25 @@ export default function App() {
             ) {
                 // Super slow scrolling for the alert resolution phase (25x slower)
                 speedMultiplier = 0.004;
+            }
+
+            // Add variable speed for VC_CLINICAL scene (clinical data charts)
+            if (isVpFamilyScene) {
+                // Mobility chart (1st chart)
+                if (currentSubScroll > 0.3 && currentSubScroll < 0.4) {
+                    // Slow down after mobility chart completes for reading time
+                    speedMultiplier = 0.01;
+                }
+                // Sleep chart (2nd chart)
+                else if (currentSubScroll > 0.55 && currentSubScroll < 0.65) {
+                    // Slow down after sleep chart completes for reading time
+                    speedMultiplier = 0.01;
+                }
+                // Bathroom visits chart (3rd chart)
+                else if (currentSubScroll > 0.75 && currentSubScroll < 0.85) {
+                    // Slow down after bathroom visits chart completes for reading time
+                    speedMultiplier = 0.01;
+                }
             }
 
             // Update target position with reduced speed
