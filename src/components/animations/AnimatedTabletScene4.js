@@ -10,25 +10,29 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
     const [showCallout, setShowCallout] = useState(false);
 
     useEffect(() => {
-        // Animate elements based on scroll progress
-        setShowHeader(scrollProgress >= 15);
-        setShowSummary(scrollProgress >= 25);
-        setShowTrends(scrollProgress >= 40);
-        setShowComparison(scrollProgress >= 60);
-        setShowCallout(scrollProgress >= 80);
+        // Log for debugging
+        console.log("AnimatedTabletScene4 scrollProgress:", scrollProgress);
+
+        // Animate elements based on scroll progress (0-100 range)
+        setShowHeader(scrollProgress >= 5);
+        setShowSummary(scrollProgress >= 15);
+        setShowTrends(scrollProgress >= 30);
+        setShowComparison(scrollProgress >= 50);
+        setShowCallout(scrollProgress >= 70);
     }, [scrollProgress]);
 
     // Sample trend data
     const trends = [
-        { month: "Jan", falls: 5, bathroom: 12 },
-        { month: "Feb", falls: 7, bathroom: 14 },
-        { month: "Mar", falls: 4, bathroom: 16 },
-        { month: "Apr", falls: 6, bathroom: 15 },
-        { month: "May", falls: 3, bathroom: 18 },
+        { month: "Jan", falls: 5, bathroom: 12, gait: 8 },
+        { month: "Feb", falls: 7, bathroom: 14, gait: 7 },
+        { month: "Mar", falls: 4, bathroom: 16, gait: 9 },
+        { month: "Apr", falls: 6, bathroom: 15, gait: 6 },
+        { month: "May", falls: 3, bathroom: 18, gait: 10 },
     ];
 
     const maxFalls = Math.max(...trends.map((t) => t.falls));
     const maxBathroom = Math.max(...trends.map((t) => t.bathroom));
+    const maxGait = Math.max(...trends.map((t) => t.gait));
 
     return (
         <TabletLayout time="10:15 AM" showChatInput={true} showMetrics={true}>
@@ -45,10 +49,10 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
                 }}
             >
                 <h2 style={{ margin: "0 0 5px 0", color: "#2c3e50" }}>
-                    Team Huddle
+                    Monthly Health Report
                 </h2>
                 <p style={{ margin: "0", color: "#7f8c8d", fontSize: "14px" }}>
-                    Weekly trends and insights across all monitored residents
+                    Key metrics and trends for resident John Smith
                 </p>
             </div>
 
@@ -116,6 +120,31 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
                                 Bathroom
                             </div>
                         </div>
+
+                        <div
+                            style={{
+                                textAlign: "center",
+                                flex: 1,
+                                padding: "10px",
+                                borderRadius: "8px",
+                                backgroundColor: "white",
+                                margin: "0 5px",
+                                boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    color: "#2ecc71",
+                                    fontSize: "24px",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                +8%
+                            </div>
+                            <div style={{ color: "#7f8c8d", fontSize: "12px" }}>
+                                Gait
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
@@ -143,7 +172,7 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
 
                     <div
                         style={{
-                            height: "150px",
+                            height: "200px",
                             position: "relative",
                             marginBottom: "25px",
                         }}
@@ -181,7 +210,7 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
                             </div>
                         </div>
 
-                        {/* Falls chart */}
+                        {/* Line chart container */}
                         <div
                             style={{
                                 position: "absolute",
@@ -189,38 +218,186 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
                                 left: 0,
                                 right: 0,
                                 height: "90%",
-                                display: "flex",
-                                alignItems: "flex-end",
                             }}
                         >
-                            {trends.map((data, index) => (
-                                <div
-                                    key={index}
+                            {/* Falls line */}
+                            <svg
+                                style={{
+                                    position: "absolute",
+                                    width: "100%",
+                                    height: "100%",
+                                    overflow: "visible",
+                                }}
+                            >
+                                <polyline
+                                    points={trends
+                                        .map((data, index) => {
+                                            const x =
+                                                (index / (trends.length - 1)) *
+                                                    100 +
+                                                "%";
+                                            const y =
+                                                100 -
+                                                (data.falls / maxFalls) * 100 +
+                                                "%";
+                                            return `${x},${y}`;
+                                        })
+                                        .join(" ")}
+                                    fill="none"
+                                    stroke="#e74c3c"
+                                    strokeWidth="2"
+                                    strokeLinejoin="round"
                                     style={{
-                                        flex: 1,
-                                        marginLeft: "5px",
-                                        marginRight: "5px",
-                                        display: "flex",
-                                        justifyContent: "center",
+                                        strokeDasharray: "1000",
+                                        strokeDashoffset: showTrends
+                                            ? "0"
+                                            : "1000",
+                                        transition:
+                                            "stroke-dashoffset 1.5s ease",
                                     }}
-                                >
-                                    <div
+                                />
+                                {trends.map((data, index) => (
+                                    <circle
+                                        key={index}
+                                        cx={
+                                            (index / (trends.length - 1)) *
+                                                100 +
+                                            "%"
+                                        }
+                                        cy={
+                                            100 -
+                                            (data.falls / maxFalls) * 100 +
+                                            "%"
+                                        }
+                                        r="3"
+                                        fill="#e74c3c"
                                         style={{
-                                            width: "8px",
-                                            height: `${
-                                                (data.falls / maxFalls) * 100
-                                            }%`,
-                                            backgroundColor: "#e74c3c",
-                                            borderRadius: "2px",
-                                            transform: "scaleY(0)",
-                                            transformOrigin: "bottom",
-                                            animation: `scaleIn 0.5s ease-out ${
-                                                index * 0.1
-                                            }s forwards`,
+                                            opacity: showTrends ? "1" : "0",
+                                            transition: "opacity 0.5s ease",
                                         }}
                                     />
-                                </div>
-                            ))}
+                                ))}
+                            </svg>
+
+                            {/* Bathroom line */}
+                            <svg
+                                style={{
+                                    position: "absolute",
+                                    width: "100%",
+                                    height: "100%",
+                                    overflow: "visible",
+                                }}
+                            >
+                                <polyline
+                                    points={trends
+                                        .map((data, index) => {
+                                            const x =
+                                                (index / (trends.length - 1)) *
+                                                    100 +
+                                                "%";
+                                            const y =
+                                                100 -
+                                                (data.bathroom / maxBathroom) *
+                                                    100 +
+                                                "%";
+                                            return `${x},${y}`;
+                                        })
+                                        .join(" ")}
+                                    fill="none"
+                                    stroke="#3498db"
+                                    strokeWidth="2"
+                                    strokeLinejoin="round"
+                                    style={{
+                                        strokeDasharray: "1000",
+                                        strokeDashoffset: showTrends
+                                            ? "0"
+                                            : "1000",
+                                        transition:
+                                            "stroke-dashoffset 1.5s ease 0.3s",
+                                    }}
+                                />
+                                {trends.map((data, index) => (
+                                    <circle
+                                        key={index}
+                                        cx={
+                                            (index / (trends.length - 1)) *
+                                                100 +
+                                            "%"
+                                        }
+                                        cy={
+                                            100 -
+                                            (data.bathroom / maxBathroom) *
+                                                100 +
+                                            "%"
+                                        }
+                                        r="3"
+                                        fill="#3498db"
+                                        style={{
+                                            opacity: showTrends ? "1" : "0",
+                                            transition: "opacity 0.5s ease",
+                                        }}
+                                    />
+                                ))}
+                            </svg>
+
+                            {/* Gait line */}
+                            <svg
+                                style={{
+                                    position: "absolute",
+                                    width: "100%",
+                                    height: "100%",
+                                    overflow: "visible",
+                                }}
+                            >
+                                <polyline
+                                    points={trends
+                                        .map((data, index) => {
+                                            const x =
+                                                (index / (trends.length - 1)) *
+                                                    100 +
+                                                "%";
+                                            const y =
+                                                100 -
+                                                (data.gait / maxGait) * 100 +
+                                                "%";
+                                            return `${x},${y}`;
+                                        })
+                                        .join(" ")}
+                                    fill="none"
+                                    stroke="#2ecc71"
+                                    strokeWidth="2"
+                                    strokeLinejoin="round"
+                                    style={{
+                                        strokeDasharray: "1000",
+                                        strokeDashoffset: showTrends
+                                            ? "0"
+                                            : "1000",
+                                        transition:
+                                            "stroke-dashoffset 1.5s ease 0.6s",
+                                    }}
+                                />
+                                {trends.map((data, index) => (
+                                    <circle
+                                        key={index}
+                                        cx={
+                                            (index / (trends.length - 1)) *
+                                                100 +
+                                            "%"
+                                        }
+                                        cy={
+                                            100 -
+                                            (data.gait / maxGait) * 100 +
+                                            "%"
+                                        }
+                                        r="3"
+                                        fill="#2ecc71"
+                                        style={{
+                                            opacity: showTrends ? "1" : "0",
+                                            transition: "opacity 0.5s ease",
+                                        }}
+                                    />
+                                ))}
+                            </svg>
                         </div>
                     </div>
 
@@ -246,6 +423,40 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
                                 style={{ fontSize: "12px", color: "#7f8c8d" }}
                             >
                                 Falls
+                            </span>
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                            <div
+                                style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    backgroundColor: "#3498db",
+                                    borderRadius: "2px",
+                                    marginRight: "5px",
+                                }}
+                            ></div>
+                            <span
+                                style={{ fontSize: "12px", color: "#7f8c8d" }}
+                            >
+                                Bathroom
+                            </span>
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                            <div
+                                style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    backgroundColor: "#2ecc71",
+                                    borderRadius: "2px",
+                                    marginRight: "5px",
+                                }}
+                            ></div>
+                            <span
+                                style={{ fontSize: "12px", color: "#7f8c8d" }}
+                            >
+                                Gait
                             </span>
                         </div>
                     </div>
