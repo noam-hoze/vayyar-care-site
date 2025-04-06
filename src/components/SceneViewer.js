@@ -5,7 +5,6 @@ import AnimatedTablet1 from "./animations/AnimatedTablet1";
 import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
 import AnimatedTabletScene6 from "./animations/AnimatedTabletScene6";
-import ContinuousChatScene from "./animations/ContinuousChatScene";
 import DebugOverlay from "./DebugOverlay";
 import { videoConfig } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
@@ -105,7 +104,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
         () => ({
-            [SCENES.MORNING_SHIFT]: ContinuousChatScene,
+            [SCENES.MORNING_SHIFT]: AnimatedTablet1,
             [SCENES.FALL_CHART]: AnimatedTabletScene2,
             [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
             [SCENES.VC_CLINICAL]: AnimatedTabletScene6,
