@@ -93,6 +93,14 @@
   }
 }
 
+/* Tablet layout alert styles */
+.tablet-layout-alert {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1000;
+}
+
 .alert-banner {
   animation: slideInDown 0.3s ease-out, alertPulse 2s infinite;
 }

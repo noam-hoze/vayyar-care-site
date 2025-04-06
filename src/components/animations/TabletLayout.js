@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./animations.css";
+import { SCENES } from "../../data/sceneRegistry";
 
 /**
  * Reusable tablet layout component that provides the common structure for all scenes
@@ -18,6 +19,7 @@ import "./animations.css";
  * @param {number} props.responseStartThreshold - Scroll progress at which to show response (defaults to 40)
  * @param {number} props.transitionStartThreshold - Scroll progress at which to start typing next query (defaults to 85)
  * @param {number} props.contentTransitionThreshold - Scroll progress at which to transition content (defaults to 95)
+ * @param {number} props.scene - Current scene ID from SCENES
  */
 const TabletLayout = ({
     children,
@@ -33,6 +35,7 @@ const TabletLayout = ({
     responseStartThreshold = 40,
     transitionStartThreshold = 85,
     contentTransitionThreshold = 95,
+    scene,
 }) => {
     // State for animation control
     const [animationState, setAnimationState] = useState({
@@ -166,12 +169,69 @@ const TabletLayout = ({
         " "
     )}`;
 
+    // Render Fall Alert Banner
+    const renderFallAlert = () => {
+        // Only check for scrollProgress >= 75 for now (removing scene check for testing)
+        const showFallAlert = scrollProgress >= 75;
+
+        if (!showFallAlert) return null;
+
+        return (
+            <div
+                className="tablet-layout-alert alert-banner alert-flicker"
+                style={{
+                    backgroundColor: "#E63946",
+                    color: "white",
+                    padding: "12px 15px",
+                    margin: "0",
+                    fontWeight: "bold",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    boxShadow: "0 4px 8px rgba(230, 57, 70, 0.3)",
+                    zIndex: 1000,
+                    position: "relative",
+                    opacity: showFallAlert ? 1 : 0,
+                    transform: showFallAlert
+                        ? "translateY(0)"
+                        : "translateY(-100%)",
+                    transition: "opacity 0.3s ease, transform 0.3s ease",
+                }}
+            >
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <span style={{ marginRight: "10px", fontSize: "18px" }}>
+                        ⚠️
+                    </span>
+                    <div>
+                        <div style={{ fontSize: "14px" }}>FALL DETECTED</div>
+                        <div style={{ fontSize: "12px", opacity: "0.9" }}>
+                            Room 208 - John Smith - Just now
+                        </div>
+                    </div>
+                </div>
+                <div
+                    style={{
+                        backgroundColor: "rgba(255,255,255,0.2)",
+                        padding: "5px 8px",
+                        borderRadius: "4px",
+                        fontSize: "12px",
+                    }}
+                >
+                    URGENT
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="tablet-container">
             <div className="tablet-frame">
                 <div className="tablet-notch"></div>
 
                 <div className="tablet-screen">
+                    {/* Fall Alert - positioned at the very top */}
+                    {renderFallAlert()}
+
                     {/* Header */}
                     <div className="tablet-layout-header">
                         <div className="tablet-layout-header-logo">

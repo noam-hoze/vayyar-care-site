@@ -24,6 +24,7 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
     const showQueryResponse = scrollProgress >= 20;
     const showNote = scrollProgress >= 60;
     const focusedChart = scrollProgress >= 30 && scrollProgress <= 70;
+    // Show fall alert will now be handled in TabletLayout
 
     // Render the bar chart for falls
     const renderFallsChart = () => {
@@ -175,6 +176,8 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
             responseStartThreshold={10}
             transitionStartThreshold={85}
             contentTransitionThreshold={95}
+            // Pass the scene to TabletLayout to determine when to show the alert
+            scene={scene}
         >
             {visualResponse}
         </TabletLayout>
