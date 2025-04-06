@@ -43,103 +43,47 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                     animationState.showQueryResponse ? "visible" : ""
                 } ${animationState.focusedChart ? "focused" : ""}`}
                 style={{
-                    marginTop: "16px",
-                    position: "relative",
                     height: `${chartHeight * focusScaleFactor}px`,
-                    marginBottom: animationState.focusedChart ? "24px" : "16px",
-                    opacity: animationState.showQueryResponse ? 1 : 0,
-                    transition:
-                        "opacity 0.8s ease, height 0.5s ease, margin 0.5s ease, transform 0.5s ease",
-                    transform: animationState.focusedChart
-                        ? "scale(1.1)"
-                        : "scale(1)",
-                    transformOrigin: "center center",
-                    zIndex: animationState.focusedChart ? 10 : 1,
-                    boxShadow: animationState.focusedChart
-                        ? "0 4px 12px rgba(0,0,0,0.15)"
-                        : "none",
-                    borderRadius: animationState.focusedChart ? "8px" : "0",
-                    padding: animationState.focusedChart ? "12px" : "0",
-                    backgroundColor: animationState.focusedChart
-                        ? "rgba(255,255,255,0.95)"
-                        : "transparent",
                 }}
             >
                 {/* Y-axis label */}
-                <div
-                    style={{
-                        position: "absolute",
-                        left: animationState.focusedChart ? "-24px" : "-18px",
-                        top: "50%",
-                        transform: "rotate(-90deg) translateX(50%)",
-                        fontSize: animationState.focusedChart ? "12px" : "10px",
-                        color: "#6C757D",
-                        whiteSpace: "nowrap",
-                        fontWeight: animationState.focusedChart
-                            ? "bold"
-                            : "normal",
-                        transition: "all 0.5s ease",
-                    }}
-                >
-                    Falls
-                </div>
+                <div className="y-axis-label">Falls</div>
 
                 {/* Chart grid lines */}
                 <div
+                    className="chart-grid"
                     style={{
-                        position: "absolute",
-                        top: 0,
-                        left: "15px",
-                        right: 0,
-                        height: "100%",
-                        borderLeft: "1px solid #E0E0E0",
-                        borderBottom: "1px solid #E0E0E0",
-                        backgroundImage:
-                            "linear-gradient(to bottom, #F8F9FA 1px, transparent 1px)",
                         backgroundSize: `100% ${
                             (chartHeight * focusScaleFactor) / 3
                         }px`,
-                        transition: "all 0.5s ease",
                     }}
                 />
 
                 {/* Bars for fall events */}
-                <div
-                    style={{
-                        display: "flex",
-                        position: "absolute",
-                        bottom: 0,
-                        left: "15px",
-                        height: "100%",
-                        alignItems: "flex-end",
-                        transition: "all 0.5s ease",
-                    }}
-                >
+                <div className="bars-container">
                     {fallData.map((fall, index) => (
                         <div
                             key={index}
+                            className="bar-item"
                             style={{
                                 width: `${barWidth * focusScaleFactor}px`,
                                 marginRight: `${
                                     barSpacing * focusScaleFactor
                                 }px`,
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                transition: "all 0.5s ease",
                             }}
                         >
                             <div
+                                className={`bar ${
+                                    fall.detected ? "detected" : "hidden"
+                                } ${
+                                    animationState.showQueryResponse
+                                        ? "visible"
+                                        : ""
+                                }`}
                                 style={{
-                                    width: "100%",
                                     height: `${
                                         fall.height * focusScaleFactor
                                     }px`,
-                                    backgroundColor: fall.detected
-                                        ? "#3EBD93"
-                                        : "#E63946",
-                                    borderRadius: "3px 3px 0 0",
-                                    position: "relative",
                                     opacity: animationState.showQueryResponse
                                         ? 1
                                         : 0,
@@ -155,22 +99,8 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                             >
                                 {!fall.detected && (
                                     <div
+                                        className="hidden-label"
                                         style={{
-                                            position: "absolute",
-                                            top: "-16px",
-                                            left: "50%",
-                                            transform: "translateX(-50%)",
-                                            backgroundColor: "#E63946",
-                                            color: "white",
-                                            fontSize:
-                                                animationState.focusedChart
-                                                    ? "10px"
-                                                    : "8px",
-                                            padding: animationState.focusedChart
-                                                ? "2px 6px"
-                                                : "1px 4px",
-                                            borderRadius: "3px",
-                                            whiteSpace: "nowrap",
                                             opacity:
                                                 animationState.showQueryResponse
                                                     ? 1
@@ -185,17 +115,8 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                                 )}
                             </div>
                             <div
+                                className="day-label"
                                 style={{
-                                    transform: "rotate(-45deg)",
-                                    fontSize: animationState.focusedChart
-                                        ? "10px"
-                                        : "8px",
-                                    marginTop: "4px",
-                                    whiteSpace: "nowrap",
-                                    color: "#343A40",
-                                    fontWeight: animationState.focusedChart
-                                        ? "bold"
-                                        : "normal",
                                     opacity: animationState.showQueryResponse
                                         ? 1
                                         : 0,
@@ -207,12 +128,8 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
                                 {fall.day}
                             </div>
                             <div
+                                className="time-label"
                                 style={{
-                                    fontSize: animationState.focusedChart
-                                        ? "9px"
-                                        : "7px",
-                                    color: "#6C757D",
-                                    marginTop: "1px",
                                     opacity: animationState.showQueryResponse
                                         ? 1
                                         : 0,
@@ -229,114 +146,23 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
 
                 {/* Legend */}
                 <div
+                    className="chart-legend"
                     style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        position: "absolute",
-                        top: "-5px",
-                        right: "0",
                         opacity: animationState.showQueryResponse ? 1 : 0,
-                        transition:
-                            "opacity 0.8s ease 0.7s, font-size 0.5s ease",
-                        fontSize: animationState.focusedChart ? "11px" : "9px",
                     }}
                 >
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginRight: "8px",
-                            transition: "all 0.5s ease",
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: animationState.focusedChart
-                                    ? "10px"
-                                    : "8px",
-                                height: animationState.focusedChart
-                                    ? "10px"
-                                    : "8px",
-                                backgroundColor: "#E63946",
-                                marginRight: "4px",
-                                borderRadius: "2px",
-                                transition: "all 0.5s ease",
-                            }}
-                        ></div>
+                    <div className="legend-item">
+                        <div className="legend-color hidden"></div>
                         <span>Hidden</span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                        <div
-                            style={{
-                                width: animationState.focusedChart
-                                    ? "10px"
-                                    : "8px",
-                                height: animationState.focusedChart
-                                    ? "10px"
-                                    : "8px",
-                                backgroundColor: "#3EBD93",
-                                marginRight: "4px",
-                                borderRadius: "2px",
-                                transition: "all 0.5s ease",
-                            }}
-                        ></div>
+                    <div className="legend-item">
+                        <div className="legend-color detected"></div>
                         <span>Detected</span>
                     </div>
                 </div>
-
-                {/* Focus indicator text */}
-                {animationState.focusedChart && (
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "-30px",
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                            color: "#2D7DD2",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            backgroundColor: "rgba(45, 125, 210, 0.1)",
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                            opacity: 1,
-                            animation: "pulse 2s infinite",
-                        }}
-                    >
-                    </div>
-                )}
             </div>
         );
     };
-
- 
-
-    // Add some keyframe animations to CSS
-    useEffect(() => {
-        const style = document.createElement("style");
-        style.textContent = `
-            @keyframes pulse {
-                0% { opacity: 0.7; }
-                50% { opacity: 1; }
-                100% { opacity: 0.7; }
-            }
-            
-            .fall-chart.focused::before {
-                content: '';
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.1);
-                z-index: -1;
-                pointer-events: none;
-            }
-        `;
-        document.head.appendChild(style);
-        return () => {
-            document.head.removeChild(style);
-        };
-    }, []);
 
     return (
         <TabletLayout
@@ -346,38 +172,15 @@ const AnimatedTabletScene1_5 = ({ scrollProgress = 0, scene }) => {
             inputValue=""
         >
             <div
-                style={{
-                    position: "relative",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    padding: "0 8px",
-                    overflow: animationState.focusedChart ? "hidden" : "auto",
-                }}
+                className={`scene-content-container ${
+                    animationState.focusedChart ? "focused-chart" : ""
+                }`}
             >
-                <h3
-                    style={{
-                        fontSize: animationState.focusedChart ? "18px" : "16px",
-                        margin: "0 0 4px 0",
-                        color: "#333",
-                        transition: "font-size 0.5s ease",
-                        opacity: animationState.focusedChart ? 0.7 : 1,
-                    }}
-                >
+                <h3 className="scene-title">
                     Fall Analysis for Joe (Room 208)
                 </h3>
 
-                <div
-                    style={{
-                        fontSize: "12px",
-                        color: "#6C757D",
-                        marginBottom: "10px",
-                        opacity: animationState.focusedChart ? 0.7 : 1,
-                        transition: "opacity 0.5s ease",
-                    }}
-                >
-                    May 1 - May 30, 2023
-                </div>
+                <div className="scene-date">May 1 - May 30, 2023</div>
 
                 {/* Falls chart */}
                 {renderFallsChart()}

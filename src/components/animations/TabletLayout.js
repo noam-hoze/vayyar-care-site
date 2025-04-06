@@ -36,266 +36,78 @@ const TabletLayout = ({
             <div className="tablet-frame">
                 <div className="tablet-notch"></div>
 
-                <div
-                    className="tablet-screen"
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        height: "100%",
-                        width: "100%",
-                        overflow: "hidden",
-                        margin: "0 auto",
-                    }}
-                >
+                <div className="tablet-screen">
                     {/* Header */}
-                    <div
-                        className="tablet-layout-header"
-                        style={{
-                            flexShrink: 0,
-                            padding: "10px 16px",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            borderBottom: "1px solid #F0F0F0",
-                        }}
-                    >
+                    <div className="tablet-layout-header">
                         <div className="tablet-layout-header-logo">
-                            <img
-                                src="/images/vayyar-logo.png"
-                                alt="Vayyar"
-                                style={{ height: "24px", width: "auto" }}
-                            />
+                            <img src="/images/vayyar-logo.png" alt="Vayyar" />
                         </div>
-                        <div
-                            className="tablet-layout-header-info"
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div
-                                className="tablet-layout-header-time"
-                                style={{
-                                    marginRight: "10px",
-                                    fontSize: "14px",
-                                    color: "#666",
-                                }}
-                            >
+                        <div className="tablet-layout-header-info">
+                            <div className="tablet-layout-header-time">
                                 {time}
                             </div>
-                            <div
-                                className="tablet-layout-header-avatar"
-                                style={{
-                                    width: "32px",
-                                    height: "32px",
-                                    borderRadius: "50%",
-                                    overflow: "hidden",
-                                }}
-                            >
-                                <img
-                                    src="/images/nurse.jpg"
-                                    alt="Nurse"
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                    }}
-                                />
+                            <div className="tablet-layout-header-avatar">
+                                <img src="/images/nurse.jpg" alt="Nurse" />
                             </div>
                         </div>
                     </div>
 
                     {/* Metrics Panel */}
                     {showMetrics && (
-                        <div
-                            className="tablet-layout-metrics"
-                            style={{
-                                flexShrink: 0,
-                                display: "flex",
-                                justifyContent: "space-around",
-                                padding: "10px 0",
-                                backgroundColor: "#FDFDFD",
-                                borderBottom: "1px solid #F0F0F0",
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
-                            }}
-                        >
-                            <div
-                                className="tablet-layout-metrics-item"
-                                style={{
-                                    flex: 1,
-                                    textAlign: "center",
-                                }}
-                            >
-                                <div
-                                    className="tablet-layout-metrics-item-value"
-                                    style={{
-                                        fontSize: "18px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
+                        <div className="tablet-layout-metrics">
+                            <div className="tablet-layout-metrics-item">
+                                <div className="tablet-layout-metrics-item-value">
                                     0
                                 </div>
-                                <div
-                                    className="tablet-layout-metrics-item-label"
-                                    style={{
-                                        fontSize: "12px",
-                                        color: "#666",
-                                    }}
-                                >
+                                <div className="tablet-layout-metrics-item-label">
                                     Alerts
                                 </div>
                             </div>
 
-                            <div
-                                className="tablet-layout-metrics-divider"
-                                style={{
-                                    width: "1px",
-                                    backgroundColor: "#E0E0E0",
-                                    margin: "0 8px",
-                                }}
-                            ></div>
+                            <div className="tablet-layout-metrics-divider"></div>
 
-                            <div
-                                className="tablet-layout-metrics-item"
-                                style={{
-                                    flex: 1,
-                                    textAlign: "center",
-                                }}
-                            >
+                            <div className="tablet-layout-metrics-item">
                                 <div
                                     className={`tablet-layout-metrics-item-value ${
                                         criticalMetric > 0 ? "alert" : "normal"
                                     }`}
-                                    style={{
-                                        fontSize: "18px",
-                                        fontWeight: "bold",
-                                        color:
-                                            criticalMetric > 0
-                                                ? "#E63946"
-                                                : "inherit",
-                                    }}
                                 >
                                     {criticalMetric}
                                 </div>
-                                <div
-                                    className="tablet-layout-metrics-item-label"
-                                    style={{
-                                        fontSize: "12px",
-                                        color: "#666",
-                                    }}
-                                >
+                                <div className="tablet-layout-metrics-item-label">
                                     Critical
                                 </div>
                             </div>
 
-                            <div
-                                className="tablet-layout-metrics-divider"
-                                style={{
-                                    width: "1px",
-                                    backgroundColor: "#E0E0E0",
-                                    margin: "0 8px",
-                                }}
-                            ></div>
+                            <div className="tablet-layout-metrics-divider"></div>
 
-                            <div
-                                className="tablet-layout-metrics-item"
-                                style={{
-                                    flex: 1,
-                                    textAlign: "center",
-                                }}
-                            >
-                                <div
-                                    className="tablet-layout-metrics-item-value monitored"
-                                    style={{
-                                        fontSize: "18px",
-                                        fontWeight: "bold",
-                                        color: "#3EBD93",
-                                    }}
-                                >
-                                    100%
+                            <div className="tablet-layout-metrics-item">
+                                <div className="tablet-layout-metrics-item-value">
+                                    {criticalMetric > 0 ? 7 : 8}
                                 </div>
-                                <div
-                                    className="tablet-layout-metrics-item-label"
-                                    style={{
-                                        fontSize: "12px",
-                                        color: "#666",
-                                    }}
-                                >
+                                <div className="tablet-layout-metrics-item-label">
                                     Monitored
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* Content Area */}
-                    <div
-                        className={contentClassString}
-                        style={{
-                            flex: 1,
-                            overflow: "hidden",
-                            padding: "12px 10px",
-                            display: "flex",
-                            flexDirection: "column",
-                            scrollbarWidth: "none" /* Firefox */,
-                            msOverflowStyle: "none" /* IE and Edge */,
-                            WebkitOverflowScrolling: "touch",
-                        }}
-                    >
-                        {children}
-                    </div>
+                    {/* Content area */}
+                    <div className={contentClassString}>{children}</div>
 
-                    {/* Chat Input */}
+                    {/* Chat input */}
                     {showChatInput && (
-                        <div
-                            className="tablet-layout-chat-input"
-                            style={{
-                                flexShrink: 0,
-                                padding: "10px",
-                                borderTop: "1px solid #F0F0F0",
-                            }}
-                        >
-                            <div
-                                className="tablet-layout-chat-input-container"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    border: "1px solid #E0E0E0",
-                                    borderRadius: "24px",
-                                    overflow: "hidden",
-                                    backgroundColor: "white",
-                                }}
-                            >
-                                <input
-                                    type="text"
-                                    placeholder="Message VayyarCare..."
-                                    value={inputValue}
-                                    readOnly
-                                    style={{
-                                        flex: 1,
-                                        border: "none",
-                                        padding: "10px 16px",
-                                        fontSize: "14px",
-                                        outline: "none",
-                                    }}
-                                />
-                                <button
-                                    style={{
-                                        width: "38px",
-                                        height: "38px",
-                                        borderRadius: "50%",
-                                        backgroundColor: "#2D7DD2",
-                                        color: "white",
-                                        border: "none",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontWeight: "bold",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    ↑
-                                </button>
-                            </div>
+                        <div className="tablet-layout-input">
+                            <input
+                                type="text"
+                                className="tablet-layout-input-field"
+                                placeholder="Ask Vayyar something..."
+                                value={inputValue}
+                                readOnly
+                            />
+                            <button className="tablet-layout-input-button">
+                                <i className="fa fa-paper-plane"></i>
+                            </button>
                         </div>
                     )}
                 </div>

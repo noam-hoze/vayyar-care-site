@@ -8,6 +8,7 @@ import AnimatedTabletScene6 from "./animations/AnimatedTabletScene6";
 import ContinuousChatScene from "./animations/ContinuousChatScene";
 import DebugOverlay from "./DebugOverlay";
 import { videoConfig } from "../config/videoConfig";
+import { SCENES } from "../data/sceneRegistry";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -101,24 +102,27 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         }
     }, [subScrollProgress, scene, animationProgress]);
 
-    // Define tablet components map
+    // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
         () => ({
-            0: ContinuousChatScene,
-            1: AnimatedTabletScene1_5,
-            2: AnimatedTabletScene5,
-            3: AnimatedTabletScene6,
+            [SCENES.MORNING_SHIFT]: ContinuousChatScene,
+            [SCENES.FALL_CHART]: AnimatedTabletScene1_5,
+            [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene5,
+            [SCENES.VC_CLINICAL]: AnimatedTabletScene6,
         }),
-        []
+        [SCENES]
     );
 
     // Memoized render tablet component
     const tabletComponent = useMemo(() => {
-        const TabletComponent = tabletComponentsMap[index] || AnimatedTablet;
+        // Get the scene index rather than using the array index
+        const sceneIndex = scene.scene;
+        const TabletComponent =
+            tabletComponentsMap[sceneIndex] || AnimatedTablet;
         return (
             <TabletComponent scene={scene} scrollProgress={animationProgress} />
         );
-    }, [index, scene, animationProgress, tabletComponentsMap]);
+    }, [scene, animationProgress, tabletComponentsMap]);
 
     return (
         <div

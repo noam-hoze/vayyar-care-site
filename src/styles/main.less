@@ -5,112 +5,116 @@
 // Main styles entry point
 
 // Variables and Mixins
-@import './variables.less';
-@import './mixins.less';
+@import "./variables.less";
+@import "./mixins.less";
 
 // Core styles
-@import './index.less';
+@import "./index.less";
 
 // Layout components
-@import './components/TabletLayout.less';
+@import "./components/TabletLayout.less";
 
-// Animation components
-@import './components/animations/AnimatedTablet.less';
-@import './components/animations/RoomVisualization.less';
-@import './components/animations/RiskMeter.less';
-@import './components/animations/RapidResponse.less';
-@import './components/animations/BotTypingIndicator.less';
+// Animation components - consolidated import
+@import "./components/animations/index.less";
 
 // Component styles
-@import './components/App.less';
-@import './components/SceneViewer.less';
-@import './components/Chat.less';
-@import './components/DebugOverlay.less';
+@import "./components/App.less";
+@import "./components/SceneViewer.less";
+@import "./components/Chat.less";
+@import "./components/DebugOverlay.less";
 
 // Animation styles
-@import './animations/animations.less';
+@import "./animations/animations.less";
 
 // Reset and global styles
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
 }
 
-*, *:before, *:after {
-  box-sizing: inherit;
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
 }
 
 // Global utility classes
 .text-center {
-  text-align: center;
+    text-align: center;
 }
 
 .flex {
-  display: flex;
+    display: flex;
 }
 
 .flex-column {
-  flex-direction: column;
+    flex-direction: column;
 }
 
 .items-center {
-  align-items: center;
+    align-items: center;
 }
 
 .justify-center {
-  justify-content: center;
+    justify-content: center;
 }
 
 .justify-between {
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 .w-full {
-  width: 100%;
+    width: 100%;
 }
 
 .h-full {
-  height: 100%;
+    height: 100%;
 }
 
 .m-0 {
-  margin: 0;
+    margin: 0;
 }
 
 .p-0 {
-  padding: 0;
+    padding: 0;
 }
 
 // Animation-specific keyframes
 @keyframes alert-flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
 }
 
 .alert-flicker {
-  animation: alert-flicker 1s infinite;
+    animation: alert-flicker 1s infinite;
 }
 
 .scene-image-column {
-  .scene-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+    .scene-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 }
 
 // Set the total scroll height based on config
 .scenes-container {
-  height: ~"calc(100vh * @{videoConfig.scrollMultiplier})";
-} 
+    height: ~"calc(100vh * @{videoConfig.scrollMultiplier})";
+}
