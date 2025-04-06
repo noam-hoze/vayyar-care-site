@@ -1,25 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TabletLayout from "./TabletLayout";
 import "./animations.css";
 
 const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
-    const [showHeader, setShowHeader] = useState(false);
-    const [showSummary, setShowSummary] = useState(false);
-    const [showTrends, setShowTrends] = useState(false);
-    const [showComparison, setShowComparison] = useState(false);
-    const [showCallout, setShowCallout] = useState(false);
-
-    useEffect(() => {
-        // Log for debugging
-        console.log("AnimatedTabletScene4 scrollProgress:", scrollProgress);
-
-        // Animate elements based on scroll progress (0-100 range)
-        setShowHeader(scrollProgress >= 5);
-        setShowSummary(scrollProgress >= 15);
-        setShowTrends(scrollProgress >= 30);
-        setShowComparison(scrollProgress >= 50);
-        setShowCallout(scrollProgress >= 70);
-    }, [scrollProgress]);
+    // Chat query and response
+    const userQuery = "Show me John's monthly health trends";
 
     // Sample trend data
     const trends = [
@@ -34,8 +19,16 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
     const maxBathroom = Math.max(...trends.map((t) => t.bathroom));
     const maxGait = Math.max(...trends.map((t) => t.gait));
 
-    return (
-        <TabletLayout time="10:15 AM" showChatInput={true} showMetrics={true}>
+    // Check if specific components should be shown based on scroll progress
+    const showHeader = scrollProgress >= 5;
+    const showSummary = scrollProgress >= 15;
+    const showTrends = scrollProgress >= 30;
+    const showComparison = scrollProgress >= 50;
+    const showCallout = scrollProgress >= 70;
+
+    // Visual response that includes all the health report components
+    const visualResponse = (
+        <>
             <div
                 className="documentation-header"
                 style={{
@@ -623,6 +616,20 @@ const AnimatedTabletScene4 = ({ scrollProgress = 0, scene }) => {
                     </button>
                 </div>
             )}
+        </>
+    );
+
+    return (
+        <TabletLayout
+            time="10:15 AM"
+            showMetrics={true}
+            query={userQuery}
+            scrollProgress={scrollProgress}
+            queryStartThreshold={5}
+            queryCompleteThreshold={15}
+            responseStartThreshold={20}
+        >
+            {visualResponse}
         </TabletLayout>
     );
 };

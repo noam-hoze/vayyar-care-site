@@ -1,23 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import TabletLayout from "./TabletLayout";
 import "./animations.css";
 
 const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
-    // Animation state based on scroll position
-    const [animationState, setAnimationState] = useState({
-        showQueryResponse: false,
-        showNote: false,
-        focusedChart: false,
-    });
-
-    // Update animation state based on scroll progress
-    useEffect(() => {
-        setAnimationState({
-            showQueryResponse: scrollProgress >= 20,
-            showNote: scrollProgress >= 60,
-            focusedChart: scrollProgress >= 30 && scrollProgress <= 70,
-        });
-    }, [scrollProgress]);
+    // Chat query and response
+    const userQuery = "Show me Joe's fall analysis for May";
 
     // Fall data for the chart
     const fallData = [
@@ -30,18 +17,23 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
         { day: "May 27", time: "12:19 AM", detected: false, height: 35 },
     ];
 
+    // Check if specific components should be shown based on scroll progress
+    const showQueryResponse = scrollProgress >= 20;
+    const showNote = scrollProgress >= 60;
+    const focusedChart = scrollProgress >= 30 && scrollProgress <= 70;
+
     // Render the bar chart for falls
     const renderFallsChart = () => {
         const chartHeight = 120;
         const barWidth = 28;
         const barSpacing = 8;
-        const focusScaleFactor = animationState.focusedChart ? 1.25 : 1;
+        const focusScaleFactor = focusedChart ? 1.25 : 1;
 
         return (
             <div
-                className={`fall-chart ${
-                    animationState.showQueryResponse ? "visible" : ""
-                } ${animationState.focusedChart ? "focused" : ""}`}
+                className={`fall-chart ${showQueryResponse ? "visible" : ""} ${
+                    focusedChart ? "focused" : ""
+                }`}
                 style={{
                     height: `${chartHeight * focusScaleFactor}px`,
                 }}
@@ -75,19 +67,13 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
                             <div
                                 className={`bar ${
                                     fall.detected ? "detected" : "hidden"
-                                } ${
-                                    animationState.showQueryResponse
-                                        ? "visible"
-                                        : ""
-                                }`}
+                                } ${showQueryResponse ? "visible" : ""}`}
                                 style={{
                                     height: `${
                                         fall.height * focusScaleFactor
                                     }px`,
-                                    opacity: animationState.showQueryResponse
-                                        ? 1
-                                        : 0,
-                                    transform: animationState.showQueryResponse
+                                    opacity: showQueryResponse ? 1 : 0,
+                                    transform: showQueryResponse
                                         ? "translateY(0)"
                                         : "translateY(20px)",
                                     transition: `opacity 0.8s ease ${
@@ -101,10 +87,7 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
                                     <div
                                         className="hidden-label"
                                         style={{
-                                            opacity:
-                                                animationState.showQueryResponse
-                                                    ? 1
-                                                    : 0,
+                                            opacity: showQueryResponse ? 1 : 0,
                                             transition: `opacity 0.8s ease ${
                                                 0.1 * index + 0.3
                                             }s, font-size 0.5s ease, padding 0.5s ease`,
@@ -117,9 +100,7 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
                             <div
                                 className="day-label"
                                 style={{
-                                    opacity: animationState.showQueryResponse
-                                        ? 1
-                                        : 0,
+                                    opacity: showQueryResponse ? 1 : 0,
                                     transition: `opacity 0.8s ease ${
                                         0.1 * index + 0.2
                                     }s, font-size 0.5s ease, font-weight 0.5s ease`,
@@ -130,9 +111,7 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
                             <div
                                 className="time-label"
                                 style={{
-                                    opacity: animationState.showQueryResponse
-                                        ? 1
-                                        : 0,
+                                    opacity: showQueryResponse ? 1 : 0,
                                     transition: `opacity 0.8s ease ${
                                         0.1 * index + 0.2
                                     }s, font-size 0.5s ease`,
@@ -148,7 +127,7 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
                 <div
                     className="chart-legend"
                     style={{
-                        opacity: animationState.showQueryResponse ? 1 : 0,
+                        opacity: showQueryResponse ? 1 : 0,
                     }}
                 >
                     <div className="legend-item">
@@ -164,27 +143,33 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
         );
     };
 
+    // Visual response content that will be displayed after the query
+    const visualResponse = (
+        <div
+            className={`scene-content-container ${
+                focusedChart ? "focused-chart" : ""
+            }`}
+        >
+            <h3 className="scene-title">Fall Analysis for Joe (Room 208)</h3>
+
+            <div className="scene-date">May 1 - May 30, 2023</div>
+
+            {/* Falls chart */}
+            {renderFallsChart()}
+        </div>
+    );
+
     return (
         <TabletLayout
             showMetrics={true}
             time="10:15 AM"
-            showChatInput={true}
-            inputValue=""
+            query={userQuery}
+            scrollProgress={scrollProgress}
+            queryStartThreshold={5}
+            queryCompleteThreshold={15}
+            responseStartThreshold={20}
         >
-            <div
-                className={`scene-content-container ${
-                    animationState.focusedChart ? "focused-chart" : ""
-                }`}
-            >
-                <h3 className="scene-title">
-                    Fall Analysis for Joe (Room 208)
-                </h3>
-
-                <div className="scene-date">May 1 - May 30, 2023</div>
-
-                {/* Falls chart */}
-                {renderFallsChart()}
-            </div>
+            {visualResponse}
         </TabletLayout>
     );
 };
