@@ -3,8 +3,11 @@ import TabletLayout from "./TabletLayout";
 import "./animations.css";
 
 const AnimatedTabletScene3 = ({ scrollProgress = 0, scene }) => {
-    // Chat query and response
-    const userQuery = "Show me the fall report for John in Room 208";
+    // Current scene query (which is a continuation from scene 2)
+    const currentQuery = "Show me the fall report for John in Room 208";
+
+    // Bridge query to scene 4
+    const nextQuery = "Show me John's monthly health trends";
 
     // Check if specific components should be shown based on scroll progress
     const showReport = scrollProgress >= 30;
@@ -174,11 +177,15 @@ const AnimatedTabletScene3 = ({ scrollProgress = 0, scene }) => {
         <TabletLayout
             time="4:30 PM"
             showMetrics={true}
-            query={userQuery}
+            currentQuery={currentQuery}
+            nextQuery={nextQuery}
             scrollProgress={scrollProgress}
-            queryStartThreshold={5}
-            queryCompleteThreshold={20}
-            responseStartThreshold={25}
+            // Start with the query already showing since it comes from scene 2
+            queryStartThreshold={-50}
+            queryCompleteThreshold={0}
+            responseStartThreshold={10}
+            transitionStartThreshold={85}
+            contentTransitionThreshold={95}
         >
             {visualResponse}
         </TabletLayout>

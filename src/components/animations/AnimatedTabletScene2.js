@@ -3,8 +3,11 @@ import TabletLayout from "./TabletLayout";
 import "./animations.css";
 
 const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
-    // Chat query and response
-    const userQuery = "Show me Joe's fall analysis for May";
+    // Current scene query (which is a continuation from scene 1)
+    const currentQuery = "Show me Joe's fall analysis for May";
+
+    // Bridge query to scene 3
+    const nextQuery = "Show me the fall report for John in Room 208";
 
     // Fall data for the chart
     const fallData = [
@@ -163,11 +166,15 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
         <TabletLayout
             showMetrics={true}
             time="10:15 AM"
-            query={userQuery}
+            currentQuery={currentQuery}
+            nextQuery={nextQuery}
             scrollProgress={scrollProgress}
-            queryStartThreshold={5}
-            queryCompleteThreshold={15}
-            responseStartThreshold={20}
+            // Start with the query already showing since it comes from scene 1
+            queryStartThreshold={-50} // Negative value far below 0 to ensure it never shows typing
+            queryCompleteThreshold={0} // Show query bubble immediately from the start
+            responseStartThreshold={10}
+            transitionStartThreshold={85}
+            contentTransitionThreshold={95}
         >
             {visualResponse}
         </TabletLayout>

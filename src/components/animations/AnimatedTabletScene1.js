@@ -8,9 +8,14 @@ import "./animations.css";
 const VAYYAR_BLUE = "rgba(5, 170, 233, 1)";
 
 const AnimatedTabletScene1 = ({ scrollProgress = 0, scene }) => {
-    // Mock data
-    const userQuery = "Show me yesterday's summary";
-    const botResponse = "Good morning Alice! Here's your shift summary.";
+    // Current scene query and response
+    const currentQuery = "Show me yesterday's summary";
+    const textResponse = "Good morning Alice! Here's your shift summary.";
+
+    // Bridge query to scene 2
+    const nextQuery = "Show me Joe's fall analysis for May";
+
+    // Summary items from the scene data
     const summaryItems = scene.content || [];
 
     // Render the summary item with appropriate styling
@@ -55,12 +60,15 @@ const AnimatedTabletScene1 = ({ scrollProgress = 0, scene }) => {
         <TabletLayout
             showMetrics={true}
             time="9:41 AM"
-            query={userQuery}
-            textResponse={botResponse}
+            currentQuery={currentQuery}
+            nextQuery={nextQuery}
+            textResponse={textResponse}
             scrollProgress={scrollProgress}
             queryStartThreshold={10}
             queryCompleteThreshold={25}
             responseStartThreshold={35}
+            transitionStartThreshold={85}
+            contentTransitionThreshold={95}
         >
             {visualResponse}
         </TabletLayout>
