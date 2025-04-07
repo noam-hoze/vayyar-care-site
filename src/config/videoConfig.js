@@ -12,13 +12,19 @@ const defaultConfig = {
     scrubSmoothness: 1,
 
     // Video source path
-    videoSrc: "/videos/output_vid_960.mp4", // Default video path
+    videoSrc: "", // Default video path
 
     // Timing configuration for each scene
     // These times should match your video timestamps
     sceneTiming: [
         { scene: SCENES.MORNING_SHIFT, videoTime: 0 }, // Scene 0 starts at 0s
-        { scene: SCENES.FALL_CHART, videoTime: 5 }, // Scene 1 starts at 3s
+        {
+            scene: SCENES.FALL_CHART,
+            scrollingPercentage: {
+                0: { videoTime: 5 },
+                75: { videoTime: 10 },
+            },
+        }, // Scene 1 starts at 3s
         { scene: SCENES.DOCUMENT_EVENT, videoTime: 10 },
         { scene: SCENES.VC_CLINICAL, videoTime: 30 },
     ],
@@ -86,4 +92,17 @@ export const resetToDefaultVideo = () => {
 // Function to check if a custom video is active
 export const isCustomVideoActive = () => {
     return videoConfig.videoSrc !== defaultConfig.videoSrc;
+};
+
+// Function to clear the video source and localStorage
+export const clearVideoSource = () => {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        videoConfig.videoSrc = "";
+        console.log("Video source cleared successfully");
+    } catch (error) {
+        console.error("Error clearing video URL:", error);
+    }
+
+    return videoConfig;
 };

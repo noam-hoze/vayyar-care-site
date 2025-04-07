@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-    updateVideoSource,
-    resetToDefaultVideo,
-    isCustomVideoActive,
-} from "../config/videoConfig";
+import { updateVideoSource, isCustomVideoActive } from "../config/videoConfig";
 import { storage } from "../config/firebaseConfig";
-import {
-    ref,
-    uploadBytesResumable,
-    getDownloadURL,
-    deleteObject,
-} from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 // Maximum file size (50MB) - reduced for better web compatibility
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -25,23 +16,11 @@ const ALLOWED_VIDEO_FORMATS = [
 const VideoControl = () => {
     const [dragActive, setDragActive] = useState(false);
     const [uploadStatus, setUploadStatus] = useState("");
-    const [customVideoActive, setCustomVideoActive] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
     const [currentVideoUrl, setCurrentVideoUrl] = useState("");
-
-    // Check if a custom video is active on component mount
-    useEffect(() => {
-        const active = isCustomVideoActive();
-        setCustomVideoActive(active);
-
-        // Store the current video URL for potential deletion
-        if (active) {
-            setCurrentVideoUrl(
-                localStorage.getItem("vayyar_custom_video") || ""
-            );
-        }
-    }, []);
+    const [uploadMode, setUploadMode] = useState(false);
+    const fileInputRef = React.useRef(null);
 
     const handleDrag = (e) => {
         e.preventDefault();
@@ -61,6 +40,16 @@ const VideoControl = () => {
 
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             handleFile(e.dataTransfer.files[0]);
+        }
+    };
+
+    const handleButtonClick = () => {
+        setUploadMode(!uploadMode);
+    };
+
+    const handleFileInputClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
         }
     };
 
@@ -169,9 +158,9 @@ const VideoControl = () => {
 
                             // Update the video source in the config
                             updateVideoSource(downloadURL);
-                            setCustomVideoActive(true);
                             setUploadStatus("Video uploaded successfully!");
                             setIsUploading(false);
+                            setUploadMode(false);
 
                             // Clear status message after 3 seconds
                             setTimeout(() => {
@@ -191,84 +180,83 @@ const VideoControl = () => {
         }
     };
 
-    const handleReset = () => {
-        // If there's a current video URL and it's from Firebase Storage
-        if (
-            currentVideoUrl &&
-            currentVideoUrl.includes("firebasestorage.googleapis.com")
-        ) {
-            try {
-                // Extract the file path from the URL
-                const fileUrl = new URL(currentVideoUrl);
-                const pathWithQuery = fileUrl.pathname;
-                const decodedPath = decodeURIComponent(pathWithQuery);
-
-                // Firebase Storage URLs contain a token after the path
-                const pathParts = decodedPath.split("/o/");
-                if (pathParts.length > 1) {
-                    // Get the actual file path
-                    let filePath = pathParts[1];
-                    // Remove any query parameters
-                    if (filePath.includes("?")) {
-                        filePath = filePath.split("?")[0];
-                    }
-
-                    // Create a reference to the file
-                    const fileRef = ref(storage, filePath);
-
-                    // Delete the file
-                    deleteObject(fileRef)
-                        .then(() => {
-                            console.log(
-                                "Video deleted successfully from Firebase Storage"
-                            );
-                        })
-                        .catch((error) => {
-                            console.error("Error deleting video:", error);
-                        });
-                }
-            } catch (error) {
-                console.error("Error parsing video URL:", error);
-            }
-        }
-
-        // Reset to default video
-        resetToDefaultVideo();
-        setCustomVideoActive(false);
-        setCurrentVideoUrl("");
-
-        // Force page reload to apply changes to video
-        window.location.reload();
-    };
-
     return (
-        <div className="video-control-panel">
-            <div
-                className={`video-drop-area ${dragActive ? "active" : ""}`}
-                onDragEnter={handleDrag}
-                onDragOver={handleDrag}
-                onDragLeave={handleDrag}
-                onDrop={handleDrop}
-            >
-                <input
-                    type="file"
-                    id="video-upload"
-                    accept="video/mp4,video/webm,video/ogg,video/quicktime"
-                    onChange={handleChange}
-                    className="video-input"
-                />
-                <label htmlFor="video-upload" className="video-upload-label">
-                    <div className="upload-icon">📁</div>
-                    <span>Drag & drop a video or click to browse</span>
-                    <div className="upload-hint">
-                        Max size: 50MB (.mp4, .webm, .ogg, .mov)
+        <>
+            {!uploadMode ? (
+                <button
+                    className="video-button upload-button"
+                    onClick={handleButtonClick}
+                >
+                    Upload Video
+                </button>
+            ) : (
+                <div className="upload-container">
+                    <div
+                        className={`dropzone ${dragActive ? "active" : ""}`}
+                        onDragEnter={handleDrag}
+                        onDragOver={handleDrag}
+                        onDragLeave={handleDrag}
+                        onDrop={handleDrop}
+                        onClick={handleFileInputClick}
+                    >
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            id="video-upload"
+                            accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                            onChange={handleChange}
+                            className="video-input"
+                        />
+                        <div className="dropzone-content">
+                            <svg
+                                className="upload-icon"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M12 16L12 8"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                />
+                                <path
+                                    d="M9 11L12 8L15 11"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                                <path
+                                    d="M8 16H16"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                />
+                            </svg>
+                            <span>Drop video or click</span>
+                        </div>
                     </div>
-                </label>
-            </div>
+
+                    <div className="upload-actions">
+                        <span className="upload-info">
+                            Max: 50MB (mp4, webm, mov)
+                        </span>
+                        <button
+                            className="cancel-button"
+                            onClick={() => setUploadMode(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {isUploading && (
                 <div className="upload-progress">
-                    <div className="progress-container">
+                    <div className="progress-bar-container">
                         <div
                             className="progress-bar"
                             style={{ width: `${uploadProgress}%` }}
@@ -281,16 +269,7 @@ const VideoControl = () => {
             {uploadStatus && (
                 <div className="upload-status">{uploadStatus}</div>
             )}
-
-            {customVideoActive && (
-                <button
-                    className="video-control-btn reset-btn"
-                    onClick={handleReset}
-                >
-                    Reset to Default Video
-                </button>
-            )}
-        </div>
+        </>
     );
 };
 

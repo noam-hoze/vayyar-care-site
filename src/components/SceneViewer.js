@@ -7,6 +7,7 @@ import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
 import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
 import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import DebugOverlay from "./DebugOverlay";
+import VideoControl from "./VideoControl";
 import { videoConfig } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
 
@@ -79,25 +80,103 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
             console.log("Current scroll progress:", subScrollProgress);
             console.log("Current scene index:", index);
 
-            // Get current and next scene timings
+            // Get current scene timing
             const currentSceneTiming = sceneTimings.find(
                 (t) => t.scene === index
             );
-            const nextSceneIndex = index + 1;
-            const nextSceneTiming = sceneTimings.find(
-                (t) => t.scene === nextSceneIndex
-            );
 
-            // If we found current scene timing
-            if (currentSceneTiming) {
+            if (!currentSceneTiming) {
+                console.warn("Scene timing not found for index:", index);
+                return;
+            }
+
+            // Handle new scrollingPercentage-based timing
+            if (currentSceneTiming.scrollingPercentage) {
+                // Get the scroll percentage (0-100)
+                const scrollPercentage = Math.floor(subScrollProgress * 100);
+
+                // Get the percentage points defined in the scrollingPercentage object
+                const percentagePoints = Object.keys(
+                    currentSceneTiming.scrollingPercentage
+                )
+                    .map(Number)
+                    .sort((a, b) => a - b);
+
+                // Find the surrounding percentage points for interpolation
+                let lowerPoint = percentagePoints[0];
+                let upperPoint = percentagePoints[percentagePoints.length - 1];
+
+                // Find the points that bound the current scroll percentage
+                for (let i = 0; i < percentagePoints.length; i++) {
+                    if (scrollPercentage >= percentagePoints[i]) {
+                        lowerPoint = percentagePoints[i];
+                    }
+                    if (scrollPercentage <= percentagePoints[i]) {
+                        upperPoint = percentagePoints[i];
+                        break;
+                    }
+                }
+
+                // Get the video times for the surrounding percentage points
+                const lowerTime =
+                    currentSceneTiming.scrollingPercentage[lowerPoint]
+                        .videoTime;
+                const upperTime =
+                    currentSceneTiming.scrollingPercentage[upperPoint]
+                        .videoTime;
+
+                // Calculate the interpolation factor (0-1) between the two percentage points
+                let factor = 0;
+                if (upperPoint > lowerPoint) {
+                    factor =
+                        (scrollPercentage - lowerPoint) /
+                        (upperPoint - lowerPoint);
+                }
+
+                // Interpolate to get the exact video time
+                const videoTime = lowerTime + (upperTime - lowerTime) * factor;
+
+                // Set the video time
+                if (!isNaN(videoTime)) {
+                    video.currentTime = videoTime;
+                    console.log(
+                        "Setting video time to:",
+                        videoTime,
+                        "using percentage mapping"
+                    );
+                }
+            } else {
+                // Handle traditional scene timing with a single videoTime value
+                const nextSceneIndex = index + 1;
+                const nextSceneTiming = sceneTimings.find(
+                    (t) => t.scene === nextSceneIndex
+                );
+
+                // Set the video time based on a linear interpolation
                 let videoTime;
 
                 if (nextSceneTiming) {
+                    // If next scene has scrollingPercentage, use its first percentage point
+                    let nextSceneStartTime;
+                    if (nextSceneTiming.scrollingPercentage) {
+                        // Get the first percentage point (lowest value)
+                        const firstPercentage = Math.min(
+                            ...Object.keys(
+                                nextSceneTiming.scrollingPercentage
+                            ).map(Number)
+                        );
+                        nextSceneStartTime =
+                            nextSceneTiming.scrollingPercentage[firstPercentage]
+                                .videoTime;
+                    } else {
+                        nextSceneStartTime = nextSceneTiming.videoTime;
+                    }
+
                     // Interpolate between current and next scene times
                     const startTime = currentSceneTiming.videoTime;
-                    const endTime = nextSceneTiming.videoTime;
                     videoTime =
-                        startTime + (endTime - startTime) * subScrollProgress;
+                        startTime +
+                        (nextSceneStartTime - startTime) * subScrollProgress;
                 } else {
                     // Last scene - interpolate to the end of the video
                     const startTime = currentSceneTiming.videoTime;
@@ -109,7 +188,11 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                 // Set the video time
                 if (!isNaN(videoTime)) {
                     video.currentTime = videoTime;
-                    console.log("Setting video time to:", videoTime);
+                    console.log(
+                        "Setting video time to:",
+                        videoTime,
+                        "using traditional mapping"
+                    );
                 }
             }
         };
@@ -171,7 +254,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
             [SCENES.VC_CLINICAL]: AnimatedTabletScene4,
             [SCENES.VP_FAMILY]: AnimatedTabletScene5,
         }),
-        [SCENES]
+        []
     );
 
     // Memoized render tablet component
@@ -190,13 +273,6 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
             className="scene-container"
             style={{ color: scene.color || "#000" }}
         >
-            <DebugOverlay
-                scrollProgress={subScrollProgress}
-                animationProgress={animationProgress}
-                scene={scene}
-                sceneIndex={index}
-            />
-
             <div className="scene-content">
                 <div className="scene-layout">
                     {/* Left column - Video */}
@@ -213,6 +289,15 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
 
                     {/* Right column - Scene description and marketing callout */}
                     <div className="scene-content-column">
+                        {/* Debug overlay at the top */}
+                        <DebugOverlay
+                            scrollProgress={subScrollProgress}
+                            animationProgress={animationProgress}
+                            scene={scene}
+                            sceneIndex={index}
+                        />
+
+                        {/* Story box */}
                         <div
                             className={`scene-description-container ${
                                 animateCard ? "animate-in" : "reset-animation"
@@ -239,22 +324,29 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                             </p>
                         </div>
 
-                        {scene.subtitle && scene.subtitle.trim() !== "" && (
-                            <div className="scene-callout-wrapper">
-                                <div
-                                    className={`scene-callout ${
-                                        showCallout ? "visible" : "hidden"
-                                    } ${
-                                        animateCard
-                                            ? "animate-in"
-                                            : "reset-animation"
-                                    }`}
-                                >
-                                    <h3>{scene.subtitle}</h3>
-                                    <div className="scene-callout-underline"></div>
+                        {/* Controls container at the bottom */}
+                        <div className="controls-container">
+                            {/* Video upload control */}
+                            <VideoControl />
+
+                            {/* Callout after the story box and upload control */}
+                            {scene.subtitle && scene.subtitle.trim() !== "" && (
+                                <div className="scene-callout-wrapper">
+                                    <div
+                                        className={`scene-callout ${
+                                            showCallout ? "visible" : "hidden"
+                                        } ${
+                                            animateCard
+                                                ? "animate-in"
+                                                : "reset-animation"
+                                        }`}
+                                    >
+                                        <h3>{scene.subtitle}</h3>
+                                        <div className="scene-callout-underline"></div>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
 
