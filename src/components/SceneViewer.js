@@ -229,6 +229,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                                             animation:
                                                 "fadeIn 0.8s ease forwards",
                                             opacity: 0,
+                                            color: "white",
                                             animationFillMode: "forwards",
                                         }}
                                     >

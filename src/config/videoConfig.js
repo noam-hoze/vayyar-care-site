@@ -1,7 +1,10 @@
 import { SCENES, MAX_SCENES } from "../data/sceneRegistry";
 
-// Configuration for video scroll behavior
-export const videoConfig = {
+// Storage key for local storage
+const STORAGE_KEY = "vayyar_custom_video";
+
+// Default video configuration
+const defaultConfig = {
     // How many viewport heights to scroll through
     scrollMultiplier: MAX_SCENES,
 
@@ -9,7 +12,7 @@ export const videoConfig = {
     scrubSmoothness: 1,
 
     // Video source path
-    videoSrc: "/videos/output_vid_960.mp4", // Update this with your video path
+    videoSrc: "/videos/output_vid_960.mp4", // Default video path
 
     // Timing configuration for each scene
     // These times should match your video timestamps
@@ -19,4 +22,68 @@ export const videoConfig = {
         { scene: SCENES.DOCUMENT_EVENT, videoTime: 10 },
         { scene: SCENES.VC_CLINICAL, videoTime: 30 },
     ],
+};
+
+// Check if there's a saved custom video URL in localStorage
+const loadSavedVideo = () => {
+    try {
+        const savedVideo = localStorage.getItem(STORAGE_KEY);
+        if (savedVideo) {
+            // Check if URL starts with 'https://' to identify Firebase Storage URLs
+            if (
+                savedVideo.startsWith("https://firebasestorage.googleapis.com")
+            ) {
+                return savedVideo;
+            }
+            // For backward compatibility with old localStorage data
+            else {
+                // If it's an object URL or other format, reset to default
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+    } catch (error) {
+        console.error("Error loading saved video:", error);
+    }
+    return defaultConfig.videoSrc;
+};
+
+// Create a mutable copy of the configuration
+export const videoConfig = {
+    ...defaultConfig,
+    videoSrc: loadSavedVideo(),
+};
+
+// Function to update the video source
+export const updateVideoSource = (newSource) => {
+    videoConfig.videoSrc = newSource;
+
+    try {
+        // Save to localStorage for persistence
+        localStorage.setItem(STORAGE_KEY, newSource);
+    } catch (error) {
+        console.error("Error saving video URL:", error);
+    }
+
+    // Return the updated config for chaining
+    return videoConfig;
+};
+
+// Function to reset to default video
+export const resetToDefaultVideo = () => {
+    videoConfig.videoSrc = defaultConfig.videoSrc;
+
+    try {
+        // Remove from localStorage
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+        console.error("Error removing saved video:", error);
+    }
+
+    // Return the updated config for chaining
+    return videoConfig;
+};
+
+// Function to check if a custom video is active
+export const isCustomVideoActive = () => {
+    return videoConfig.videoSrc !== defaultConfig.videoSrc;
 };

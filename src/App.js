@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { scenes } from "./data/scenes";
 import SceneViewer from "./components/SceneViewer";
+import VideoControl from "./components/VideoControl";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MAX_SCENES, isValidScene, SCENES } from "./data/sceneRegistry";
@@ -166,6 +167,9 @@ export default function App() {
                     }}
                 />
             </div>
+
+            {/* Video Control Panel */}
+            <VideoControl />
 
             {/* Main content - set height based on MAX_SCENES */}
             <div
