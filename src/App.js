@@ -157,15 +157,7 @@ export default function App() {
                 ))}
             </div>
 
-            {/* Progress indicator */}
-            <div className="progress-bar-container">
-                <div
-                    className="progress-bar"
-                    style={{
-                        width: `${progress}%`,
-                    }}
-                />
-            </div>
+            {/* Progress indicator - Removed */}
 
             {/* Main content - set height based on MAX_SCENES */}
             <div

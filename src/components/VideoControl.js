@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { updateVideoSource, isCustomVideoActive } from "../config/videoConfig";
+import {
+    updateVideoSource,
+    isCustomVideoActive,
+    clearVideoSource,
+} from "../config/videoConfig";
 import { storage } from "../config/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -20,7 +24,13 @@ const VideoControl = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [currentVideoUrl, setCurrentVideoUrl] = useState("");
     const [uploadMode, setUploadMode] = useState(false);
+    const [hasCustomVideo, setHasCustomVideo] = useState(false);
     const fileInputRef = React.useRef(null);
+
+    // Check if a custom video is active
+    useEffect(() => {
+        setHasCustomVideo(isCustomVideoActive());
+    }, []);
 
     const handleDrag = (e) => {
         e.preventDefault();
@@ -45,6 +55,12 @@ const VideoControl = () => {
 
     const handleButtonClick = () => {
         setUploadMode(!uploadMode);
+    };
+
+    const handleClearVideo = () => {
+        clearVideoSource();
+        setHasCustomVideo(false);
+        window.location.reload();
     };
 
     const handleFileInputClick = () => {
@@ -161,6 +177,7 @@ const VideoControl = () => {
                             setUploadStatus("Video uploaded successfully!");
                             setIsUploading(false);
                             setUploadMode(false);
+                            setHasCustomVideo(true);
 
                             // Clear status message after 3 seconds
                             setTimeout(() => {
@@ -183,12 +200,22 @@ const VideoControl = () => {
     return (
         <>
             {!uploadMode ? (
-                <button
-                    className="video-button upload-button"
-                    onClick={handleButtonClick}
-                >
-                    Upload Video
-                </button>
+                <div className="video-buttons-container">
+                    <button
+                        className="video-button upload-button"
+                        onClick={handleButtonClick}
+                    >
+                        Upload Video
+                    </button>
+                    {hasCustomVideo && (
+                        <button
+                            className="video-button clear-button"
+                            onClick={handleClearVideo}
+                        >
+                            Clear Video
+                        </button>
+                    )}
+                </div>
             ) : (
                 <div className="upload-container">
                     <div

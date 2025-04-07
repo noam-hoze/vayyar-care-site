@@ -33,6 +33,9 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
 
+    // State to control control panel visibility
+    const [controlsCollapsed, setControlsCollapsed] = useState(false);
+
     // Handle extra descriptions that show at specific scroll percentages
     useEffect(() => {
         // Check if there's an extraDescription property in the scene
@@ -268,11 +271,48 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         );
     }, [scene, animationProgress, tabletComponentsMap]);
 
+    // Toggle control panel visibility
+    const toggleControls = () => {
+        setControlsCollapsed(!controlsCollapsed);
+    };
+
     return (
         <div
             className="scene-container"
             style={{ color: scene.color || "#000" }}
         >
+            {/* Unified control panel */}
+            <div
+                className={`control-panel ${
+                    controlsCollapsed ? "collapsed" : ""
+                }`}
+            >
+                <div className="control-panel-inner">
+                    <div className="debug-section">
+                        <div className="debug-info">
+                            <div>
+                                Scroll: {Math.round(subScrollProgress * 100)}%
+                            </div>
+                            <div>
+                                Animation: {Math.round(animationProgress)}%
+                            </div>
+                            <div>
+                                Scene: {scene.title || "None"} (Index: {index})
+                            </div>
+                        </div>
+                    </div>
+                    <div className="video-controls-section">
+                        <VideoControl />
+                    </div>
+                </div>
+                <button
+                    className="toggle-controls-button"
+                    onClick={toggleControls}
+                >
+                    {controlsCollapsed ? "⌄" : "⌃"}
+                </button>
+            </div>
+
             <div className="scene-content">
                 <div className="scene-layout">
                     {/* Left column - Video */}
@@ -289,14 +329,6 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
 
                     {/* Right column - Scene description and marketing callout */}
                     <div className="scene-content-column">
-                        {/* Debug overlay at the top */}
-                        <DebugOverlay
-                            scrollProgress={subScrollProgress}
-                            animationProgress={animationProgress}
-                            scene={scene}
-                            sceneIndex={index}
-                        />
-
                         {/* Story box */}
                         <div
                             className={`scene-description-container ${
@@ -326,9 +358,6 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
 
                         {/* Controls container at the bottom */}
                         <div className="controls-container">
-                            {/* Video upload control */}
-                            <VideoControl />
-
                             {/* Callout after the story box and upload control */}
                             {scene.subtitle && scene.subtitle.trim() !== "" && (
                                 <div className="scene-callout-wrapper">
