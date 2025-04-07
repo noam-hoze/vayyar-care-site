@@ -479,7 +479,15 @@ const TabletLayout = ({
                             className="tablet-layout-input-button"
                             onClick={handleSendClick}
                         >
-                            <i className="fa fa-paper-plane"></i>
+                            <img
+                                src="/images/vayyar-logo-white.png"
+                                alt="Vayyar"
+                                style={{
+                                    width: "60%",
+                                    height: "60%",
+                                    objectFit: "contain",
+                                }}
+                            />
                         </button>
                     </div>
                 </div>
