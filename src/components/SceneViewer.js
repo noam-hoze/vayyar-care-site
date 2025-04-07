@@ -289,10 +289,11 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
             >
                 <div className="control-panel-inner">
                     <div className="debug-section">
-                        <div className="debug-info">
-                            <div>
-                                Scene: {scene.title || "None"}
-                            </div>
+                        <div
+                            className="debug-info"
+                            style={{ marginTop: "-6px" }}
+                        >
+                            <div>Scene: {scene.title || "None"}</div>
                             <div>
                                 Scroll: {Math.round(subScrollProgress * 100)}%
                             </div>
