@@ -97,6 +97,29 @@ const TabletLayout = ({
             scrollProgress >= queryCompleteThreshold ||
             animationState.buttonClicked;
 
+        // Animate button click after typing is complete
+        // We define a small window after typing is done before the response starts
+        const shouldAnimateButtonClick =
+            scrollProgress >= queryCompleteThreshold &&
+            scrollProgress < queryCompleteThreshold + 0.02 &&
+            !animationState.buttonClicked;
+
+        if (shouldAnimateButtonClick) {
+            // Simulate button click
+            setAnimationState((prevState) => ({
+                ...prevState,
+                buttonClicked: true,
+            }));
+
+            // Reset button animation after a short delay
+            setTimeout(() => {
+                setAnimationState((prevState) => ({
+                    ...prevState,
+                    buttonClicked: false,
+                }));
+            }, 300);
+        }
+
         setAnimationState((prevState) => ({
             ...prevState,
             showTypingCurrentQuery: isTypingCurrentQuery,
@@ -143,39 +166,39 @@ const TabletLayout = ({
     ]);
 
     // Handle the send button click
-    const handleSendClick = () => {
-        if (
-            !animationState.buttonClicked &&
-            !animationState.showCurrentQueryBubble &&
-            currentQuery.length > 0
-        ) {
-            // First show the query in the input
-            setAnimationState((prevState) => ({
-                ...prevState,
-                currentInputValue: currentQuery,
-            }));
+    // const handleSendClick = () => {
+    //     if (
+    //         !animationState.buttonClicked &&
+    //         !animationState.showCurrentQueryBubble &&
+    //         currentQuery.length > 0
+    //     ) {
+    //         // First show the query in the input
+    //         setAnimationState((prevState) => ({
+    //             ...prevState,
+    //             currentInputValue: currentQuery,
+    //         }));
 
-            // Short delay before triggering animation
-            setTimeout(() => {
-                // Start the animation sequence - slide everything up
-                setAnimationState((prevState) => ({
-                    ...prevState,
-                    buttonClicked: true,
-                    bubbleAnimating: true,
-                    showResponse: true, // Keep response visible for animation
-                    currentInputValue: "", // Clear the input field
-                }));
+    //         // Short delay before triggering animation
+    //         setTimeout(() => {
+    //             // Start the animation sequence - slide everything up
+    //             setAnimationState((prevState) => ({
+    //                 ...prevState,
+    //                 buttonClicked: true,
+    //                 bubbleAnimating: true,
+    //                 showResponse: true, // Keep response visible for animation
+    //                 currentInputValue: "", // Clear the input field
+    //             }));
 
-                // After animation is complete, reset states
-                setTimeout(() => {
-                    setAnimationState((prevState) => ({
-                        ...prevState,
-                        bubbleAnimating: false,
-                    }));
-                }, 2000); // Match animation duration
-            }, 300);
-        }
-    };
+    //             // After animation is complete, reset states
+    //             setTimeout(() => {
+    //                 setAnimationState((prevState) => ({
+    //                     ...prevState,
+    //                     bubbleAnimating: false,
+    //                 }));
+    //             }, 2000); // Match animation duration
+    //         }, 300);
+    //     }
+    // };
 
     // Determine content class modifiers based on what is shown
     const contentClassModifiers = [];
@@ -477,7 +500,16 @@ const TabletLayout = ({
                         />
                         <button
                             className="tablet-layout-input-button"
-                            onClick={handleSendClick}
+                            style={{
+                                transition:
+                                    "transform 0.2s ease, box-shadow 0.2s ease",
+                                transform: animationState.buttonClicked
+                                    ? "scale(0.9)"
+                                    : "scale(1)",
+                                boxShadow: animationState.buttonClicked
+                                    ? "0 0 0 rgba(0,0,0,0)"
+                                    : "0 2px 4px rgba(0,0,0,0.2)",
+                            }}
                         >
                             <img
                                 src="/images/vayyar-logo-white.png"
@@ -486,6 +518,10 @@ const TabletLayout = ({
                                     width: "60%",
                                     height: "60%",
                                     objectFit: "contain",
+                                    transition: "transform 0.2s ease",
+                                    transform: animationState.buttonClicked
+                                        ? "scale(0.9)"
+                                        : "scale(1)",
                                 }}
                             />
                         </button>
