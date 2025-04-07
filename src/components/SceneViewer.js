@@ -34,7 +34,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
 
     // State to control control panel visibility
-    const [controlsCollapsed, setControlsCollapsed] = useState(false);
+    const [controlsCollapsed, setControlsCollapsed] = useState(true);
 
     // Handle extra descriptions that show at specific scroll percentages
     useEffect(() => {
@@ -254,7 +254,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
             [SCENES.MORNING_SHIFT]: AnimatedTabletScene1,
             [SCENES.FALL_CHART]: AnimatedTabletScene2,
             [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
-            [SCENES.VC_CLINICAL]: AnimatedTabletScene4,
+            [SCENES.VP_CLINICAL]: AnimatedTabletScene4,
             [SCENES.VP_FAMILY]: AnimatedTabletScene5,
         }),
         []
@@ -291,13 +291,10 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                     <div className="debug-section">
                         <div className="debug-info">
                             <div>
+                                Scene: {scene.title || "None"}
+                            </div>
+                            <div>
                                 Scroll: {Math.round(subScrollProgress * 100)}%
-                            </div>
-                            <div>
-                                Animation: {Math.round(animationProgress)}%
-                            </div>
-                            <div>
-                                Scene: {scene.title || "None"} (Index: {index})
                             </div>
                         </div>
                     </div>

@@ -6,7 +6,7 @@ export const SCENES = {
     MORNING_SHIFT: 0,
     FALL_CHART: 1,
     DOCUMENT_EVENT: 2,
-    VC_CLINICAL: 3,
+    VP_CLINICAL: 3,
     VP_FAMILY: 4,
 };
 

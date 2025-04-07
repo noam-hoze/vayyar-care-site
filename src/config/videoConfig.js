@@ -26,7 +26,7 @@ const defaultConfig = {
             },
         }, // Scene 1 starts at 3s
         { scene: SCENES.DOCUMENT_EVENT, videoTime: 10 },
-        { scene: SCENES.VC_CLINICAL, videoTime: 30 },
+        { scene: SCENES.VP_CLINICAL, videoTime: 30 },
     ],
 };
 
