@@ -5,7 +5,9 @@ import NavBar from "./navigation"; // Assuming NavBar is in the same directory
 export default function MainLayout() {
     return (
         <div>
-            <NavBar />
+            <div className="relative z-50">
+                <NavBar />
+            </div>
             <main>
                 <Outlet /> {/* Child routes will render here */}
             </main>

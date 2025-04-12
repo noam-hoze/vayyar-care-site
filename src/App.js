@@ -22,30 +22,24 @@ function HomePage() {
     const [subScrollProgress, setSubScrollProgress] = useState(0);
     const scrollableRef = useRef(null);
 
-    // Setup GSAP smooth scrolling
+    // Setup GSAP smooth scrolling - Reverted to original logic
     useEffect(() => {
-        // Simple smooth scrolling with GSAP
-        let smoothness = 0.08; // Lower = more resistance (0.05-0.5)
+        let smoothness = 0.08;
         let currentY = 0;
-        let targetY = 0;
+        let targetY = window.scrollY;
         let rafId = null;
 
         function updateScroll() {
-            // Calculate smooth scrolling with easing
             currentY += (targetY - currentY) * smoothness;
-            // Apply scroll only if this component is actively managing scroll
-            if (scrollableRef.current) {
-                window.scrollTo(0, currentY);
-            }
+            window.scrollTo(0, currentY);
             rafId = requestAnimationFrame(updateScroll);
         }
 
         function handleWheel(e) {
-            // Prevent default scrolling
             e.preventDefault();
 
-            // Get current scene and sub-scroll progress
             const windowHeight = window.innerHeight;
+            // Use window.scrollY directly again
             const currentSceneIndex = Math.min(
                 MAX_SCENES - 1,
                 Math.floor(window.scrollY / windowHeight)
@@ -91,80 +85,73 @@ function HomePage() {
                 }
             }
 
-            // Update target position with reduced speed
+            // Update targetY, considering the full document scroll height
             targetY = Math.max(
                 0,
                 Math.min(
-                    document.body.scrollHeight - window.innerHeight,
+                    document.body.scrollHeight - windowHeight,
                     targetY + e.deltaY * speedMultiplier
                 )
             );
 
-            // Start animation if not already running
             if (rafId === null) {
                 rafId = requestAnimationFrame(updateScroll);
             }
         }
 
-        // Attach listener only when HomePage is mounted
-        const scrollableElement = window; // Use window directly for global scroll
+        const scrollableElement = window;
         scrollableElement.addEventListener("wheel", handleWheel, {
             passive: false,
         });
-        // Recalculate targetY on mount based on current scroll position
-        targetY = window.scrollY;
-        // Start scroll animation immediately
         rafId = requestAnimationFrame(updateScroll);
 
         return () => {
-            // Clean up
             scrollableElement.removeEventListener("wheel", handleWheel);
             cancelAnimationFrame(rafId);
-            // Reset scroll behavior when navigating away? Maybe not needed if page reloads.
         };
     }, []);
 
+    // Revert scroll progress calculation
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
             const totalHeight = MAX_SCENES * windowHeight;
 
-            // Calculate progress percentage for visual indicators
             const newProgress = Math.min(
                 100,
                 (scrollY / (totalHeight - windowHeight)) * 100
             );
-            setProgress(newProgress);
+            setProgress(isNaN(newProgress) ? 0 : newProgress);
 
-            // Set current scene index - limited to MAX_SCENES
             const newIndex = Math.min(
                 MAX_SCENES - 1,
                 Math.floor(scrollY / windowHeight)
             );
 
-            // Validate the index is a valid scene
             if (isValidScene(newIndex)) {
-                // Calculate sub-scroll progress within the current scene (0 to 1)
                 const sceneStartY = newIndex * windowHeight;
                 const subScroll = (scrollY - sceneStartY) / windowHeight;
-                setSubScrollProgress(subScroll);
-
+                setSubScrollProgress(Math.max(0, Math.min(1, subScroll)));
                 setIndex(newIndex);
+            } else if (scrollY <= 0) {
+                setIndex(0);
+                setSubScrollProgress(0);
             }
         };
 
         window.addEventListener("scroll", handleScroll);
-        // Initial calculation
+        // Simple initial calculation
         handleScroll();
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
+    // Add `relative` class to establish positioning context
     return (
-        <div className="app homepage-scroll" ref={scrollableRef}>
-            {/* Scene navigation indicators - only show for available scenes */}
+        <div className="app homepage-scroll relative" ref={scrollableRef}>
+            {/* scene-navigation likely uses absolute positioning, should be okay relative to this div */}
             <div className="scene-navigation">
                 {scenes.slice(0, MAX_SCENES).map((s, i) => (
                     <div
@@ -176,12 +163,9 @@ function HomePage() {
                     />
                 ))}
             </div>
-
-            {/* Progress indicator - Removed */}
-
-            {/* Main content - set height based on MAX_SCENES */}
+            {/* Add `relative` class here too */}
             <div
-                className="scenes-container"
+                className="scenes-container relative"
                 style={{ height: `${MAX_SCENES * 100}vh` }}
             >
                 <SceneViewer
@@ -198,16 +182,15 @@ function HomePage() {
 export default function App() {
     return (
         <Routes>
-            {/* Route for the unique homepage */}
-            <Route path="/" element={<HomePage />} />
-
-            {/* Routes that use the MainLayout (with NavBar) */}
-            <Route element={<MainLayout />}>
-                <Route path="/clinical" element={<ClinicalPage />} />
-                <Route path="/executive" element={<ExecutivePage />} />
-                <Route path="/mission" element={<MissionPage />} />
-                <Route path="/about-us" element={<AboutUsPage />} />
-                <Route path="/customers" element={<CustomersPage />} />
+            {/* All routes use MainLayout (with NavBar) */}
+            <Route path="/" element={<MainLayout />}>
+                <Route index element={<HomePage />} />{" "}
+                {/* Use index route for homepage */}
+                <Route path="clinical" element={<ClinicalPage />} />
+                <Route path="executive" element={<ExecutivePage />} />
+                <Route path="mission" element={<MissionPage />} />
+                <Route path="about-us" element={<AboutUsPage />} />
+                <Route path="customers" element={<CustomersPage />} />
                 {/* Add other routes needing the NavBar here */}
             </Route>
         </Routes>
