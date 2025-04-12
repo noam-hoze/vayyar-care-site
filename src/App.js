@@ -1,14 +1,17 @@
 import { useState, useEffect, useRef } from "react";
+import { Routes, Route } from "react-router-dom";
 import { scenes } from "./data/scenes";
 import SceneViewer from "./components/SceneViewer";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MAX_SCENES, isValidScene, SCENES } from "./data/sceneRegistry";
+import ClinicalPage from "./pages/clinical";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
-export default function App() {
+// Component for the original homepage scroll logic
+function HomePage() {
     const [index, setIndex] = useState(0);
     const [progress, setProgress] = useState(0);
     const [subScrollProgress, setSubScrollProgress] = useState(0);
@@ -25,7 +28,10 @@ export default function App() {
         function updateScroll() {
             // Calculate smooth scrolling with easing
             currentY += (targetY - currentY) * smoothness;
-            window.scrollTo(0, currentY);
+            // Apply scroll only if this component is actively managing scroll
+            if (scrollableRef.current) {
+                window.scrollTo(0, currentY);
+            }
             rafId = requestAnimationFrame(updateScroll);
         }
 
@@ -95,14 +101,21 @@ export default function App() {
             }
         }
 
-        // Add event listener to the scrollable container
-        const scrollable = scrollableRef.current || window;
-        scrollable.addEventListener("wheel", handleWheel, { passive: false });
+        // Attach listener only when HomePage is mounted
+        const scrollableElement = window; // Use window directly for global scroll
+        scrollableElement.addEventListener("wheel", handleWheel, {
+            passive: false,
+        });
+        // Recalculate targetY on mount based on current scroll position
+        targetY = window.scrollY;
+        // Start scroll animation immediately
+        rafId = requestAnimationFrame(updateScroll);
 
         return () => {
             // Clean up
-            scrollable.removeEventListener("wheel", handleWheel);
+            scrollableElement.removeEventListener("wheel", handleWheel);
             cancelAnimationFrame(rafId);
+            // Reset scroll behavior when navigating away? Maybe not needed if page reloads.
         };
     }, []);
 
@@ -137,13 +150,15 @@ export default function App() {
         };
 
         window.addEventListener("scroll", handleScroll);
+        // Initial calculation
+        handleScroll();
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
     return (
-        <div className="app" ref={scrollableRef}>
+        <div className="app homepage-scroll" ref={scrollableRef}>
             {/* Scene navigation indicators - only show for available scenes */}
             <div className="scene-navigation">
                 {scenes.slice(0, MAX_SCENES).map((s, i) => (
@@ -171,5 +186,16 @@ export default function App() {
                 />
             </div>
         </div>
+    );
+}
+
+// Main App component now handles routing
+export default function App() {
+    return (
+        <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/clinical" element={<ClinicalPage />} />
+            {/* Add other routes here as needed */}
+        </Routes>
     );
 }
