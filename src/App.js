@@ -7,6 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MAX_SCENES, isValidScene, SCENES } from "./data/sceneRegistry";
 import ClinicalPage from "./pages/clinical";
 import ExecutivePage from "./pages/executive";
+import MissionPage from "./pages/mission";
+import AboutUsPage from "./pages/about-us";
+import CustomersPage from "./pages/customers";
+import MainLayout from "./components/MainLayout";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -194,10 +198,18 @@ function HomePage() {
 export default function App() {
     return (
         <Routes>
+            {/* Route for the unique homepage */}
             <Route path="/" element={<HomePage />} />
-            <Route path="/clinical" element={<ClinicalPage />} />
-            <Route path="/executive" element={<ExecutivePage />} />
-            {/* Add other routes here as needed */}
+
+            {/* Routes that use the MainLayout (with NavBar) */}
+            <Route element={<MainLayout />}>
+                <Route path="/clinical" element={<ClinicalPage />} />
+                <Route path="/executive" element={<ExecutivePage />} />
+                <Route path="/mission" element={<MissionPage />} />
+                <Route path="/about-us" element={<AboutUsPage />} />
+                <Route path="/customers" element={<CustomersPage />} />
+                {/* Add other routes needing the NavBar here */}
+            </Route>
         </Routes>
     );
 }
