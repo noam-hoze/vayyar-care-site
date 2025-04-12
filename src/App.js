@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MAX_SCENES, isValidScene, SCENES } from "./data/sceneRegistry";
 import ClinicalPage from "./pages/clinical";
+import ExecutivePage from "./pages/executive";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -195,6 +196,7 @@ export default function App() {
         <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/clinical" element={<ClinicalPage />} />
+            <Route path="/executive" element={<ExecutivePage />} />
             {/* Add other routes here as needed */}
         </Routes>
     );
