@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface FadeInListProps<T> {
     items: T[];
@@ -23,29 +23,47 @@ const FadeInList = <T,>({
     className = "",
 }: FadeInListProps<T>) => {
     const [visibleItems, setVisibleItems] = useState<number[]>([]);
+    const onCompleteRef = useRef(onComplete);
 
     useEffect(() => {
-        if (items.length === 0) return;
+        const totalItems = items.length; // Get length here
+        if (totalItems === 0) return;
 
         // Calculate how many items to show based on progress
-        const totalItems = items.length;
         const itemsToShow = Math.min(
             totalItems,
             Math.ceil((progress / 100) * totalItems)
         );
 
         // Update visible items
-        if (itemsToShow === 0) {
-            setVisibleItems([]);
-        } else {
-            setVisibleItems(Array.from({ length: itemsToShow }, (_, i) => i));
+        const newVisibleItems =
+            itemsToShow === 0
+                ? []
+                : Array.from({ length: itemsToShow }, (_, i) => i);
 
-            // Call onComplete when all items are visible
-            if (itemsToShow === totalItems) {
-                onComplete();
+        // Only update state if the array content actually changes
+        setVisibleItems((currentVisible) => {
+            if (
+                JSON.stringify(currentVisible) ===
+                JSON.stringify(newVisibleItems)
+            ) {
+                return currentVisible; // No change
             }
-        }
-    }, [items, progress, onComplete]);
+            // Call onComplete only when transitioning to full visibility
+            if (
+                itemsToShow === totalItems &&
+                currentVisible.length !== totalItems
+            ) {
+                onCompleteRef.current(); // Use ref for stable function call
+            }
+            return newVisibleItems;
+        });
+    }, [items.length, progress]); // Depend on length and progress
+
+    // Use a ref to keep onComplete stable if needed outside effect
+    useEffect(() => {
+        onCompleteRef.current = onComplete;
+    }, [onComplete]);
 
     return (
         <div className={`fade-in-list-container ${className}`}>

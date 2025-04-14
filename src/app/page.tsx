@@ -13,7 +13,6 @@ gsap.registerPlugin(ScrollTrigger);
 // Renamed function to match Next.js convention (can be any name, but default export is the page)
 export default function HomePage() {
     const [index, setIndex] = useState(0);
-    const [progress, setProgress] = useState(0); // You might not need progress state anymore
     const [subScrollProgress, setSubScrollProgress] = useState(0);
     const scrollableRef = useRef(null); // This ref might need adjustment depending on scroll target
 
@@ -100,35 +99,45 @@ export default function HomePage() {
         const handleScroll = () => {
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
-            // Recalculate totalHeight based on MAX_SCENES
             const totalHeight = MAX_SCENES * windowHeight;
-
-            const newProgress = Math.min(
-                100,
-                (scrollY / (totalHeight - windowHeight)) * 100
-            );
-            setProgress(isNaN(newProgress) ? 0 : newProgress); // Still might not need progress state
 
             const newIndex = Math.min(
                 MAX_SCENES - 1,
                 Math.floor(scrollY / windowHeight)
             );
 
+            let newSubScroll = 0;
             if (isValidScene(newIndex)) {
                 const sceneStartY = newIndex * windowHeight;
-                const subScroll = (scrollY - sceneStartY) / windowHeight;
-                setSubScrollProgress(Math.max(0, Math.min(1, subScroll)));
-                setIndex(newIndex);
+                newSubScroll = Math.max(
+                    0,
+                    Math.min(1, (scrollY - sceneStartY) / windowHeight)
+                );
+
+                // Only update state if values have changed
+                if (newIndex !== index) {
+                    setIndex(newIndex);
+                }
+                // Add a small tolerance for floating point comparison if needed
+                if (newSubScroll !== subScrollProgress) {
+                    setSubScrollProgress(newSubScroll);
+                }
             } else if (scrollY <= 0) {
-                setIndex(0);
-                setSubScrollProgress(0);
+                // Only update state if values have changed
+                if (0 !== index) {
+                    setIndex(0);
+                }
+                if (0 !== subScrollProgress) {
+                    setSubScrollProgress(0);
+                }
             }
         };
 
         window.addEventListener("scroll", handleScroll);
         handleScroll(); // Initial calculation
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+        // Add index and subScrollProgress as dependencies to get their current values in the checks
+    }, [index, subScrollProgress]);
 
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
