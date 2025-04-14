@@ -59,19 +59,29 @@ export const videoConfig = {
     videoSrc: loadSavedVideo(),
 };
 
+// Interface for individual scene timing
+export interface SceneTiming {
+    scene: number;
+    videoTime?: number;
+    scrollingPercentage?: Record<number, { videoTime: number }>;
+}
+
+// Interface for the entire video configuration
+export interface VideoConfig {
+    videoSrc: string | null;
+    sceneTiming: SceneTiming[];
+    scrubSmoothness?: number;
+}
+
 // Function to update the video source
-export const updateVideoSource = (newSource) => {
+export const updateVideoSource = (newSource: string): void => {
     videoConfig.videoSrc = newSource;
 
     try {
-        // Save to localStorage for persistence
         localStorage.setItem(STORAGE_KEY, newSource);
     } catch (error) {
-        console.error("Error saving video URL:", error);
+        console.error("Error saving video source to localStorage:", error);
     }
-
-    // Return the updated config for chaining
-    return videoConfig;
 };
 
 // Function to reset to default video
@@ -90,7 +100,7 @@ export const resetToDefaultVideo = () => {
 };
 
 // Function to check if a custom video is active
-export const isCustomVideoActive = () => {
+export const isCustomVideoActive = (): boolean => {
     return videoConfig.videoSrc !== defaultConfig.videoSrc;
 };
 
@@ -101,8 +111,23 @@ export const clearVideoSource = () => {
         videoConfig.videoSrc = "";
         console.log("Video source cleared successfully");
     } catch (error) {
-        console.error("Error clearing video URL:", error);
+        console.error("Error removing video source from localStorage:", error);
     }
 
     return videoConfig;
 };
+
+// Initialize video source on load
+const initializeVideoSource = (): void => {
+    try {
+        const storedUrl = localStorage.getItem(STORAGE_KEY);
+        if (storedUrl) {
+            videoConfig.videoSrc = storedUrl;
+        }
+    } catch (error) {
+        console.error("Error reading video source from localStorage:", error);
+    }
+};
+
+// Call initialization
+initializeVideoSource();

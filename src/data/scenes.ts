@@ -17,7 +17,7 @@ export const scenes = [
         scene: SCENES.FALL_CHART,
         title: "Fall event",
         description: "During her morning walk, Alice checks John's fall chart.",
-        extraDescription: {
+        percentageText: {
             70: {
                 text: "Suddenly she receives a fall alert.",
             },

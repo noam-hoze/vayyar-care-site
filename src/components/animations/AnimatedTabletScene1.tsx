@@ -1,13 +1,22 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import AnimatedMetric from "./AnimatedMetric";
 import FadeInList from "./FadeInList";
 import TabletLayout from "./TabletLayout";
+import { Scene } from "../../types"; // Import Scene from types.ts
 import "./animations.css";
 
 // Define the Vayyar blue color as a constant for reuse
 const VAYYAR_BLUE = "rgba(5, 170, 233, 1)";
 
-const AnimatedTabletScene1 = ({ scrollProgress = 0, scene }) => {
+interface AnimatedTabletScene1Props {
+    scrollProgress?: number;
+    scene: Scene; // Use imported Scene
+}
+
+const AnimatedTabletScene1: React.FC<AnimatedTabletScene1Props> = ({
+    scrollProgress = 0,
+    scene,
+}) => {
     // Current scene query and response
     const currentQuery = "Show me yesterday's summary";
     const textResponse = "Good morning Alice! Here's your shift summary.";
@@ -15,11 +24,16 @@ const AnimatedTabletScene1 = ({ scrollProgress = 0, scene }) => {
     // Bridge query to scene 2
     const nextQuery = "Show me Joe's fall analysis for May";
 
-    // Summary items from the scene data
-    const summaryItems = scene.content || [];
+    // Ensure summaryItems is an array of ReactNode or default to empty array
+    const summaryItems: ReactNode[] = Array.isArray(scene.content)
+        ? scene.content
+        : [];
 
-    // Render the summary item with appropriate styling
-    const renderSummaryItem = (item, index) => (
+    // Render the summary item with appropriate styling - item is ReactNode
+    const renderSummaryItem = (
+        item: ReactNode,
+        index: number // Accept ReactNode
+    ) => (
         <div key={index} className="animated-tablet-summary-item">
             <span className="animated-tablet-summary-item-bullet">•</span>
             {item}
@@ -58,6 +72,7 @@ const AnimatedTabletScene1 = ({ scrollProgress = 0, scene }) => {
 
     return (
         <TabletLayout
+            scene={scene}
             showMetrics={true}
             time="9:41 AM"
             currentQuery={currentQuery}

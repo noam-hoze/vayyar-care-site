@@ -1,6 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import "./animations.css";
 import { SCENES } from "../../data/sceneRegistry";
+
+// Define Scene interface if not already defined/imported
+interface Scene {
+    scene?: number; // Optional scene ID
+    [key: string]: any;
+}
+
+// Export the props interface
+export interface TabletLayoutProps {
+    children: ReactNode;
+    time?: string;
+    showMetrics?: boolean;
+    showChatInput?: boolean;
+    criticalMetric?: number;
+    currentQuery?: string;
+    nextQuery?: string;
+    textResponse?: string;
+    scrollProgress?: number;
+    queryStartThreshold?: number;
+    queryCompleteThreshold?: number;
+    responseStartThreshold?: number;
+    transitionStartThreshold?: number;
+    contentTransitionThreshold?: number;
+    scene: Scene; // Use the Scene interface, make it required
+}
 
 /**
  * Reusable tablet layout component that provides the common structure for all scenes
@@ -9,6 +34,7 @@ import { SCENES } from "../../data/sceneRegistry";
  * @param {React.ReactNode} props.children - Content to render inside the tablet (visual response for current scene)
  * @param {string} props.time - Time to display in header
  * @param {boolean} props.showMetrics - Whether to show the metrics panel (defaults to false)
+ * @param {boolean} props.showChatInput - Whether to show the chat input (defaults to true)
  * @param {number} props.criticalMetric - Value to display in Critical metric (defaults to 0)
  * @param {string} props.currentQuery - Query text for current scene
  * @param {string} props.nextQuery - Query text for next scene (bridge query)
@@ -21,10 +47,11 @@ import { SCENES } from "../../data/sceneRegistry";
  * @param {number} props.contentTransitionThreshold - Scroll progress at which to transition content (defaults to 95)
  * @param {number} props.scene - Current scene ID from SCENES
  */
-const TabletLayout = ({
+const TabletLayout: React.FC<TabletLayoutProps> = ({
     children,
     time = "9:41 AM",
     showMetrics = false,
+    showChatInput = true,
     criticalMetric = 0,
     currentQuery = "",
     nextQuery = "",
@@ -166,39 +193,59 @@ const TabletLayout = ({
     ]);
 
     // Handle the send button click
-    // const handleSendClick = () => {
-    //     if (
-    //         !animationState.buttonClicked &&
-    //         !animationState.showCurrentQueryBubble &&
-    //         currentQuery.length > 0
-    //     ) {
-    //         // First show the query in the input
-    //         setAnimationState((prevState) => ({
-    //             ...prevState,
-    //             currentInputValue: currentQuery,
-    //         }));
+    const handleSendClick = () => {
+        if (
+            !animationState.buttonClicked &&
+            !animationState.showCurrentQueryBubble &&
+            currentQuery.length > 0
+        ) {
+            // First show the query in the input
+            setAnimationState((prevState) => ({
+                ...prevState,
+                currentInputValue: currentQuery,
+            }));
 
-    //         // Short delay before triggering animation
-    //         setTimeout(() => {
-    //             // Start the animation sequence - slide everything up
-    //             setAnimationState((prevState) => ({
-    //                 ...prevState,
-    //                 buttonClicked: true,
-    //                 bubbleAnimating: true,
-    //                 showResponse: true, // Keep response visible for animation
-    //                 currentInputValue: "", // Clear the input field
-    //             }));
+            // Short delay before triggering animation
+            setTimeout(() => {
+                // Simulate button click visually
+                const sendButton = document.querySelector(
+                    ".tablet-send-button"
+                );
+                if (sendButton) {
+                    sendButton.classList.add("clicked");
+                    setTimeout(
+                        () => sendButton.classList.remove("clicked"),
+                        200
+                    );
+                }
+                // Simulate clicking action for accessibility/focus
+                const btn = document.activeElement; // Keep as Element | null
+                if (btn instanceof HTMLElement) {
+                    // Check if it's an HTMLElement
+                    btn.blur();
+                }
 
-    //             // After animation is complete, reset states
-    //             setTimeout(() => {
-    //                 setAnimationState((prevState) => ({
-    //                     ...prevState,
-    //                     bubbleAnimating: false,
-    //                 }));
-    //             }, 2000); // Match animation duration
-    //         }, 300);
-    //     }
-    // };
+                // Resolve after a longer delay to simulate nurse response time
+                // This would represent the time it takes to check on the patient
+                setTimeout(() => {
+                    setAnimationState((prevState) => ({
+                        ...prevState,
+                        buttonClicked: true, // Keep this true to show bubble
+                        bubbleAnimating: true, // Optional: if needed for CSS
+                        showResponse: true,
+                        currentInputValue: "", // Clear input
+                    }));
+                    // Reset bubble animating state if used
+                    setTimeout(() => {
+                        setAnimationState((prevState) => ({
+                            ...prevState,
+                            bubbleAnimating: false,
+                        }));
+                    }, 500); // Duration for bubble animation
+                }, 300);
+            }, 100);
+        }
+    };
 
     // Determine content class modifiers based on what is shown
     const contentClassModifiers = [];
@@ -285,7 +332,9 @@ const TabletLayout = ({
                         if (!alertResolved) {
                             // Simulate clicking action
                             const btn = document.activeElement;
-                            if (btn) btn.blur();
+                            if (btn instanceof HTMLElement) {
+                                btn.blur();
+                            }
 
                             // Resolve after a longer delay to simulate nurse response time
                             // This would represent the time it takes to check on the patient

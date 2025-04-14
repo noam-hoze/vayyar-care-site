@@ -27,7 +27,7 @@ function HomePage() {
         let smoothness = 0.08;
         let currentY = 0;
         let targetY = window.scrollY;
-        let rafId = null;
+        let rafId: number | null = null;
 
         function updateScroll() {
             currentY += (targetY - currentY) * smoothness;
@@ -35,7 +35,7 @@ function HomePage() {
             rafId = requestAnimationFrame(updateScroll);
         }
 
-        function handleWheel(e) {
+        function handleWheel(e: WheelEvent) {
             e.preventDefault();
 
             const windowHeight = window.innerHeight;
@@ -107,7 +107,9 @@ function HomePage() {
 
         return () => {
             scrollableElement.removeEventListener("wheel", handleWheel);
-            cancelAnimationFrame(rafId);
+            if (rafId !== null) {
+                cancelAnimationFrame(rafId);
+            }
         };
     }, []);
 

@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
 
+interface FadeInListProps<T> {
+    items: T[];
+    progress?: number;
+    animationDuration?: number;
+    delayBetween?: number;
+    renderItem?: (item: T, index: number) => React.ReactNode;
+    onComplete?: () => void;
+    className?: string;
+}
+
 // A component that fades in list items sequentially based on scroll progress
-const FadeInList = ({
+const FadeInList = <T,>({
     items = [],
     progress = 0, // 0-100 scroll progress
     animationDuration = 500,
     delayBetween = 150, // Delay between animations in ms
-    renderItem = (item, index) => <div key={index}>{item}</div>,
+    renderItem = (item: T, index: number) => (
+        <div key={index}>{String(item)}</div>
+    ),
     onComplete = () => {},
     className = "",
-}) => {
-    const [visibleItems, setVisibleItems] = useState([]);
+}: FadeInListProps<T>) => {
+    const [visibleItems, setVisibleItems] = useState<number[]>([]);
 
     useEffect(() => {
         if (items.length === 0) return;

@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, {
+    useState,
+    useEffect,
+    useMemo,
+    useRef,
+    CSSProperties,
+    ReactNode,
+} from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
@@ -8,13 +15,24 @@ import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
 import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import DebugOverlay from "./DebugOverlay";
 import VideoControl from "./VideoControl";
-import { videoConfig } from "../config/videoConfig";
+import { videoConfig, VideoConfig, SceneTiming } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
+import { Scene } from "../types";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
-const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
+interface SceneViewerProps {
+    scene: Scene;
+    index?: number;
+    subScrollProgress?: number;
+}
+
+const SceneViewer: React.FC<SceneViewerProps> = ({
+    scene,
+    index = 0,
+    subScrollProgress = 0,
+}) => {
     // Calculate sub-scroll progress for animations
     const [animationProgress, setAnimationProgress] = useState(0);
 
@@ -28,7 +46,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
     const [animateCard, setAnimateCard] = useState(true);
 
     // Video reference
-    const videoRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
@@ -38,13 +56,13 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
 
     // Handle extra descriptions that show at specific scroll percentages
     useEffect(() => {
-        // Check if there's an extraDescription property in the scene
-        if (scene.extraDescription) {
+        // Check if there's a percentageText property in the scene
+        if (scene.percentageText) {
             // Get the scroll percentage (0-100)
             const scrollPercentage = Math.floor(subScrollProgress * 100);
 
             // Find all percentages that are less than or equal to the current percentage
-            const matchingPercentages = Object.keys(scene.extraDescription)
+            const matchingPercentages = Object.keys(scene.percentageText)
                 .map(Number)
                 .filter((percentage) => percentage <= scrollPercentage)
                 .sort((a, b) => b - a); // Sort in descending order
@@ -53,9 +71,12 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
             const highestMatch = matchingPercentages[0];
 
             // Set the extra description text if there's a match
-            if (highestMatch !== undefined) {
+            if (
+                highestMatch !== undefined &&
+                scene.percentageText[highestMatch]
+            ) {
                 setExtraDescriptionText(
-                    scene.extraDescription[highestMatch].text
+                    scene.percentageText[highestMatch].text
                 );
             } else {
                 setExtraDescriptionText("");
@@ -75,17 +96,15 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
 
         // Function to update video time based on scroll progress
         const updateVideoTime = () => {
-            // Map the scroll position directly to video time
             const sceneTimings = videoConfig.sceneTiming;
-
-            if (!sceneTimings || !video.duration) return;
+            if (!sceneTimings || !video.duration || isNaN(video.duration))
+                return; // Add NaN check
 
             console.log("Current scroll progress:", subScrollProgress);
             console.log("Current scene index:", index);
 
-            // Get current scene timing
             const currentSceneTiming = sceneTimings.find(
-                (t) => t.scene === index
+                (t: SceneTiming) => t.scene === index // Add type for t
             );
 
             if (!currentSceneTiming) {
@@ -93,23 +112,17 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                 return;
             }
 
-            // Handle new scrollingPercentage-based timing
             if (currentSceneTiming.scrollingPercentage) {
-                // Get the scroll percentage (0-100)
                 const scrollPercentage = Math.floor(subScrollProgress * 100);
-
-                // Get the percentage points defined in the scrollingPercentage object
                 const percentagePoints = Object.keys(
                     currentSceneTiming.scrollingPercentage
                 )
                     .map(Number)
                     .sort((a, b) => a - b);
 
-                // Find the surrounding percentage points for interpolation
                 let lowerPoint = percentagePoints[0];
                 let upperPoint = percentagePoints[percentagePoints.length - 1];
 
-                // Find the points that bound the current scroll percentage
                 for (let i = 0; i < percentagePoints.length; i++) {
                     if (scrollPercentage >= percentagePoints[i]) {
                         lowerPoint = percentagePoints[i];
@@ -120,26 +133,40 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                     }
                 }
 
-                // Get the video times for the surrounding percentage points
-                const lowerTime =
-                    currentSceneTiming.scrollingPercentage[lowerPoint]
-                        .videoTime;
-                const upperTime =
-                    currentSceneTiming.scrollingPercentage[upperPoint]
-                        .videoTime;
+                // Access safely using optional chaining AND type assertion on the key
+                const lowerData =
+                    currentSceneTiming.scrollingPercentage?.[
+                        lowerPoint as keyof typeof currentSceneTiming.scrollingPercentage
+                    ];
+                const upperData =
+                    currentSceneTiming.scrollingPercentage?.[
+                        upperPoint as keyof typeof currentSceneTiming.scrollingPercentage
+                    ];
 
-                // Calculate the interpolation factor (0-1) between the two percentage points
+                if (!lowerData || !upperData) {
+                    console.warn(
+                        "Invalid percentage points data for interpolation:",
+                        lowerPoint,
+                        upperPoint,
+                        currentSceneTiming.scrollingPercentage
+                    );
+                    video.currentTime = currentSceneTiming.videoTime ?? 0;
+                    return;
+                }
+
+                const lowerTime = lowerData.videoTime;
+                const upperTime = upperData.videoTime;
+
                 let factor = 0;
                 if (upperPoint > lowerPoint) {
                     factor =
                         (scrollPercentage - lowerPoint) /
                         (upperPoint - lowerPoint);
                 }
+                factor = Math.max(0, Math.min(1, factor)); // Ensure factor is between 0 and 1
 
-                // Interpolate to get the exact video time
                 const videoTime = lowerTime + (upperTime - lowerTime) * factor;
 
-                // Set the video time
                 if (!isNaN(videoTime)) {
                     video.currentTime = videoTime;
                     console.log(
@@ -149,73 +176,96 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
                     );
                 }
             } else {
-                // Handle traditional scene timing with a single videoTime value
                 const nextSceneIndex = index + 1;
                 const nextSceneTiming = sceneTimings.find(
-                    (t) => t.scene === nextSceneIndex
+                    (t: SceneTiming) => t.scene === nextSceneIndex
                 );
 
-                // Set the video time based on a linear interpolation
-                let videoTime;
+                let videoTime: number;
+                const startTime = currentSceneTiming.videoTime ?? 0;
 
                 if (nextSceneTiming) {
-                    // If next scene has scrollingPercentage, use its first percentage point
-                    let nextSceneStartTime;
+                    let nextSceneStartTime: number;
                     if (nextSceneTiming.scrollingPercentage) {
-                        // Get the first percentage point (lowest value)
                         const firstPercentage = Math.min(
                             ...Object.keys(
                                 nextSceneTiming.scrollingPercentage
                             ).map(Number)
                         );
-                        nextSceneStartTime =
-                            nextSceneTiming.scrollingPercentage[firstPercentage]
-                                .videoTime;
+                        // Safely access first percentage data using optional chaining AND type assertion
+                        const firstPercentageData =
+                            nextSceneTiming.scrollingPercentage?.[
+                                firstPercentage as keyof typeof nextSceneTiming.scrollingPercentage
+                            ];
+                        if (firstPercentageData) {
+                            nextSceneStartTime = firstPercentageData.videoTime;
+                        } else {
+                            console.warn(
+                                "Could not find video time for first percentage:",
+                                firstPercentage,
+                                nextSceneTiming.scrollingPercentage
+                            );
+                            nextSceneStartTime =
+                                nextSceneTiming.videoTime ?? startTime;
+                        }
                     } else {
-                        nextSceneStartTime = nextSceneTiming.videoTime;
+                        nextSceneStartTime =
+                            nextSceneTiming.videoTime ?? startTime;
                     }
 
-                    // Interpolate between current and next scene times
-                    const startTime = currentSceneTiming.videoTime;
-                    videoTime =
-                        startTime +
-                        (nextSceneStartTime - startTime) * subScrollProgress;
+                    // Ensure startTime and nextSceneStartTime are valid numbers
+                    if (isNaN(nextSceneStartTime)) {
+                        console.warn(
+                            "Invalid next scene start time for interpolation.",
+                            nextSceneStartTime
+                        );
+                        videoTime = startTime;
+                    } else {
+                        videoTime =
+                            startTime +
+                            (nextSceneStartTime - startTime) *
+                                subScrollProgress;
+                    }
                 } else {
-                    // Last scene - interpolate to the end of the video
-                    const startTime = currentSceneTiming.videoTime;
                     const endTime = video.duration;
-                    videoTime =
-                        startTime + (endTime - startTime) * subScrollProgress;
+                    if (isNaN(endTime)) {
+                        console.warn(
+                            "Invalid end time for last scene interpolation."
+                        );
+                        videoTime = startTime;
+                    } else {
+                        videoTime =
+                            startTime +
+                            (endTime - startTime) * subScrollProgress;
+                    }
                 }
 
-                // Set the video time
-                if (!isNaN(videoTime)) {
-                    video.currentTime = videoTime;
-                    console.log(
-                        "Setting video time to:",
-                        videoTime,
-                        "using traditional mapping"
+                // Ensure videoTime is within bounds
+                if (isNaN(videoTime)) {
+                    videoTime = startTime; // Fallback if calculation failed
+                } else if (!isNaN(video.duration)) {
+                    videoTime = Math.max(
+                        0,
+                        Math.min(video.duration, videoTime)
                     );
                 }
+
+                video.currentTime = videoTime;
+                console.log(
+                    "Setting video time to:",
+                    videoTime,
+                    "using traditional mapping"
+                );
             }
         };
 
-        // Set up a scroll trigger to update the video
-        const scrollTrigger = ScrollTrigger.create({
-            trigger: ".scenes-container",
-            start: "top top",
-            end: "bottom bottom",
-            onUpdate: updateVideoTime,
-            scrub: videoConfig.scrubSmoothness,
-        });
-
-        // Initial update
+        // Call immediately and add listener
         updateVideoTime();
+        // No need for scroll listener here as progress is passed via props
 
-        return () => {
-            scrollTrigger.kill();
-        };
-    }, [scene, index, subScrollProgress]);
+        // Cleanup function - not strictly needed if progress updates trigger re-render
+        // return () => window.removeEventListener('scroll', handleScroll);
+    }, [scene, index, subScrollProgress]); // Rerun when scene, index or sub-progress changes
 
     // Reset animations when scene changes
     useEffect(() => {
@@ -238,7 +288,7 @@ const SceneViewer = ({ scene, index = 0, subScrollProgress = 0 }) => {
         );
 
         const calloutDisplayPercentage = parseFloat(
-            scene.calloutDisplayPercentage || 80
+            scene.calloutDisplayPercentage || "80"
         );
 
         if (animationProgress >= calloutDisplayPercentage) {

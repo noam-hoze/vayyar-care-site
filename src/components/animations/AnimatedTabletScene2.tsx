@@ -1,8 +1,24 @@
 import React from "react";
 import TabletLayout from "./TabletLayout";
+import { Scene } from "../../types"; // Import Scene from types.ts
 import "./animations.css";
 
-const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
+// Remove local Scene interface definition
+/*
+interface Scene {
+    [key: string]: any;
+}
+*/
+
+interface AnimatedTabletSceneProps {
+    scrollProgress?: number;
+    scene: Scene; // Use imported Scene
+}
+
+const AnimatedTabletScene2: React.FC<AnimatedTabletSceneProps> = ({
+    scrollProgress = 0,
+    scene,
+}) => {
     // Current scene query (which is a continuation from scene 1)
     const currentQuery = "Show me Joe's fall analysis for May";
 
@@ -166,7 +182,7 @@ const AnimatedTabletScene2 = ({ scrollProgress = 0, scene }) => {
     return (
         <TabletLayout
             showMetrics={true}
-            time="10:15 AM"
+            time="11:15 AM"
             currentQuery={currentQuery}
             nextQuery={nextQuery}
             scrollProgress={scrollProgress}

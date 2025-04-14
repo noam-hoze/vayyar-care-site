@@ -11,16 +11,16 @@ export const SCENES = {
 };
 
 // Helper function to validate a scene index is valid
-export function isValidScene(sceneIndex) {
+export function isValidScene(sceneIndex: number): boolean {
     return Object.values(SCENES).includes(sceneIndex);
 }
 
 // Get the scene name for debugging purposes
-export function getSceneName(sceneIndex) {
+export function getSceneName(sceneIndex: number): string | undefined {
     const entry = Object.entries(SCENES).find(
         ([_, value]) => value === sceneIndex
     );
-    return entry ? entry[0] : "UNKNOWN_SCENE";
+    return entry ? entry[0] : undefined;
 }
 
 // Get total number of scenes

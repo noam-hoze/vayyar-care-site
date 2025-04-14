@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     updateVideoSource,
     isCustomVideoActive,
@@ -25,14 +25,14 @@ const VideoControl = () => {
     const [currentVideoUrl, setCurrentVideoUrl] = useState("");
     const [uploadMode, setUploadMode] = useState(false);
     const [hasCustomVideo, setHasCustomVideo] = useState(false);
-    const fileInputRef = React.useRef(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     // Check if a custom video is active
     useEffect(() => {
         setHasCustomVideo(isCustomVideoActive());
     }, []);
 
-    const handleDrag = (e) => {
+    const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -43,13 +43,13 @@ const VideoControl = () => {
         }
     };
 
-    const handleDrop = (e) => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
 
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFile(e.dataTransfer.files[0]);
+            handleFile(e.dataTransfer.files[0] as File);
         }
     };
 
@@ -64,20 +64,18 @@ const VideoControl = () => {
     };
 
     const handleFileInputClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
+        fileInputRef.current?.click();
     };
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
 
         if (e.target.files && e.target.files[0]) {
-            handleFile(e.target.files[0]);
+            handleFile(e.target.files[0] as File);
         }
     };
 
-    const validateFile = (file) => {
+    const validateFile = (file: File): string | null => {
         // Check if the file is a video
         if (!file.type.startsWith("video/")) {
             return "Please upload a valid video file.";
@@ -99,7 +97,7 @@ const VideoControl = () => {
         return null;
     };
 
-    const handleFile = async (file) => {
+    const handleFile = async (file: File) => {
         const validationError = validateFile(file);
         if (validationError) {
             setUploadStatus(validationError);
