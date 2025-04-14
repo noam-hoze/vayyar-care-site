@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, {
     useState,
     useEffect,
@@ -16,9 +16,14 @@ import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
 import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import DebugOverlay from "./DebugOverlay";
 import VideoControl from "./VideoControl";
-import { videoConfig, VideoConfig, SceneTiming } from "../config/videoConfig";
+import {
+    videoConfig,
+    SceneTiming,
+    STORAGE_KEY,
+    defaultConfig,
+} from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
-import { Scene } from "../types";
+import { Scene } from "@/types";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -49,11 +54,45 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // Video reference
     const videoRef = useRef<HTMLVideoElement>(null);
 
+    // State for the video source URL, initialized to null for SSR safety
+    const [currentVideoSrc, setCurrentVideoSrc] = useState<string | null>(null);
+
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
 
     // State to control control panel visibility
     const [controlsCollapsed, setControlsCollapsed] = useState(true);
+
+    // Load video source from localStorage on client-side mount
+    useEffect(() => {
+        let initialSrc = defaultConfig.videoSrc; // Start with default
+        // Check if running in browser
+        if (typeof window !== "undefined") {
+            try {
+                const savedVideo = localStorage.getItem(STORAGE_KEY);
+                if (savedVideo) {
+                    // Validate if it's a Firebase URL (or your expected format)
+                    if (
+                        savedVideo.startsWith(
+                            "https://firebasestorage.googleapis.com"
+                        )
+                    ) {
+                        initialSrc = savedVideo;
+                    } else {
+                        // Clear invalid entry if needed
+                        localStorage.removeItem(STORAGE_KEY);
+                    }
+                }
+            } catch (error) {
+                console.error(
+                    "Error loading saved video in SceneViewer:",
+                    error
+                );
+            }
+        }
+        // Set state after checking. Use null if the resulting src is empty.
+        setCurrentVideoSrc(initialSrc || null);
+    }, []); // Empty dependency array runs only once on mount
 
     // Handle extra descriptions that show at specific scroll percentages
     useEffect(() => {
@@ -90,7 +129,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // Set up video scroll control
     useEffect(() => {
         const video = videoRef.current;
-        if (!video) return;
+        // Ensure video exists AND the source is loaded before manipulating time
+        if (!video || !currentVideoSrc) return;
 
         // Debug current scene
         console.log("Current scene:", scene.scene, "Scene index:", index);
@@ -266,7 +306,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
         // Cleanup function - not strictly needed if progress updates trigger re-render
         // return () => window.removeEventListener('scroll', handleScroll);
-    }, [scene, index, subScrollProgress]); // Rerun when scene, index or sub-progress changes
+    }, [scene, index, subScrollProgress, currentVideoSrc]); // Add currentVideoSrc dependency
 
     // Reset animations when scene changes
     useEffect(() => {
@@ -327,11 +367,82 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         setControlsCollapsed(!controlsCollapsed);
     };
 
+    const renderSceneContent = () => {
+        return (
+            <div className="scene-layout">
+                {/* Left column - Video */}
+                <div className="scene-image-column">
+                    <video
+                        ref={videoRef}
+                        src={currentVideoSrc ?? undefined}
+                        className="scene-video"
+                        playsInline
+                        preload="auto"
+                        muted
+                        onLoadedMetadata={() => {
+                            console.log(
+                                "Video metadata loaded, duration:",
+                                videoRef.current?.duration
+                            );
+                        }}
+                    />
+                </div>
+
+                {/* Right column - Scene description and marketing callout */}
+                <div className="scene-content-column">
+                    {/* Story box */}
+                    <div
+                        className={`scene-description-container ${
+                            animateCard ? "animate-in" : "reset-animation"
+                        }`}
+                    >
+                        <p className="scene-description-text">
+                            {scene.description}
+                            {extraDescriptionText && (
+                                <span
+                                    className="extra-description-text"
+                                    style={{
+                                        display: "block",
+                                        marginTop: "15px",
+                                        animation: "fadeIn 0.8s ease forwards",
+                                        opacity: 0,
+                                        color: "white",
+                                        animationFillMode: "forwards",
+                                    }}
+                                >
+                                    {extraDescriptionText}
+                                </span>
+                            )}
+                        </p>
+                    </div>
+
+                    {/* Controls container at the bottom */}
+                    <div className="controls-container">
+                        {/* Callout after the story box and upload control */}
+                        {scene.subtitle && scene.subtitle.trim() !== "" && (
+                            <div className="scene-callout-wrapper">
+                                <div
+                                    className={`scene-callout ${
+                                        showCallout ? "visible" : "hidden"
+                                    } ${
+                                        animateCard
+                                            ? "animate-in"
+                                            : "reset-animation"
+                                    }`}
+                                >
+                                    <h3>{scene.subtitle}</h3>
+                                    <div className="scene-callout-underline"></div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     return (
-        <div
-            className="scene-container"
-            style={{ color: scene.color || "#000" }}
-        >
+        <div className="scene-container fixed top-0 left-0 w-screen h-screen flex items-center box-border overflow-hidden">
             {/* Unified control panel */}
             <div
                 className={`control-panel ${
@@ -362,74 +473,36 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 </button>
             </div>
 
-            <div className="scene-content">
-                <div className="scene-layout">
-                    {/* Left column - Video */}
-                    <div className="scene-image-column">
-                        <video
-                            ref={videoRef}
-                            src={videoConfig.videoSrc}
-                            className="scene-video"
-                            playsInline
-                            preload="auto"
-                            muted
-                        />
-                    </div>
-
-                    {/* Right column - Scene description and marketing callout */}
-                    <div className="scene-content-column">
-                        {/* Story box */}
-                        <div
-                            className={`scene-description-container ${
-                                animateCard ? "animate-in" : "reset-animation"
-                            }`}
-                        >
-                            <p className="scene-description-text">
-                                {scene.description}
-                                {extraDescriptionText && (
-                                    <span
-                                        className="extra-description-text"
-                                        style={{
-                                            display: "block",
-                                            marginTop: "15px",
-                                            animation:
-                                                "fadeIn 0.8s ease forwards",
-                                            opacity: 0,
-                                            color: "white",
-                                            animationFillMode: "forwards",
-                                        }}
-                                    >
-                                        {extraDescriptionText}
-                                    </span>
-                                )}
-                            </p>
+            <div className="scene-content w-full">
+                {scene.layout === "two-column" ? (
+                    <div className="scene-layout two-column-layout">
+                        <div className="left-column scene-image-column">
+                            <video
+                                ref={videoRef}
+                                src={currentVideoSrc ?? undefined}
+                                className="scene-video w-full h-full object-cover"
+                                playsInline
+                                preload="auto"
+                                muted
+                                onLoadedMetadata={() => {
+                                    console.log(
+                                        "Video metadata loaded, duration:",
+                                        videoRef.current?.duration
+                                    );
+                                }}
+                            />
                         </div>
-
-                        {/* Controls container at the bottom */}
-                        <div className="controls-container">
-                            {/* Callout after the story box and upload control */}
-                            {scene.subtitle && scene.subtitle.trim() !== "" && (
-                                <div className="scene-callout-wrapper">
-                                    <div
-                                        className={`scene-callout ${
-                                            showCallout ? "visible" : "hidden"
-                                        } ${
-                                            animateCard
-                                                ? "animate-in"
-                                                : "reset-animation"
-                                        }`}
-                                    >
-                                        <h3>{scene.subtitle}</h3>
-                                        <div className="scene-callout-underline"></div>
-                                    </div>
-                                </div>
-                            )}
+                        <div className="right-column scene-content-column">
+                            {renderSceneContent()}
                         </div>
                     </div>
-                </div>
-
-                <div className="tablet-wrapper">{tabletComponent}</div>
+                ) : (
+                    renderSceneContent()
+                )}
             </div>
+
+            <div className="tablet-wrapper">{tabletComponent}</div>
+            {/* ... Debug Overlay ... */}
         </div>
     );
 };

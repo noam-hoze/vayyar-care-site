@@ -1,10 +1,10 @@
 import { SCENES, MAX_SCENES } from "../data/sceneRegistry";
 
 // Storage key for local storage
-const STORAGE_KEY = "vayyar_custom_video";
+export const STORAGE_KEY = "vayyar_custom_video";
 
 // Default video configuration
-const defaultConfig = {
+export const defaultConfig = {
     // How many viewport heights to scroll through
     scrollMultiplier: MAX_SCENES,
 
