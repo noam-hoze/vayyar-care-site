@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // or use <a href="..."> if not using React Router
+import Link from "next/link"; // Changed from react-router-dom
 
 export default function NavBar() {
     return (
@@ -9,7 +9,7 @@ export default function NavBar() {
                     {/* Logo or Brand Name */}
                     <div className="flex-shrink-0">
                         {/* Use Link for the logo to go to homepage */}
-                        <Link to="/">
+                        <Link href="/">
                             {/* Replace text with image */}
                             <img
                                 className="h-8 w-auto" /* Adjust height/width as needed */
@@ -22,25 +22,25 @@ export default function NavBar() {
                     {/* Navigation Links */}
                     <div className="flex space-x-8 text-md font-medium">
                         <Link
-                            to="/clinical"
+                            href="/clinical"
                             className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
                         >
                             Clinical
                         </Link>
                         <Link
-                            to="/executive"
+                            href="/executive"
                             className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
                         >
                             Executive
                         </Link>
                         <Link
-                            to="/customers"
+                            href="/customers"
                             className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
                         >
                             Customers
                         </Link>
                         <Link
-                            to="/about-us"
+                            href="/about-us"
                             className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
                         >
                             About Us

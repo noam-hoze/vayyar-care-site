@@ -1,26 +1,21 @@
+"use client"; // Mark this as a Client Component
+
 import { useState, useEffect, useRef } from "react";
-import { Routes, Route } from "react-router-dom";
-import { scenes } from "./data/scenes";
-import SceneViewer from "./components/SceneViewer";
+import { scenes } from "@/data/scenes"; // Use alias
+import SceneViewer from "@/components/SceneViewer"; // Use alias
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { MAX_SCENES, isValidScene, SCENES } from "./data/sceneRegistry";
-import ClinicalPage from "./pages/clinical";
-import ExecutivePage from "./pages/executive";
-import MissionPage from "./pages/mission";
-import AboutUsPage from "./pages/about-us";
-import CustomersPage from "./pages/customers";
-import MainLayout from "./components/MainLayout";
+import { MAX_SCENES, isValidScene, SCENES } from "@/data/sceneRegistry"; // Use alias
 
-// Register GSAP plugins
+// Register GSAP plugins - needs to be done in a client component or useEffect
 gsap.registerPlugin(ScrollTrigger);
 
-// Component for the original homepage scroll logic
-function HomePage() {
+// Renamed function to match Next.js convention (can be any name, but default export is the page)
+export default function HomePage() {
     const [index, setIndex] = useState(0);
-    const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(0); // You might not need progress state anymore
     const [subScrollProgress, setSubScrollProgress] = useState(0);
-    const scrollableRef = useRef(null);
+    const scrollableRef = useRef(null); // This ref might need adjustment depending on scroll target
 
     // Setup GSAP smooth scrolling - Reverted to original logic
     useEffect(() => {
@@ -31,6 +26,7 @@ function HomePage() {
 
         function updateScroll() {
             currentY += (targetY - currentY) * smoothness;
+            // Apply scroll to window for now, might need adjustment
             window.scrollTo(0, currentY);
             rafId = requestAnimationFrame(updateScroll);
         }
@@ -39,7 +35,6 @@ function HomePage() {
             e.preventDefault();
 
             const windowHeight = window.innerHeight;
-            // Use window.scrollY directly again
             const currentSceneIndex = Math.min(
                 MAX_SCENES - 1,
                 Math.floor(window.scrollY / windowHeight)
@@ -48,48 +43,34 @@ function HomePage() {
             const currentSubScroll =
                 (window.scrollY - sceneStartY) / windowHeight;
 
-            // Check if we're in the FALL_CHART scene
             const isFallChartScene = currentSceneIndex === SCENES.FALL_CHART;
-            // Check if we're in the VC_CLINICAL scene
             const isVpFamilyScene = currentSceneIndex === SCENES.VP_FAMILY;
+            let speedMultiplier = 0.1;
 
-            // Determine scroll speed multiplier
-            let speedMultiplier = 0.1; // Default reduced speed
-
-            // If in FALL_CHART scene between 75% and 84%, slow down dramatically
             if (
                 isFallChartScene &&
                 currentSubScroll >= 0.75 &&
                 currentSubScroll <= 0.84
             ) {
-                // Super slow scrolling for the alert resolution phase (25x slower)
                 speedMultiplier = 0.004;
             }
-
-            // Add variable speed for VC_CLINICAL scene (clinical data charts)
             if (isVpFamilyScene) {
-                // Mobility chart (1st chart)
                 if (currentSubScroll > 0.3 && currentSubScroll < 0.4) {
-                    // Slow down after mobility chart completes for reading time
                     speedMultiplier = 0.01;
-                }
-                // Sleep chart (2nd chart)
-                else if (currentSubScroll > 0.55 && currentSubScroll < 0.65) {
-                    // Slow down after sleep chart completes for reading time
+                } else if (currentSubScroll > 0.55 && currentSubScroll < 0.65) {
                     speedMultiplier = 0.01;
-                }
-                // Bathroom visits chart (3rd chart)
-                else if (currentSubScroll > 0.75 && currentSubScroll < 0.85) {
-                    // Slow down after bathroom visits chart completes for reading time
+                } else if (currentSubScroll > 0.75 && currentSubScroll < 0.85) {
                     speedMultiplier = 0.01;
                 }
             }
 
-            // Update targetY, considering the full document scroll height
+            // Important: Update targetY considering the *actual* scrollable height
+            // In Next.js, this might not be document.body.scrollHeight if layout handles scroll
+            const scrollableHeight = document.documentElement.scrollHeight; // Or specific element
             targetY = Math.max(
                 0,
                 Math.min(
-                    document.body.scrollHeight - windowHeight,
+                    scrollableHeight - windowHeight,
                     targetY + e.deltaY * speedMultiplier
                 )
             );
@@ -99,6 +80,7 @@ function HomePage() {
             }
         }
 
+        // Attach listener to window for now
         const scrollableElement = window;
         scrollableElement.addEventListener("wheel", handleWheel, {
             passive: false,
@@ -113,18 +95,19 @@ function HomePage() {
         };
     }, []);
 
-    // Revert scroll progress calculation
+    // Scroll progress calculation
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
+            // Recalculate totalHeight based on MAX_SCENES
             const totalHeight = MAX_SCENES * windowHeight;
 
             const newProgress = Math.min(
                 100,
                 (scrollY / (totalHeight - windowHeight)) * 100
             );
-            setProgress(isNaN(newProgress) ? 0 : newProgress);
+            setProgress(isNaN(newProgress) ? 0 : newProgress); // Still might not need progress state
 
             const newIndex = Math.min(
                 MAX_SCENES - 1,
@@ -143,32 +126,36 @@ function HomePage() {
         };
 
         window.addEventListener("scroll", handleScroll);
-        // Simple initial calculation
-        handleScroll();
+        handleScroll(); // Initial calculation
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
-    // Add `relative` class to establish positioning context
+    // Note: height calculation might move or change based on scroll implementation
+    const scenesContainerHeight = `${MAX_SCENES * 100}vh`;
+
     return (
-        <div className="app homepage-scroll relative" ref={scrollableRef}>
-            {/* scene-navigation likely uses absolute positioning, should be okay relative to this div */}
-            <div className="scene-navigation">
+        // Removed the outer .app div, as body/html are handled by layout.tsx
+        // Removed scrollableRef for now, as scrolling is on window
+        <>
+            {/* Scene navigation dots */}
+            <div className="scene-navigation fixed top-1/2 right-4 transform -translate-y-1/2 z-[2001] flex flex-col gap-2">
                 {scenes.slice(0, MAX_SCENES).map((s, i) => (
                     <div
                         key={i}
-                        className={`scene-indicator ${
-                            s.scene === index ? "active" : ""
+                        className={`scene-indicator w-2.5 h-2.5 rounded-full bg-white/50 transition-all duration-300 ease-in-out ${
+                            s.scene === index ? "active bg-white scale-150" : ""
                         }`}
                         title={s.title || ""}
                     />
                 ))}
             </div>
-            {/* Add `relative` class here too */}
+
+            {/* Main container for scenes */}
             <div
-                className="scenes-container relative"
-                style={{ height: `${MAX_SCENES * 100}vh` }}
+                className="scenes-container relative w-full"
+                style={{ height: scenesContainerHeight }} // Height set based on number of scenes
             >
                 <SceneViewer
                     scene={scene}
@@ -176,25 +163,6 @@ function HomePage() {
                     subScrollProgress={subScrollProgress}
                 />
             </div>
-        </div>
-    );
-}
-
-// Main App component now handles routing
-export default function App() {
-    return (
-        <Routes>
-            {/* All routes use MainLayout (with NavBar) */}
-            <Route path="/" element={<MainLayout />}>
-                <Route index element={<HomePage />} />{" "}
-                {/* Use index route for homepage */}
-                <Route path="clinical" element={<ClinicalPage />} />
-                <Route path="executive" element={<ExecutivePage />} />
-                <Route path="mission" element={<MissionPage />} />
-                <Route path="about-us" element={<AboutUsPage />} />
-                <Route path="customers" element={<CustomersPage />} />
-                {/* Add other routes needing the NavBar here */}
-            </Route>
-        </Routes>
+        </>
     );
 }

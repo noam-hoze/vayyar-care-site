@@ -33,29 +33,36 @@ const defaultConfig = {
 // Check if there's a saved custom video URL in localStorage
 const loadSavedVideo = () => {
     try {
-        const savedVideo = localStorage.getItem(STORAGE_KEY);
-        if (savedVideo) {
-            // Check if URL starts with 'https://' to identify Firebase Storage URLs
-            if (
-                savedVideo.startsWith("https://firebasestorage.googleapis.com")
-            ) {
-                return savedVideo;
-            }
-            // For backward compatibility with old localStorage data
-            else {
-                // If it's an object URL or other format, reset to default
-                localStorage.removeItem(STORAGE_KEY);
+        // Add check for window object
+        if (typeof window !== "undefined") {
+            const savedVideo = localStorage.getItem(STORAGE_KEY);
+            if (savedVideo) {
+                // Check if URL starts with 'https://' to identify Firebase Storage URLs
+                if (
+                    savedVideo.startsWith(
+                        "https://firebasestorage.googleapis.com"
+                    )
+                ) {
+                    return savedVideo;
+                }
+                // For backward compatibility with old localStorage data
+                else {
+                    // If it's an object URL or other format, reset to default
+                    localStorage.removeItem(STORAGE_KEY);
+                }
             }
         }
     } catch (error) {
         console.error("Error loading saved video:", error);
     }
+    // Return default if not found or not in browser
     return defaultConfig.videoSrc;
 };
 
 // Create a mutable copy of the configuration
 export const videoConfig = {
     ...defaultConfig,
+    // Call loadSavedVideo here, it handles the window check
     videoSrc: loadSavedVideo(),
 };
 
@@ -78,7 +85,10 @@ export const updateVideoSource = (newSource: string): void => {
     videoConfig.videoSrc = newSource;
 
     try {
-        localStorage.setItem(STORAGE_KEY, newSource);
+        // Add check for window object
+        if (typeof window !== "undefined") {
+            localStorage.setItem(STORAGE_KEY, newSource);
+        }
     } catch (error) {
         console.error("Error saving video source to localStorage:", error);
     }
@@ -89,8 +99,11 @@ export const resetToDefaultVideo = () => {
     videoConfig.videoSrc = defaultConfig.videoSrc;
 
     try {
-        // Remove from localStorage
-        localStorage.removeItem(STORAGE_KEY);
+        // Add check for window object
+        if (typeof window !== "undefined") {
+            // Remove from localStorage
+            localStorage.removeItem(STORAGE_KEY);
+        }
     } catch (error) {
         console.error("Error removing saved video:", error);
     }
@@ -101,14 +114,18 @@ export const resetToDefaultVideo = () => {
 
 // Function to check if a custom video is active
 export const isCustomVideoActive = (): boolean => {
+    // This function doesn't access localStorage, no change needed
     return videoConfig.videoSrc !== defaultConfig.videoSrc;
 };
 
 // Function to clear the video source and localStorage
 export const clearVideoSource = () => {
     try {
-        localStorage.removeItem(STORAGE_KEY);
-        videoConfig.videoSrc = "";
+        // Add check for window object
+        if (typeof window !== "undefined") {
+            localStorage.removeItem(STORAGE_KEY);
+        }
+        videoConfig.videoSrc = ""; // Still clear the config value
         console.log("Video source cleared successfully");
     } catch (error) {
         console.error("Error removing video source from localStorage:", error);
@@ -117,17 +134,20 @@ export const clearVideoSource = () => {
     return videoConfig;
 };
 
-// Initialize video source on load
-const initializeVideoSource = (): void => {
-    try {
-        const storedUrl = localStorage.getItem(STORAGE_KEY);
-        if (storedUrl) {
-            videoConfig.videoSrc = storedUrl;
-        }
-    } catch (error) {
-        console.error("Error reading video source from localStorage:", error);
-    }
-};
+// Initialize video source on load - DEFER this
+// const initializeVideoSource = (): void => {
+//     try {
+//         // Add check for window object
+//         if (typeof window !== 'undefined') {
+//             const storedUrl = localStorage.getItem(STORAGE_KEY);
+//             if (storedUrl) {
+//                 videoConfig.videoSrc = storedUrl;
+//             }
+//         }
+//     } catch (error) {
+//         console.error("Error reading video source from localStorage:", error);
+//     }
+// };
 
-// Call initialization
-initializeVideoSource();
+// // Call initialization - REMOVE this call from module scope
+// initializeVideoSource();
