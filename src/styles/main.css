@@ -1,8 +1,6 @@
-@tailwind base;
+@tailwind preflight;
 @tailwind components;
 @tailwind utilities;
-/* @import "tailwindcss/preflight"; - Reverted */
-/* @tailwind components; - Removed as per v4 suggestion - Reverted */
 
 /* 
  * Main styles file - imports all modular LESS files
