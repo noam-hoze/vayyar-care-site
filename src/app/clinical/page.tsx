@@ -10,18 +10,22 @@ export default function ClinicalPage() {
     const videoTestimonials = [
         {
             id: 1,
-            thumbnail: "/videos/thumb1.jpg",
-            videoUrl: "https://www.youtube.com/embed/VIDEO_ID_1",
+            thumbnail: "/videos/anthropos_testimonial.png",
+            videoUrl:
+                "https://firebasestorage.googleapis.com/v0/b/walabothome-app-cloud.appspot.com/o/testimonials%2Fanthropos_testimonial.mp4?alt=media",
         },
         {
             id: 2,
-            thumbnail: "/videos/thumb2.jpg",
-            videoUrl: "https://www.youtube.com/embed/VIDEO_ID_2",
+            thumbnail: "/videos/essex_county_council_testimonial.png",
+            videoUrl:
+                "https://firebasestorage.googleapis.com/v0/b/walabothome-app-cloud.appspot.com/o/testimonials%2Fessex_county_council_testimonial.mp4?alt=media",
         },
         {
             id: 3,
-            thumbnail: "/videos/thumb3.jpg",
-            videoUrl: "https://www.youtube.com/embed/VIDEO_ID_3",
+            thumbnail:
+                "/videos/heritage_senior_living_executives_testimonial.png",
+            videoUrl:
+                "https://firebasestorage.googleapis.com/v0/b/walabothome-app-cloud.appspot.com/o/testimonials%2Fheritage_senior_living_executives_testimonial.mp4?alt=media",
         },
     ];
 
@@ -45,9 +49,7 @@ export default function ClinicalPage() {
 
             {/* Benefits Section */}
             <section className="min-h-screen flex flex-col justify-start px-6 pt-20 bg-white text-center">
-                <h2 className="text-3xl font-semibold mb-10">
-                    In Their Words
-                </h2>
+                <h2 className="text-3xl font-semibold mb-10">In Their Words</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
                     <div>
                         <h3 className="text-xl font-bold mb-2">
