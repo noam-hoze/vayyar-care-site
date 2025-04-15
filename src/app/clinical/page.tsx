@@ -46,7 +46,7 @@ export default function ClinicalPage() {
             {/* Benefits Section */}
             <section className="min-h-screen flex flex-col justify-start px-6 pt-20 bg-white text-center">
                 <h2 className="text-3xl font-semibold mb-10">
-                    Smarter Care, Less Stress
+                    In Their Words
                 </h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
                     <div>
@@ -81,44 +81,44 @@ export default function ClinicalPage() {
                         </p>
                     </div>
                 </div>
-            </section>
 
-            {/* Testimonials Section */}
-            <section className="min-h-screen flex flex-col justify-center px-6 bg-gray-50 text-center">
-                <h2 className="text-3xl font-semibold mb-10">In Their Words</h2>
-                <div className="flex gap-4 overflow-x-auto max-w-6xl mx-auto pb-4">
-                    {videoTestimonials.map((video) => (
-                        <img
-                            key={video.id}
-                            src={video.thumbnail}
-                            alt={`Testimonial ${video.id}`}
-                            className="w-60 h-36 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
-                            onClick={() => setActiveVideo(video.videoUrl)}
-                        />
-                    ))}
-                </div>
-
-                {/* Video Modal */}
-                {activeVideo && (
-                    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-                        <div className="bg-white rounded-lg overflow-hidden w-full max-w-3xl relative">
-                            <button
-                                className="absolute top-2 right-2 text-gray-700 text-xl font-bold hover:text-black"
-                                onClick={() => setActiveVideo(null)}
-                            >
-                                ×
-                            </button>
-                            <iframe
-                                className="w-full h-[400px]"
-                                src={activeVideo}
-                                title="Testimonial Video"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            ></iframe>
-                        </div>
+                {/* === Inserted Testimonials Start === */}
+                <div className="mt-16">
+                    <div className="flex justify-center gap-4 overflow-x-auto max-w-6xl mx-auto pb-4">
+                        {videoTestimonials.map((video) => (
+                            <img
+                                key={video.id}
+                                src={video.thumbnail}
+                                alt={`Testimonial ${video.id}`}
+                                className="w-60 h-36 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
+                                onClick={() => setActiveVideo(video.videoUrl)}
+                            />
+                        ))}
                     </div>
-                )}
+
+                    {/* Video Modal Logic - remains the same */}
+                    {activeVideo && (
+                        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+                            <div className="bg-white rounded-lg overflow-hidden w-full max-w-3xl relative">
+                                <button
+                                    className="absolute top-2 right-2 text-gray-700 text-xl font-bold hover:text-black"
+                                    onClick={() => setActiveVideo(null)}
+                                >
+                                    ×
+                                </button>
+                                <iframe
+                                    className="w-full h-[400px]"
+                                    src={activeVideo}
+                                    title="Testimonial Video"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                {/* === Inserted Testimonials End === */}
             </section>
 
             {/* How It Works - Scroll-Based Animation */}
