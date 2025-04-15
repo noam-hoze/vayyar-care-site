@@ -39,12 +39,25 @@ export default function OverlayScrollReal() {
 
     return (
         <div ref={containerRef}>
-            {/* Section 1 (Pinned) */}
+            {/* Section 1 (Pinned Hero) */}
             <section
                 ref={section1Ref}
-                className="h-screen bg-blue-500 flex items-center justify-center text-white text-5xl font-bold z-0"
+                className="h-screen relative flex flex-col justify-center items-center px-6 text-center bg-[url('/images/clinical/clinical-hero.jpg')] bg-cover bg-center z-0"
             >
-                Section 1 (Stays)
+                <div className="relative z-10">
+                    <h1 className="text-5xl font-bold mb-4 text-white text-shadow-lg">
+                        You care for them. We care for you.
+                    </h1>
+                    <p className="text-lg mb-6 text-white text-shadow-sm">
+                        Smart alerts, automated monitoring, and real-time
+                        insights—so you can focus on delivering the best care.
+                    </p>
+                    <div className="flex justify-center mt-10">
+                        <button className="bg-[#05aae9] text-white px-6 py-3 rounded-md text-lg hover:bg-vayyar-blue/90 transition">
+                            Book a Demo
+                        </button>
+                    </div>
+                </div>
             </section>
 
             {/* Section 2 scrolls over Section 1 */}
