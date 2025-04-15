@@ -67,6 +67,13 @@ export default function OverlayScrollReal() {
                 </section>
             </div>
 
+            {/* Section 2.5 scrolls over Section 1 */}
+            <div className="-mt-screen relative z-10">
+                <section className="h-screen bg-orange-400 text-black flex items-center justify-center text-4xl">
+                    Section 2.5 (Scrolls Over)
+                </section>
+            </div>
+
             {/* Section 3 (Pinned) */}
             <section
                 ref={section3Ref}
