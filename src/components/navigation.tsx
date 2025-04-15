@@ -23,25 +23,25 @@ export default function NavBar() {
                     <div className="flex space-x-8 text-md font-medium">
                         <Link
                             href="/clinical"
-                            className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
+                            className="text-[#06aeef] hover:text-white  px-4 py-2 rounded transition"
                         >
                             Clinical
                         </Link>
                         <Link
                             href="/executive"
-                            className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
+                            className="text-[#06aeef] hover:text-white px-4 py-2 rounded transition"
                         >
                             Executive
                         </Link>
                         <Link
                             href="/customers"
-                            className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
+                            className="text-[#06aeef] hover:text-white px-4 py-2 rounded transition"
                         >
                             Customers
                         </Link>
                         <Link
                             href="/about-us"
-                            className="text-[#06aeef] hover:text-white hover:bg-[#06aeef] px-4 py-2 rounded transition"
+                            className="text-[#06aeef] hover:text-white px-4 py-2 rounded transition"
                         >
                             About Us
                         </Link>
