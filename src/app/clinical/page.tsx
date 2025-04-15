@@ -32,18 +32,25 @@ export default function ClinicalPage() {
     return (
         <main className="bg-white text-gray-900">
             {/* Hero Section */}
-            <section className="min-h-screen flex flex-col justify-center items-center px-6 text-center bg-purple-50">
-                <h1 className="text-4xl font-bold mb-4">
-                    You care for them. We care for you.
-                </h1>
-                <p className="text-lg mb-6">
-                    Smart alerts, automated monitoring, and real-time
-                    insights—so you can focus on delivering the best care.
-                </p>
-                <div className="flex justify-center mt-10">
-                    <button className="bg-purple-700 text-white px-6 py-3 rounded-md text-lg hover:bg-purple-800 transition">
-                        Book a Demo
-                    </button>
+            <section className="relative min-h-screen flex flex-col justify-center items-center px-6 text-center bg-[url('/images/clinical/clinical-hero.jpg')] bg-cover bg-center">
+                {/* Removed Overlay div */}
+                {/* <div className="hero-overlay"></div> */}
+
+                {/* Content needs relative positioning and higher z-index to appear above overlay */}
+                <div className="relative z-10">
+                    {/* Removed temporary image */}
+                    <h1 className="text-5xl font-bold mb-4 text-white text-shadow-lg">
+                        You care for them. We care for you.
+                    </h1>
+                    <p className="text-lg mb-6 text-white text-shadow-sm">
+                        Smart alerts, automated monitoring, and real-time
+                        insights—so you can focus on delivering the best care.
+                    </p>
+                    <div className="flex justify-center mt-10">
+                        <button className="bg-[#05aae9] text-white px-6 py-3 rounded-md text-lg hover:bg-vayyar-blue/90 transition">
+                            Book a Demo
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -92,7 +99,7 @@ export default function ClinicalPage() {
                                 key={video.id}
                                 src={video.thumbnail}
                                 alt={`Testimonial ${video.id}`}
-                                className="w-60 h-36 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
+                                className="w-80 h-48 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
                                 onClick={() => setActiveVideo(video.videoUrl)}
                             />
                         ))}
@@ -141,13 +148,72 @@ export default function ClinicalPage() {
             </section>
 
             {/* Final CTA */}
-            <section className="min-h-screen flex flex-col justify-center px-6 bg-purple-700 text-white text-center">
-                <h2 className="text-3xl font-semibold mb-6">
-                    Want to see it in your facility?
-                </h2>
-                <button className="bg-white text-purple-700 px-8 py-4 text-lg rounded-md font-semibold hover:bg-purple-100 transition">
-                    Book a Demo
-                </button>
+            <section className="min-h-screen flex flex-col justify-center items-center px-6 bg-[#2daae2] text-white text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/assets/cta-pattern.svg')] bg-cover opacity-10 z-0" />
+                <div className="relative z-10 max-w-3xl">
+                    <h2 className="text-4xl font-bold mb-6">
+                        Let's Bring VayyarCare to Your Facility
+                    </h2>
+                    <p className="text-lg mb-10">
+                        See how our non-invasive, intelligent monitoring system
+                        can transform your team's care delivery.
+                    </p>
+                    <form className="space-y-6">
+                        <div className="flex flex-col text-left">
+                            <label
+                                htmlFor="name"
+                                className="mb-1 text-white font-semibold"
+                            >
+                                Name
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                required
+                                className="p-3 rounded-md border border-white/30 bg-white text-[#2daae2] placeholder-gray-400"
+                                placeholder="Your full name"
+                            />
+                        </div>
+                        <div className="flex flex-col text-left">
+                            <label
+                                htmlFor="email"
+                                className="mb-1 text-white font-semibold"
+                            >
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                className="p-3 rounded-md border border-white/30 bg-white text-[#2daae2] placeholder-gray-400"
+                                placeholder="you@company.com"
+                            />
+                        </div>
+                        <div className="flex flex-col text-left">
+                            <label
+                                htmlFor="facility"
+                                className="mb-1 text-white font-semibold"
+                            >
+                                Facility Name
+                            </label>
+                            <input
+                                type="text"
+                                id="facility"
+                                name="facility"
+                                className="p-3 rounded-md border border-white/30 bg-white text-[#2daae2] placeholder-gray-400"
+                                placeholder="Facility or organization name"
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-white text-[#2daae2] px-6 py-3 text-lg rounded-md font-semibold hover:bg-blue-100 transition"
+                        >
+                            Book a Demo
+                        </button>
+                    </form>
+                </div>
             </section>
         </main>
     );

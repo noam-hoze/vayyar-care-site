@@ -2835,3 +2835,24 @@ code {
     background: #fff;
     transform: scale(1.5);
 }
+
+/* Clinical Page Hero Styles */
+/* 
+.clinical-hero-bg {
+  background-image: url('/images/clinical/clinical-hero.jpg'); // Corrected path based on user feedback
+  background-size: cover;
+  background-position: center;
+}
+*/
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* Using a semi-transparent white gradient for readability */
+  /* You might want to adjust this to match your purple-50 theme */
+  background-image: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7));
+  z-index: 0;
+}
