@@ -1,11 +1,9 @@
 // ClinicalPage.jsx
 
-"use client";
-
 import React, { useState } from "react";
 
 export default function ClinicalPage() {
-    const [activeVideo, setActiveVideo] = useState<string | null>(null);
+    const [activeVideo, setActiveVideo] = useState(null);
 
     const videoTestimonials = [
         {
@@ -44,7 +42,7 @@ export default function ClinicalPage() {
             </section>
 
             {/* Benefits Section */}
-            <section className="min-h-screen flex flex-col justify-start px-6 pt-20 bg-white text-center">
+            <section className="min-h-screen flex flex-col justify-center px-6 bg-white text-center">
                 <h2 className="text-3xl font-semibold mb-10">
                     Smarter Care, Less Stress
                 </h2>
