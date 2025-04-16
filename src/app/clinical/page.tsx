@@ -10,7 +10,7 @@ import {
     HeartIcon,
 } from "@heroicons/react/24/solid";
 import LogoCarousel from "@/components/LogoCarousel";
-import BenefitCard from "@/components/BenefitCard";
+import Card from "@/components/Card";
 import VideoItem from "@/components/VideoItem";
 import VideoModal from "@/components/VideoModal";
 import BookDemoForm from "@/components/BookDemoForm";
@@ -71,24 +71,24 @@ export default function Clinical() {
                         Smarter Care, Less Stress
                     </h2>
                     <div className="flex flex-nowrap overflow-x-auto justify-start gap-8 max-w-7xl w-full mx-auto mt-12 py-4">
-                        <BenefitCard
+                        <Card
                             icon={<SparklesIcon className="w-7 h-7" />}
                             title="AI-Powered Assistant"
                             description="Ask anything — from 'Did Room 304 get up today?' to 'How many falls this week?' — and get answers, fast."
                         />
-                        <BenefitCard
+                        <Card
                             icon={
                                 <ClipboardDocumentListIcon className="w-7 h-7" />
                             }
                             title="Automated Documentation"
                             description="Fall events and key moments are logged for you, instantly — no more manual notes."
                         />
-                        <BenefitCard
+                        <Card
                             icon={<ChartBarIcon className="w-7 h-7" />}
                             title="Real-Time Insights"
                             description="See the full picture at a glance. Know what's happening across your floor — no digging."
                         />
-                        <BenefitCard
+                        <Card
                             icon={<HeartIcon className="w-7 h-7" />}
                             title="Less Burnout"
                             description="Spend more time with people — not chasing tasks that are already taken care of."

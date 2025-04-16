@@ -6,11 +6,7 @@ interface BenefitCardProps {
     description: string;
 }
 
-const BenefitCard: React.FC<BenefitCardProps> = ({
-    icon,
-    title,
-    description,
-}) => {
+const Card: React.FC<BenefitCardProps> = ({ icon, title, description }) => {
     return (
         // Benefit Item - Square, Basis ~1/5, No Shrinking
         <div className="basis-[22%] flex-shrink-0 aspect-square bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition duration-300 flex flex-col items-center justify-center overflow-hidden">
@@ -29,4 +25,4 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
     );
 };
 
-export default BenefitCard;
+export default Card;
