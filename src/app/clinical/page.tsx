@@ -3,8 +3,37 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+    SparklesIcon,
+    ClipboardDocumentListIcon,
+    ChartBarIcon,
+    HeartIcon,
+} from "@heroicons/react/24/solid";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const benefits = [
+    {
+        title: "AI-Powered Assistant",
+        description: `Ask anything — from "Did Room 304 get up today?" to "How many falls this week?" — and get answers, fast.`,
+        icon: <SparklesIcon className="w-7 h-7" />,
+    },
+    {
+        title: "Automated Documentation",
+        description: `Fall events and key moments are logged for you, instantly — no more manual notes.`,
+        icon: <ClipboardDocumentListIcon className="w-7 h-7" />,
+    },
+    {
+        title: "Real-Time Insights",
+        description: `See the full picture at a glance. Know what's happening across your floor — no digging.`,
+        icon: <ChartBarIcon className="w-7 h-7" />,
+    },
+    {
+        title: "Less Burnout",
+        description: `Spend more time with people — not chasing tasks that are already taken care of.`,
+        icon: <HeartIcon className="w-7 h-7" />,
+    },
+];
 
 export default function OverlayScrollReal() {
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
@@ -115,131 +144,29 @@ export default function OverlayScrollReal() {
 
             {/* Wrapper for sections scrolling over Section 1 */}
             <div className="-mt-screen relative z-10">
-                {/* Section 2 scrolls over Section 1 - Benefits Grid Only */}
-                <section className="min-h-screen flex flex-col justify-start px-6 pt-20 bg-white text-center">
+                {/* UPDATED Section 2 JSX */}
+                <section className="min-h-screen flex flex-col justify-start items-center px-6 pt-20 pb-24 bg-white text-center">
                     <h2 className="text-3xl font-semibold text-gray-900">
                         Smarter Care, Less Stress
                     </h2>
-                    <div className="flex flex-grow items-center">
-                        <div className="grid grid-cols-4 gap-8 max-w-6xl mx-auto">
-                            {/* Benefit 1 with Icon Placeholder and Card Style */}
-                            <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-                                {/* Placeholder for Heroicon: bell-slash */}
-                                <div className="w-10 h-10 text-vayyar-blue bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                                    <svg
-                                        /* Heroicon: bell-slash */ fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.291m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                                        ></path>
-                                    </svg>
+
+                    <div className="flex flex-wrap justify-center gap-10 max-w-5xl mx-auto mt-12">
+                        {benefits.map((benefit, index) => (
+                            <div
+                                key={index}
+                                className="w-full sm:w-[45%] bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition duration-300 text-left"
+                            >
+                                <div className="w-12 h-12 bg-[#e0f6ff] text-[#06aeef] rounded-full flex items-center justify-center mb-4">
+                                    {benefit.icon}
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900">
-                                    {" "}
-                                    AI-Powered Assistant{" "}
+                                    {benefit.title}
                                 </h3>
-                                <p className="text-gray-700">
-                                    {" "}
-                                    Ask anything — from “Did Room 304 get up
-                                    today?” to “How many falls this week?” — and
-                                    get answers, fast.{" "}
+                                <p className="text-gray-600 text-sm leading-relaxed">
+                                    {benefit.description}
                                 </p>
                             </div>
-                            {/* Benefit 2 with Icon Placeholder and Card Style */}
-                            <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-                                {/* Placeholder for Heroicon: cog */}
-                                <div className="w-10 h-10 text-vayyar-blue bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                                    <svg
-                                        /* Heroicon: cog */ fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                                        ></path>
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900">
-                                    {" "}
-                                    Automated Documentation{" "}
-                                </h3>
-                                <p className="text-gray-700">
-                                    {" "}
-                                    Fall events and key moments are logged for
-                                    you, instantly.{" "}
-                                </p>
-                            </div>
-                            {/* Benefit 3 with Icon Placeholder and Card Style */}
-                            <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-                                {/* Placeholder for Heroicon: list-bullet */}
-                                <div className="w-10 h-10 text-vayyar-blue bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                                    <svg
-                                        /* Heroicon: list-bullet */ fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900">
-                                    {" "}
-                                    Real-Time Insights{" "}
-                                </h3>
-                                <p className="text-gray-700">
-                                    Know what’s happening across the floor at a
-                                    glance — no digging, no delay.
-                                </p>
-                            </div>
-                            {/* Benefit 4 with Icon Placeholder and Card Style */}
-                            <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-                                {/* Placeholder for Heroicon: face-smile */}
-                                <div className="w-10 h-10 text-vayyar-blue bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                                    <svg
-                                        /* Heroicon: face-smile */ fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900">
-                                    Less Burnout
-                                </h3>
-                                <p className="text-gray-700">
-                                    {" "}
-                                    Spend more time with people — not chasing
-                                    already taken care of tasks.{" "}
-                                </p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </section>
 
