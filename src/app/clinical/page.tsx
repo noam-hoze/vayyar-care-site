@@ -9,11 +9,10 @@ gsap.registerPlugin(ScrollTrigger);
 export default function OverlayScrollReal() {
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
-    const containerRef = useRef(null);
-    const section1Ref = useRef(null);
-    const section2Ref = useRef<HTMLElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const section1Ref = useRef<HTMLElement>(null);
     const section2_5Ref = useRef<HTMLElement>(null);
-    const section3Ref = useRef(null);
+    const section3Ref = useRef<HTMLElement>(null);
 
     const videoTestimonials = [
         {
@@ -38,26 +37,54 @@ export default function OverlayScrollReal() {
     ];
 
     useEffect(() => {
+        if (
+            !containerRef.current ||
+            !section1Ref.current ||
+            !section3Ref.current
+        ) {
+            return;
+        }
+
         const ctx = gsap.context(() => {
             // Pin Section 1
             ScrollTrigger.create({
-                trigger: containerRef.current,
+                trigger: containerRef.current!,
                 start: "top top",
                 end: "bottom top",
-                pin: section1Ref.current,
+                pin: section1Ref.current!,
                 pinSpacing: false,
-                markers: true,
+                // markers: true,
             });
 
-            // Pin Section 3
-            ScrollTrigger.create({
-                trigger: section3Ref.current,
-                start: "top top",
-                end: "+=100%",
-                pin: true,
-                pinSpacing: false,
-                markers: true,
+            // --- How It Works Card Animation & Pin Section 3 ---
+            const cards = gsap.utils.toArray<HTMLElement>(
+                section3Ref.current!.querySelectorAll(".grid > div")
+            );
+
+            // Set initial state (invisible and off-screen right)
+            gsap.set(cards, { opacity: 0, x: 100 });
+
+            // Create the timeline for the cards animating in
+            const cardTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: section3Ref.current!,
+                    pin: true,
+                    scrub: 1,
+                    start: "top top",
+                    end: "+=320%",
+                    // markers: true,    // Add markers for debugging trigger area
+                },
             });
+
+            // Add animations to the timeline with increased stagger
+            if (cards.length >= 3) {
+                cardTimeline
+                    .to(cards[0], { opacity: 1, x: 0, duration: 1 }, 0)
+                    .to(cards[1], { opacity: 1, x: 0, duration: 1 }, 1.2)
+                    .to(cards[2], { opacity: 1, x: 0, duration: 1 }, 2.4);
+            }
+            // Note: The original separate ScrollTrigger for pinning section 3 is now replaced
+            // by the ScrollTrigger within the cardTimeline definition above.
         }, containerRef);
 
         return () => ctx.revert();
@@ -115,12 +142,13 @@ export default function OverlayScrollReal() {
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900">
                                     {" "}
-                                    Fewer False Alarms{" "}
+                                    AI-Powered Assistant{" "}
                                 </h3>
                                 <p className="text-gray-700">
                                     {" "}
-                                    Over 80% reduction so you focus only where
-                                    it matters.{" "}
+                                    Ask anything — from “Did Room 304 get up
+                                    today?” to “How many falls this week?” — and
+                                    get answers, fast.{" "}
                                 </p>
                             </div>
                             {/* Benefit 2 with Icon Placeholder and Card Style */}
@@ -149,12 +177,12 @@ export default function OverlayScrollReal() {
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900">
                                     {" "}
-                                    Automated Task Support{" "}
+                                    Automated Documentation{" "}
                                 </h3>
                                 <p className="text-gray-700">
                                     {" "}
-                                    Let the system handle routine monitoring and
-                                    alerts, so you can focus on care.{" "}
+                                    Fall events and key moments are logged for
+                                    you, instantly.{" "}
                                 </p>
                             </div>
                             {/* Benefit 3 with Icon Placeholder and Card Style */}
@@ -177,10 +205,11 @@ export default function OverlayScrollReal() {
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900">
                                     {" "}
-                                    Smarter Prioritization{" "}
+                                    Real-Time Insights{" "}
                                 </h3>
                                 <p className="text-gray-700">
-                                    Know who needs you most at any moment.
+                                    Know what’s happening across the floor at a
+                                    glance — no digging, no delay.
                                 </p>
                             </div>
                             {/* Benefit 4 with Icon Placeholder and Card Style */}
@@ -206,8 +235,8 @@ export default function OverlayScrollReal() {
                                 </h3>
                                 <p className="text-gray-700">
                                     {" "}
-                                    Spend more time with people, less time
-                                    chasing false alerts.{" "}
+                                    Spend more time with people — not chasing
+                                    already taken care of tasks.{" "}
                                 </p>
                             </div>
                         </div>
