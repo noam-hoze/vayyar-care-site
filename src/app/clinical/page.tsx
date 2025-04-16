@@ -16,29 +16,6 @@ import VideoModal from "@/components/VideoModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const benefits = [
-    {
-        title: "AI-Powered Assistant",
-        description: `Ask anything — from "Did Room 304 get up today?" to "How many falls this week?" — and get answers, fast.`,
-        icon: <SparklesIcon className="w-7 h-7" />,
-    },
-    {
-        title: "Automated Documentation",
-        description: `Fall events and key moments are logged for you, instantly — no more manual notes.`,
-        icon: <ClipboardDocumentListIcon className="w-7 h-7" />,
-    },
-    {
-        title: "Real-Time Insights",
-        description: `See the full picture at a glance. Know what's happening across your floor — no digging.`,
-        icon: <ChartBarIcon className="w-7 h-7" />,
-    },
-    {
-        title: "Less Burnout",
-        description: `Spend more time with people — not chasing tasks that are already taken care of.`,
-        icon: <HeartIcon className="w-7 h-7" />,
-    },
-];
-
 export default function OverlayScrollReal() {
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -131,14 +108,32 @@ export default function OverlayScrollReal() {
                     </h2>
                     {/* Restoring Flexbox Layout for Side-by-Side Items */}
                     <div className="flex flex-nowrap overflow-x-auto justify-start gap-8 max-w-7xl w-full mx-auto mt-12 py-4">
-                        {benefits.map((benefit, index) => (
-                            <BenefitCard
-                                key={index}
-                                icon={benefit.icon}
-                                title={benefit.title}
-                                description={benefit.description}
-                            />
-                        ))}
+                        {/* Card 1 */}
+                        <BenefitCard
+                            icon={<SparklesIcon className="w-7 h-7" />}
+                            title="AI-Powered Assistant"
+                            description="Ask anything — from 'Did Room 304 get up today?' to 'How many falls this week?' — and get answers, fast."
+                        />
+                        {/* Card 2 */}
+                        <BenefitCard
+                            icon={
+                                <ClipboardDocumentListIcon className="w-7 h-7" />
+                            }
+                            title="Automated Documentation"
+                            description="Fall events and key moments are logged for you, instantly — no more manual notes."
+                        />
+                        {/* Card 3 */}
+                        <BenefitCard
+                            icon={<ChartBarIcon className="w-7 h-7" />}
+                            title="Real-Time Insights"
+                            description="See the full picture at a glance. Know what's happening across your floor — no digging."
+                        />
+                        {/* Card 4 */}
+                        <BenefitCard
+                            icon={<HeartIcon className="w-7 h-7" />}
+                            title="Less Burnout"
+                            description="Spend more time with people — not chasing tasks that are already taken care of."
+                        />
                     </div>
 
                     {/* Use the LogoCarousel component here */}

@@ -12,10 +12,10 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
     description,
 }) => {
     return (
-        // Each Benefit Item - Style remains the same
-        <div className="w-full sm:w-[45%] lg:w-[22%] bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition duration-300">
+        // Benefit Item - Square, Basis ~1/5, No Shrinking
+        <div className="basis-[22%] flex-shrink-0 aspect-square bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition duration-300 flex flex-col items-center justify-center overflow-hidden">
             {/* Centered Icon Wrapper */}
-            <div className="mx-auto w-12 h-12 bg-[#e0f6ff] text-[#06aeef] rounded-full flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-[#e0f6ff] text-[#06aeef] rounded-full flex items-center justify-center mb-4 flex-shrink-0">
                 {icon}
             </div>
             {/* Centered Text */}
