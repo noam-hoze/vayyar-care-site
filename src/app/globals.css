@@ -36,8 +36,8 @@ body {
 }
 
 .animate-scroll {
-  /* Adjust duration (e.g., 30s) for speed */
-  animation: scroll 30s linear infinite;
+  /* Adjust duration (e.g., 20s) for speed */
+  animation: scroll 15s linear infinite;
 }
 
 /* Optional: Pause animation on hover */
