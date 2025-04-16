@@ -16,6 +16,47 @@ import VideoModal from "@/components/VideoModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Helper function to set up Hero section pinning
+const setupHeroPin = (sectionRef: HTMLElement, container: HTMLDivElement) => {
+    ScrollTrigger.create({
+        trigger: container, // Trigger based on the main container
+        start: "top top",
+        end: "bottom top",
+        pin: sectionRef, // Pin the hero section
+        pinSpacing: false,
+    });
+};
+
+// Helper function to set up "How It Works" animation and pinning
+const setupHowItWorksAnimation = (sectionRef: HTMLElement) => {
+    const cards = gsap.utils.toArray<HTMLElement>(
+        sectionRef.querySelectorAll(".grid > div")
+    );
+
+    if (cards.length < 3) return; // Exit if not enough cards
+
+    // Set initial state
+    gsap.set(cards, { opacity: 0, x: 100 });
+
+    // Create timeline with ScrollTrigger for pinning and animation
+    const cardTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: sectionRef,
+            pin: true,
+            scrub: 1,
+            start: "top top",
+            end: "+=320%",
+            // markers: true,
+        },
+    });
+
+    // Add animations to timeline
+    cardTimeline
+        .to(cards[0], { opacity: 1, x: 0, duration: 1 }, 0)
+        .to(cards[1], { opacity: 1, x: 0, duration: 1 }, 1.2)
+        .to(cards[2], { opacity: 1, x: 0, duration: 1 }, 2.4);
+};
+
 export default function OverlayScrollReal() {
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +64,7 @@ export default function OverlayScrollReal() {
     const section3Ref = useRef<HTMLElement>(null);
 
     useEffect(() => {
+        // Ensure refs are current
         if (
             !containerRef.current ||
             !section1Ref.current ||
@@ -31,50 +73,18 @@ export default function OverlayScrollReal() {
             return;
         }
 
+        // GSAP Context for cleanup
         const ctx = gsap.context(() => {
-            // Pin Section 1
-            ScrollTrigger.create({
-                trigger: containerRef.current!,
-                start: "top top",
-                end: "bottom top",
-                pin: section1Ref.current!,
-                pinSpacing: false,
-                // markers: true,
-            });
+            // Call helper functions to set up animations
+            setupHeroPin(section1Ref.current!, containerRef.current!); // Pass refs
+            setupHowItWorksAnimation(section3Ref.current!); // Pass ref
 
-            // --- How It Works Card Animation & Pin Section 3 ---
-            const cards = gsap.utils.toArray<HTMLElement>(
-                section3Ref.current!.querySelectorAll(".grid > div")
-            );
+            // Note: No need for the notes about replaced triggers here anymore
+        }, containerRef); // Scope context to the main container
 
-            // Set initial state (invisible and off-screen right)
-            gsap.set(cards, { opacity: 0, x: 100 });
-
-            // Create the timeline for the cards animating in
-            const cardTimeline = gsap.timeline({
-                scrollTrigger: {
-                    trigger: section3Ref.current!,
-                    pin: true,
-                    scrub: 1,
-                    start: "top top",
-                    end: "+=320%",
-                    // markers: true,    // Add markers for debugging trigger area
-                },
-            });
-
-            // Add animations to the timeline with increased stagger
-            if (cards.length >= 3) {
-                cardTimeline
-                    .to(cards[0], { opacity: 1, x: 0, duration: 1 }, 0)
-                    .to(cards[1], { opacity: 1, x: 0, duration: 1 }, 1.2)
-                    .to(cards[2], { opacity: 1, x: 0, duration: 1 }, 2.4);
-            }
-            // Note: The original separate ScrollTrigger for pinning section 3 is now replaced
-            // by the ScrollTrigger within the cardTimeline definition above.
-        }, containerRef);
-
+        // Cleanup function
         return () => ctx.revert();
-    }, []);
+    }, []); // Empty dependency array ensures this runs once on mount
 
     return (
         <div ref={containerRef}>
