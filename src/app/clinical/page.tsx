@@ -16,29 +16,25 @@ import VideoModal from "@/components/VideoModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Helper function to set up Hero section pinning
 const setupHeroPin = (sectionRef: HTMLElement, container: HTMLDivElement) => {
     ScrollTrigger.create({
-        trigger: container, // Trigger based on the main container
+        trigger: container,
         start: "top top",
         end: "bottom top",
-        pin: sectionRef, // Pin the hero section
+        pin: sectionRef,
         pinSpacing: false,
     });
 };
 
-// Helper function to set up "How It Works" animation and pinning
 const setupHowItWorksAnimation = (sectionRef: HTMLElement) => {
     const cards = gsap.utils.toArray<HTMLElement>(
         sectionRef.querySelectorAll(".grid > div")
     );
 
-    if (cards.length < 3) return; // Exit if not enough cards
+    if (cards.length < 3) return;
 
-    // Set initial state
     gsap.set(cards, { opacity: 0, x: 100 });
 
-    // Create timeline with ScrollTrigger for pinning and animation
     const cardTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: sectionRef,
@@ -50,21 +46,19 @@ const setupHowItWorksAnimation = (sectionRef: HTMLElement) => {
         },
     });
 
-    // Add animations to timeline
     cardTimeline
         .to(cards[0], { opacity: 1, x: 0, duration: 1 }, 0)
         .to(cards[1], { opacity: 1, x: 0, duration: 1 }, 1.2)
         .to(cards[2], { opacity: 1, x: 0, duration: 1 }, 2.4);
 };
 
-export default function OverlayScrollReal() {
+export default function Clinical() {
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const section1Ref = useRef<HTMLElement>(null);
     const section3Ref = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        // Ensure refs are current
         if (
             !containerRef.current ||
             !section1Ref.current ||
@@ -73,22 +67,17 @@ export default function OverlayScrollReal() {
             return;
         }
 
-        // GSAP Context for cleanup
         const ctx = gsap.context(() => {
-            // Call helper functions to set up animations
-            setupHeroPin(section1Ref.current!, containerRef.current!); // Pass refs
-            setupHowItWorksAnimation(section3Ref.current!); // Pass ref
+            setupHeroPin(section1Ref.current!, containerRef.current!);
+            setupHowItWorksAnimation(section3Ref.current!);
+        }, containerRef);
 
-            // Note: No need for the notes about replaced triggers here anymore
-        }, containerRef); // Scope context to the main container
-
-        // Cleanup function
         return () => ctx.revert();
-    }, []); // Empty dependency array ensures this runs once on mount
+    }, []); 
 
     return (
         <div ref={containerRef}>
-            {/* Section 1 (Pinned Hero) */}
+            {/* Section 1 - (Pinned) Hero */}
             <section
                 ref={section1Ref}
                 className="h-screen relative flex flex-col justify-center items-center px-6 text-center bg-[url('/images/clinical/clinical-hero.jpg')] bg-cover bg-center z-0"
@@ -111,20 +100,16 @@ export default function OverlayScrollReal() {
 
             {/* Wrapper for sections scrolling over Section 1 */}
             <div className="-mt-screen relative z-10">
-                {/* UPDATED Section 2 JSX */}
                 <section className="min-h-screen flex flex-col justify-start items-center px-6 pt-20 pb-24 bg-white text-center">
                     <h2 className="text-3xl font-semibold text-gray-900">
                         Smarter Care, Less Stress
                     </h2>
-                    {/* Restoring Flexbox Layout for Side-by-Side Items */}
                     <div className="flex flex-nowrap overflow-x-auto justify-start gap-8 max-w-7xl w-full mx-auto mt-12 py-4">
-                        {/* Card 1 */}
                         <BenefitCard
                             icon={<SparklesIcon className="w-7 h-7" />}
                             title="AI-Powered Assistant"
                             description="Ask anything — from 'Did Room 304 get up today?' to 'How many falls this week?' — and get answers, fast."
                         />
-                        {/* Card 2 */}
                         <BenefitCard
                             icon={
                                 <ClipboardDocumentListIcon className="w-7 h-7" />
@@ -132,13 +117,11 @@ export default function OverlayScrollReal() {
                             title="Automated Documentation"
                             description="Fall events and key moments are logged for you, instantly — no more manual notes."
                         />
-                        {/* Card 3 */}
                         <BenefitCard
                             icon={<ChartBarIcon className="w-7 h-7" />}
                             title="Real-Time Insights"
                             description="See the full picture at a glance. Know what's happening across your floor — no digging."
                         />
-                        {/* Card 4 */}
                         <BenefitCard
                             icon={<HeartIcon className="w-7 h-7" />}
                             title="Less Burnout"
@@ -150,7 +133,7 @@ export default function OverlayScrollReal() {
                     <LogoCarousel />
                 </section>
 
-                {/* Section 2.5 Testimonials */}
+                {/* Section 3 - Testimonials */}
                 <section className="min-h-screen flex flex-col justify-center items-center px-6 py-20 bg-orange-400 text-center">
                     <h3 className="text-2xl font-semibold mb-8 text-gray-800">
                         Hear From Our Partners
@@ -176,7 +159,6 @@ export default function OverlayScrollReal() {
                         />
                     </div>
 
-                    {/* Video Modal Logic using VideoModal component */}
                     {activeVideo && (
                         <VideoModal
                             src={activeVideo}
@@ -195,7 +177,6 @@ export default function OverlayScrollReal() {
                     How It Works
                 </h2>
                 <div className="grid grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    {/* Card 1 */}
                     <div className="bg-white rounded-lg p-6 shadow-md">
                         <h3 className="text-xl font-bold mb-2 text-vayyar-blue">
                             Step 1
@@ -205,7 +186,6 @@ export default function OverlayScrollReal() {
                             sit amet, consectetur adipiscing elit.
                         </p>
                     </div>
-                    {/* Card 2 */}
                     <div className="bg-white rounded-lg p-6 shadow-md">
                         <h3 className="text-xl font-bold mb-2 text-vayyar-blue">
                             Step 2
@@ -215,7 +195,6 @@ export default function OverlayScrollReal() {
                             incididunt ut labore et dolore magna aliqua.
                         </p>
                     </div>
-                    {/* Card 3 */}
                     <div className="bg-white rounded-lg p-6 shadow-md">
                         <h3 className="text-xl font-bold mb-2 text-vayyar-blue">
                             Step 3
@@ -229,10 +208,9 @@ export default function OverlayScrollReal() {
                 </div>
             </section>
 
-            {/* Section 4 scrolls over Section 3 - Final CTA Content */}
+            {/* Section 4 - Final CTA Content */}
             <div className="-mt-screen relative z-10">
                 <section
-                    // Apply original CTA styles + min-h-screen
                     className="min-h-screen flex flex-col justify-center items-center px-6 bg-[#2daae2] text-white text-center relative overflow-hidden"
                 >
                     <div className="absolute inset-0 bg-[url('/assets/cta-pattern.svg')] bg-cover opacity-10 z-0" />
