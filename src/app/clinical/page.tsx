@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -150,23 +151,122 @@ export default function OverlayScrollReal() {
                         Smarter Care, Less Stress
                     </h2>
 
-                    <div className="flex flex-wrap justify-center gap-10 max-w-5xl mx-auto mt-12">
+                    {/* Flex Layout - Always Horizontal, Scrollable Squares */}
+                    <div className="flex flex-nowrap overflow-x-auto justify-start gap-8 max-w-7xl w-full mx-auto mt-12 py-4">
                         {benefits.map((benefit, index) => (
+                            // Each Benefit Item - Slightly Smaller Square, Basis ~1/5, No Shrinking
                             <div
                                 key={index}
-                                className="w-full sm:w-[45%] bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition duration-300 text-left"
+                                className="basis-[22%] flex-shrink-0 aspect-square bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition duration-300 flex flex-col items-center justify-center overflow-hidden"
                             >
-                                <div className="w-12 h-12 bg-[#e0f6ff] text-[#06aeef] rounded-full flex items-center justify-center mb-4">
+                                {/* Centered Icon Wrapper */}
+                                <div className="w-12 h-12 bg-[#e0f6ff] text-[#06aeef] rounded-full flex items-center justify-center mb-4 flex-shrink-0">
                                     {benefit.icon}
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900">
+                                {/* Centered Text */}
+                                <h3 className="text-xl font-bold mb-2 text-gray-900 text-center">
                                     {benefit.title}
                                 </h3>
-                                <p className="text-gray-600 text-sm leading-relaxed">
+                                <p className="text-gray-600 text-sm leading-relaxed text-center">
                                     {benefit.description}
                                 </p>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Logo Carousel Section */}
+                    <div className="mt-20 w-full">
+                        <div className="w-full overflow-hidden py-8">
+                            <div className="animate-scroll flex items-center space-x-16 flex-shrink-0">
+                                {/* Original set of logos using Next/Image (Scaled 1.5x) */}
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/anthropos.png"
+                                    alt="Anthropos Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/appelo.png"
+                                    alt="Appello Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/arquella.png"
+                                    alt="Arquella Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/Austeco.png"
+                                    alt="Austco Healthcare Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/blessen.png"
+                                    alt="Blesen Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/dry.png"
+                                    alt="Dryfemount Care Logo"
+                                    width={150}
+                                    height={60}
+                                />
+
+                                {/* Duplicated set for smooth looping (Scaled 1.5x) */}
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/anthropos.png"
+                                    alt="Anthropos Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/appelo.png"
+                                    alt="Appello Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/arquella.png"
+                                    alt="Arquella Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/Austeco.png"
+                                    alt="Austco Healthcare Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/blessen.png"
+                                    alt="Blesen Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                                <Image
+                                    className="flex-shrink-0 object-contain"
+                                    src="/images/logos/dry.png"
+                                    alt="Dryfemount Care Logo"
+                                    width={150}
+                                    height={60}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -181,11 +281,13 @@ export default function OverlayScrollReal() {
                     </h3>
                     <div className="flex justify-center gap-4 overflow-x-auto max-w-6xl mx-auto pb-4">
                         {videoTestimonials.map((video) => (
-                            <img
+                            <Image
                                 key={video.id}
                                 src={video.thumbnail}
                                 alt={`Testimonial ${video.id}`}
-                                className="w-80 h-48 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
+                                width={320}
+                                height={192}
+                                className="object-cover rounded-md cursor-pointer hover:opacity-80 transition"
                                 onClick={() => setActiveVideo(video.videoUrl)}
                             />
                         ))}
