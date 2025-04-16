@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -12,6 +11,8 @@ import {
 } from "@heroicons/react/24/solid";
 import LogoCarousel from "@/components/LogoCarousel";
 import BenefitCard from "@/components/BenefitCard";
+import VideoItem from "@/components/VideoItem";
+import VideoModal from "@/components/VideoModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,33 +41,9 @@ const benefits = [
 
 export default function OverlayScrollReal() {
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
-
     const containerRef = useRef<HTMLDivElement>(null);
     const section1Ref = useRef<HTMLElement>(null);
-    const section2_5Ref = useRef<HTMLElement>(null);
     const section3Ref = useRef<HTMLElement>(null);
-
-    const videoTestimonials = [
-        {
-            id: 1,
-            thumbnail: "/videos/anthropos_testimonial.png",
-            videoUrl:
-                "https://firebasestorage.googleapis.com/v0/b/walabothome-app-cloud.appspot.com/o/testimonials%2Fanthropos_testimonial.mp4?alt=media",
-        },
-        {
-            id: 2,
-            thumbnail: "/videos/essex_county_council_testimonial.png",
-            videoUrl:
-                "https://firebasestorage.googleapis.com/v0/b/walabothome-app-cloud.appspot.com/o/testimonials%2Fessex_county_council_testimonial.mp4?alt=media",
-        },
-        {
-            id: 3,
-            thumbnail:
-                "/videos/heritage_senior_living_executives_testimonial.png",
-            videoUrl:
-                "https://firebasestorage.googleapis.com/v0/b/walabothome-app-cloud.appspot.com/o/testimonials%2Fheritage_senior_living_executives_testimonial.mp4?alt=media",
-        },
-    ];
 
     useEffect(() => {
         if (
@@ -168,49 +145,38 @@ export default function OverlayScrollReal() {
                     <LogoCarousel />
                 </section>
 
-                {/* Section 2.5 scrolls over Section 1 - Testimonials on Orange BG */}
-                <section
-                    ref={section2_5Ref}
-                    className="min-h-screen flex flex-col justify-center items-center px-6 py-20 bg-orange-400 text-center"
-                >
-                    {/* Testimonials Content */}
+                {/* Section 2.5 Testimonials */}
+                <section className="min-h-screen flex flex-col justify-center items-center px-6 py-20 bg-orange-400 text-center">
                     <h3 className="text-2xl font-semibold mb-8 text-gray-800">
                         Hear From Our Partners
                     </h3>
                     <div className="flex justify-center gap-4 overflow-x-auto max-w-6xl mx-auto pb-4">
-                        {videoTestimonials.map((video) => (
-                            <Image
-                                key={video.id}
-                                src={video.thumbnail}
-                                alt={`Testimonial ${video.id}`}
-                                width={320}
-                                height={192}
-                                className="object-cover rounded-md cursor-pointer hover:opacity-80 transition"
-                                onClick={() => setActiveVideo(video.videoUrl)}
-                            />
-                        ))}
+                        <VideoItem
+                            thumbnailName="anthropos_testimonial.png"
+                            altText="Anthropos Testimonial"
+                            videoFileName="anthropos_testimonial.mp4"
+                            onPlay={setActiveVideo}
+                        />
+                        <VideoItem
+                            thumbnailName="essex_county_council_testimonial.png"
+                            altText="Essex County Council Testimonial"
+                            videoFileName="essex_county_council_testimonial.mp4"
+                            onPlay={setActiveVideo}
+                        />
+                        <VideoItem
+                            thumbnailName="heritage_senior_living_executives_testimonial.png"
+                            altText="Heritage Senior Living Testimonial"
+                            videoFileName="heritage_senior_living_executives_testimonial.mp4"
+                            onPlay={setActiveVideo}
+                        />
                     </div>
-                    {/* Video Modal Logic */}
+
+                    {/* Video Modal Logic using VideoModal component */}
                     {activeVideo && (
-                        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg overflow-hidden w-full max-w-3xl relative">
-                                <button
-                                    className="absolute top-2 right-2 text-gray-700 text-xl font-bold hover:text-black"
-                                    onClick={() => setActiveVideo(null)}
-                                >
-                                    {" "}
-                                    ×{" "}
-                                </button>
-                                <iframe
-                                    className="w-full h-[400px]"
-                                    src={activeVideo}
-                                    title="Testimonial Video"
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        </div>
+                        <VideoModal
+                            src={activeVideo}
+                            onClose={() => setActiveVideo(null)}
+                        />
                     )}
                 </section>
             </div>
