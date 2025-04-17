@@ -8,6 +8,7 @@ import {
     ClipboardDocumentListIcon,
     ChartBarIcon,
     HeartIcon,
+    InformationCircleIcon,
 } from "@heroicons/react/24/solid";
 import LogoCarousel from "@/components/LogoCarousel";
 import Card from "@/components/Card";
@@ -141,34 +142,21 @@ export default function Clinical() {
                     How It Works
                 </h2>
                 <div className="grid grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <div className="bg-white rounded-lg p-6 shadow-md">
-                        <h3 className="text-xl font-bold mb-2 text-vayyar-blue">
-                            Step 1
-                        </h3>
-                        <p className="text-gray-600">
-                            Initial setup and configuration. Lorem ipsum dolor
-                            sit amet, consectetur adipiscing elit.
-                        </p>
-                    </div>
-                    <div className="bg-white rounded-lg p-6 shadow-md">
-                        <h3 className="text-xl font-bold mb-2 text-vayyar-blue">
-                            Step 2
-                        </h3>
-                        <p className="text-gray-600">
-                            Real-time monitoring begins. Sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua.
-                        </p>
-                    </div>
-                    <div className="bg-white rounded-lg p-6 shadow-md">
-                        <h3 className="text-xl font-bold mb-2 text-vayyar-blue">
-                            Step 3
-                        </h3>
-                        <p className="text-gray-600">
-                            Smart alerts and insights delivered. Ut enim ad
-                            minim veniam, quis nostrud exercitation ullamco
-                            laboris.
-                        </p>
-                    </div>
+                    <Card
+                        icon={<InformationCircleIcon className="w-7 h-7" />}
+                        title="Step 1"
+                        description="Initial setup and configuration. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                    />
+                    <Card
+                        icon={<InformationCircleIcon className="w-7 h-7" />}
+                        title="Step 2"
+                        description="Real-time monitoring begins. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                    />
+                    <Card
+                        icon={<InformationCircleIcon className="w-7 h-7" />}
+                        title="Step 3"
+                        description="Smart alerts and insights delivered. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+                    />
                 </div>
             </section>
 
