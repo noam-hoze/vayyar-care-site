@@ -24,6 +24,11 @@ export default function Clinical() {
     const section1Ref = useRef<HTMLElement>(null);
     const section3Ref = useRef<HTMLElement>(null);
 
+    // Add state for individual card progresses
+    const [progress1, setProgress1] = useState(0);
+    const [progress2, setProgress2] = useState(0);
+    const [progress3, setProgress3] = useState(0);
+
     useEffect(() => {
         if (
             !containerRef.current ||
@@ -35,11 +40,18 @@ export default function Clinical() {
 
         const ctx = gsap.context(() => {
             setupHeroPin(section1Ref.current!, containerRef.current!);
-            setupHowItWorksAnimation(section3Ref.current!);
+            // Pass setters to animation function
+            setupHowItWorksAnimation(
+                section3Ref.current!,
+                setProgress1,
+                setProgress2,
+                setProgress3
+            );
         }, containerRef);
 
         return () => ctx.revert();
-    }, []);
+        // Add setters to dependency array
+    }, [setProgress1, setProgress2, setProgress3]);
 
     return (
         <div ref={containerRef}>
@@ -141,10 +153,10 @@ export default function Clinical() {
                 <h2 className="text-3xl font-semibold mb-10 text-gray-900">
                     How It Works
                 </h2>
-                <div className="grid grid-cols-3 gap-8 max-w-7xl mx-auto">
-                    <HowItWorksCard />
-                    <HowItWorksCard />
-                    <HowItWorksCard />
+                <div className="grid grid-cols-3 gap-8 max-w-7xl mx-auto flex-grow w-full items-center">
+                    <HowItWorksCard scrollProgress={progress1} />
+                    <HowItWorksCard scrollProgress={progress2} />
+                    <HowItWorksCard scrollProgress={progress3} />
                 </div>
             </section>
 
@@ -159,7 +171,12 @@ export default function Clinical() {
     );
 }
 
-const setupHowItWorksAnimation = (sectionRef: HTMLElement) => {
+const setupHowItWorksAnimation = (
+    sectionRef: HTMLElement,
+    setProgress1: React.Dispatch<React.SetStateAction<number>>,
+    setProgress2: React.Dispatch<React.SetStateAction<number>>,
+    setProgress3: React.Dispatch<React.SetStateAction<number>>
+) => {
     const cards = gsap.utils.toArray<HTMLElement>(
         sectionRef.querySelectorAll(".grid > div")
     );
@@ -168,16 +185,79 @@ const setupHowItWorksAnimation = (sectionRef: HTMLElement) => {
 
     gsap.set(cards, { opacity: 0, x: 100 });
 
+    // Define approximate segments based on timeline (adjust if needed)
+    const segmentEnd1 = 0.35; // End of card 1 animation
+    const segmentStart2 = segmentEnd1; // Start card 2 immediately after card 1 ends
+    const segmentEnd2 = 0.7; // End of card 2 animation (Adjust total duration if needed)
+    const segmentStart3 = segmentEnd2; // Start card 3 immediately after card 2 ends
+    const segmentEnd3 = 1.0; // End of card 3 animation
+
     const cardTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: sectionRef,
             pin: true,
             scrub: 1,
             start: "top top",
-            end: "+=320%",
+            end: "+=320%", // Corresponds to total animation duration
+            markers: true,
+            onUpdate: (self) => {
+                const overallProgress = self.progress; // 0 to 1
+
+                // Calculate normalized progress (0-100) for each segment
+                let p1 = 0;
+                let p2 = 0;
+                let p3 = 0;
+
+                if (overallProgress <= segmentEnd1) {
+                    // Normalize progress for card 1
+                    p1 = Math.min(100, (overallProgress / segmentEnd1) * 100);
+                } else {
+                    p1 = 100; // Freeze card 1 at end
+                }
+
+                if (
+                    overallProgress >= segmentStart2 &&
+                    overallProgress <= segmentEnd2
+                ) {
+                    // Normalize progress for card 2
+                    p2 = Math.min(
+                        100,
+                        ((overallProgress - segmentStart2) /
+                            (segmentEnd2 - segmentStart2)) *
+                            100
+                    );
+                } else if (overallProgress > segmentEnd2) {
+                    p2 = 100; // Freeze card 2 at end
+                } else {
+                    p2 = 0; // Keep card 2 at start
+                }
+
+                if (
+                    overallProgress >= segmentStart3 &&
+                    overallProgress <= segmentEnd3
+                ) {
+                    // Normalize progress for card 3
+                    p3 = Math.min(
+                        100,
+                        ((overallProgress - segmentStart3) /
+                            (segmentEnd3 - segmentStart3)) *
+                            100
+                    );
+                } else if (overallProgress > segmentEnd3) {
+                    p3 = 100; // Freeze card 3 at end
+                } else {
+                    p3 = 0; // Keep card 3 at start
+                }
+
+                // Update state - ensure updates happen
+                setProgress1(p1);
+                setProgress2(p2);
+                setProgress3(p3);
+            },
         },
     });
 
+    // Add card fade-in tweens (these just control card visibility)
     cardTimeline
         .to(cards[0], { opacity: 1, x: 0, duration: 1 }, 0)
         .to(cards[1], { opacity: 1, x: 0, duration: 1 }, 1.2)
