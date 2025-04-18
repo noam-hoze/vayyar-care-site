@@ -1,6 +1,6 @@
-# VayyarCare Website
+![Vayyar Logo](public/images/vayyar-logo-text.png)
+![Clinical Hero Image](public/images/clinical/clinical-hero.jpg)
 
-This repository contains the source code for the VayyarCare service website, built with Next.js.
 
 ## Project Purpose
 
@@ -81,3 +81,7 @@ These scripts are located in the `tools/` directory and are used for asset prepa
 -   `make_scrubbable.sh`: Processes video files (likely MP4) to ensure they are easily scrubbable in web video players, possibly by adjusting keyframes or using `ffmpeg`.
 
 Make sure you have `ffmpeg` installed and configured in your environment if you need to use these shell scripts.
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit bug reports, feature requests, and pull requests, including our issue title and commit message conventions.
