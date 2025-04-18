@@ -8,10 +8,10 @@ import {
     ClipboardDocumentListIcon,
     ChartBarIcon,
     HeartIcon,
-    InformationCircleIcon,
 } from "@heroicons/react/24/solid";
 import LogoCarousel from "@/components/LogoCarousel";
 import Card from "@/components/Card";
+import HowItWorksCard from "@/components/HowItWorksCard";
 import VideoItem from "@/components/VideoItem";
 import VideoModal from "@/components/VideoModal";
 import BookDemoForm from "@/components/BookDemoForm";
@@ -141,22 +141,10 @@ export default function Clinical() {
                 <h2 className="text-3xl font-semibold mb-10 text-gray-900">
                     How It Works
                 </h2>
-                <div className="grid grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <Card
-                        icon={<InformationCircleIcon className="w-7 h-7" />}
-                        title="Step 1"
-                        description="Initial setup and configuration. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                    />
-                    <Card
-                        icon={<InformationCircleIcon className="w-7 h-7" />}
-                        title="Step 2"
-                        description="Real-time monitoring begins. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    />
-                    <Card
-                        icon={<InformationCircleIcon className="w-7 h-7" />}
-                        title="Step 3"
-                        description="Smart alerts and insights delivered. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
-                    />
+                <div className="grid grid-cols-3 gap-8 max-w-7xl mx-auto">
+                    <HowItWorksCard />
+                    <HowItWorksCard />
+                    <HowItWorksCard />
                 </div>
             </section>
 
@@ -170,6 +158,7 @@ export default function Clinical() {
         </div>
     );
 }
+
 const setupHowItWorksAnimation = (sectionRef: HTMLElement) => {
     const cards = gsap.utils.toArray<HTMLElement>(
         sectionRef.querySelectorAll(".grid > div")
@@ -186,7 +175,6 @@ const setupHowItWorksAnimation = (sectionRef: HTMLElement) => {
             scrub: 1,
             start: "top top",
             end: "+=320%",
-            // markers: true,
         },
     });
 
