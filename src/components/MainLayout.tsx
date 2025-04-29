@@ -9,7 +9,7 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
     return (
         <div>
-            <div className="relative z-50">
+            <div className="sticky top-0 z-50">
                 <NavBar />
             </div>
             <main>

@@ -360,7 +360,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     };
 
     return (
-        <div className="scene-container fixed top-0 left-0 w-screen h-screen box-border overflow-hidden">
+        <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
             {/* Unified control panel */}
             <div
                 className={`control-panel ${
@@ -452,8 +452,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 )}
             </div>
 
-            {/* Tablet Wrapper - Positioned absolutely */}
-            <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+            {/* Tablet Wrapper - Currently hidden */}
+            <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden">
                 {tabletComponent}
             </div>
         </div>
