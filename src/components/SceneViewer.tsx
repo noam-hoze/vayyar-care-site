@@ -1,12 +1,5 @@
 "use client";
-import React, {
-    useState,
-    useEffect,
-    useMemo,
-    useRef,
-    CSSProperties,
-    ReactNode,
-} from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
@@ -14,7 +7,6 @@ import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
 import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
 import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
-import DebugOverlay from "./DebugOverlay";
 import VideoControl from "./VideoControl";
 import {
     videoConfig,
@@ -367,82 +359,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         setControlsCollapsed(!controlsCollapsed);
     };
 
-    const renderSceneContent = () => {
-        return (
-            <div className="scene-layout">
-                {/* Left column - Video */}
-                <div className="scene-image-column">
-                    <video
-                        ref={videoRef}
-                        src={currentVideoSrc ?? undefined}
-                        className="scene-video"
-                        playsInline
-                        preload="auto"
-                        muted
-                        onLoadedMetadata={() => {
-                            console.log(
-                                "Video metadata loaded, duration:",
-                                videoRef.current?.duration
-                            );
-                        }}
-                    />
-                </div>
-
-                {/* Right column - Scene description and marketing callout */}
-                <div className="scene-content-column">
-                    {/* Story box */}
-                    <div
-                        className={`scene-description-container ${
-                            animateCard ? "animate-in" : "reset-animation"
-                        }`}
-                    >
-                        <p className="scene-description-text">
-                            {scene.description}
-                            {extraDescriptionText && (
-                                <span
-                                    className="extra-description-text"
-                                    style={{
-                                        display: "block",
-                                        marginTop: "15px",
-                                        animation: "fadeIn 0.8s ease forwards",
-                                        opacity: 0,
-                                        color: "white",
-                                        animationFillMode: "forwards",
-                                    }}
-                                >
-                                    {extraDescriptionText}
-                                </span>
-                            )}
-                        </p>
-                    </div>
-
-                    {/* Controls container at the bottom */}
-                    <div className="controls-container">
-                        {/* Callout after the story box and upload control */}
-                        {scene.subtitle && scene.subtitle.trim() !== "" && (
-                            <div className="scene-callout-wrapper">
-                                <div
-                                    className={`scene-callout ${
-                                        showCallout ? "visible" : "hidden"
-                                    } ${
-                                        animateCard
-                                            ? "animate-in"
-                                            : "reset-animation"
-                                    }`}
-                                >
-                                    <h3>{scene.subtitle}</h3>
-                                    <div className="scene-callout-underline"></div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     return (
-        <div className="scene-container fixed top-0 left-0 w-screen h-screen flex items-center box-border overflow-hidden">
+        <div className="scene-container fixed top-0 left-0 w-screen h-screen box-border overflow-hidden">
             {/* Unified control panel */}
             <div
                 className={`control-panel ${
@@ -473,36 +391,71 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 </button>
             </div>
 
-            <div className="scene-content w-full">
-                {scene.layout === "two-column" ? (
-                    <div className="scene-layout two-column-layout">
-                        <div className="left-column scene-image-column">
-                            <video
-                                ref={videoRef}
-                                src={currentVideoSrc ?? undefined}
-                                className="scene-video w-full h-full object-cover"
-                                playsInline
-                                preload="auto"
-                                muted
-                                onLoadedMetadata={() => {
-                                    console.log(
-                                        "Video metadata loaded, duration:",
-                                        videoRef.current?.duration
-                                    );
+            {/* Fullscreen Video Background */}
+            <video
+                ref={videoRef}
+                src={currentVideoSrc ?? undefined}
+                className="absolute top-0 left-0 w-full h-full object-cover z-0" // Fullscreen, behind content
+                playsInline
+                preload="auto"
+                muted
+                onLoadedMetadata={() => {
+                    console.log(
+                        "Video metadata loaded, duration:",
+                        videoRef.current?.duration
+                    );
+                }}
+            />
+
+            {/* Overlay Content - Positioned on the left */}
+            <div className="absolute top-1/2 left-8 transform -translate-y-1/2 w-auto max-w-[30%] z-10">
+                {/* Story box */}
+                <div
+                    className={`scene-description-container mb-4 ${
+                        animateCard ? "animate-in" : "reset-animation"
+                    }`}
+                >
+                    <p className="scene-description-text">
+                        {scene.description}
+                        {extraDescriptionText && (
+                            <span
+                                className="extra-description-text"
+                                style={{
+                                    display: "block",
+                                    marginTop: "15px",
+                                    animation: "fadeIn 0.8s ease forwards",
+                                    opacity: 0,
+                                    color: "white",
+                                    animationFillMode: "forwards",
                                 }}
-                            />
-                        </div>
-                        <div className="right-column scene-content-column">
-                            {renderSceneContent()}
+                            >
+                                {extraDescriptionText}
+                            </span>
+                        )}
+                    </p>
+                </div>
+
+                {/* Callout */}
+                {scene.subtitle && scene.subtitle.trim() !== "" && (
+                    <div className="scene-callout-wrapper">
+                        <div
+                            className={`scene-callout ${
+                                showCallout ? "visible" : "hidden"
+                            } ${
+                                animateCard ? "animate-in" : "reset-animation"
+                            }`}
+                        >
+                            <h3>{scene.subtitle}</h3>
+                            <div className="scene-callout-underline"></div>
                         </div>
                     </div>
-                ) : (
-                    renderSceneContent()
                 )}
             </div>
 
-            <div className="tablet-wrapper">{tabletComponent}</div>
-            {/* ... Debug Overlay ... */}
+            {/* Tablet Wrapper - Positioned absolutely */}
+            <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                {tabletComponent}
+            </div>
         </div>
     );
 };

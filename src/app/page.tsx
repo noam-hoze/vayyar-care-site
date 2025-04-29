@@ -1,6 +1,6 @@
 "use client"; // Mark this as a Client Component
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { scenes } from "@/data/scenes"; // Use alias
 import SceneViewer from "@/components/SceneViewer"; // Use alias
 import { gsap } from "gsap";
@@ -14,11 +14,11 @@ gsap.registerPlugin(ScrollTrigger);
 export default function HomePage() {
     const [index, setIndex] = useState(0);
     const [subScrollProgress, setSubScrollProgress] = useState(0);
-    const scrollableRef = useRef(null); // This ref might need adjustment depending on scroll target
+    // const scrollableRef = useRef(null); // Commented out as it's unused
 
     // Setup GSAP smooth scrolling - Reverted to original logic
     useEffect(() => {
-        let smoothness = 0.08;
+        const smoothness = 0.08;
         let currentY = 0;
         let targetY = window.scrollY;
         let rafId: number | null = null;
@@ -99,7 +99,7 @@ export default function HomePage() {
         const handleScroll = () => {
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
-            const totalHeight = MAX_SCENES * windowHeight;
+            // const totalHeight = MAX_SCENES * windowHeight; // Commented out as it's unused
 
             const newIndex = Math.min(
                 MAX_SCENES - 1,
