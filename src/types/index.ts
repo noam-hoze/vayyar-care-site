@@ -7,6 +7,8 @@ export interface Scene {
     percentageText?: {
         [key: number]: { text: string }; // e.g., { 70: { text: "..." } }
     };
+    showUpAt?: number; // Percentage (0-100) when description starts fading in
+    disappearAt?: number; // Percentage (0-100) when description starts fading out
     layout?: string; // e.g., "two-column"
     color?: string; // e.g., "#000"
     subtitle?: string;

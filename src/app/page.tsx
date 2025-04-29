@@ -42,17 +42,17 @@ export default function HomePage() {
             const currentSubScroll =
                 (window.scrollY - sceneStartY) / windowHeight;
 
-            const isFallChartScene = currentSceneIndex === SCENES.FALL_CHART;
+            //const isFallChartScene = currentSceneIndex === SCENES.FALL_CHART;
             const isVpFamilyScene = currentSceneIndex === SCENES.VP_FAMILY;
             let speedMultiplier = 0.1;
 
-            if (
-                isFallChartScene &&
-                currentSubScroll >= 0.75 &&
-                currentSubScroll <= 0.84
-            ) {
-                speedMultiplier = 0.004;
-            }
+            // if (
+            //     isFallChartScene &&
+            //     currentSubScroll >= 0.75 &&
+            //     currentSubScroll <= 0.84
+            // ) {
+            //     speedMultiplier = 0.004;
+            // }
             if (isVpFamilyScene) {
                 if (currentSubScroll > 0.3 && currentSubScroll < 0.4) {
                     speedMultiplier = 0.01;
@@ -148,18 +148,7 @@ export default function HomePage() {
         // Removed the outer .app div, as body/html are handled by layout.tsx
         // Removed scrollableRef for now, as scrolling is on window
         <>
-            {/* Scene navigation dots */}
-            <div className="scene-navigation fixed top-1/2 right-4 transform -translate-y-1/2 z-[2001] flex flex-col gap-2">
-                {scenes.slice(0, MAX_SCENES).map((s, i) => (
-                    <div
-                        key={i}
-                        className={`scene-indicator w-2.5 h-2.5 rounded-full bg-white/50 transition-all duration-300 ease-in-out ${
-                            s.scene === index ? "active bg-white scale-150" : ""
-                        }`}
-                        title={s.title || ""}
-                    />
-                ))}
-            </div>
+            {/* Scene navigation dots removed */}
 
             {/* Main container for scenes */}
             <div

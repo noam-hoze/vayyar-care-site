@@ -4,9 +4,9 @@ export const scenes = [
     {
         scene: SCENES.MORNING_SHIFT,
         title: "Morning shift",
-        description:
-            "Nurse Alice just got to her morning shift. Upon entering her desk she picks her phone and starts talking with VayyarCare.",
-        calloutDisplayPercentage: "80",
+        description: "Automated shift summary",
+        showUpAt: 33,
+        disappearAt: 71,
         content: [
             "Room 302: Resident shows signs of unsteady walking",
             "Room 214: Bathroom visits increased 40% overnight",
@@ -16,7 +16,9 @@ export const scenes = [
     {
         scene: SCENES.FALL_CHART,
         title: "Fall event",
-        description: "During her morning walk, Alice checks John's fall chart.",
+        description: "Personal assistant, retrieving data in seconds!",
+        showUpAt: 0,
+        disappearAt: 100,
         percentageText: {
             70: {
                 text: "Suddenly she receives a fall alert.",
@@ -31,18 +33,23 @@ export const scenes = [
         title: "Automated documentation",
         description:
             "Instead of writing a report herself, Alice askss VayyarCare document the event for her.",
-        calloutDisplayPercentage: "80",
+        showUpAt: 0,
+        disappearAt: 100,
     },
     {
         scene: SCENES.VP_CLINICAL,
         title: "Monthly review with VP Clicnal",
         description:
             "Alice meets with the VP Clinical to discuss the past month.",
+        showUpAt: 0,
+        disappearAt: 100,
     },
     {
         scene: SCENES.VP_FAMILY,
         title: "Talk with family",
         description:
             "The VP Clinical meets with Toni's family and explains why it is better for Toni to get extra care.",
+        showUpAt: 0,
+        disappearAt: 100,
     },
 ];

@@ -361,36 +361,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
-            {/* Unified control panel */}
-            <div
-                className={`control-panel ${
-                    controlsCollapsed ? "collapsed" : ""
-                }`}
-            >
-                <div className="control-panel-inner">
-                    <div className="debug-section">
-                        <div
-                            className="debug-info"
-                            style={{ marginTop: "-6px" }}
-                        >
-                            <div>Scene: {scene.title || "None"}</div>
-                            <div>
-                                Scroll: {Math.round(subScrollProgress * 100)}%
-                            </div>
-                        </div>
-                    </div>
-                    <div className="video-controls-section">
-                        <VideoControl />
-                    </div>
-                </div>
-                <button
-                    className="toggle-controls-button"
-                    onClick={toggleControls}
-                >
-                    {controlsCollapsed ? "⌄" : "⌃"}
-                </button>
-            </div>
-
             {/* Fullscreen Video Background */}
             <video
                 ref={videoRef}
@@ -407,12 +377,34 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 }}
             />
 
-            {/* Overlay Content - Positioned on the left */}
-            <div className="absolute top-1/2 left-8 transform -translate-y-1/2 w-auto max-w-[30%] z-10">
+            {/* Overlay Content - Positioned on the right */}
+            <div className="absolute top-1/2 right-8 transform -translate-y-1/2 w-auto max-w-[30%] z-10">
                 {/* Story box */}
                 <div
-                    className={`scene-description-container mb-4 ${
-                        animateCard ? "animate-in" : "reset-animation"
+                    className={`scene-description-container mb-4 transition-opacity duration-1000 ease-in-out ${
+                        // Determine visibility and animation based on scroll progress
+                        (() => {
+                            const currentPercentage = subScrollProgress * 100;
+                            const showAt = scene.showUpAt ?? 0;
+                            const disappearAt = scene.disappearAt ?? 100;
+
+                            if (currentPercentage < showAt) {
+                                return "opacity-0"; // Hidden before showUpAt
+                            } else if (currentPercentage >= disappearAt) {
+                                return "opacity-0"; // Fade out (and stay faded) at/after disappearAt
+                            } else {
+                                // Visible between showAt and disappearAt
+                                // Apply animate-in class, but rely on opacity for fade-out
+                                const baseClass = "opacity-100"; // Ensure visible
+                                const animationClass = animateCard
+                                    ? "animate-in"
+                                    : ""; // Keep scene transition animation
+                                const resetClass = !animateCard
+                                    ? "reset-animation"
+                                    : ""; // Keep reset logic
+                                return `${baseClass} ${animationClass} ${resetClass}`.trim();
+                            }
+                        })()
                     }`}
                 >
                     <p className="scene-description-text">
@@ -455,6 +447,14 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             {/* Tablet Wrapper - Currently hidden */}
             <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden">
                 {tabletComponent}
+            </div>
+
+            {/* STANDALONE DEBUG INFO - BOTTOM CENTER */}
+            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999] bg-black/80 text-white p-3 rounded-md shadow-lg text-xs font-mono">
+                <div>
+                    Scene: {scene.title || "None"} (Index: {index})
+                </div>
+                <div>Scroll%: {Math.round(subScrollProgress * 100)}%</div>
             </div>
         </div>
     );

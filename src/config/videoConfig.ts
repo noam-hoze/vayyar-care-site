@@ -18,13 +18,7 @@ export const defaultConfig = {
     // These times should match your video timestamps
     sceneTiming: [
         { scene: SCENES.MORNING_SHIFT, videoTime: 0 }, // Scene 0 starts at 0s
-        {
-            scene: SCENES.FALL_CHART,
-            scrollingPercentage: {
-                0: { videoTime: 5 },
-                75: { videoTime: 10 },
-            },
-        }, // Scene 1 starts at 3s
+        { scene: SCENES.FALL_CHART, videoTime: 5}, // Scene 1 starts at 3s
         { scene: SCENES.DOCUMENT_EVENT, videoTime: 10 },
         { scene: SCENES.VP_CLINICAL, videoTime: 30 },
     ],

@@ -47,7 +47,7 @@ export default function NavBar() {
                             </span>
                             {/* Text Span - Transitions transform */}
                             <span className="inline-block transition-all duration-300 ease-in-out transform group-hover:translate-x-2 uppercase">
-                                Let's Talk
+                                Let&apos;s Talk
                             </span>
                         </Link>
 
