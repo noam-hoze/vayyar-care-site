@@ -1,42 +1,33 @@
 "use client"; // Add this for useState
-import React, { useState, useEffect, useRef } from "react"; // Import useEffect, useRef
+import React, { useState, useRef } from "react"; // Removed useEffect
 import Link from "next/link"; // Changed from react-router-dom
 
 export default function NavBar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu visibility
-    const menuButtonRef = useRef<HTMLButtonElement>(null); // Ref for the menu button
-    const menuPanelRef = useRef<HTMLDivElement>(null); // Ref for the menu panel
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref for hover timeout
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const handleMouseEnter = () => {
+        if (hoverTimeoutRef.current) {
+            clearTimeout(hoverTimeoutRef.current);
+            hoverTimeoutRef.current = null;
+        }
+        setIsMenuOpen(true);
     };
 
-    // Effect to handle clicks outside the menu
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            // Check if menu is open and refs are valid
-            if (
-                isMenuOpen &&
-                menuButtonRef.current &&
-                menuPanelRef.current &&
-                // Check if click is outside the button
-                !menuButtonRef.current.contains(event.target as Node) &&
-                // Check if click is outside the panel
-                !menuPanelRef.current.contains(event.target as Node)
-            ) {
-                setIsMenuOpen(false); // Close the menu
-            }
-        }
+    const handleMouseLeave = () => {
+        // Set a timer to close the menu
+        hoverTimeoutRef.current = setTimeout(() => {
+            setIsMenuOpen(false);
+        }, 200); // 200ms delay
+    };
 
-        // Add event listener on mount
-        document.addEventListener("mousedown", handleClickOutside);
-        // Cleanup event listener on unmount
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-        // Rerun effect if isMenuOpen changes (optional, but can be useful)
-        // Using empty array [] ensures listener is added/removed only on mount/unmount
-    }, [isMenuOpen]); // Dependency includes isMenuOpen to ensure check is always correct
+    // Clear timeout when mouse enters panel, preventing it from closing
+    const handlePanelMouseEnter = () => {
+        if (hoverTimeoutRef.current) {
+            clearTimeout(hoverTimeoutRef.current);
+            hoverTimeoutRef.current = null;
+        }
+    };
 
     return (
         // Make nav relative to position the absolute menu
@@ -80,10 +71,11 @@ export default function NavBar() {
                             </span>
                         </Link>
 
-                        {/* Menu Toggle Button - Now Text */}
+                        {/* Menu Toggle Button - Hover Activated */}
                         <button
-                            ref={menuButtonRef} // Assign ref to the button
-                            onClick={toggleMenu}
+                            // Removed ref
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
                             className={`
                                 group relative overflow-hidden
                                 ${
@@ -96,40 +88,22 @@ export default function NavBar() {
                                 focus:outline-none transition duration-150 ease-in-out 
                                 uppercase cursor-pointer min-w-[80px]
                             `}
-                            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                            aria-label="Open menu"
                         >
-                            {/* Text Span - Transitions transform */}
                             <span
-                                className={`inline-block transition-all duration-300 ease-in-out transform ${
-                                    // If menu open, apply shift directly. If closed, apply shift only on hover.
-                                    isMenuOpen
-                                        ? "-translate-x-2"
-                                        : "group-hover:-translate-x-2"
-                                }`}
+                                className={`inline-block transition-all duration-300 ease-in-out transform`}
                             >
-                                {isMenuOpen ? "Close" : "Menu"}
+                                Menu
                             </span>
-                            {/* Vayyar Logo Image - Appears on Hover, Slides in from right */}
-                            <img
-                                src="/images/vayyar-logo-black.png"
-                                alt="Vayyar Logo"
-                                className={`absolute right-1 top-1/2 transform -translate-y-1/2 
-                                           w-3 h-3
-                                           transition-all duration-300 ease-in-out
-                                           ${
-                                               isMenuOpen
-                                                   ? "opacity-100 translate-x-0 -rotate-90"
-                                                   : "opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0 rotate-0"
-                                           }
-                                           `}
-                            />
                         </button>
                     </div>
                 </div>
 
-                {/* Mobile Menu Panel - Now inside the max-w container */}
+                {/* Mobile Menu Panel - Hover Activated */}
                 <div
-                    ref={menuPanelRef} // Assign ref to the panel
+                    // Removed ref
+                    onMouseEnter={handlePanelMouseEnter} // Keep open when mouse enters panel
+                    onMouseLeave={handleMouseLeave} // Close when mouse leaves panel
                     className={`
                         absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg p-6 z-[60] mt-2 mr-2
                         transform transition-all duration-300 ease-in-out
@@ -144,7 +118,7 @@ export default function NavBar() {
                         <Link
                             href="/clinical"
                             className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
-                            onClick={toggleMenu}
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
@@ -158,7 +132,7 @@ export default function NavBar() {
                         <Link
                             href="/executive"
                             className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
-                            onClick={toggleMenu}
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
@@ -172,7 +146,7 @@ export default function NavBar() {
                         <Link
                             href="/customers"
                             className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
-                            onClick={toggleMenu}
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
@@ -186,7 +160,7 @@ export default function NavBar() {
                         <Link
                             href="/about-us"
                             className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
-                            onClick={toggleMenu}
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
