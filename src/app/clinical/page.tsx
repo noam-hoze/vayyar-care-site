@@ -199,7 +199,7 @@ const setupHowItWorksAnimation = (
             scrub: 1,
             start: "top top",
             end: "+=320%", // Corresponds to total animation duration
-            markers: true,
+            markers: false,
             onUpdate: (self) => {
                 const overallProgress = self.progress; // 0 to 1
 
