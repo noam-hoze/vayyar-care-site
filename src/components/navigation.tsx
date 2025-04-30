@@ -131,7 +131,7 @@ export default function NavBar() {
                 <div
                     ref={menuPanelRef} // Assign ref to the panel
                     className={`
-                        absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg p-5 z-[60] mt-2 mr-2
+                        absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg p-6 z-[60] mt-2 mr-2
                         transform transition-all duration-300 ease-in-out
                         ${
                             isMenuOpen
@@ -140,16 +140,16 @@ export default function NavBar() {
                         }
                     `}
                 >
-                    <div className="flex flex-col space-y-4">
+                    <div className="flex flex-col space-y-5 items-center">
                         <Link
                             href="/clinical"
-                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
+                            className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
                             onClick={toggleMenu}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
                                 alt=""
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
                             <span className="inline-block uppercase">
                                 Clinical
@@ -157,13 +157,13 @@ export default function NavBar() {
                         </Link>
                         <Link
                             href="/executive"
-                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
+                            className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
                             onClick={toggleMenu}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
                                 alt=""
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
                             <span className="inline-block uppercase">
                                 Executive
@@ -171,13 +171,13 @@ export default function NavBar() {
                         </Link>
                         <Link
                             href="/customers"
-                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
+                            className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
                             onClick={toggleMenu}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
                                 alt=""
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
                             <span className="inline-block uppercase">
                                 Customers
@@ -185,13 +185,13 @@ export default function NavBar() {
                         </Link>
                         <Link
                             href="/about-us"
-                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
+                            className="group relative text-gray-700 hover:text-blue-700 block pl-3 pr-10 py-3 rounded-md text-lg font-medium transition-all duration-200 ease-out hover:scale-[1.02] w-auto"
                             onClick={toggleMenu}
                         >
                             <img
                                 src="/images/vayyar-logo-dark-blue.png"
                                 alt=""
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
                             <span className="inline-block uppercase">
                                 About Us
