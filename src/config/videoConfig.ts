@@ -12,7 +12,7 @@ export const defaultConfig = {
     scrubSmoothness: 1,
 
     // Video source path
-    videoSrc: "/videos/first-scenes.mp4", // Set default to the physical file
+    videoSrc: "/videos/first_scenes_converted.mp4", // Use the converted video file
 
     // Timing configuration for each scene
     // These times should match your video timestamps
