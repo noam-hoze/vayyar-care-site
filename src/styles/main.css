@@ -1714,7 +1714,7 @@
 .scene-description-container.animate-in {
     animation: fadeInUp 1.5s ease-out forwards;
 }
-.scene-description-text {
+/* .scene-description-text {
     font-size: 50px;
     line-height: 1.6;
     color: #000000;
@@ -1724,7 +1724,7 @@
     text-align: left;
     position: relative;
     height: auto;
-}
+} */
 .scene-callout-wrapper {
     height: auto;
     width: 100%;

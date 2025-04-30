@@ -4,10 +4,11 @@
  */
 export const SCENES = {
     MORNING_SHIFT: 0,
-    FALL_EVENT: 1,
-    DOCUMENT_EVENT: 2,
-    VP_CLINICAL: 3,
-    VP_FAMILY: 4,
+    JOHNS_SUMMARY: 1,
+    FALL_EVENT: 2,
+    // DOCUMENT_EVENT: 3,
+    // VP_CLINICAL: 4,
+    // VP_FAMILY: 5,
 };
 
 // Helper function to validate a scene index is valid

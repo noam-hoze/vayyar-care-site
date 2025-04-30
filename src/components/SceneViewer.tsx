@@ -381,50 +381,47 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 w-auto max-w-[30%] z-10">
                 {/* Story box */}
                 <div
-                    className={`scene-description-container mb-4 transition-opacity duration-1000 ease-in-out ${
-                        // Determine visibility and animation based on scroll progress
-                        (() => {
-                            const currentPercentage = subScrollProgress * 100;
-                            const showAt = scene.showUpAt ?? 0;
-                            const disappearAt = scene.disappearAt ?? 100;
+                    className={`scene-description-container mb-4 
+                                transition-all duration-1000 ease-in-out 
+                                ${
+                                    // Determine visibility and position based on scroll progress
+                                    (() => {
+                                        const currentPercentage =
+                                            subScrollProgress * 100;
+                                        const showAt = scene.showUpAt ?? 0;
+                                        const disappearAt =
+                                            scene.disappearAt ?? 100;
 
-                            if (currentPercentage < showAt) {
-                                return "opacity-0"; // Hidden before showUpAt
-                            } else if (currentPercentage >= disappearAt) {
-                                return "opacity-0"; // Fade out (and stay faded) at/after disappearAt
-                            } else {
-                                // Visible between showAt and disappearAt
-                                // Apply animate-in class, but rely on opacity for fade-out
-                                const baseClass = "opacity-100"; // Ensure visible
-                                const animationClass = animateCard
-                                    ? "animate-in"
-                                    : ""; // Keep scene transition animation
-                                const resetClass = !animateCard
-                                    ? "reset-animation"
-                                    : ""; // Keep reset logic
-                                return `${baseClass} ${animationClass} ${resetClass}`.trim();
-                            }
-                        })()
-                    }`}
+                                        if (
+                                            currentPercentage >= showAt &&
+                                            currentPercentage < disappearAt
+                                        ) {
+                                            // State: Visible and in position
+                                            return "opacity-100 translate-y-0";
+                                        } else {
+                                            // State: Hidden and slightly offset
+                                            return "opacity-0 translate-y-3";
+                                        }
+                                    })()
+                                }`}
                 >
-                    <p className="scene-description-text">
-                        {scene.description}
-                        {extraDescriptionText && (
-                            <span
-                                className="extra-description-text"
-                                style={{
-                                    display: "block",
-                                    marginTop: "15px",
-                                    animation: "fadeIn 0.8s ease forwards",
-                                    opacity: 0,
-                                    color: "white",
-                                    animationFillMode: "forwards",
-                                }}
-                            >
-                                {extraDescriptionText}
-                            </span>
-                        )}
-                    </p>
+                    {/* Title - Larger and Bold */}
+                    {scene.title && (
+                        <h2 className="text-4xl font-semibold mb-3 text-black">
+                            {scene.title}
+                        </h2>
+                    )}
+                    {/* Description - Smaller */}
+                    {scene.description && (
+                        <p className="text-lg text-gray-800">
+                            {scene.description}
+                            {extraDescriptionText && (
+                                <span className="extra-description-text block mt-4 opacity-0 text-white animate-fadeInForwards">
+                                    {extraDescriptionText}
+                                </span>
+                            )}
+                        </p>
+                    )}
                 </div>
 
                 {/* Callout */}
