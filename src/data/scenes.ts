@@ -20,6 +20,7 @@ export const scenes = [
         description: "Falls, mobility, bathroom behavior — instantly surfaced",
         showUpAt: 32,
         disappearAt: 70,
+        cta: { text: "TRY NOW", link: "/", showUpAt: 50 },
     },
     {
         scene: SCENES.FALL_EVENT,
@@ -28,6 +29,7 @@ export const scenes = [
             "Quick, precise information — so you can act without hesitation.",
         showUpAt: 22,
         disappearAt: 67,
+        cta: { text: "SEE IT IN ACTION", link: "/" },
     },
     // {
     //     scene: SCENES.DOCUMENT_EVENT,

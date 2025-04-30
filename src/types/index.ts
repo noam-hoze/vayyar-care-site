@@ -13,4 +13,5 @@ export interface Scene {
     color?: string; // e.g., "#000"
     subtitle?: string;
     // Add any other properties observed in scenes.ts data
+    cta?: { text: string; link?: string; showUpAt?: number }; // Added showUpAt inside cta definition
 }

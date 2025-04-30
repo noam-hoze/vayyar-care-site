@@ -16,6 +16,7 @@ import {
 } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
 import { Scene } from "@/types";
+import Link from "next/link";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -420,6 +421,25 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                                     {extraDescriptionText}
                                 </span>
                             )}
+                            {/* CTA Button - Conditionally Rendered in Bottom Right */}
+                            <div
+                                className={`absolute bottom-3 right-3 transition-opacity duration-500 ease-in-out ${
+                                    // Conditionally set opacity based on cta.showUpAt
+                                    subScrollProgress * 100 >=
+                                    (scene.cta?.showUpAt ?? scene.showUpAt ?? 0)
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                }`}
+                            >
+                                {scene.cta && scene.cta.text && (
+                                    <Link
+                                        href={scene.cta.link || "#"}
+                                        className="inline-block px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700 transition duration-150 ease-in-out" // Removed mt-6
+                                    >
+                                        {scene.cta.text}
+                                    </Link>
+                                )}
+                            </div>
                         </p>
                     )}
                 </div>
