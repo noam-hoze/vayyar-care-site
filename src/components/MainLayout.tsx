@@ -11,12 +11,17 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const pathname = usePathname(); // Get current path
+    // Determine if NavBar should be shown (hide on /contact and /demo)
+    const showNavBar = !["/contact", "/demo"].includes(pathname);
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
-            <div className="sticky top-0 z-50">
-                <NavBar />
-            </div>
+            {/* Conditionally render the NavBar container */}
+            {showNavBar && (
+                <div className="sticky top-0 z-50">
+                    <NavBar />
+                </div>
+            )}
             <main key={pathname} className="flex-grow page-fade-in">
                 {children}
             </main>

@@ -21,7 +21,7 @@ export const scenes = [
         showUpAt: 32,
         disappearAt: 80,
         wipeStartAt: 40,
-        cta: { text: "TRY NOW", link: "/", showUpAt: 50 },
+        cta: { text: "TRY NOW", link: "/demo", showUpAt: 50 },
     },
     {
         scene: SCENES.FALL_EVENT,
@@ -30,7 +30,7 @@ export const scenes = [
             "Quick, precise information — so you can act without hesitation.",
         showUpAt: 22,
         disappearAt: 77,
-        cta: { text: "SEE IT IN ACTION", link: "/" },
+        cta: { text: "SEE IT IN ACTION", link: "/contact" },
     },
     // {
     //     scene: SCENES.DOCUMENT_EVENT,

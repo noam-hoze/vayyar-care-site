@@ -1051,4 +1051,20 @@
   font-size: 18px;
   font-weight: bold;
   color: #e63946;
+}
+
+/* Add this to animations.css */
+@keyframes subtlePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Base shadow */
+  }
+  50% {
+    transform: scale(1.05); /* Increased scale */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.18); /* Slightly stronger shadow to match scale */
+  }
+}
+
+.animate-subtle-pulse {
+  animation: subtlePulse 2.5s infinite ease-in-out;
 } 

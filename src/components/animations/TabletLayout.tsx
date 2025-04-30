@@ -365,9 +365,6 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
                             <img src="/images/vayyar-logo.png" alt="Vayyar" />
                         </div>
                         <div className="tablet-layout-header-info">
-                            <div className="tablet-layout-header-time">
-                                {time}
-                            </div>
                             <div className="tablet-layout-header-avatar">
                                 <img src="/images/nurse.jpg" alt="Nurse" />
                             </div>
