@@ -12,7 +12,7 @@ export const defaultConfig = {
     scrubSmoothness: 1,
 
     // Video source path
-    videoSrc: "", // Default video path
+    videoSrc: "/videos/first-scenes.mp4", // Set default to the physical file
 
     // Timing configuration for each scene
     // These times should match your video timestamps
@@ -57,8 +57,7 @@ const loadSavedVideo = () => {
 // Create a mutable copy of the configuration
 export const videoConfig = {
     ...defaultConfig,
-    // Call loadSavedVideo here, it handles the window check
-    videoSrc: loadSavedVideo(),
+    // The videoSrc from defaultConfig will now be the initial value.
 };
 
 // Interface for individual scene timing

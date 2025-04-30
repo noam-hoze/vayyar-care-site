@@ -8,7 +8,8 @@
         "upload-videos": "node tools/upload_videos_to_firebase.js",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "deploy": "pnpm run build && firebase deploy --only functions,hosting"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
