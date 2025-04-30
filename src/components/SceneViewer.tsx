@@ -4,10 +4,10 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
 import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
-import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
-import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
-import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
-import VideoControl from "./VideoControl";
+// Removed unused scene imports
+// import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
+// import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
+// import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import {
     videoConfig,
     SceneTiming,
@@ -32,6 +32,9 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     index = 0,
     subScrollProgress = 0,
 }) => {
+    // Flag to control debug info visibility
+    const showDebugInfo = false; // Set to false to hide debug info
+
     // Calculate sub-scroll progress for animations
     const [animationProgress, setAnimationProgress] = useState(0);
 
@@ -52,9 +55,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
-
-    // State to control control panel visibility
-    const [controlsCollapsed, setControlsCollapsed] = useState(true);
 
     // Load video source from localStorage on client-side mount
     useEffect(() => {
@@ -138,18 +138,19 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             console.log("Current scene index:", index);
 
             const currentSceneTiming = sceneTimings.find(
-                (t: SceneTiming) => t.scene === index // Add type for t
-            );
+                (t) => t.scene === index
+            ) as SceneTiming | undefined; // Cast result to SceneTiming | undefined
 
             if (!currentSceneTiming) {
                 console.warn("Scene timing not found for index:", index);
                 return;
             }
 
+            // Check if scrollingPercentage exists BEFORE trying to use it
             if (currentSceneTiming.scrollingPercentage) {
                 const scrollPercentage = Math.floor(subScrollProgress * 100);
                 const percentagePoints = Object.keys(
-                    currentSceneTiming.scrollingPercentage
+                    currentSceneTiming.scrollingPercentage // Safe to access now
                 )
                     .map(Number)
                     .sort((a, b) => a - b);
@@ -167,23 +168,21 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     }
                 }
 
-                // Access safely using optional chaining AND type assertion on the key
+                // Access safely using the check above and type assertion
+                const percentageData = currentSceneTiming.scrollingPercentage; // Assign for clarity
                 const lowerData =
-                    currentSceneTiming.scrollingPercentage?.[
-                        lowerPoint as keyof typeof currentSceneTiming.scrollingPercentage
-                    ];
+                    percentageData?.[lowerPoint as keyof typeof percentageData];
                 const upperData =
-                    currentSceneTiming.scrollingPercentage?.[
-                        upperPoint as keyof typeof currentSceneTiming.scrollingPercentage
-                    ];
+                    percentageData?.[upperPoint as keyof typeof percentageData];
 
                 if (!lowerData || !upperData) {
                     console.warn(
                         "Invalid percentage points data for interpolation:",
                         lowerPoint,
                         upperPoint,
-                        currentSceneTiming.scrollingPercentage
+                        percentageData
                     );
+                    // Fallback to simple videoTime if percentage data is bad
                     video.currentTime = currentSceneTiming.videoTime ?? 0;
                     return;
                 }
@@ -210,27 +209,29 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     );
                 }
             } else {
+                // Handle cases WITHOUT scrollingPercentage
                 const nextSceneIndex = index + 1;
                 const nextSceneTiming = sceneTimings.find(
-                    (t: SceneTiming) => t.scene === nextSceneIndex
-                );
+                    (t) => t.scene === nextSceneIndex
+                ) as SceneTiming | undefined; // Cast result
 
                 let videoTime: number;
                 const startTime = currentSceneTiming.videoTime ?? 0;
 
                 if (nextSceneTiming) {
                     let nextSceneStartTime: number;
+                    // Check if NEXT scene has scrollingPercentage
                     if (nextSceneTiming.scrollingPercentage) {
+                        const percentageData =
+                            nextSceneTiming.scrollingPercentage;
                         const firstPercentage = Math.min(
-                            ...Object.keys(
-                                nextSceneTiming.scrollingPercentage
-                            ).map(Number)
+                            ...Object.keys(percentageData).map(Number)
                         );
-                        // Safely access first percentage data using optional chaining AND type assertion
                         const firstPercentageData =
-                            nextSceneTiming.scrollingPercentage?.[
-                                firstPercentage as keyof typeof nextSceneTiming.scrollingPercentage
+                            percentageData[
+                                firstPercentage as keyof typeof percentageData
                             ];
+
                         if (firstPercentageData) {
                             nextSceneStartTime = firstPercentageData.videoTime;
                         } else {
@@ -239,15 +240,16 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                                 firstPercentage,
                                 nextSceneTiming.scrollingPercentage
                             );
+                            // Fallback if data missing for first percentage
                             nextSceneStartTime =
                                 nextSceneTiming.videoTime ?? startTime;
                         }
                     } else {
+                        // If next scene also doesn't have percentage mapping
                         nextSceneStartTime =
                             nextSceneTiming.videoTime ?? startTime;
                     }
 
-                    // Ensure startTime and nextSceneStartTime are valid numbers
                     if (isNaN(nextSceneStartTime)) {
                         console.warn(
                             "Invalid next scene start time for interpolation.",
@@ -261,6 +263,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                                 subScrollProgress;
                     }
                 } else {
+                    // Last scene
                     const endTime = video.duration;
                     if (isNaN(endTime)) {
                         console.warn(
@@ -274,9 +277,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     }
                 }
 
-                // Ensure videoTime is within bounds
                 if (isNaN(videoTime)) {
-                    videoTime = startTime; // Fallback if calculation failed
+                    videoTime = startTime;
                 } else if (!isNaN(video.duration)) {
                     videoTime = Math.max(
                         0,
@@ -337,9 +339,10 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         () => ({
             [SCENES.MORNING_SHIFT]: AnimatedTabletScene1,
             [SCENES.FALL_EVENT]: AnimatedTabletScene2,
-            [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
-            [SCENES.VP_CLINICAL]: AnimatedTabletScene4,
-            [SCENES.VP_FAMILY]: AnimatedTabletScene5,
+            // Removed references to non-existent scenes:
+            // [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
+            // [SCENES.VP_CLINICAL]: AnimatedTabletScene4,
+            // [SCENES.VP_FAMILY]: AnimatedTabletScene5,
         }),
         []
     );
@@ -354,11 +357,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             <TabletComponent scene={scene} scrollProgress={animationProgress} />
         );
     }, [scene, animationProgress, tabletComponentsMap]);
-
-    // Toggle control panel visibility
-    const toggleControls = () => {
-        setControlsCollapsed(!controlsCollapsed);
-    };
 
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
@@ -467,12 +465,14 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             </div>
 
             {/* STANDALONE DEBUG INFO - BOTTOM CENTER */}
-            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999] bg-black/80 text-white p-3 rounded-md shadow-lg text-xs font-mono">
-                <div>
-                    Scene: {scene.title || "None"} (Index: {index})
+            {showDebugInfo && (
+                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999] bg-black/80 text-white p-3 rounded-md shadow-lg text-xs font-mono">
+                    <div>
+                        Scene: {scene.title || "None"} (Index: {index})
+                    </div>
+                    <div>Scroll%: {Math.round(subScrollProgress * 100)}%</div>
                 </div>
-                <div>Scroll%: {Math.round(subScrollProgress * 100)}%</div>
-            </div>
+            )}
         </div>
     );
 };
