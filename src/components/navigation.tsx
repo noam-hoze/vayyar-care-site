@@ -1,13 +1,42 @@
 "use client"; // Add this for useState
-import React, { useState } from "react"; // Import useState
+import React, { useState, useEffect, useRef } from "react"; // Import useEffect, useRef
 import Link from "next/link"; // Changed from react-router-dom
 
 export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu visibility
+    const menuButtonRef = useRef<HTMLButtonElement>(null); // Ref for the menu button
+    const menuPanelRef = useRef<HTMLDivElement>(null); // Ref for the menu panel
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    // Effect to handle clicks outside the menu
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            // Check if menu is open and refs are valid
+            if (
+                isMenuOpen &&
+                menuButtonRef.current &&
+                menuPanelRef.current &&
+                // Check if click is outside the button
+                !menuButtonRef.current.contains(event.target as Node) &&
+                // Check if click is outside the panel
+                !menuPanelRef.current.contains(event.target as Node)
+            ) {
+                setIsMenuOpen(false); // Close the menu
+            }
+        }
+
+        // Add event listener on mount
+        document.addEventListener("mousedown", handleClickOutside);
+        // Cleanup event listener on unmount
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+        // Rerun effect if isMenuOpen changes (optional, but can be useful)
+        // Using empty array [] ensures listener is added/removed only on mount/unmount
+    }, [isMenuOpen]); // Dependency includes isMenuOpen to ensure check is always correct
 
     return (
         // Make nav relative to position the absolute menu
@@ -53,24 +82,54 @@ export default function NavBar() {
 
                         {/* Menu Toggle Button - Now Text */}
                         <button
+                            ref={menuButtonRef} // Assign ref to the button
                             onClick={toggleMenu}
                             className={`
+                                group relative overflow-hidden
                                 ${
                                     isMenuOpen
                                         ? "bg-white"
                                         : "bg-[#e4e6ef] hover:bg-white"
                                 }
-                                text-black px-4 py-2 rounded-full text-sm font-medium focus:outline-none transition duration-150 ease-in-out uppercase cursor-pointer min-w-[100px]
+                                text-black pl-4 pr-4 py-2
+                                rounded-full text-sm font-medium 
+                                focus:outline-none transition duration-150 ease-in-out 
+                                uppercase cursor-pointer min-w-[80px]
                             `}
                             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                         >
-                            {isMenuOpen ? "Close" : "Menu"}
+                            {/* Text Span - Transitions transform */}
+                            <span
+                                className={`inline-block transition-all duration-300 ease-in-out transform ${
+                                    // If menu open, apply shift directly. If closed, apply shift only on hover.
+                                    isMenuOpen
+                                        ? "-translate-x-2"
+                                        : "group-hover:-translate-x-2"
+                                }`}
+                            >
+                                {isMenuOpen ? "Close" : "Menu"}
+                            </span>
+                            {/* Vayyar Logo Image - Appears on Hover, Slides in from right */}
+                            <img
+                                src="/images/vayyar-logo-black.png"
+                                alt="Vayyar Logo"
+                                className={`absolute right-1 top-1/2 transform -translate-y-1/2 
+                                           w-3 h-3
+                                           transition-all duration-300 ease-in-out
+                                           ${
+                                               isMenuOpen
+                                                   ? "opacity-100 translate-x-0 -rotate-90"
+                                                   : "opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0 rotate-0"
+                                           }
+                                           `}
+                            />
                         </button>
                     </div>
                 </div>
 
                 {/* Mobile Menu Panel - Now inside the max-w container */}
                 <div
+                    ref={menuPanelRef} // Assign ref to the panel
                     className={`
                         absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg p-5 z-[60] mt-2 mr-2
                         transform transition-all duration-300 ease-in-out
