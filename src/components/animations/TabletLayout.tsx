@@ -171,7 +171,7 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
         // This provides more time to simulate the nurse taking care of the patient
         // Alert appears at 75% and resolves closer to the transition
         if (
-            sceneId === SCENES.FALL_CHART &&
+            sceneId === SCENES.FALL_EVENT &&
             scrollProgress >= 83 &&
             scrollProgress <= 84 &&
             !alertResolved
@@ -266,9 +266,9 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
         const sceneId =
             typeof scene === "object" && scene !== null ? scene.scene : scene;
 
-        // Show the fall alert in the FALL_CHART scene when scrollProgress is >= 75
+        // Show the fall alert in the FALL_EVENT scene when scrollProgress is >= 75
         const showFallAlert =
-            sceneId === SCENES.FALL_CHART && scrollProgress >= 75;
+            sceneId === SCENES.FALL_EVENT && scrollProgress >= 75;
 
         if (!showFallAlert) return null;
 

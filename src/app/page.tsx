@@ -42,7 +42,7 @@ export default function HomePage() {
             const currentSubScroll =
                 (window.scrollY - sceneStartY) / windowHeight;
 
-            //const isFallChartScene = currentSceneIndex === SCENES.FALL_CHART;
+            //const isFallChartScene = currentSceneIndex === SCENES.FALL_EVENT;
             const isVpFamilyScene = currentSceneIndex === SCENES.VP_FAMILY;
             let speedMultiplier = 0.1;
 

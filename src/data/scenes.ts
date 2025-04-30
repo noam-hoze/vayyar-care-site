@@ -14,7 +14,7 @@ export const scenes = [
         ],
     },
     {
-        scene: SCENES.FALL_CHART,
+        scene: SCENES.FALL_EVENT,
         title: "Fall event",
         description: "Personal assistant, retrieving data in seconds!",
         showUpAt: 0,

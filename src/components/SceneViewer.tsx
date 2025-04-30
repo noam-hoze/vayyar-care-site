@@ -335,7 +335,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     const tabletComponentsMap = useMemo(
         () => ({
             [SCENES.MORNING_SHIFT]: AnimatedTabletScene1,
-            [SCENES.FALL_CHART]: AnimatedTabletScene2,
+            [SCENES.FALL_EVENT]: AnimatedTabletScene2,
             [SCENES.DOCUMENT_EVENT]: AnimatedTabletScene3,
             [SCENES.VP_CLINICAL]: AnimatedTabletScene4,
             [SCENES.VP_FAMILY]: AnimatedTabletScene5,
