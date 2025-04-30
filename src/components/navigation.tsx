@@ -168,7 +168,7 @@ export default function NavBar() {
                                 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
                             <span className="inline-block uppercase">
-                                About Us
+                                Mission
                             </span>
                         </Link>
                     </div>
