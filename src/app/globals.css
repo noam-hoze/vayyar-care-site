@@ -45,3 +45,13 @@ body {
 .logo-carousel-container:hover .animate-scroll {
   animation-play-state: paused;
 }
+
+/* Page Fade-In Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.page-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
