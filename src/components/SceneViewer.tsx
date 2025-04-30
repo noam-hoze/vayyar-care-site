@@ -56,6 +56,12 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
 
+    // State to track title visibility for animation
+    const [isTitleVisible, setIsTitleVisible] = useState(false);
+
+    // State to track when the wipe animation should trigger
+    const [shouldWipe, setShouldWipe] = useState(false);
+
     // Load video source from localStorage on client-side mount
     useEffect(() => {
         let initialSrc = defaultConfig.videoSrc; // Start with default
@@ -118,6 +124,24 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             setExtraDescriptionText("");
         }
     }, [scene, subScrollProgress]);
+
+    // Determine title visibility and wipe trigger based on scroll
+    useEffect(() => {
+        const currentPercentage = subScrollProgress * 100;
+        const showAt = scene.showUpAt ?? 0;
+        const disappearAt = scene.disappearAt ?? 100;
+        const wipeAt = scene.wipeStartAt ?? showAt; // Default wipe start to showUpAt
+
+        setIsTitleVisible(
+            currentPercentage >= showAt && currentPercentage < disappearAt
+        );
+        setShouldWipe(currentPercentage >= wipeAt); // Set wipe based on wipeAt percentage
+    }, [
+        subScrollProgress,
+        scene.showUpAt,
+        scene.disappearAt,
+        scene.wipeStartAt,
+    ]);
 
     // Set up video scroll control
     useEffect(() => {
@@ -358,6 +382,41 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         );
     }, [scene, animationProgress, tabletComponentsMap]);
 
+    // Helper function to render title with specific word highlighted and animated
+    const renderHighlightedTitle = (
+        title: string | undefined,
+        shouldAnimateWipe: boolean
+    ) => {
+        if (!title) return null;
+        const parts = title.split("VayyarCare");
+        if (parts.length !== 2) {
+            return title;
+        }
+        return (
+            <>
+                {parts[0]}
+                {/* Outer span establishes relative positioning and contains black text implicitly */}
+                <span className="relative inline-block">
+                    {/* Black text underneath (rendered by the outer span's content) */}
+                    VayyarCare
+                    {/* Absolutely positioned blue overlay span */}
+                    <span
+                        className={`
+                            absolute top-0 left-0 h-full 
+                            text-blue-600 
+                            overflow-hidden whitespace-nowrap 
+                            transition-[width] duration-700 ease-in-out
+                            ${shouldAnimateWipe ? "w-full" : "w-0"}
+                        `}
+                    >
+                        VayyarCare {/* Blue text inside the clipped overlay */}
+                    </span>
+                </span>
+                {parts[1]}
+            </>
+        );
+    };
+
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
             {/* Fullscreen Video Background */}
@@ -383,31 +442,16 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     className={`scene-description-container mb-4 
                                 transition-all duration-1000 ease-in-out 
                                 ${
-                                    // Determine visibility and position based on scroll progress
-                                    (() => {
-                                        const currentPercentage =
-                                            subScrollProgress * 100;
-                                        const showAt = scene.showUpAt ?? 0;
-                                        const disappearAt =
-                                            scene.disappearAt ?? 100;
-
-                                        if (
-                                            currentPercentage >= showAt &&
-                                            currentPercentage < disappearAt
-                                        ) {
-                                            // State: Visible and in position
-                                            return "opacity-100 translate-y-0";
-                                        } else {
-                                            // State: Hidden and slightly offset
-                                            return "opacity-0 translate-y-3";
-                                        }
-                                    })()
+                                    // Determine visibility and position based on isTitleVisible state
+                                    isTitleVisible // Use the state variable here
+                                        ? "opacity-100 translate-y-0" // State: Visible and in position
+                                        : "opacity-0 translate-y-3" // State: Hidden and slightly offset
                                 }`}
                 >
                     {/* Title - Larger and Bold */}
                     {scene.title && (
                         <h2 className="text-4xl font-semibold mb-3 text-black">
-                            {scene.title}
+                            {renderHighlightedTitle(scene.title, shouldWipe)}
                         </h2>
                     )}
                     {/* Description - Smaller */}

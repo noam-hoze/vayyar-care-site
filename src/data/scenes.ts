@@ -19,7 +19,8 @@ export const scenes = [
         title: "You asked. VayyarCare answered.",
         description: "Falls, mobility, bathroom behavior — instantly surfaced",
         showUpAt: 32,
-        disappearAt: 70,
+        disappearAt: 80,
+        wipeStartAt: 40,
         cta: { text: "TRY NOW", link: "/", showUpAt: 50 },
     },
     {
@@ -28,7 +29,7 @@ export const scenes = [
         description:
             "Quick, precise information — so you can act without hesitation.",
         showUpAt: 22,
-        disappearAt: 67,
+        disappearAt: 77,
         cta: { text: "SEE IT IN ACTION", link: "/" },
     },
     // {
