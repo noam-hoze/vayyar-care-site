@@ -143,31 +143,59 @@ export default function NavBar() {
                     <div className="flex flex-col space-y-4">
                         <Link
                             href="/clinical"
-                            className="text-gray-700 hover:text-black block px-3 py-2 rounded-md text-base font-medium"
+                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
                             onClick={toggleMenu}
                         >
-                            Clinical
+                            <img
+                                src="/images/vayyar-logo-dark-blue.png"
+                                alt=""
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                            />
+                            <span className="inline-block uppercase">
+                                Clinical
+                            </span>
                         </Link>
                         <Link
                             href="/executive"
-                            className="text-gray-700 hover:text-black block px-3 py-2 rounded-md text-base font-medium"
+                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
                             onClick={toggleMenu}
                         >
-                            Executive
+                            <img
+                                src="/images/vayyar-logo-dark-blue.png"
+                                alt=""
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                            />
+                            <span className="inline-block uppercase">
+                                Executive
+                            </span>
                         </Link>
                         <Link
                             href="/customers"
-                            className="text-gray-700 hover:text-black block px-3 py-2 rounded-md text-base font-medium"
+                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
                             onClick={toggleMenu}
                         >
-                            Customers
+                            <img
+                                src="/images/vayyar-logo-dark-blue.png"
+                                alt=""
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                            />
+                            <span className="inline-block uppercase">
+                                Customers
+                            </span>
                         </Link>
                         <Link
                             href="/about-us"
-                            className="text-gray-700 hover:text-black block px-3 py-2 rounded-md text-base font-medium"
+                            className="group relative overflow-hidden text-gray-700 hover:text-blue-700 block pl-3 pr-6 py-2 rounded-md text-base font-medium transition-all duration-200 ease-out hover:scale-[1.02]"
                             onClick={toggleMenu}
                         >
-                            About Us
+                            <img
+                                src="/images/vayyar-logo-dark-blue.png"
+                                alt=""
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-0"
+                            />
+                            <span className="inline-block uppercase">
+                                About Us
+                            </span>
                         </Link>
                     </div>
                 </div>
