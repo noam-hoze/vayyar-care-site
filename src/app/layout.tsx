@@ -26,6 +26,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+        <head>
+            <title>Vayyar Care</title>
+            <meta name="robots" content="noindex, nofollow" />
+        </head>
             <body
                 className={`${inter.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white`}
             >

@@ -2830,7 +2830,7 @@ code {
 /* Clinical Page Hero Styles */
 /* 
 .clinical-hero-bg {
-  background-image: url('/images/clinical/clinical-hero.jpg'); // Corrected path based on user feedback
+  background-image: url('/care/images/clinical/clinical-hero.jpg'); // Corrected path based on user feedback
   background-size: cover;
   background-position: center;
 }

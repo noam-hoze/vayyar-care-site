@@ -14,7 +14,7 @@ const VideoItem: React.FC<VideoItemProps> = ({
     videoFileName,
     onPlay,
 }) => {
-    const thumbnailPath = `/videos/${thumbnailName}`;
+    const thumbnailPath = `${process.env.NEXT_PUBLIC_BASE_PATH}/videos/${thumbnailName}`;
     const fullVideoUrl = `https://firebasestorage.googleapis.com/v0/b/walabothome-app-cloud.appspot.com/o/testimonials%2F${videoFileName}?alt=media`;
 
     return (

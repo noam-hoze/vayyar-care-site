@@ -29,6 +29,8 @@ export default function NavBar() {
         }
     };
 
+    const darkBlueLogo = `${process.env.NEXT_PUBLIC_BASE_PATH}/images/vayyar-logo-dark-blue.png`;
+
     return (
         // Make nav relative to position the absolute menu
         <nav className="bg-[#f0f1fa] shadow-md relative">
@@ -42,7 +44,7 @@ export default function NavBar() {
                             {/* Replace text with image */}
                             <img
                                 className="h-8 w-auto" /* Adjust height/width as needed */
-                                src="/images/vayyar-logo-text.png"
+                                src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/vayyar-logo-text.png`}
                                 alt="Vayyar Logo"
                             />
                         </Link>
@@ -60,7 +62,7 @@ export default function NavBar() {
                             {/* Arrow Icon - Absolutely positioned, transitions opacity and transform */}
                             <span className="absolute left-2 inline-flex items-center transition-all duration-300 ease-in-out opacity-0 transform -translate-x-5 group-hover:opacity-100 group-hover:translate-x-0">
                                 <img
-                                    src="/images/vayyar-logo-white.png"
+                                    src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/vayyar-logo-white.png`}
                                     alt="Arrow"
                                     className="w-3 h-3 rotate-180"
                                 />
@@ -121,7 +123,7 @@ export default function NavBar() {
                             onClick={() => setIsMenuOpen(false)}
                         >
                             <img
-                                src="/images/vayyar-logo-dark-blue.png"
+                                src={darkBlueLogo}
                                 alt=""
                                 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
@@ -135,7 +137,7 @@ export default function NavBar() {
                             onClick={() => setIsMenuOpen(false)}
                         >
                             <img
-                                src="/images/vayyar-logo-dark-blue.png"
+                                src={darkBlueLogo}
                                 alt=""
                                 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
@@ -149,7 +151,7 @@ export default function NavBar() {
                             onClick={() => setIsMenuOpen(false)}
                         >
                             <img
-                                src="/images/vayyar-logo-dark-blue.png"
+                                src={darkBlueLogo}
                                 alt=""
                                 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />
@@ -163,7 +165,7 @@ export default function NavBar() {
                             onClick={() => setIsMenuOpen(false)}
                         >
                             <img
-                                src="/images/vayyar-logo-dark-blue.png"
+                                src={darkBlueLogo}
                                 alt=""
                                 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 rotate-180 transition-all duration-300 ease-in-out opacity-0 translate-x-5 group-hover:opacity-100 group-hover:translate-x-4"
                             />

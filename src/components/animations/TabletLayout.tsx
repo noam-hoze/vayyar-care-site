@@ -362,11 +362,13 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
                     {/* Header */}
                     <div className="tablet-layout-header">
                         <div className="tablet-layout-header-logo">
-                            <img src="/images/vayyar-logo.png" alt="Vayyar" />
+                            <img src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/vayyar-logo.png`}
+                                 alt="Vayyar" />
                         </div>
                         <div className="tablet-layout-header-info">
                             <div className="tablet-layout-header-avatar">
-                                <img src="/images/nurse.jpg" alt="Nurse" />
+                                <img src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/nurse.jpg`}
+                                     alt="Nurse" />
                             </div>
                         </div>
                     </div>
@@ -558,7 +560,7 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
                             }}
                         >
                             <img
-                                src="/images/vayyar-logo-white.png"
+                                src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/vayyar-logo-white.png`}
                                 alt="Vayyar"
                                 style={{
                                     width: "60%",

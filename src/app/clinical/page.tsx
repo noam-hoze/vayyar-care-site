@@ -58,7 +58,8 @@ export default function Clinical() {
             {/* Section 1 (Pinned) - Hero */}
             <section
                 ref={section1Ref}
-                className="h-screen relative flex flex-col justify-center items-center px-6 text-center bg-[url('/images/clinical/clinical-hero.jpg')] bg-cover bg-center z-0"
+                style={{backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH}/images/clinical/clinical-hero.jpg)`}}
+                className={`h-screen relative flex flex-col justify-center items-center px-6 text-center bg-cover bg-center z-0`}
             >
                 <div className="relative z-10">
                     <h1 className="text-5xl font-bold mb-4 text-white text-shadow-lg">

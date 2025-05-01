@@ -12,42 +12,42 @@ const LogoCarousel: React.FC = () => {
                     {/* Original set of logos using Next/Image (Scaled 1.5x) */}
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/anthropos.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/anthropos.png`}
                         alt="Anthropos Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/appelo.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/appelo.png`}
                         alt="Appello Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/arquella.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/arquella.png`}
                         alt="Arquella Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/Austeco.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/Austeco.png`}
                         alt="Austco Healthcare Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/blessen.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/blessen.png`}
                         alt="Blesen Logo"
                         width={150}
                         height={60}
                     />
                     {/* <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/dry.png"
+                        src="/care/images/logos/dry.png"
                         alt="Dryfemount Care Logo"
                         width={150}
                         height={60}
@@ -56,46 +56,46 @@ const LogoCarousel: React.FC = () => {
                     {/* Duplicated set for smooth looping (Scaled 1.5x) */}
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/anthropos.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/anthropos.png`}
                         alt="Anthropos Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/appelo.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/appelo.png`}
                         alt="Appello Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/arquella.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/arquella.png`}
                         alt="Arquella Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/Austeco.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/Austeco.png`}
                         alt="Austco Healthcare Logo"
                         width={150}
                         height={60}
                     />
                     <Image
                         className="flex-shrink-0 object-contain"
-                        src="/images/logos/blessen.png"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/logos/blessen.png`}
                         alt="Blesen Logo"
                         width={150}
                         height={60}
                     />
-                    <Image
-                        className="flex-shrink-0 object-contain"
-                        src="/images/logos/dry.png"
-                        alt="Dryfemount Care Logo"
-                        width={150}
-                        height={60}
-                    />
+                    {/*<Image*/}
+                    {/*    className="flex-shrink-0 object-contain"*/}
+                    {/*    src="/care/images/logos/dry.png"*/}
+                    {/*    alt="Dryfemount Care Logo"*/}
+                    {/*    width={150}*/}
+                    {/*    height={60}*/}
+                    {/*/>*/}
                 </div>
             </div>
         </div>
