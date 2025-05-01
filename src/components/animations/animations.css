@@ -387,6 +387,7 @@
   border-radius: 20px;
   font-size: 14px;
   outline: none;
+  color: black;
 }
 
 .tablet-layout-input-button {
@@ -1067,4 +1068,19 @@
 
 .animate-subtle-pulse {
   animation: subtlePulse 2.5s infinite ease-in-out;
+}
+
+/* Bouncing Arrow Hint */
+@keyframes bounceUpAndDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px); /* Corrected: moves visually downward arrow UP */
+  }
+}
+
+.send-hint-arrow {
+  /* Position is set via inline style in component */
+  animation: bounceUpAndDown 1.2s infinite ease-in-out;
 } 

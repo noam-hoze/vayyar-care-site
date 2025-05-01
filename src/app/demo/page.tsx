@@ -2,9 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import TabletLayout from "@/components/animations/TabletLayout"; // Import the main layout
-import InputBar from "@/components/mobile/InputBar"; // Import our controlled input bar
-import { Scene } from "@/types"; // Import Scene type
+import DemoTabletLayout from "@/components/animations/DemoTabletLayout"; // Import the NEW layout
+import { Scene as AppScene } from "@/types"; // Import Scene type
 import { SCENES } from "@/data/sceneRegistry"; // Import SCENES if needed for dummy scene
 // We might need styles from animations.css if TabletLayout relies on them heavily
 import "@/components/animations/animations.css";
@@ -19,7 +18,7 @@ interface ChatMessage {
 }
 
 // Dummy scene data for TabletLayout props
-const dummyScene: Scene = {
+const dummyScene: AppScene & { [key: string]: unknown } = {
     scene: SCENES.MORNING_SHIFT, // Use an existing scene ID
     title: "VayyarCare Demo",
     subtitle: "Live Chat",
@@ -31,6 +30,11 @@ export default function DemoPage() {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [isTypingSuggestion, setIsTypingSuggestion] = useState(false); // State for typewriter effect
+    // --- State for send button hint ---
+    const [showSendButtonHint, setShowSendButtonHint] = useState(false);
+    const [firstSuggestionCompleted, setFirstSuggestionCompleted] =
+        useState(false);
+    // --- End State for send button hint ---
     const chatAreaRef = useRef<HTMLDivElement>(null); // Ref for the scrollable chat area
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref to clear existing typing animation
 
@@ -63,6 +67,12 @@ export default function DemoPage() {
         }
     };
 
+    // --- Function to hide hint ---
+    const handleHideHint = () => {
+        setShowSendButtonHint(false);
+    };
+    // --- End Function to hide hint ---
+
     // Handle sending a message
     const handleSendMessage = () => {
         const trimmedInput = inputValue.trim();
@@ -86,33 +96,35 @@ export default function DemoPage() {
         }, 800);
 
         setInputValue("");
+        handleHideHint(); // Hide hint when message is sent
     };
 
     // Handle clicking a suggestion
     const handleSuggestionClick = (questionText: string) => {
-        if (isTypingSuggestion) return; // Prevent multiple clicks during typing
+        if (isTypingSuggestion) return;
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
-        // Clear existing typing animation if any
-        if (typingTimeoutRef.current) {
-            clearTimeout(typingTimeoutRef.current);
-        }
-
+        setShowSendButtonHint(false); // Hide hint if a new suggestion is clicked during animation
         setIsTypingSuggestion(true);
-        setInputValue(""); // Clear input immediately
+        setInputValue("");
 
         let index = 0;
         const typeCharacter = () => {
             if (index < questionText.length) {
-                setInputValue((prev) => prev + questionText.charAt(index));
+                const currentText = questionText.substring(0, index + 1);
+                setInputValue(currentText);
                 index++;
-                typingTimeoutRef.current = setTimeout(typeCharacter, 50); // Adjust typing speed (ms)
+                typingTimeoutRef.current = setTimeout(typeCharacter, 50);
             } else {
-                setIsTypingSuggestion(false); // Typing finished
+                setIsTypingSuggestion(false);
                 typingTimeoutRef.current = null;
+                if (!firstSuggestionCompleted) {
+                    setShowSendButtonHint(true);
+                    setFirstSuggestionCompleted(true);
+                }
             }
         };
-
-        typeCharacter(); // Start typing
+        typeCharacter();
     };
 
     return (
@@ -143,54 +155,53 @@ export default function DemoPage() {
 
             {/* Tablet Container - Centered horizontally, responsive height */}
             <div className="relative w-[375px] h-[85vh] max-h-[750px] flex-shrink-0">
-                <TabletLayout
+                <DemoTabletLayout
                     scene={dummyScene}
                     showMetrics={true}
-                    showChatInput={false}
                     scrollProgress={0}
-                    queryStartThreshold={101}
                     queryCompleteThreshold={102}
                     responseStartThreshold={103}
                     transitionStartThreshold={104}
                     contentTransitionThreshold={105}
+                    inputValue={inputValue}
+                    onInputChange={(e) => {
+                        setInputValue(e.target.value);
+                        handleHideHint(); // Hide hint on manual input change
+                    }}
+                    onSend={handleSendMessage}
+                    inputPlaceholder="Ask VayyarCare..."
+                    showSendButtonHint={showSendButtonHint}
+                    onHideHint={handleHideHint} // Pass the hide handler
                 >
-                    <div className="flex flex-col h-full">
-                        <div
-                            ref={chatAreaRef}
-                            className="flex-grow overflow-y-auto p-3 space-y-3"
-                        >
-                            {messages.map((msg) => (
-                                <motion.div
-                                    key={msg.id}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                    className={`flex ${
+                    <div
+                        ref={chatAreaRef}
+                        className="flex-grow overflow-y-auto p-3 space-y-3"
+                    >
+                        {messages.map((msg) => (
+                            <motion.div
+                                key={msg.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className={`flex ${
+                                    msg.sender === "user"
+                                        ? "justify-end"
+                                        : "justify-start"
+                                }`}
+                            >
+                                <div
+                                    className={`max-w-[75%] p-2 px-3 rounded-lg text-sm ${
                                         msg.sender === "user"
-                                            ? "justify-end"
-                                            : "justify-start"
+                                            ? "bg-blue-500 text-white"
+                                            : "bg-gray-200 text-gray-800"
                                     }`}
                                 >
-                                    <div
-                                        className={`max-w-[75%] p-2 px-3 rounded-lg text-sm ${
-                                            msg.sender === "user"
-                                                ? "bg-blue-500 text-white"
-                                                : "bg-gray-200 text-gray-800"
-                                        }`}
-                                    >
-                                        {msg.text}
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-
-                        <InputBar
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onSend={handleSendMessage}
-                        />
+                                    {msg.text}
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
-                </TabletLayout>
+                </DemoTabletLayout>
 
                 {/* Example Questions - Absolutely Positioned Around Tablet */}
                 {/* Parent container for staggering */}
@@ -291,10 +302,12 @@ export default function DemoPage() {
                             animationDelay: "0.9s",
                         }}
                         onClick={() =>
-                            handleSuggestionClick("Show me yesterday's summary")
+                            handleSuggestionClick(
+                                "Show me yesterday&apos;s summary"
+                            )
                         }
                     >
-                        Show me yesterday's summary
+                        Show me yesterday&apos;s summary
                     </motion.div>
                     {/* --- More Questions - Increased spacing AGAIN --- */}
                     <motion.div
