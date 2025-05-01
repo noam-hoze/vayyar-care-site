@@ -249,7 +249,7 @@ const TabletDisplay: React.FC<TabletDisplayProps> = ({ scene }) => {
                 <div style={styles.appHeader}>
                     <div style={styles.appIconContainer}>
                         <img
-                            src="/images/vayyar-logo.png"
+                            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/vayyar-logo.png`}
                             alt="Vayyar"
                             style={styles.appIcon}
                         />

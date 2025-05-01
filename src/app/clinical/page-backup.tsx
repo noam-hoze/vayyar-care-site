@@ -32,7 +32,9 @@ export default function ClinicalPage() {
     return (
         <main className="bg-white text-gray-900">
             {/* Hero Section */}
-            <section className="relative min-h-screen flex flex-col justify-center items-center px-6 text-center bg-[url('/images/clinical/clinical-hero.jpg')] bg-cover bg-center">
+            <section
+                style={{backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH}/images/clinical/clinical-hero.jpg)`}}
+                className="relative min-h-screen flex flex-col justify-center items-center px-6 text-center bg-cover bg-center">
                 {/* Removed Overlay div */}
                 {/* <div className="hero-overlay"></div> */}
 
