@@ -11,8 +11,8 @@ export const defaultConfig = {
     // Controls the smoothness of video scrubbing (higher = smoother but more delayed)
     scrubSmoothness: 1,
 
-    // Video source path
-    videoSrc: "/videos/first_scenes_converted.mp4", // Use the converted video file
+    // Video source path - added timestamp for cache busting
+    videoSrc: `/videos/first_scenes_converted.mp4?t=${Date.now()}`,
 
     // Timing configuration for each scene
     // These times should match your video timestamps
