@@ -15,6 +15,7 @@ import HowItWorksCard from "@/components/HowItWorksCard";
 import VideoItem from "@/components/VideoItem";
 import VideoModal from "@/components/VideoModal";
 import BookDemoForm from "@/components/BookDemoForm";
+import {setupHeroPin} from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -262,14 +263,4 @@ const setupHowItWorksAnimation = (
         .to(cards[0], { opacity: 1, x: 0, duration: 1 }, 0)
         .to(cards[1], { opacity: 1, x: 0, duration: 1 }, 1.2)
         .to(cards[2], { opacity: 1, x: 0, duration: 1 }, 2.4);
-};
-
-const setupHeroPin = (sectionRef: HTMLElement, container: HTMLDivElement) => {
-    ScrollTrigger.create({
-        trigger: container,
-        start: "top top",
-        end: "bottom top",
-        pin: sectionRef,
-        pinSpacing: false,
-    });
 };
