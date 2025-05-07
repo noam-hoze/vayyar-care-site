@@ -14,14 +14,6 @@ const nextConfig: NextConfig = {
         // !! WARN !!
         ignoreBuildErrors: true,
     },
-    async rewrites() {
-        return [
-            {
-                source: '/contact',
-                destination: '/',
-            },
-        ]
-    },
 };
 
 export default nextConfig;
