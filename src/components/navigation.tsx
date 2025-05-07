@@ -1,9 +1,11 @@
 "use client"; // Add this for useState
-import React, { useState, useRef } from "react"; // Removed useEffect
+import React, { useState, useRef, useEffect } from "react"; // Removed useEffect
 import Link from "next/link"; // Changed from react-router-dom
+import ContactModal from "@/components/ContactModal";
 
 export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref for hover timeout
 
     const handleMouseEnter = () => {
@@ -29,6 +31,22 @@ export default function NavBar() {
         }
     };
 
+    const openContactModal = () => {
+        setIsContactModalOpen(true);
+    };
+
+    const handleContactModalClose = () => {
+        setIsContactModalOpen(false);
+    }
+
+    useEffect(() => {
+        document.body.style.overflow = isContactModalOpen ? 'hidden' : 'auto';
+
+        return () => {
+            document.body.style.overflow = 'auto';
+        }
+    }, [isContactModalOpen]);
+
     return (
         // Make nav relative to position the absolute menu
         <nav className="bg-[#f0f1fa] shadow-md relative">
@@ -51,10 +69,8 @@ export default function NavBar() {
                     {/* Right Side - CTA and Menu Toggle */}
                     <div className="flex items-center space-x-4">
                         {/* Let's Talk Button (CTA) */}
-                        <Link
-                            // Add 'group' class for hover effects on children
-                            href="/contact" // Assuming '/contact' is the target for Let's Talk
-                            // Relative for positioning, flex center, overflow-hidden
+                        <button
+                            onClick={openContactModal}
                             className="group relative bg-black text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition duration-150 ease-in-out flex items-center justify-center overflow-hidden"
                         >
                             {/* Arrow Icon - Absolutely positioned, transitions opacity and transform */}
@@ -69,7 +85,7 @@ export default function NavBar() {
                             <span className="inline-block transition-all duration-300 ease-in-out transform group-hover:translate-x-2 uppercase">
                                 Let&apos;s Talk
                             </span>
-                        </Link>
+                        </button>
 
                         {/* Menu Toggle Button - Hover Activated */}
                         <button
@@ -174,6 +190,9 @@ export default function NavBar() {
                     </div>
                 </div>
             </div>
+            {isContactModalOpen && (
+                <ContactModal onClose={handleContactModalClose} />
+            )}
         </nav>
     );
 }

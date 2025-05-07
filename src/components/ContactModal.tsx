@@ -1,12 +1,11 @@
-"use client"; // Required for router and state
-
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
-export default function ContactPage() {
-    const router = useRouter();
-    // Basic form state (can be expanded)
+interface ContactModalProps {
+    onClose: () => void; // Function to call when the close button is clicked
+}
+
+const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -23,31 +22,24 @@ export default function ContactPage() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // TODO: Implement actual form submission logic (e.g., API call)
         console.log("Form Data Submitted:", formData);
         alert("Form submitted (check console). Implement API call.");
-        // Optionally navigate back or show success message
-        // router.back();
     };
 
     return (
-        <div className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto">
-            {/* Close Button - Circled */}
+        <div className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto" onWheel={e => e.stopPropagation()}>
             <button
-                onClick={() => router.back()}
                 className="absolute top-6 right-6 z-10 flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition cursor-pointer"
+                onClick={onClose}
                 aria-label="Close contact form"
             >
                 <XMarkIcon className="h-6 w-6" />
             </button>
-
             <div className="w-full max-w-2xl bg-white p-8 rounded-lg">
                 <h1 className="text-5xl font-bold text-center text-black mb-12">
-                    Let's Talk
+                    Let&apos;s Talk
                 </h1>
-
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Name Field */}
                     <div>
                         <label
                             htmlFor="name"
@@ -66,8 +58,6 @@ export default function ContactPage() {
                             className="block w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                     </div>
-
-                    {/* Email & Phone Fields (Side-by-side) */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label
@@ -105,8 +95,6 @@ export default function ContactPage() {
                             />
                         </div>
                     </div>
-
-                    {/* Message Field */}
                     <div>
                         <label
                             htmlFor="message"
@@ -125,8 +113,6 @@ export default function ContactPage() {
                             className="block w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm resize-none"
                         ></textarea>
                     </div>
-
-                    {/* Submit Button */}
                     <div className="flex justify-end pt-4">
                         <button
                             type="submit"
@@ -139,4 +125,6 @@ export default function ContactPage() {
             </div>
         </div>
     );
-}
+};
+
+export default ContactModal; 

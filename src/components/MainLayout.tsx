@@ -11,8 +11,8 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const pathname = usePathname(); // Get current path
-    // Determine if NavBar should be shown (hide on /contact and /demo)
-    const showNavBar = !["/contact", "/demo"].includes(pathname);
+    // Determine if NavBar should be shown (hide on /demo)
+    const showNavBar = !["/demo"].includes(pathname);
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
