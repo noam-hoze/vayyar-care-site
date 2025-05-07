@@ -27,7 +27,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto" onWheel={e => e.stopPropagation()}>
             <button
                 className="absolute top-6 right-6 z-10 flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition cursor-pointer"
                 onClick={onClose}

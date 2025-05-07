@@ -2,11 +2,8 @@
 import React, { useState, useRef, useEffect } from "react"; // Removed useEffect
 import Link from "next/link"; // Changed from react-router-dom
 import ContactModal from "@/components/ContactModal";
-import { usePathname, useRouter } from "next/navigation"; // Import new hooks
 
 export default function NavBar() {
-    const router = useRouter();
-    const pathname = usePathname(); // Use the new hook to get the current path
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref for hover timeout
@@ -36,20 +33,19 @@ export default function NavBar() {
 
     const openContactModal = () => {
         setIsContactModalOpen(true);
-        localStorage.setItem('oldPathName', pathname);
-        window.history.replaceState(null, '', '/contact');
     };
 
     const handleContactModalClose = () => {
         setIsContactModalOpen(false);
-        window.history.replaceState(null, '', localStorage.getItem('oldPathName') ?? '/');
     }
 
     useEffect(() => {
-        if (pathname === "/contact") {
-            setIsContactModalOpen(true);
+        document.body.style.overflow = isContactModalOpen ? 'hidden' : 'auto';
+
+        return () => {
+            document.body.style.overflow = 'auto';
         }
-    }, [pathname]);
+    }, [isContactModalOpen]);
 
     return (
         // Make nav relative to position the absolute menu
