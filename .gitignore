@@ -46,6 +46,7 @@ lerna-debug.log*
 # Media files (especially large ones)
 *.mp4
 !/public/videos/first_scenes_converted.mp4
+!/public/videos/output_vid.mp4
 *.avi
 *.mov
 *.wmv

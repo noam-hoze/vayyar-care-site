@@ -439,7 +439,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 w-auto max-w-[30%] z-10">
                 {/* Story box */}
                 <div
-                    className={`scene-description-container mb-4 
+                    className={`scene-description-container hidden mb-4 
                                 transition-all duration-1000 ease-in-out 
                                 ${
                                     // Determine visibility and position based on isTitleVisible state
