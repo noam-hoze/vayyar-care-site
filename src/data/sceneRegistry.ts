@@ -30,4 +30,4 @@ export function getTotalScenes() {
 }
 
 // The number of scenes we want to display in the app
-export const MAX_SCENES = 6;
+export const MAX_SCENES = 4;
