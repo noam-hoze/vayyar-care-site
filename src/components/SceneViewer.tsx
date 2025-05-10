@@ -62,6 +62,23 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State to track when the wipe animation should trigger
     const [shouldWipe, setShouldWipe] = useState(false);
 
+    // State for current time and frame
+    const [currentTime, setCurrentTime] = useState(0);
+    const [currentFrame, setCurrentFrame] = useState(0);
+    const frameRate = 30; // Assuming 30fps, adjust if your video has a different frame rate
+
+    // Function to format timecode
+    const formatTimecode = (time: number, frame: number) => {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+        const seconds = Math.floor(time % 60);
+        return `${hours.toString().padStart(2, "0")}:${minutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}:${frame
+            .toString()
+            .padStart(2, "0")}`;
+    };
+
     // Load video source from localStorage on client-side mount
     useEffect(() => {
         let initialSrc = defaultConfig.videoSrc; // Start with default
@@ -358,6 +375,22 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         }
     }, [subScrollProgress, scene, animationProgress]);
 
+    // Update timecode when video time changes
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const updateTimecode = () => {
+            const time = video.currentTime;
+            const frame = Math.floor((time % 1) * frameRate);
+            setCurrentTime(time);
+            setCurrentFrame(frame);
+        };
+
+        video.addEventListener("timeupdate", updateTimecode);
+        return () => video.removeEventListener("timeupdate", updateTimecode);
+    }, []);
+
     // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
         () => ({
@@ -434,6 +467,11 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     );
                 }}
             />
+
+            {/* Timecode Display */}
+            <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded font-mono text-sm z-20">
+                {formatTimecode(currentTime, currentFrame)}
+            </div>
 
             {/* Overlay Content - Positioned on the right */}
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 w-auto max-w-[30%] z-10">
