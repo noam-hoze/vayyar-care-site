@@ -10,6 +10,7 @@ interface VideoPlayerProps {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentTime, onTimeUpdate }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const [preloadedBlobs, setPreloadedBlobs] = useState<Map<number, string>>(new Map());
     const [currentChunk, setCurrentChunk] = useState<VideoChunk>(VIDEO_CHUNKS.chunks[0]);
     const [isVideoReady, setIsVideoReady] = useState(false);
     const lastUpdateTimeRef = useRef<number>(0);
@@ -29,10 +30,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentTime, onTimeUpdate }) 
         const video = videoRef.current;
         if (!video || !isVideoReady) return;
 
-        video.src = newChunk.path;
+        // Get the preloaded blob URL for this chunk
+        const blobUrl = preloadedBlobs.get(newChunk.id);
+        if (blobUrl) {
+            console.log(`Switching to preloaded chunk ${newChunk.id}`);
+            video.src = blobUrl;
+        } else {
+            console.log(`Switching to chunk ${newChunk.id} using original URL`);
+            video.src = newChunk.path;
+        }
         video.load();
         setCurrentChunk(newChunk);
-    }, [isVideoReady]);
+    }, [isVideoReady, preloadedBlobs]);
 
     // Initialize video element
     useEffect(() => {
@@ -65,57 +74,56 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentTime, onTimeUpdate }) 
         };
     }, []);
 
+
+
     // Function to preload all chunks once on mount
-    const preloadAllChunks = () => {
+    const preloadAllChunks = async () => {
         console.log('Starting to preload all chunks');
         
-        // Create a hidden video element for preloading
-        const preloadVideo = document.createElement('video');
-        preloadVideo.style.display = 'none';
-        
-        // Add to document temporarily
-        document.body.appendChild(preloadVideo);
-        
         // Function to load next chunk
-        const loadNextChunk = (index: number) => {
-            if (index >= VIDEO_CHUNKS.totalChunks) {
-                // Cleanup when done
-                document.body.removeChild(preloadVideo);
-                preloadVideo.remove();
+        const loadNextChunk = async (index: number) => {
+            if (index >= VIDEO_CHUNKS.chunks.length) {
                 console.log('All chunks preloaded successfully');
                 return;
             }
 
             const chunk = VIDEO_CHUNKS.chunks[index];
             console.log(`Preloading chunk ${index}: ${chunk.path}`);
-            
-            preloadVideo.src = chunk.path;
-            preloadVideo.preload = 'auto';
-            
-            // Wait for chunk to load
-            const handleCanPlay = () => {
-                console.log(`Finished loading chunk ${index}`);
-                preloadVideo.removeEventListener('canplay', handleCanPlay);
-                loadNextChunk(index + 1);
-            };
 
-            // Add error handler
-            const handleError = (e: Event) => {
-                console.error(`Error loading chunk ${index}:`, e);
-                preloadVideo.removeEventListener('error', handleError);
+            try {
+                // Fetch the video as blob
+                const response = await fetch(chunk.path);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const blob = await response.blob();
+
+                // Create blob URL
+                const blobUrl = URL.createObjectURL(blob);
+                console.log(`Created blob URL for chunk ${index}: ${blobUrl}`);
+
+                // Store the blob URL
+                setPreloadedBlobs(prev => {
+                    const newMap = new Map(prev);
+                    newMap.set(index, blobUrl);
+                    return newMap;
+                });
+
+                // Load next chunk
+                await loadNextChunk(index + 1);
+
+            } catch (error) {
+                console.error(`Failed to preload chunk ${index}:`, error);
                 // Continue with next chunk even if one fails
-                loadNextChunk(index + 1);
-            };
-
-            preloadVideo.addEventListener('canplay', handleCanPlay);
-            preloadVideo.addEventListener('error', handleError);
-            
-            preloadVideo.load();
+                await loadNextChunk(index + 1);
+            }
         };
 
         // Start loading chunks
-        loadNextChunk(0);
+        await loadNextChunk(0);
     };
+
+
 
     // Memoize the time update handler
     const handleTimeUpdate = useCallback(() => {
