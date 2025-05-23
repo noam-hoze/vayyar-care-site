@@ -82,6 +82,9 @@ These scripts are located in the `tools/` directory and are used for asset prepa
 
 Make sure you have `ffmpeg` installed and configured in your environment if you need to use these shell scripts.
 
+### Video chunking
+`ffmpeg -i output_vid.mp4 -f segment -segment_time 30 -c:v copy -c:a copy -reset_timestamps 1 -map 0 output-%02d.mp4`
+
 ## Contributing
 
 Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit bug reports, feature requests, and pull requests, including our issue title and commit message conventions.

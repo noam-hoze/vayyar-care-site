@@ -3,6 +3,60 @@ import { SCENES, MAX_SCENES } from "../data/sceneRegistry";
 // Storage key for local storage
 export const STORAGE_KEY = "vayyar_custom_video";
 
+// Video chunk configuration
+export const VIDEO_CHUNKS = {
+    get totalChunks() {
+        return this.chunks.length;
+    },
+    get totalDuration() {
+        return this.chunks.reduce((total, chunk) => total + chunk.duration, 0);
+    },
+    chunks: [
+        {
+            id: 0,
+            path: '/videos/output-00.mp4',
+            duration: 30,
+            startTime: 0
+        },
+        {
+            id: 1,
+            path: '/videos/output-01.mp4',
+            duration: 30,
+            startTime: 30
+        },
+        {
+            id: 2,
+            path: '/videos/output-02.mp4',
+            duration: 30,
+            startTime: 60
+        },
+        {
+            id: 3,
+            path: '/videos/output-03.mp4',
+            duration: 30,
+            startTime: 90
+        },
+        {
+            id: 4,
+            path: '/videos/output-04.mp4',
+            duration: 30,
+            startTime: 120
+        },
+        {
+            id: 5,
+            path: '/videos/output-05.mp4',
+            duration: 30,
+            startTime: 150
+        },
+        {
+            id: 6,
+            path: '/videos/output-06.mp4',
+            duration: 2,
+            startTime: 180
+        },
+    ]
+};
+
 // Default video configuration
 export const defaultConfig = {
     // How many viewport heights to scroll through
@@ -12,7 +66,7 @@ export const defaultConfig = {
     scrubSmoothness: 1,
 
     // Video source path - added timestamp for cache busting
-    videoSrc: `/videos/output_vid_960_new.mp4?t=${Date.now()}`,
+    videoSrc: VIDEO_CHUNKS.chunks[0].path + `?t=${Date.now()}`,
 
     // Timing configuration for each scene
     // These times should match your video timestamps
@@ -67,11 +121,20 @@ export interface SceneTiming {
     scrollingPercentage?: Record<number, { videoTime: number }>;
 }
 
+// Interface for video chunk
+export interface VideoChunk {
+    id: number;
+    path: string;
+    duration: number;
+    startTime: number;
+}
+
 // Interface for the entire video configuration
 export interface VideoConfig {
     videoSrc: string | null;
     sceneTiming: SceneTiming[];
     scrubSmoothness?: number;
+    currentChunk?: VideoChunk;
 }
 
 // Function to update the video source

@@ -47,6 +47,7 @@ lerna-debug.log*
 *.mp4
 !/public/videos/output_vid.mp4
 !/public/videos/output_vid_960.mp4
+!/public/videos/output-*.mp4
 *.avi
 *.mov
 *.wmv

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
@@ -11,12 +11,12 @@ import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 import {
     videoConfig,
     SceneTiming,
-    STORAGE_KEY,
-    defaultConfig,
+    VIDEO_CHUNKS,
 } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
 import { Scene } from "@/types";
 import Link from "next/link";
+import VideoPlayer from './VideoPlayer';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -47,12 +47,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State to control scene card animation
     const [animateCard, setAnimateCard] = useState(true);
 
-    // Video reference
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    // State for the video source URL, initialized to null for SSR safety
-    const [currentVideoSrc, setCurrentVideoSrc] = useState<string | null>(null);
-
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
 
@@ -66,6 +60,16 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     const [currentTime, setCurrentTime] = useState(0);
     const [currentFrame, setCurrentFrame] = useState(0);
     const frameRate = 30; // Assuming 30fps, adjust if your video has a different frame rate
+    const lastSetTimeRef = useRef<number>(0);
+
+    // Memoize the time update handler
+    const handleTimeUpdate = useCallback((time: number) => {
+        // Only update if the time has changed significantly (more than 0.1 seconds)
+        if (Math.abs(time - lastSetTimeRef.current) > 0.1) {
+            lastSetTimeRef.current = time;
+            setCurrentTime(time);
+        }
+    }, []);
 
     // Function to format timecode
     const formatTimecode = (time: number, frame: number) => {
@@ -81,33 +85,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // Load video source from localStorage on client-side mount
     useEffect(() => {
-        let initialSrc = defaultConfig.videoSrc; // Start with default
-        // Check if running in browser
-        if (typeof window !== "undefined") {
-            try {
-                const savedVideo = localStorage.getItem(STORAGE_KEY);
-                if (savedVideo) {
-                    // Validate if it's a Firebase URL (or your expected format)
-                    if (
-                        savedVideo.startsWith(
-                            "https://firebasestorage.googleapis.com"
-                        )
-                    ) {
-                        initialSrc = savedVideo;
-                    } else {
-                        // Clear invalid entry if needed
-                        localStorage.removeItem(STORAGE_KEY);
-                    }
-                }
-            } catch (error) {
-                console.error(
-                    "Error loading saved video in SceneViewer:",
-                    error
-                );
-            }
-        }
-        // Set state after checking. Use null if the resulting src is empty.
-        setCurrentVideoSrc(initialSrc || null);
+        setCurrentTime(0);
     }, []); // Empty dependency array runs only once on mount
 
     // Handle extra descriptions that show at specific scroll percentages
@@ -162,187 +140,50 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // Set up video scroll control
     useEffect(() => {
-        const video = videoRef.current;
-        // Ensure video exists AND the source is loaded before manipulating time
-        if (!video || !currentVideoSrc) return;
+        const sceneTimings = videoConfig.sceneTiming;
+        if (!sceneTimings) return;
 
-        // Debug current scene
-        console.log("Current scene:", scene.scene, "Scene index:", index);
+        console.log("Current scroll progress:", subScrollProgress);
+        console.log("Current scene index:", index);
 
-        // Function to update video time based on scroll progress
-        const updateVideoTime = () => {
-            const sceneTimings = videoConfig.sceneTiming;
-            if (!sceneTimings || !video.duration || isNaN(video.duration))
-                return; // Add NaN check
+        const currentSceneTiming = sceneTimings.find(
+            (t) => t.scene === index
+        ) as SceneTiming | undefined;
 
-            console.log("Current scroll progress:", subScrollProgress);
-            console.log("Current scene index:", index);
+        if (!currentSceneTiming) {
+            console.warn("Scene timing not found for index:", index);
+            return;
+        }
 
-            const currentSceneTiming = sceneTimings.find(
-                (t) => t.scene === index
-            ) as SceneTiming | undefined; // Cast result to SceneTiming | undefined
+        // Get the next scene timing for interpolation
+        const nextSceneIndex = index + 1;
+        const nextSceneTiming = sceneTimings.find(
+            (t) => t.scene === nextSceneIndex
+        ) as SceneTiming | undefined;
 
-            if (!currentSceneTiming) {
-                console.warn("Scene timing not found for index:", index);
-                return;
-            }
+        let videoTime: number;
+        const startTime = currentSceneTiming.videoTime ?? 0;
 
-            // Check if scrollingPercentage exists BEFORE trying to use it
-            if (currentSceneTiming.scrollingPercentage) {
-                const scrollPercentage = Math.floor(subScrollProgress * 100);
-                const percentagePoints = Object.keys(
-                    currentSceneTiming.scrollingPercentage // Safe to access now
-                )
-                    .map(Number)
-                    .sort((a, b) => a - b);
+        if (nextSceneTiming) {
+            // If we have a next scene, interpolate between current and next scene times
+            const nextSceneTime = nextSceneTiming.videoTime ?? startTime;
+            videoTime = startTime + (nextSceneTime - startTime) * subScrollProgress;
+        } else {
+            // If this is the last scene, use the total video duration
+            videoTime = startTime + (VIDEO_CHUNKS.totalDuration - startTime) * subScrollProgress;
+        }
 
-                let lowerPoint = percentagePoints[0];
-                let upperPoint = percentagePoints[percentagePoints.length - 1];
+        // Ensure videoTime is within bounds
+        videoTime = Math.max(0, Math.min(VIDEO_CHUNKS.totalDuration, videoTime));
+        
+        console.log("Setting video time to:", videoTime, "based on scroll progress:", subScrollProgress);
+        setCurrentTime(videoTime);
+    }, [index, subScrollProgress]);
 
-                for (let i = 0; i < percentagePoints.length; i++) {
-                    if (scrollPercentage >= percentagePoints[i]) {
-                        lowerPoint = percentagePoints[i];
-                    }
-                    if (scrollPercentage <= percentagePoints[i]) {
-                        upperPoint = percentagePoints[i];
-                        break;
-                    }
-                }
-
-                // Access safely using the check above and type assertion
-                const percentageData = currentSceneTiming.scrollingPercentage; // Assign for clarity
-                const lowerData =
-                    percentageData?.[lowerPoint as keyof typeof percentageData];
-                const upperData =
-                    percentageData?.[upperPoint as keyof typeof percentageData];
-
-                if (!lowerData || !upperData) {
-                    console.warn(
-                        "Invalid percentage points data for interpolation:",
-                        lowerPoint,
-                        upperPoint,
-                        percentageData
-                    );
-                    // Fallback to simple videoTime if percentage data is bad
-                    video.currentTime = currentSceneTiming.videoTime ?? 0;
-                    return;
-                }
-
-                const lowerTime = lowerData.videoTime;
-                const upperTime = upperData.videoTime;
-
-                let factor = 0;
-                if (upperPoint > lowerPoint) {
-                    factor =
-                        (scrollPercentage - lowerPoint) /
-                        (upperPoint - lowerPoint);
-                }
-                factor = Math.max(0, Math.min(1, factor)); // Ensure factor is between 0 and 1
-
-                const videoTime = lowerTime + (upperTime - lowerTime) * factor;
-
-                if (!isNaN(videoTime)) {
-                    video.currentTime = videoTime;
-                    console.log(
-                        "Setting video time to:",
-                        videoTime,
-                        "using percentage mapping"
-                    );
-                }
-            } else {
-                // Handle cases WITHOUT scrollingPercentage
-                const nextSceneIndex = index + 1;
-                const nextSceneTiming = sceneTimings.find(
-                    (t) => t.scene === nextSceneIndex
-                ) as SceneTiming | undefined; // Cast result
-
-                let videoTime: number;
-                const startTime = currentSceneTiming.videoTime ?? 0;
-
-                if (nextSceneTiming) {
-                    let nextSceneStartTime: number;
-                    // Check if NEXT scene has scrollingPercentage
-                    if (nextSceneTiming.scrollingPercentage) {
-                        const percentageData =
-                            nextSceneTiming.scrollingPercentage;
-                        const firstPercentage = Math.min(
-                            ...Object.keys(percentageData).map(Number)
-                        );
-                        const firstPercentageData =
-                            percentageData[
-                                firstPercentage as keyof typeof percentageData
-                            ];
-
-                        if (firstPercentageData) {
-                            nextSceneStartTime = firstPercentageData.videoTime;
-                        } else {
-                            console.warn(
-                                "Could not find video time for first percentage:",
-                                firstPercentage,
-                                nextSceneTiming.scrollingPercentage
-                            );
-                            // Fallback if data missing for first percentage
-                            nextSceneStartTime =
-                                nextSceneTiming.videoTime ?? startTime;
-                        }
-                    } else {
-                        // If next scene also doesn't have percentage mapping
-                        nextSceneStartTime =
-                            nextSceneTiming.videoTime ?? startTime;
-                    }
-
-                    if (isNaN(nextSceneStartTime)) {
-                        console.warn(
-                            "Invalid next scene start time for interpolation.",
-                            nextSceneStartTime
-                        );
-                        videoTime = startTime;
-                    } else {
-                        videoTime =
-                            startTime +
-                            (nextSceneStartTime - startTime) *
-                                subScrollProgress;
-                    }
-                } else {
-                    // Last scene
-                    const endTime = video.duration;
-                    if (isNaN(endTime)) {
-                        console.warn(
-                            "Invalid end time for last scene interpolation."
-                        );
-                        videoTime = startTime;
-                    } else {
-                        videoTime =
-                            startTime +
-                            (endTime - startTime) * subScrollProgress;
-                    }
-                }
-
-                if (isNaN(videoTime)) {
-                    videoTime = startTime;
-                } else if (!isNaN(video.duration)) {
-                    videoTime = Math.max(
-                        0,
-                        Math.min(video.duration, videoTime)
-                    );
-                }
-
-                video.currentTime = videoTime;
-                console.log(
-                    "Setting video time to:",
-                    videoTime,
-                    "using traditional mapping"
-                );
-            }
-        };
-
-        // Call immediately and add listener
-        updateVideoTime();
-        // No need for scroll listener here as progress is passed via props
-
-        // Cleanup function - not strictly needed if progress updates trigger re-render
-        // return () => window.removeEventListener('scroll', handleScroll);
-    }, [scene, index, subScrollProgress, currentVideoSrc]); // Add currentVideoSrc dependency
+    // Update frame based on current time
+    useEffect(() => {
+        setCurrentFrame(Math.floor(currentTime * frameRate));
+    }, [currentTime]);
 
     // Reset animations when scene changes
     useEffect(() => {
@@ -374,22 +215,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             setShowCallout(false);
         }
     }, [subScrollProgress, scene, animationProgress]);
-
-    // Update timecode when video time changes
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video) return;
-
-        const updateTimecode = () => {
-            const time = video.currentTime;
-            const frame = Math.floor((time % 1) * frameRate);
-            setCurrentTime(time);
-            setCurrentFrame(frame);
-        };
-
-        video.addEventListener("timeupdate", updateTimecode);
-        return () => video.removeEventListener("timeupdate", updateTimecode);
-    }, []);
 
     // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
@@ -453,20 +278,12 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
             {/* Fullscreen Video Background */}
-            <video
-                ref={videoRef}
-                src={currentVideoSrc ?? undefined}
-                className="absolute top-0 left-0 w-full h-full object-cover z-0" // Fullscreen, behind content
-                playsInline
-                preload="auto"
-                muted
-                onLoadedMetadata={() => {
-                    console.log(
-                        "Video metadata loaded, duration:",
-                        videoRef.current?.duration
-                    );
-                }}
-            />
+            <div className="video-container absolute inset-0 w-full h-full">
+                <VideoPlayer
+                    currentTime={currentTime}
+                    onTimeUpdate={handleTimeUpdate}
+                />
+            </div>
 
             {/* Timecode Display */}
             <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded font-mono text-sm z-20">
