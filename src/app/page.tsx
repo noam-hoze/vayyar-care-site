@@ -22,6 +22,8 @@ export default function HomePage() {
         let currentY = 0;
         let targetY = window.scrollY;
         let rafId: number | null = null;
+        let lastTouchY = 0;
+        let isTouching = false;
 
         function updateScroll() {
             currentY += (targetY - currentY) * smoothness;
@@ -30,9 +32,7 @@ export default function HomePage() {
             rafId = requestAnimationFrame(updateScroll);
         }
 
-        function handleWheel(e: WheelEvent) {
-            e.preventDefault();
-
+        function updateScrollPosition(deltaY: number) {
             const windowHeight = window.innerHeight;
             const currentSceneIndex = Math.min(
                 MAX_SCENES - 1,
@@ -70,7 +70,7 @@ export default function HomePage() {
                 0,
                 Math.min(
                     scrollableHeight - windowHeight,
-                    targetY + e.deltaY * speedMultiplier
+                    targetY + deltaY * speedMultiplier
                 )
             );
 
@@ -79,15 +79,52 @@ export default function HomePage() {
             }
         }
 
-        // Attach listener to window for now
+        function handleWheel(e: WheelEvent) {
+            e.preventDefault();
+            updateScrollPosition(e.deltaY);
+        }
+
+        function handleTouchStart(e: TouchEvent) {
+            isTouching = true;
+            lastTouchY = e.touches[0].clientY;
+        }
+
+        function handleTouchMove(e: TouchEvent) {
+            if (!isTouching) return;
+            e.preventDefault();
+
+            const touchY = e.touches[0].clientY;
+            const deltaY = lastTouchY - touchY;
+            lastTouchY = touchY;
+
+            updateScrollPosition(deltaY);
+        }
+
+        function handleTouchEnd() {
+            isTouching = false;
+        }
+
+        // Attach listeners to window
         const scrollableElement = window;
         scrollableElement.addEventListener("wheel", handleWheel, {
             passive: false,
+        });
+        scrollableElement.addEventListener("touchstart", handleTouchStart, {
+            passive: true,
+        });
+        scrollableElement.addEventListener("touchmove", handleTouchMove, {
+            passive: false,
+        });
+        scrollableElement.addEventListener("touchend", handleTouchEnd, {
+            passive: true,
         });
         rafId = requestAnimationFrame(updateScroll);
 
         return () => {
             scrollableElement.removeEventListener("wheel", handleWheel);
+            scrollableElement.removeEventListener("touchstart", handleTouchStart);
+            scrollableElement.removeEventListener("touchmove", handleTouchMove);
+            scrollableElement.removeEventListener("touchend", handleTouchEnd);
             if (rafId !== null) {
                 cancelAnimationFrame(rafId);
             }
