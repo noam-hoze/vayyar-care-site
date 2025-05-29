@@ -51,7 +51,7 @@ export const VIDEO_CHUNKS = {
         {
             id: 6,
             path: '/videos/output-06.mp4',
-            duration: 2,
+            duration: 8,
             startTime: 180
         },
     ]
