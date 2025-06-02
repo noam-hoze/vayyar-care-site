@@ -8,11 +8,7 @@ import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 // import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
 // import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
 // import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
-import {
-    videoConfig,
-    SceneTiming,
-    VIDEO_CHUNKS,
-} from "../config/videoConfig";
+import { VIDEO_CHUNKS } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
 import { Scene } from "@/types";
 import Link from "next/link";
@@ -140,45 +136,13 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // Set up video scroll control
     useEffect(() => {
-        const sceneTimings = videoConfig.sceneTiming;
-        if (!sceneTimings) return;
-
-        console.log("Current scroll progress:", subScrollProgress);
-        console.log("Current scene index:", index);
-
-        const currentSceneTiming = sceneTimings.find(
-            (t) => t.scene === index
-        ) as SceneTiming | undefined;
-
-        if (!currentSceneTiming) {
-            console.warn("Scene timing not found for index:", index);
-            return;
-        }
-
-        // Get the next scene timing for interpolation
-        const nextSceneIndex = index + 1;
-        const nextSceneTiming = sceneTimings.find(
-            (t) => t.scene === nextSceneIndex
-        ) as SceneTiming | undefined;
-
-        let videoTime: number;
-        const startTime = currentSceneTiming.videoTime ?? 0;
-
-        if (nextSceneTiming) {
-            // If we have a next scene, interpolate between current and next scene times
-            const nextSceneTime = nextSceneTiming.videoTime ?? startTime;
-            videoTime = startTime + (nextSceneTime - startTime) * subScrollProgress;
-        } else {
-            // If this is the last scene, use the total video duration
-            videoTime = startTime + (VIDEO_CHUNKS.totalDuration - startTime) * subScrollProgress;
-        }
-
-        // Ensure videoTime is within bounds
-        videoTime = Math.max(0, Math.min(VIDEO_CHUNKS.totalDuration, videoTime));
+        // Calculate video time based on scroll position without scene timing
+        const totalDuration = VIDEO_CHUNKS.totalDuration;
+        const videoTime = Math.max(0, Math.min(totalDuration, subScrollProgress * totalDuration));
         
         console.log("Setting video time to:", videoTime, "based on scroll progress:", subScrollProgress);
         setCurrentTime(videoTime);
-    }, [index, subScrollProgress]);
+    }, [subScrollProgress]);
 
     // Update frame based on current time
     useEffect(() => {
