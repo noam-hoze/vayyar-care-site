@@ -14,46 +14,46 @@ export const VIDEO_CHUNKS = {
     chunks: [
         {
             id: 0,
-            path: '/videos/output-00.mp4',
-            duration: 30,
+            path: '/videos/output_vid_960.mp4',
+            duration: 152,
             startTime: 0
         },
-        {
-            id: 1,
-            path: '/videos/output-01.mp4',
-            duration: 30,
-            startTime: 30
-        },
-        {
-            id: 2,
-            path: '/videos/output-02.mp4',
-            duration: 30,
-            startTime: 60
-        },
-        {
-            id: 3,
-            path: '/videos/output-03.mp4',
-            duration: 30,
-            startTime: 90
-        },
-        {
-            id: 4,
-            path: '/videos/output-04.mp4',
-            duration: 30,
-            startTime: 120
-        },
-        {
-            id: 5,
-            path: '/videos/output-05.mp4',
-            duration: 30,
-            startTime: 150
-        },
-        {
-            id: 6,
-            path: '/videos/output-06.mp4',
-            duration: 2,
-            startTime: 180
-        },
+        // {
+        //     id: 1,
+        //     path: '/videos/output-01.mp4',
+        //     duration: 30,
+        //     startTime: 30
+        // },
+        // {
+        //     id: 2,
+        //     path: '/videos/output-02.mp4',
+        //     duration: 30,
+        //     startTime: 60
+        // },
+        // {
+        //     id: 3,
+        //     path: '/videos/output-03.mp4',
+        //     duration: 30,
+        //     startTime: 90
+        // },
+        // {
+        //     id: 4,
+        //     path: '/videos/output-04.mp4',
+        //     duration: 30,
+        //     startTime: 120
+        // },
+        // {
+        //     id: 5,
+        //     path: '/videos/output-05.mp4',
+        //     duration: 30,
+        //     startTime: 150
+        // },
+        // {
+        //     id: 6,
+        //     path: '/videos/output-06.mp4',
+        //     duration: 2,
+        //     startTime: 180
+        // },
     ]
 };
 
