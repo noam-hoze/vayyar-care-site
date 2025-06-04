@@ -32,14 +32,14 @@ export const scenes = [
         disappearAt: 77,
         cta: { text: "SEE IT IN ACTION", link: "/contact" },
     },
-    // {
-    //     scene: SCENES.DOCUMENT_EVENT,
-    //     title: "Automated documentation",
-    //     description:
-    //         "Instead of writing a report herself, Alice askss VayyarCare document the event for her.",
-    //     showUpAt: 0,
-    //     disappearAt: 100,
-    // },
+    {
+        scene: SCENES.DOCUMENT_EVENT,
+        title: "Automated documentation",
+        description:
+            "Instead of writing a report herself, Alice askss VayyarCare document the event for her.",
+        showUpAt: 0,
+        disappearAt: 100,
+    },
     // {
     //     scene: SCENES.VP_CLINICAL,
     //     title: "Monthly review with VP Clicnal",

@@ -17,6 +17,7 @@ import {
 import { SCENES } from "../data/sceneRegistry";
 import { Scene } from "@/types";
 import Link from "next/link";
+import { useVideoTime } from "@/contexts/VideoTimeContext";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -32,6 +33,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     index = 0,
     subScrollProgress = 0,
 }) => {
+    const { setCurrentTime: setGlobalCurrentTime, setVideoDuration } =
+        useVideoTime();
     // Flag to control debug info visibility
     const showDebugInfo = false; // Set to false to hide debug info
 
@@ -62,12 +65,11 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State to track when the wipe animation should trigger
     const [shouldWipe, setShouldWipe] = useState(false);
 
-    // State for current time and frame
-    const [currentTime, setCurrentTime] = useState(0);
-    const [currentFrame, setCurrentFrame] = useState(0);
-    const frameRate = 30; // Assuming 30fps, adjust if your video has a different frame rate
+    // Renamed local states for time and frame display
+    const [displayTime, setDisplayTime] = useState(0);
+    const [displayFrame, setDisplayFrame] = useState(0);
+    const frameRate = 30;
 
-    // Function to format timecode
     const formatTimecode = (time: number, frame: number) => {
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor((time % 3600) / 60);
@@ -375,21 +377,29 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         }
     }, [subScrollProgress, scene, animationProgress]);
 
-    // Update timecode when video time changes
+    // This useEffect updates context and local display time from video element
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
 
-        const updateTimecode = () => {
+        const updateTimeAndFrame = () => {
             const time = video.currentTime;
             const frame = Math.floor((time % 1) * frameRate);
-            setCurrentTime(time);
-            setCurrentFrame(frame);
+
+            setGlobalCurrentTime(time); // Update context
+            setDisplayTime(time); // Update local state for display
+            setDisplayFrame(frame); // Update local state for display
         };
 
-        video.addEventListener("timeupdate", updateTimecode);
-        return () => video.removeEventListener("timeupdate", updateTimecode);
-    }, []);
+        video.addEventListener("timeupdate", updateTimeAndFrame);
+        // Also call on loadedmetadata to set initial time in context if video doesn't auto-play from 0
+        video.addEventListener("loadedmetadata", updateTimeAndFrame);
+
+        return () => {
+            video.removeEventListener("timeupdate", updateTimeAndFrame);
+            video.removeEventListener("loadedmetadata", updateTimeAndFrame);
+        };
+    }, [setGlobalCurrentTime, frameRate]); // Dependency: context's setter
 
     // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
@@ -461,16 +471,26 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 preload="auto"
                 muted
                 onLoadedMetadata={() => {
-                    console.log(
-                        "Video metadata loaded, duration:",
-                        videoRef.current?.duration
-                    );
+                    if (videoRef.current) {
+                        console.log(
+                            "Video metadata loaded, duration:",
+                            videoRef.current?.duration
+                        );
+                        setVideoDuration(videoRef.current.duration); // Update context with video duration
+                        // Initial time update in case 'timeupdate' doesn't fire immediately or video is paused at a non-zero time
+                        const initialTime = videoRef.current.currentTime;
+                        setGlobalCurrentTime(initialTime);
+                        setDisplayTime(initialTime);
+                        setDisplayFrame(
+                            Math.floor((initialTime % 1) * frameRate)
+                        );
+                    }
                 }}
             />
 
-            {/* Timecode Display */}
+            {/* Timecode Display uses local displayTime and displayFrame */}
             <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded font-mono text-sm z-20">
-                {formatTimecode(currentTime, currentFrame)}
+                {formatTimecode(displayTime, displayFrame)}
             </div>
 
             {/* Overlay Content - Positioned on the right */}

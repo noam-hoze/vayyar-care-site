@@ -3,7 +3,8 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "@/styles/main.css";
 import "./globals.css";
 import MainLayout from "@/components/MainLayout";
-import ScrollToTop from '@/components/ScrollToTop';
+import ScrollToTop from "@/components/ScrollToTop";
+import { VideoTimeProvider } from "@/contexts/VideoTimeContext";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -30,8 +31,10 @@ export default function RootLayout({
             <body
                 className={`${inter.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white`}
             >
-                <ScrollToTop />
-                <MainLayout>{children}</MainLayout>
+                <VideoTimeProvider>
+                    <ScrollToTop />
+                    <MainLayout>{children}</MainLayout>
+                </VideoTimeProvider>
             </body>
         </html>
     );

@@ -2,11 +2,62 @@
 import React, { useState, useRef, useEffect } from "react"; // Removed useEffect
 import Link from "next/link"; // Changed from react-router-dom
 import ContactModal from "@/components/ContactModal";
+import { useVideoTime } from "@/contexts/VideoTimeContext"; // Import useVideoTime
 
 export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref for hover timeout
+    // const [scrollPercentage, setScrollPercentage] = useState(0); // Original scroll percentage, replaced by video time
+
+    const { currentTime, videoDuration } = useVideoTime(); // Get video time and duration
+
+    // Calculate progress for each of the 4 buttons based on video time
+    const calculateProgress = (segmentIndex: number): number => {
+        if (videoDuration === 0) return 0; // Avoid division by zero if duration not set
+
+        const segmentDuration = videoDuration / 4;
+        const segmentStartTime = segmentIndex * segmentDuration;
+        const segmentEndTime = (segmentIndex + 1) * segmentDuration;
+
+        if (currentTime < segmentStartTime) return 0;
+        if (currentTime > segmentEndTime) return 100;
+
+        const progressInSegment =
+            ((currentTime - segmentStartTime) / segmentDuration) * 100;
+        return Math.max(0, Math.min(100, progressInSegment)); // Clamp between 0 and 100
+    };
+
+    const buttonProgresses = [
+        calculateProgress(0), // Vayyar Care AI
+        calculateProgress(1), // Real-time Detection
+        calculateProgress(2), // Privacy
+        calculateProgress(3), // Staff Optimization
+    ];
+
+    // Original useEffect for scroll percentage - can be removed or commented out
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const element = document.documentElement;
+    //         const body = document.body;
+    //         const scrollTop = element.scrollTop || body.scrollTop;
+    //         const scrollHeight = element.scrollHeight || body.scrollHeight;
+    //         const clientHeight = element.clientHeight;
+
+    //         if (scrollHeight - clientHeight === 0) {
+    //             setScrollPercentage(0);
+    //             return;
+    //         }
+
+    //         const percentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+    //         setScrollPercentage(percentage > 100 ? 100 : percentage < 0 ? 0 : percentage);
+    //     };
+
+    //     window.addEventListener("scroll", handleScroll, { passive: true });
+    //     handleScroll(); // Initial call
+
+    //     return () => window.removeEventListener("scroll", handleScroll);
+    // }, []);
 
     const handleMouseEnter = () => {
         if (hoverTimeoutRef.current) {
@@ -68,18 +119,40 @@ export default function NavBar() {
 
                     {/* Right Side - CTA and Menu Toggle */}
                     <div className="flex items-center space-x-4">
-                        {/* New Text Buttons */}
-                        <button className="text-neutral-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
-                            Vayyar Care AI
+                        {/* New Text Buttons with Progress Fill based on Video Time */}
+                        <button className="relative text-neutral-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
+                            <div
+                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
+                                style={{ width: `${buttonProgresses[0]}%` }} // Use video progress
+                            ></div>
+                            <span className="relative z-10">
+                                Vayyar Care AI
+                            </span>
                         </button>
-                        <button className="text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
-                            Real-time Detection
+                        <button className="relative text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
+                            <div
+                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
+                                style={{ width: `${buttonProgresses[1]}%` }} // Use video progress
+                            ></div>
+                            <span className="relative z-10">
+                                Real-time Detection
+                            </span>
                         </button>
-                        <button className="text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
-                            Privacy
+                        <button className="relative text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
+                            <div
+                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
+                                style={{ width: `${buttonProgresses[2]}%` }} // Use video progress
+                            ></div>
+                            <span className="relative z-10">Privacy</span>
                         </button>
-                        <button className="text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
-                            Staff Optimization
+                        <button className="relative text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
+                            <div
+                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
+                                style={{ width: `${buttonProgresses[3]}%` }} // Use video progress
+                            ></div>
+                            <span className="relative z-10">
+                                Staff Optimization
+                            </span>
                         </button>
 
                         {/* Let's Talk Button (CTA) - Text changed to Book a Demo by user previously */}
