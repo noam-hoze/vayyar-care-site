@@ -46,7 +46,79 @@ const TIMED_TEXTS_CONFIG = [
             transition: "opacity 0.3s ease-in-out",
         },
     },
+    {
+        id: 5,
+        text: (
+            <>
+                <span
+                    style={{
+                        display: "block",
+                        fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
+                        fontWeight: "800",
+                        marginBottom: "0.4em",
+                        textAlign: "center",
+                    }}
+                >
+                    <span style={{ color: "#06aeef" }}>Save time</span>
+                    <span style={{ fontWeight: "300" }}>
+                        &nbsp;with <br />
+                        AI-powered insights
+                    </span>
+                </span>
+                <span
+                    style={{
+                        display: "block",
+                        fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
+                        fontWeight: "300",
+                        lineHeight: "1.45",
+                        textAlign: "center",
+                    }}
+                >
+                    - Delivered in real time
+                    <br />
+                    - Without wearables
+                    <br />- Without a camera
+                </span>
+            </>
+        ),
+        startTime: 16 + 22 / 30, // 16.22s
+        fadeInDuration: 0.5,
+        visibleDuration: 6,
+        fadeOutDuration: 0.5,
+        isRightAligned: true,
+        style: {
+            // fontSize, fontWeight, lineHeight, whiteSpace are now controlled by inner spans or not needed
+            fontFamily: "Manrope, Inter, sans-serif",
+            fontWeight: "normal", // Set a base fontWeight, inner spans will override
+            color: "#FFFFFF",
+            textShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
+            letterSpacing: "0.01em", // Adjusted letter spacing slightly
+            maxWidth: "480px", // Adjusted maxWidth
+            transition: "opacity 0.5s ease-in-out",
+        },
+    },
 ];
+
+interface TimedTextConfigItem {
+    id: number;
+    text: React.ReactNode;
+    startTime: number;
+    endTime?: number; // Optional for texts using duration logic
+    fadeInDuration?: number;
+    visibleDuration?: number;
+    fadeOutDuration?: number;
+    isRightAligned?: boolean;
+    style: React.CSSProperties & {
+        fontSize?: string;
+        fontFamily?: string;
+        fontWeight?: string | number;
+        color?: string;
+        textShadow?: string;
+        lineHeight?: string;
+        maxWidth?: string;
+        whiteSpace?: React.CSSProperties["whiteSpace"];
+    };
+}
 
 // Renamed function to match Next.js convention (can be any name, but default export is the page)
 export default function HomePage() {
@@ -85,8 +157,24 @@ export default function HomePage() {
     useEffect(() => {
         const newVisibility: { [key: number]: boolean } = {};
         TIMED_TEXTS_CONFIG.forEach((config) => {
-            newVisibility[config.id] =
-                currentTime >= config.startTime && currentTime < config.endTime;
+            if (config.fadeInDuration) {
+                // New logic for texts with explicit durations
+                const animationStartTime = config.startTime;
+                const fullyVisibleTime =
+                    animationStartTime + config.fadeInDuration;
+                const startFadeOutTime =
+                    fullyVisibleTime + config.visibleDuration;
+                const animationEndTime =
+                    startFadeOutTime + config.fadeOutDuration;
+                newVisibility[config.id] =
+                    currentTime >= animationStartTime &&
+                    currentTime < animationEndTime;
+            } else {
+                // Original logic for texts with simple start/end
+                newVisibility[config.id] =
+                    currentTime >= config.startTime &&
+                    currentTime < config.endTime!;
+            }
         });
         setTimedTextsVisibility(newVisibility);
     }, [currentTime]);
@@ -136,7 +224,7 @@ export default function HomePage() {
                 (window.scrollY - sceneStartY) / windowHeight;
 
             //const isFallChartScene = currentSceneIndex === SCENES.FALL_EVENT;
-            const isVpFamilyScene = currentSceneIndex === SCENES.VP_FAMILY;
+            // const isVpFamilyScene = currentSceneIndex === SCENES.VP_FAMILY; // Commented out
             let speedMultiplier = 0.1;
 
             // if (
@@ -146,15 +234,15 @@ export default function HomePage() {
             // ) {
             //     speedMultiplier = 0.004;
             // }
-            if (isVpFamilyScene) {
-                if (currentSubScroll > 0.3 && currentSubScroll < 0.4) {
-                    speedMultiplier = 0.01;
-                } else if (currentSubScroll > 0.55 && currentSubScroll < 0.65) {
-                    speedMultiplier = 0.01;
-                } else if (currentSubScroll > 0.75 && currentSubScroll < 0.85) {
-                    speedMultiplier = 0.01;
-                }
-            }
+            // if (isVpFamilyScene) { // Commented out block
+            //     if (currentSubScroll > 0.3 && currentSubScroll < 0.4) {
+            //         speedMultiplier = 0.01;
+            //     } else if (currentSubScroll > 0.55 && currentSubScroll < 0.65) {
+            //         speedMultiplier = 0.01;
+            //     } else if (currentSubScroll > 0.75 && currentSubScroll < 0.85) {
+            //         speedMultiplier = 0.01;
+            //     }
+            // }
 
             // Important: Update targetY considering the *actual* scrollable height
             // In Next.js, this might not be document.body.scrollHeight if layout handles scroll
@@ -367,19 +455,51 @@ export default function HomePage() {
             </div>
 
             {/* Timed Texts Section - Fade In/Out */}
-            {TIMED_TEXTS_CONFIG.map((config) => (
-                <div
-                    key={config.id}
-                    className="fixed inset-0 flex justify-center items-center text-center text-white font-bold pointer-events-none z-40"
-                    style={{
-                        ...config.style,
-                        opacity: timedTextsVisibility[config.id] ? 1 : 0,
-                        textShadow: "0px 2px 8px rgba(0,0,0,0.7)",
-                    }}
-                >
-                    {config.text}
-                </div>
-            ))}
+            {TIMED_TEXTS_CONFIG.map((config: TimedTextConfigItem) => {
+                if (config.isRightAligned) {
+                    return (
+                        <div
+                            key={config.id}
+                            className="fixed top-1/2 right-[5%] transform -translate-y-1/2 text-right text-white font-bold pointer-events-none z-40"
+                            style={{
+                                ...config.style,
+                                opacity: timedTextsVisibility[config.id]
+                                    ? 1
+                                    : 0,
+                                padding: "20px",
+                            }}
+                        >
+                            <div
+                                className="absolute -z-10"
+                                style={{
+                                    inset: "-30px",
+                                    background:
+                                        "linear-gradient(to bottom, rgba(107, 106, 106, 0.33),rgba(65, 60, 60, 0.43))",
+                                    filter: "blur(35px)",
+                                    borderRadius: "30px",
+                                }}
+                            ></div>
+                            {config.text}
+                        </div>
+                    );
+                }
+                // Default centered rendering for other texts
+                return (
+                    <div
+                        key={config.id}
+                        className="fixed inset-0 flex justify-center items-center text-center text-white font-bold pointer-events-none z-40"
+                        style={{
+                            ...config.style,
+                            opacity: timedTextsVisibility[config.id] ? 1 : 0,
+                            textShadow:
+                                config.style.textShadow ||
+                                "0px 2px 8px rgba(0,0,0,0.7)", // Keep original default if not specified in config
+                        }}
+                    >
+                        {config.text}
+                    </div>
+                );
+            })}
 
             {/* Main container for scenes */}
             <div
