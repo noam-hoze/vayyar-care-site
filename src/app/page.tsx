@@ -97,6 +97,54 @@ const TIMED_TEXTS_CONFIG = [
             transition: "opacity 0.5s ease-in-out",
         },
     },
+    {
+        id: 6, // New ID for the duplicated text
+        text: (
+            <>
+                <span
+                    style={{
+                        display: "block",
+                        fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
+                        fontWeight: "800",
+                        marginBottom: "0.4em",
+                        textAlign: "center",
+                    }}
+                >
+                    <span style={{ fontWeight: "300" }}>
+                        Preserve{" "}
+                        <span style={{ color: "#06aeef", fontWeight: "800" }}>
+                            Privacy
+                        </span>
+                    </span>
+                </span>
+                <span
+                    style={{
+                        display: "block",
+                        fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
+                        fontWeight: "300",
+                        lineHeight: "1.45",
+                        textAlign: "center",
+                    }}
+                >
+                    VayyarCare sees what matters, without exposing what doesn't
+                </span>
+            </>
+        ),
+        startTime: 48 + 22 / 30, // 00:00:48:22
+        fadeInDuration: 0.5,
+        visibleDuration: 9, // Same as the original id: 5
+        fadeOutDuration: 0.5,
+        isRightAligned: true,
+        style: {
+            fontFamily: "Manrope, Inter, sans-serif",
+            fontWeight: "normal",
+            color: "#FFFFFF",
+            textShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
+            letterSpacing: "0.01em",
+            maxWidth: "480px",
+            transition: "opacity 0.5s ease-in-out",
+        },
+    },
 ];
 
 interface TimedTextConfigItem {
