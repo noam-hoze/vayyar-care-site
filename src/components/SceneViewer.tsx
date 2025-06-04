@@ -466,7 +466,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             <video
                 ref={videoRef}
                 src={currentVideoSrc ?? undefined}
-                className="absolute top-0 left-0 w-full h-full object-cover z-0" // Fullscreen, behind content
+                className="absolute top-0 left-0 w-full h-full object-cover z-[-10]" // Fullscreen, behind content, NEGATIVE Z-INDEX
                 playsInline
                 preload="auto"
                 muted

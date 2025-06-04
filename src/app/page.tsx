@@ -13,7 +13,7 @@ import { videoConfig } from "@/config/videoConfig"; // Import videoConfig
 gsap.registerPlugin(ScrollTrigger);
 
 const VAYYAR_BLUE = "#06aeef"; // Define Vayyar blue for use in styles
-const HERO_FADE_OUT_TIME = 4 + 24 / 30; // 00:00:04:24 assuming 30fps
+const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 
 // Renamed function to match Next.js convention (can be any name, but default export is the page)
 export default function HomePage() {
@@ -263,7 +263,7 @@ export default function HomePage() {
         <>
             {/* Hero Section */}
             <div
-                className={`fixed inset-0 flex flex-col justify-center items-center text-center z-10 pointer-events-none ${
+                className={`fixed inset-0 flex flex-col justify-center items-center text-center z-50 pointer-events-none ${
                     shouldHeroFadeOut
                         ? "animate-hero-section-fade-out"
                         : heroHasFadedOutOnce
@@ -271,34 +271,53 @@ export default function HomePage() {
                         : "" // Initially, h1/h2 animations control fade-in
                 }`}
                 style={{
-                    // Ensures hero is above the video/scenes but below interactive nav elements if nav has higher z-index
-                    // Add a subtle gradient or scrim if needed for text readability over complex video parts, e.g.:
-                    // background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.3) 100%)",
-                    transform: "translateY(0) !important", // Keep this to ensure no vertical shift from other sources
+                    // boxShadow: "0px 0px 80px 0px rgba(6, 174, 239, 0.6)", // REMOVED diagnostic blue shadow
+                    transform: "translateY(0) !important",
                 }}
             >
-                <h1
-                    className="text-white font-bold tracking-tight leading-tight opacity-0 animate-fadeInSlow"
-                    style={{
-                        fontSize: "clamp(3rem, 7vw, 5.5rem)", // Responsive font size
-                        textShadow: "0px 2px 10px rgba(0, 0, 0, 0.5)", // Subtle shadow for readability
-                        transform: "translateY(0) !important", // Force no vertical movement
-                    }}
+                {/* Inner container for text and cloud */}
+                <div
+                    className="relative flex flex-col items-center justify-center p-8 group" // Added padding and group for potential future use
+                    // No box-shadow here anymore
                 >
-                    Vayyar Care AI
-                </h1>
-                <h2
-                    className="text-gray-200 mt-4 tracking-normal opacity-0 animate-fadeInSlower"
-                    style={{
-                        fontSize: "clamp(1.25rem, 3vw, 2rem)", // Responsive font size
-                        textShadow: "0px 1px 8px rgba(0, 0, 0, 0.4)", // Subtle shadow
-                        transform: "translateY(0) !important", // Force no vertical movement
-                    }}
-                >
-                    Turn <span style={{ color: VAYYAR_BLUE }}>Data</span> to
-                    smarter, safer{" "}
-                    <span style={{ color: VAYYAR_BLUE }}>Care</span>
-                </h2>
+                    {/* NEW Cloud Div */}
+                    <div
+                        className="absolute inset-[-40px] -z-10"
+                        style={{
+                            background:
+                                "linear-gradient(to bottom, rgba(33, 30, 30, 0.73),rgba(65, 60, 60, 0.43))",
+                            filter: "blur(40px)",
+                            borderRadius: "50%", // For soft, organic edges
+                        }}
+                    ></div>
+
+                    {/* Text elements - ensure they have a higher z-index implicitly or explicitly if needed */}
+                    <h1
+                        className="text-white font-bold tracking-tight leading-tight opacity-0 animate-fadeInSlow relative z-0"
+                        style={{
+                            fontSize: "clamp(3rem, 7vw, 5.5rem)",
+                            textShadow:
+                                "0px 2px 4px rgba(0,0,0,0.5), 0px 4px 12px rgba(0,0,0,0.3)",
+                            // transform: "translateY(0) !important", // Likely not needed due to parent flex
+                        }}
+                    >
+                        Vayyar Care AI
+                    </h1>
+                    <h2
+                        className="text-white mt-4 tracking-normal opacity-0 animate-fadeInSlower relative z-0"
+                        style={{
+                            fontSize: "clamp(1.25rem, 3vw, 2rem)",
+                            textShadow:
+                                "0px 1px 3px rgba(0,0,0,0.6), 0px 3px 8px rgba(0,0,0,0.4)",
+                            // transform: "translateY(0) !important", // Likely not needed
+                        }}
+                    >
+                        Turn <span style={{ color: VAYYAR_BLUE }}>Data</span> to
+                        smarter, safer{" "}
+                        <span style={{ color: VAYYAR_BLUE }}>Care</span>
+                    </h2>
+                </div>{" "}
+                {/* END Inner container */}
             </div>
 
             {/* Main container for scenes */}
