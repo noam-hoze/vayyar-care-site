@@ -101,6 +101,25 @@ body {
   animation: heroSectionFadeIn 0.7s ease-out forwards; /* Match duration of fade-out */
 }
 
+/* Modal Fade Animations */
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes modalFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+.animate-modal-fade-in {
+  animation: modalFadeIn 0.2s ease-out forwards;
+}
+
+.animate-modal-fade-out {
+  animation: modalFadeOut 0.2s ease-out forwards;
+}
+
 /* Ensure html and body take full height if not already set, useful for sticky footers or full-screen layouts */
 /* html, body {
   height: 100%;

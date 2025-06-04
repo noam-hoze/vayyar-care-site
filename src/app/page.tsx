@@ -41,7 +41,7 @@ const TIMED_TEXTS_CONFIG = [
         id: 3,
         text: "AI-Powered operations",
         startTime: 6 + 14 / 30,
-        endTime: 7 + 14 / 30,
+        endTime: 7 + 12 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -82,9 +82,9 @@ const TIMED_TEXTS_CONFIG = [
                 </span>
             </>
         ),
-        startTime: 16 + 22 / 30, // 16.22s
+        startTime: 16 + 20 / 30, // 16.22s
         fadeInDuration: 0.5,
-        visibleDuration: 6,
+        visibleDuration: 8,
         fadeOutDuration: 0.5,
         isRightAligned: true,
         style: {

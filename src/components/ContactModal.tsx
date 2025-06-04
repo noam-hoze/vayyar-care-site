@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 interface ContactModalProps {
-    onClose: () => void; // Function to call when the close button is clicked
+    isOpen: boolean;
+    onClose: () => void;
 }
 
-const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
+const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
         message: "",
     });
+
+    const [animationClass, setAnimationClass] = useState("");
+    const [shouldRenderModal, setShouldRenderModal] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            setShouldRenderModal(true);
+            setTimeout(() => setAnimationClass("animate-modal-fade-in"), 10);
+        } else if (!isOpen && shouldRenderModal) {
+            setAnimationClass("animate-modal-fade-out");
+        }
+    }, [isOpen, shouldRenderModal]);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -26,10 +39,22 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         alert("Form submitted (check console). Implement API call.");
     };
 
+    const handleAnimationEnd = () => {
+        if (animationClass === "animate-modal-fade-out") {
+            setShouldRenderModal(false);
+            setAnimationClass("");
+        }
+    };
+
+    if (!shouldRenderModal) {
+        return null;
+    }
+
     return (
         <div
-            className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto"
+            className={`fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto ${animationClass}`}
             onWheel={(e) => e.stopPropagation()}
+            onAnimationEnd={handleAnimationEnd}
         >
             <button
                 className="absolute top-6 right-6 z-10 flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition cursor-pointer"

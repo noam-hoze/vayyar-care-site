@@ -290,7 +290,10 @@ export default function NavBar() {
                 </div>
             </div>
             {isDemoModalOpen && (
-                <ContactModal onClose={handleContactModalClose} />
+                <ContactModal
+                    isOpen={isDemoModalOpen}
+                    onClose={handleContactModalClose}
+                />
             )}
         </nav>
     );
