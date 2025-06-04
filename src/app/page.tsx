@@ -15,6 +15,39 @@ gsap.registerPlugin(ScrollTrigger);
 const VAYYAR_BLUE = "#06aeef"; // Define Vayyar blue for use in styles
 const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 
+const TIMED_TEXTS_CONFIG = [
+    {
+        id: 1,
+        text: "Smarter Care Plan",
+        startTime: 5 + 8 / 30,
+        endTime: 5 + 22 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
+    {
+        id: 2,
+        text: "Reduced Costs",
+        startTime: 5 + 24 / 30,
+        endTime: 6 + 8 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
+    {
+        id: 3,
+        text: "AI-Powered operations",
+        startTime: 6 + 14 / 30,
+        endTime: 7 + 14 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
+];
+
 // Renamed function to match Next.js convention (can be any name, but default export is the page)
 export default function HomePage() {
     const [index, setIndex] = useState(0);
@@ -25,6 +58,9 @@ export default function HomePage() {
 
     const [shouldHeroFadeOut, setShouldHeroFadeOut] = useState(false);
     const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false); // New state
+    const [timedTextsVisibility, setTimedTextsVisibility] = useState<{
+        [key: number]: boolean;
+    }>({});
 
     // Refs for smooth scrolling logic, lifted from useEffect
     const targetY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
@@ -44,6 +80,16 @@ export default function HomePage() {
             setShouldHeroFadeOut(false); // Allow it to fade back in or remain visible
         }
     }, [currentTime, shouldHeroFadeOut]); // Added shouldHeroFadeOut
+
+    // Effect to trigger timed texts fade-in/out
+    useEffect(() => {
+        const newVisibility: { [key: number]: boolean } = {};
+        TIMED_TEXTS_CONFIG.forEach((config) => {
+            newVisibility[config.id] =
+                currentTime >= config.startTime && currentTime < config.endTime;
+        });
+        setTimedTextsVisibility(newVisibility);
+    }, [currentTime]);
 
     // Setup GSAP smooth scrolling (modified)
     useEffect(() => {
@@ -319,6 +365,21 @@ export default function HomePage() {
                 </div>{" "}
                 {/* END Inner container */}
             </div>
+
+            {/* Timed Texts Section - Fade In/Out */}
+            {TIMED_TEXTS_CONFIG.map((config) => (
+                <div
+                    key={config.id}
+                    className="fixed inset-0 flex justify-center items-center text-center text-white font-bold pointer-events-none z-40"
+                    style={{
+                        ...config.style,
+                        opacity: timedTextsVisibility[config.id] ? 1 : 0,
+                        textShadow: "0px 2px 8px rgba(0,0,0,0.7)",
+                    }}
+                >
+                    {config.text}
+                </div>
+            ))}
 
             {/* Main container for scenes */}
             <div
