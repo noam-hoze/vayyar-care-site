@@ -1,6 +1,6 @@
 "use client"; // Ensure it's a client component
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation"; // Import usePathname
 import NavBar from "./navigation"; // Assuming NavBar is in the same directory
 
@@ -16,7 +16,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
-            {/* Conditionally render the NavBar container */}
             {showNavBar && (
                 <div className="sticky top-0 z-50">
                     <NavBar />
@@ -25,7 +24,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             <main key={pathname} className="flex-grow page-fade-in">
                 {children}
             </main>
-            {/* You could add a Footer component here too if needed */}
         </div>
     );
 };

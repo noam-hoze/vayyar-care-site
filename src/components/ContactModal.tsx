@@ -27,7 +27,10 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto" onWheel={e => e.stopPropagation()}>
+        <div
+            className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4 overflow-y-auto"
+            onWheel={(e) => e.stopPropagation()}
+        >
             <button
                 className="absolute top-6 right-6 z-10 flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition cursor-pointer"
                 onClick={onClose}
@@ -37,7 +40,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             </button>
             <div className="w-full max-w-2xl bg-white p-8 rounded-lg">
                 <h1 className="text-5xl font-bold text-center text-black mb-12">
-                    Let&apos;s Talk
+                    Book a Demo
                 </h1>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
@@ -116,9 +119,10 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                     <div className="flex justify-end pt-4">
                         <button
                             type="submit"
-                            className="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-full text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition"
+                            className="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-full text-white hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition cursor-pointer"
+                            style={{ backgroundColor: "#06aeef" }}
                         >
-                            Send Message
+                            Send
                         </button>
                     </div>
                 </form>
@@ -127,4 +131,4 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     );
 };
 
-export default ContactModal; 
+export default ContactModal;

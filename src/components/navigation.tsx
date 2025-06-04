@@ -37,14 +37,14 @@ export default function NavBar() {
 
     const handleContactModalClose = () => {
         setIsContactModalOpen(false);
-    }
+    };
 
     useEffect(() => {
-        document.body.style.overflow = isContactModalOpen ? 'hidden' : 'auto';
+        document.body.style.overflow = isContactModalOpen ? "hidden" : "auto";
 
         return () => {
-            document.body.style.overflow = 'auto';
-        }
+            document.body.style.overflow = "auto";
+        };
     }, [isContactModalOpen]);
 
     return (
@@ -68,48 +68,29 @@ export default function NavBar() {
 
                     {/* Right Side - CTA and Menu Toggle */}
                     <div className="flex items-center space-x-4">
-                        {/* Let's Talk Button (CTA) */}
-                        <button
-                            onClick={openContactModal}
-                            className="group relative bg-black text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition duration-150 ease-in-out flex items-center justify-center overflow-hidden"
-                        >
-                            {/* Arrow Icon - Absolutely positioned, transitions opacity and transform */}
-                            <span className="absolute left-2 inline-flex items-center transition-all duration-300 ease-in-out opacity-0 transform -translate-x-5 group-hover:opacity-100 group-hover:translate-x-0">
-                                <img
-                                    src="/images/vayyar-logo-white.png"
-                                    alt="Arrow"
-                                    className="w-3 h-3 rotate-180"
-                                />
-                            </span>
-                            {/* Text Span - Transitions transform */}
-                            <span className="inline-block transition-all duration-300 ease-in-out transform group-hover:translate-x-2 uppercase">
-                                Let&apos;s Talk
-                            </span>
+                        {/* New Text Buttons */}
+                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                            Vayyar Care AI
+                        </button>
+                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                            Real-time Detection
+                        </button>
+                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                            Privacy
+                        </button>
+                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                            Staff Optimization
                         </button>
 
-                        {/* Menu Toggle Button - Hover Activated */}
+                        {/* Let's Talk Button (CTA) - Text changed to Book a Demo by user previously */}
                         <button
-                            // Removed ref
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            className={`
-                                group relative overflow-hidden
-                                ${
-                                    isMenuOpen
-                                        ? "bg-white"
-                                        : "bg-[#e4e6ef] hover:bg-white"
-                                }
-                                text-black pl-4 pr-4 py-2
-                                rounded-full text-sm font-medium 
-                                focus:outline-none transition duration-150 ease-in-out 
-                                uppercase cursor-pointer min-w-[80px]
-                            `}
-                            aria-label="Open menu"
+                            onClick={openContactModal}
+                            className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
+                            style={{ backgroundColor: "#06aeef" }} // Apply custom Vayyar blue
                         >
-                            <span
-                                className={`inline-block transition-all duration-300 ease-in-out transform`}
-                            >
-                                Menu
+                            {/* Text Span - Transitions transform removed */}
+                            <span className="inline-block uppercase">
+                                Book a Demo
                             </span>
                         </button>
                     </div>
