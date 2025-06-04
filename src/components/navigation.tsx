@@ -69,16 +69,16 @@ export default function NavBar() {
                     {/* Right Side - CTA and Menu Toggle */}
                     <div className="flex items-center space-x-4">
                         {/* New Text Buttons */}
-                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                        <button className="text-neutral-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
                             Vayyar Care AI
                         </button>
-                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                        <button className="text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
                             Real-time Detection
                         </button>
-                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                        <button className="text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
                             Privacy
                         </button>
-                        <button className="text-gray-700 bg-transparent border border-black hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out">
+                        <button className="text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer">
                             Staff Optimization
                         </button>
 
@@ -89,9 +89,7 @@ export default function NavBar() {
                             style={{ backgroundColor: "#06aeef" }} // Apply custom Vayyar blue
                         >
                             {/* Text Span - Transitions transform removed */}
-                            <span className="inline-block uppercase">
-                                Book a Demo
-                            </span>
+                            <span className="inline-block">Book a Demo</span>
                         </button>
                     </div>
                 </div>
