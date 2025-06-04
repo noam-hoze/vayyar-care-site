@@ -1,12 +1,21 @@
 "use client";
 
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, {
+    createContext,
+    useState,
+    useContext,
+    ReactNode,
+    useRef,
+    useCallback,
+} from "react";
 
 interface VideoTimeContextType {
     currentTime: number;
     setCurrentTime: (time: number) => void;
     videoDuration: number;
     setVideoDuration: (duration: number) => void;
+    scrollToTime: (time: number) => void;
+    registerScrollToTime: (fn: (time: number) => void) => void;
 }
 
 const VideoTimeContext = createContext<VideoTimeContextType | undefined>(
@@ -15,7 +24,19 @@ const VideoTimeContext = createContext<VideoTimeContextType | undefined>(
 
 export const VideoTimeProvider = ({ children }: { children: ReactNode }) => {
     const [currentTime, setCurrentTime] = useState(0);
-    const [videoDuration, setVideoDuration] = useState(0); // Initialize with 0 or a sensible default
+    const [videoDuration, setVideoDuration] = useState(0);
+
+    const scrollToTimeRef = useRef<(time: number) => void>(() => {
+        console.warn("scrollToTime implementation not yet registered.");
+    });
+
+    const registerScrollToTime = useCallback((fn: (time: number) => void) => {
+        scrollToTimeRef.current = fn;
+    }, []);
+
+    const scrollToTime = useCallback((time: number) => {
+        scrollToTimeRef.current(time);
+    }, []);
 
     return (
         <VideoTimeContext.Provider
@@ -24,6 +45,8 @@ export const VideoTimeProvider = ({ children }: { children: ReactNode }) => {
                 setCurrentTime,
                 videoDuration,
                 setVideoDuration,
+                scrollToTime,
+                registerScrollToTime,
             }}
         >
             {children}

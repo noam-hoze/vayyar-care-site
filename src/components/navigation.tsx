@@ -4,36 +4,106 @@ import Link from "next/link"; // Changed from react-router-dom
 import ContactModal from "@/components/ContactModal";
 import { useVideoTime } from "@/contexts/VideoTimeContext"; // Import useVideoTime
 
+// Helper to convert HH:MM:SS:FF to seconds
+const timecodeToSeconds = (tc: string, frameRate: number = 30): number => {
+    const parts = tc.split(":").map(Number);
+    let seconds = 0;
+    if (parts.length === 4) {
+        // HH:MM:SS:FF
+        seconds =
+            parts[0] * 3600 + parts[1] * 60 + parts[2] + parts[3] / frameRate;
+    } else if (parts.length === 3) {
+        // MM:SS:FF (assuming minutes if first part < 60)
+        seconds = parts[0] * 60 + parts[1] + parts[2] / frameRate;
+    } else {
+        console.warn("Invalid timecode format:", tc);
+    }
+    return seconds;
+};
+
+const BUTTON_CONFIG = [
+    {
+        name: "Vayyar Care AI",
+        startTimeString: "00:00:12:02",
+        endTimeString: "00:00:29:18",
+        baseTextColor: "text-neutral-500",
+    },
+    {
+        name: "Real-time Detection",
+        startTimeString: "00:00:29:19",
+        endTimeString: "00:01:17:00",
+        baseTextColor: "text-gray-500",
+    },
+    {
+        name: "Automations",
+        startTimeString: "00:01:17:01",
+        endTimeString: "00:02:09:15",
+        baseTextColor: "text-gray-500",
+    },
+    {
+        name: "Staff Optimization",
+        startTimeString: "00:02:09:06",
+        endTimeString: "00:02:50:19",
+        baseTextColor: "text-gray-500",
+    },
+    {
+        name: "Dedicated Care",
+        startTimeString: "00:02:50:20",
+        endTimeString: "00:03:00:29",
+        baseTextColor: "text-gray-500",
+    },
+].map((btn) => ({
+    ...btn,
+    startTime: timecodeToSeconds(btn.startTimeString),
+    endTime: timecodeToSeconds(btn.endTimeString),
+}));
+
 export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref for hover timeout
-    // const [scrollPercentage, setScrollPercentage] = useState(0); // Original scroll percentage, replaced by video time
+    const [hasLastButtonBeenFilled, setHasLastButtonBeenFilled] =
+        useState(false); // New state
 
-    const { currentTime, videoDuration } = useVideoTime(); // Get video time and duration
+    const { currentTime, videoDuration, scrollToTime } = useVideoTime(); // Get video time, duration, and scrollToTime
 
-    // Calculate progress for each of the 4 buttons based on video time
-    const calculateProgress = (segmentIndex: number): number => {
-        if (videoDuration === 0) return 0; // Avoid division by zero if duration not set
+    const calculateButtonData = (buttonConfig: (typeof BUTTON_CONFIG)[0]) => {
+        const { startTime, endTime } = buttonConfig;
+        // Ensure videoDuration is positive and endTime is after startTime to avoid NaN or negative progress
+        if (videoDuration <= 0 || endTime <= startTime)
+            return { progress: 0, startTime };
 
-        const segmentDuration = videoDuration / 4;
-        const segmentStartTime = segmentIndex * segmentDuration;
-        const segmentEndTime = (segmentIndex + 1) * segmentDuration;
+        let progress = 0;
+        if (currentTime >= endTime) {
+            progress = 100;
+        } else if (currentTime > startTime) {
+            // Ensure endTime - startTime is positive before division
+            progress =
+                ((currentTime - startTime) / (endTime - startTime)) * 100;
+        }
 
-        if (currentTime < segmentStartTime) return 0;
-        if (currentTime > segmentEndTime) return 100;
-
-        const progressInSegment =
-            ((currentTime - segmentStartTime) / segmentDuration) * 100;
-        return Math.max(0, Math.min(100, progressInSegment)); // Clamp between 0 and 100
+        return { progress: Math.max(0, Math.min(100, progress)), startTime };
     };
 
-    const buttonProgresses = [
-        calculateProgress(0), // Vayyar Care AI
-        calculateProgress(1), // Real-time Detection
-        calculateProgress(2), // Privacy
-        calculateProgress(3), // Staff Optimization
-    ];
+    const buttonDisplayData = BUTTON_CONFIG.map((config) => ({
+        ...config,
+        ...calculateButtonData(config),
+    }));
+
+    // Effect to latch the orange state
+    useEffect(() => {
+        if (!hasLastButtonBeenFilled && buttonDisplayData.length > 0) {
+            if (
+                buttonDisplayData[buttonDisplayData.length - 1].progress >= 99.9
+            ) {
+                setHasLastButtonBeenFilled(true);
+            }
+        }
+    }, [buttonDisplayData, hasLastButtonBeenFilled]); // Depend on buttonDisplayData and the latch state
+
+    const bookADemoBackgroundColor = hasLastButtonBeenFilled
+        ? "#FFA500"
+        : "#06aeef"; // Orange or Vayyar Blue
 
     // Original useEffect for scroll percentage - can be removed or commented out
     // useEffect(() => {
@@ -99,79 +169,55 @@ export default function NavBar() {
     }, [isContactModalOpen]);
 
     return (
-        // Make nav relative to position the absolute menu
         <nav className="bg-[#f0f1fa] shadow-md relative">
-            {/* Add relative positioning here */}
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16 items-center">
-                    {/* Logo or Brand Name */}
+                <div className="flex items-center h-16">
                     <div className="flex-shrink-0">
-                        {/* Use Link for the logo to go to homepage */}
                         <Link href="/">
-                            {/* Replace text with image */}
                             <img
-                                className="h-8 w-auto" /* Adjust height/width as needed */
+                                className="h-8 w-auto"
                                 src="/images/vayyar-logo-text.png"
                                 alt="Vayyar Logo"
                             />
                         </Link>
                     </div>
 
-                    {/* Right Side - CTA and Menu Toggle */}
-                    <div className="flex items-center space-x-4">
-                        {/* New Text Buttons with Progress Fill based on Video Time */}
-                        <button className="relative text-neutral-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
-                            <div
-                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
-                                style={{ width: `${buttonProgresses[0]}%` }} // Use video progress
-                            ></div>
-                            <span className="relative z-10">
-                                Vayyar Care AI
-                            </span>
-                        </button>
-                        <button className="relative text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
-                            <div
-                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
-                                style={{ width: `${buttonProgresses[1]}%` }} // Use video progress
-                            ></div>
-                            <span className="relative z-10">
-                                Real-time Detection
-                            </span>
-                        </button>
-                        <button className="relative text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
-                            <div
-                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
-                                style={{ width: `${buttonProgresses[2]}%` }} // Use video progress
-                            ></div>
-                            <span className="relative z-10">Privacy</span>
-                        </button>
-                        <button className="relative text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden">
-                            <div
-                                className="absolute top-0 left-0 h-full bg-[#06aeef] transition-all duration-150 ease-in-out"
-                                style={{ width: `${buttonProgresses[3]}%` }} // Use video progress
-                            ></div>
-                            <span className="relative z-10">
-                                Staff Optimization
-                            </span>
-                        </button>
+                    <div className="flex-1 flex justify-center items-center space-x-4">
+                        {buttonDisplayData.map((data) => (
+                            <button
+                                key={data.name}
+                                onClick={() => scrollToTime(data.startTime)}
+                                className={`relative ${data.baseTextColor} bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium cursor-pointer overflow-hidden`}
+                            >
+                                {data.name}
+                                <div
+                                    className="absolute top-0 left-0 h-full overflow-hidden bg-[#06aeef]"
+                                    style={{ width: `${data.progress}%` }}
+                                >
+                                    <span className="block text-white px-3 py-2 text-sm font-medium whitespace-nowrap">
+                                        {data.name}
+                                    </span>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
 
-                        {/* Let's Talk Button (CTA) - Text changed to Book a Demo by user previously */}
+                    <div className="flex-shrink-0">
                         <button
                             onClick={openContactModal}
                             className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
-                            style={{ backgroundColor: "#06aeef" }} // Apply custom Vayyar blue
+                            style={{
+                                backgroundColor: bookADemoBackgroundColor,
+                            }}
                         >
-                            {/* Text Span - Transitions transform removed */}
                             <span className="inline-block">Book a Demo</span>
                         </button>
                     </div>
                 </div>
 
-                {/* Mobile Menu Panel - Hover Activated */}
                 <div
-                    // Removed ref
-                    onMouseEnter={handlePanelMouseEnter} // Keep open when mouse enters panel
-                    onMouseLeave={handleMouseLeave} // Close when mouse leaves panel
+                    onMouseEnter={handlePanelMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                     className={`
                         absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg p-6 z-[60] mt-2 mr-2
                         transform transition-all duration-300 ease-in-out

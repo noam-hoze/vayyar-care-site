@@ -1,11 +1,13 @@
 "use client"; // Mark this as a Client Component
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { scenes } from "@/data/scenes"; // Use alias
 import SceneViewer from "@/components/SceneViewer"; // Use alias
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MAX_SCENES, isValidScene, SCENES } from "@/data/sceneRegistry"; // Use alias
+import { useVideoTime } from "@/contexts/VideoTimeContext"; // Import context hook
+import { videoConfig } from "@/config/videoConfig"; // Import videoConfig
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
 gsap.registerPlugin(ScrollTrigger);
@@ -16,22 +18,48 @@ export default function HomePage() {
     const [subScrollProgress, setSubScrollProgress] = useState(0);
     // const scrollableRef = useRef(null); // Commented out as it's unused
 
-    // Setup GSAP smooth scrolling - Reverted to original logic
+    const { registerScrollToTime, videoDuration } = useVideoTime(); // Get registration function and videoDuration
+
+    // Refs for smooth scrolling logic, lifted from useEffect
+    const targetY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
+    const currentY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
+    const rafId = useRef<number | null>(null);
+    const isScrollingProgrammatically = useRef(false); // Flag to manage programmatic scroll
+
+    // Setup GSAP smooth scrolling (modified)
     useEffect(() => {
         const smoothness = 0.08;
-        let currentY = 0;
-        let targetY = window.scrollY;
-        let rafId: number | null = null;
+        // targetY, currentY, and rafId are now refs
 
         function updateScroll() {
-            currentY += (targetY - currentY) * smoothness;
-            // Apply scroll to window for now, might need adjustment
-            window.scrollTo(0, currentY);
-            rafId = requestAnimationFrame(updateScroll);
+            currentY.current +=
+                (targetY.current - currentY.current) * smoothness;
+            window.scrollTo(0, currentY.current);
+
+            // Stop RAF if close enough and not programmatically scrolling
+            if (
+                Math.abs(targetY.current - currentY.current) < 0.1 &&
+                !isScrollingProgrammatically.current
+            ) {
+                if (rafId.current !== null) {
+                    cancelAnimationFrame(rafId.current);
+                    rafId.current = null;
+                }
+            } else {
+                rafId.current = requestAnimationFrame(updateScroll);
+            }
         }
+
+        // Start the loop if not already started (e.g. after programmatic scroll ends)
+        const startScrollLoop = () => {
+            if (rafId.current === null) {
+                rafId.current = requestAnimationFrame(updateScroll);
+            }
+        };
 
         function handleWheel(e: WheelEvent) {
             e.preventDefault();
+            isScrollingProgrammatically.current = false; // User scroll overrides programmatic scroll
 
             const windowHeight = window.innerHeight;
             const currentSceneIndex = Math.min(
@@ -66,33 +94,101 @@ export default function HomePage() {
             // Important: Update targetY considering the *actual* scrollable height
             // In Next.js, this might not be document.body.scrollHeight if layout handles scroll
             const scrollableHeight = document.documentElement.scrollHeight; // Or specific element
-            targetY = Math.max(
+            targetY.current = Math.max(
                 0,
                 Math.min(
                     scrollableHeight - windowHeight,
-                    targetY + e.deltaY * speedMultiplier
+                    targetY.current + e.deltaY * speedMultiplier
                 )
             );
-
-            if (rafId === null) {
-                rafId = requestAnimationFrame(updateScroll);
-            }
+            startScrollLoop();
         }
 
-        // Attach listener to window for now
+        // Initialize targetY and currentY on mount
+        if (typeof window !== "undefined") {
+            targetY.current = window.scrollY;
+            currentY.current = window.scrollY;
+        }
+
         const scrollableElement = window;
         scrollableElement.addEventListener("wheel", handleWheel, {
             passive: false,
         });
-        rafId = requestAnimationFrame(updateScroll);
+        // rafId.current = requestAnimationFrame(updateScroll); // Start loop initially or based on interaction
+        // Start loop if initial target and current are different, or always if preferred
+        startScrollLoop();
+
+        // Register the actual scrollToTime function
+        const actualScrollToTime = (time: number) => {
+            if (videoDuration === 0) return;
+            isScrollingProgrammatically.current = true; // Set flag
+
+            let targetSceneIndex = 0;
+            let progressWithinTargetScene = 0;
+
+            // Find the scene and progress for the given time
+            for (let i = 0; i < videoConfig.sceneTiming.length; i++) {
+                const currentSceneInfo = videoConfig.sceneTiming[i];
+                const nextSceneInfo = videoConfig.sceneTiming[i + 1];
+
+                const sceneStartTime = currentSceneInfo.videoTime ?? 0;
+                const sceneEndTime = nextSceneInfo?.videoTime ?? videoDuration; // Use videoDuration for the last scene
+
+                if (time >= sceneStartTime && time < sceneEndTime) {
+                    targetSceneIndex = currentSceneInfo.scene; // Assuming scene in config matches index directly, or map if needed
+                    if (sceneEndTime - sceneStartTime > 0) {
+                        progressWithinTargetScene =
+                            (time - sceneStartTime) /
+                            (sceneEndTime - sceneStartTime);
+                    } else {
+                        progressWithinTargetScene = 0; // Avoid division by zero if scene duration is 0
+                    }
+                    break;
+                }
+                // If time is beyond the start of the last configured scene, snap to it
+                if (!nextSceneInfo && time >= sceneStartTime) {
+                    targetSceneIndex = currentSceneInfo.scene;
+                    progressWithinTargetScene = 0; // Or 1, depending on desired behavior at exact end time
+                    break;
+                }
+            }
+
+            progressWithinTargetScene = Math.max(
+                0,
+                Math.min(1, progressWithinTargetScene)
+            ); // Clamp
+
+            const windowHeight = window.innerHeight;
+            const newTargetScrollY =
+                targetSceneIndex * windowHeight +
+                progressWithinTargetScene * windowHeight;
+
+            targetY.current = Math.max(
+                0,
+                Math.min(
+                    document.documentElement.scrollHeight - windowHeight,
+                    newTargetScrollY
+                )
+            );
+
+            startScrollLoop(); // Ensure scroll loop is active
+
+            // After a short delay, unset the programmatic scroll flag to allow RAF to stop if target is reached
+            setTimeout(() => {
+                isScrollingProgrammatically.current = false;
+            }, smoothness * 1000 + 100); // Delay slightly longer than one frame of smoothing
+        };
+
+        registerScrollToTime(actualScrollToTime);
 
         return () => {
             scrollableElement.removeEventListener("wheel", handleWheel);
-            if (rafId !== null) {
-                cancelAnimationFrame(rafId);
+            if (rafId.current !== null) {
+                cancelAnimationFrame(rafId.current);
+                rafId.current = null;
             }
         };
-    }, []);
+    }, [registerScrollToTime, videoDuration]); // Add videoDuration as dependency
 
     // Scroll progress calculation
     useEffect(() => {
@@ -119,7 +215,7 @@ export default function HomePage() {
                     setIndex(newIndex);
                 }
                 // Add a small tolerance for floating point comparison if needed
-                if (newSubScroll !== subScrollProgress) {
+                if (Math.abs(newSubScroll - subScrollProgress) > 0.0001) {
                     setSubScrollProgress(newSubScroll);
                 }
             } else if (scrollY <= 0) {
