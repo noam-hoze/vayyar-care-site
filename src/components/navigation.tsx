@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react"; // Removed useEffect
 import Link from "next/link"; // Changed from react-router-dom
 import ContactModal from "@/components/ContactModal";
 import { useVideoTime } from "@/contexts/VideoTimeContext"; // Import useVideoTime
+import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
 
 // Helper to convert HH:MM:SS:FF to seconds
 const timecodeToSeconds = (tc: string, frameRate: number = 30): number => {
@@ -60,12 +61,12 @@ const BUTTON_CONFIG = [
 
 export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref for hover timeout
+    const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // Changed type for timeout ref
     const [hasLastButtonBeenFilled, setHasLastButtonBeenFilled] =
         useState(false); // New state
 
     const { currentTime, videoDuration, scrollToTime } = useVideoTime(); // Get video time, duration, and scrollToTime
+    const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal(); // Use new context
 
     const calculateButtonData = (buttonConfig: (typeof BUTTON_CONFIG)[0]) => {
         const { startTime, endTime } = buttonConfig;
@@ -153,20 +154,20 @@ export default function NavBar() {
     };
 
     const openContactModal = () => {
-        setIsContactModalOpen(true);
+        setIsDemoModalOpen(true); // Use context setter
     };
 
     const handleContactModalClose = () => {
-        setIsContactModalOpen(false);
+        setIsDemoModalOpen(false); // Use context setter
     };
 
     useEffect(() => {
-        document.body.style.overflow = isContactModalOpen ? "hidden" : "auto";
+        document.body.style.overflow = isDemoModalOpen ? "hidden" : "auto"; // Use context state
 
         return () => {
             document.body.style.overflow = "auto";
         };
-    }, [isContactModalOpen]);
+    }, [isDemoModalOpen]); // Depend on context state
 
     return (
         <nav className="bg-[#f0f1fa] shadow-md relative">
@@ -288,7 +289,7 @@ export default function NavBar() {
                     </div>
                 </div>
             </div>
-            {isContactModalOpen && (
+            {isDemoModalOpen && (
                 <ContactModal onClose={handleContactModalClose} />
             )}
         </nav>

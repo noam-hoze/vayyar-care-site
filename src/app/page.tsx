@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MAX_SCENES, isValidScene, SCENES } from "@/data/sceneRegistry"; // Use alias
 import { useVideoTime } from "@/contexts/VideoTimeContext"; // Import context hook
+import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
 import { videoConfig } from "@/config/videoConfig"; // Import videoConfig
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
@@ -175,6 +176,7 @@ export default function HomePage() {
     // const scrollableRef = useRef(null); // Commented out as it's unused
 
     const { registerScrollToTime, videoDuration, currentTime } = useVideoTime(); // Get registration function and videoDuration, added currentTime
+    const { isDemoModalOpen } = useDemoModal(); // Use new context
 
     const [shouldHeroFadeOut, setShouldHeroFadeOut] = useState(false);
     const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false); // New state
@@ -443,64 +445,67 @@ export default function HomePage() {
 
     return (
         <>
-            {/* Hero Section */}
-            <div
-                className={`fixed inset-0 flex flex-col justify-center items-center text-center z-50 pointer-events-none ${
-                    shouldHeroFadeOut
-                        ? "animate-hero-section-fade-out"
-                        : heroHasFadedOutOnce
-                        ? "animate-hero-section-fade-in"
-                        : "" // Initially, h1/h2 animations control fade-in
-                }`}
-                style={{
-                    // boxShadow: "0px 0px 80px 0px rgba(6, 174, 239, 0.6)", // REMOVED diagnostic blue shadow
-                    transform: "translateY(0) !important",
-                }}
-            >
-                {/* Inner container for text and cloud */}
+            {/* Hero Section - Conditionally rendered based on Demo Modal state */}
+            {!isDemoModalOpen && (
                 <div
-                    className="relative flex flex-col items-center justify-center p-8 group" // Added padding and group for potential future use
-                    // No box-shadow here anymore
+                    className={`fixed inset-0 flex flex-col justify-center items-center text-center z-50 pointer-events-none ${
+                        shouldHeroFadeOut
+                            ? "animate-hero-section-fade-out"
+                            : heroHasFadedOutOnce
+                            ? "animate-hero-section-fade-in"
+                            : "" // Initially, h1/h2 animations control fade-in
+                    }`}
+                    style={{
+                        // boxShadow: "0px 0px 80px 0px rgba(6, 174, 239, 0.6)", // REMOVED diagnostic blue shadow
+                        transform: "translateY(0) !important",
+                    }}
                 >
-                    {/* NEW Cloud Div */}
+                    {/* Inner container for text and cloud */}
                     <div
-                        className="absolute inset-[-40px] -z-10"
-                        style={{
-                            background:
-                                "linear-gradient(to bottom, rgba(33, 30, 30, 0.73),rgba(65, 60, 60, 0.43))",
-                            filter: "blur(40px)",
-                            borderRadius: "50%", // For soft, organic edges
-                        }}
-                    ></div>
+                        className="relative flex flex-col items-center justify-center p-8 group" // Added padding and group for potential future use
+                        // No box-shadow here anymore
+                    >
+                        {/* NEW Cloud Div */}
+                        <div
+                            className="absolute inset-[-40px] -z-10"
+                            style={{
+                                background:
+                                    "linear-gradient(to bottom, rgba(33, 30, 30, 0.73),rgba(65, 60, 60, 0.43))",
+                                filter: "blur(40px)",
+                                borderRadius: "50%", // For soft, organic edges
+                            }}
+                        ></div>
 
-                    {/* Text elements - ensure they have a higher z-index implicitly or explicitly if needed */}
-                    <h1
-                        className="text-white font-bold tracking-tight leading-tight opacity-0 animate-fadeInSlow relative z-0"
-                        style={{
-                            fontSize: "clamp(3rem, 7vw, 5.5rem)",
-                            textShadow:
-                                "0px 2px 4px rgba(0,0,0,0.5), 0px 4px 12px rgba(0,0,0,0.3)",
-                            // transform: "translateY(0) !important", // Likely not needed due to parent flex
-                        }}
-                    >
-                        Vayyar Care AI
-                    </h1>
-                    <h2
-                        className="text-white mt-4 tracking-normal opacity-0 animate-fadeInSlower relative z-0"
-                        style={{
-                            fontSize: "clamp(1.25rem, 3vw, 2rem)",
-                            textShadow:
-                                "0px 1px 3px rgba(0,0,0,0.6), 0px 3px 8px rgba(0,0,0,0.4)",
-                            // transform: "translateY(0) !important", // Likely not needed
-                        }}
-                    >
-                        Turn <span style={{ color: VAYYAR_BLUE }}>Data</span> to
-                        smarter, safer{" "}
-                        <span style={{ color: VAYYAR_BLUE }}>Care</span>
-                    </h2>
-                </div>{" "}
-                {/* END Inner container */}
-            </div>
+                        {/* Text elements - ensure they have a higher z-index implicitly or explicitly if needed */}
+                        <h1
+                            className="text-white font-bold tracking-tight leading-tight opacity-0 animate-fadeInSlow relative z-0"
+                            style={{
+                                fontSize: "clamp(3rem, 7vw, 5.5rem)",
+                                textShadow:
+                                    "0px 2px 4px rgba(0,0,0,0.5), 0px 4px 12px rgba(0,0,0,0.3)",
+                                // transform: "translateY(0) !important", // Likely not needed due to parent flex
+                            }}
+                        >
+                            Vayyar Care AI
+                        </h1>
+                        <h2
+                            className="text-white mt-4 tracking-normal opacity-0 animate-fadeInSlower relative z-0"
+                            style={{
+                                fontSize: "clamp(1.25rem, 3vw, 2rem)",
+                                textShadow:
+                                    "0px 1px 3px rgba(0,0,0,0.6), 0px 3px 8px rgba(0,0,0,0.4)",
+                                // transform: "translateY(0) !important", // Likely not needed
+                            }}
+                        >
+                            Turn{" "}
+                            <span style={{ color: VAYYAR_BLUE }}>Data</span> to
+                            smarter, safer{" "}
+                            <span style={{ color: VAYYAR_BLUE }}>Care</span>
+                        </h2>
+                    </div>{" "}
+                    {/* END Inner container */}
+                </div>
+            )}
 
             {/* Timed Texts Section - Fade In/Out */}
             {TIMED_TEXTS_CONFIG.map((config: TimedTextConfigItem) => {

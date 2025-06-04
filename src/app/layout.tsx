@@ -5,6 +5,7 @@ import "./globals.css";
 import MainLayout from "@/components/MainLayout";
 import ScrollToTop from "@/components/ScrollToTop";
 import { VideoTimeProvider } from "@/contexts/VideoTimeContext";
+import { DemoModalProvider } from "@/contexts/DemoModalContext";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -32,8 +33,10 @@ export default function RootLayout({
                 className={`${inter.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white`}
             >
                 <VideoTimeProvider>
-                    <ScrollToTop />
-                    <MainLayout>{children}</MainLayout>
+                    <DemoModalProvider>
+                        <ScrollToTop />
+                        <MainLayout>{children}</MainLayout>
+                    </DemoModalProvider>
                 </VideoTimeProvider>
             </body>
         </html>
