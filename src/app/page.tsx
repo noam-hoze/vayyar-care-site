@@ -12,19 +12,38 @@ import { videoConfig } from "@/config/videoConfig"; // Import videoConfig
 // Register GSAP plugins - needs to be done in a client component or useEffect
 gsap.registerPlugin(ScrollTrigger);
 
+const VAYYAR_BLUE = "#06aeef"; // Define Vayyar blue for use in styles
+const HERO_FADE_OUT_TIME = 4 + 24 / 30; // 00:00:04:24 assuming 30fps
+
 // Renamed function to match Next.js convention (can be any name, but default export is the page)
 export default function HomePage() {
     const [index, setIndex] = useState(0);
     const [subScrollProgress, setSubScrollProgress] = useState(0);
     // const scrollableRef = useRef(null); // Commented out as it's unused
 
-    const { registerScrollToTime, videoDuration } = useVideoTime(); // Get registration function and videoDuration
+    const { registerScrollToTime, videoDuration, currentTime } = useVideoTime(); // Get registration function and videoDuration, added currentTime
+
+    const [shouldHeroFadeOut, setShouldHeroFadeOut] = useState(false);
+    const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false); // New state
 
     // Refs for smooth scrolling logic, lifted from useEffect
     const targetY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const currentY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const rafId = useRef<number | null>(null);
     const isScrollingProgrammatically = useRef(false); // Flag to manage programmatic scroll
+
+    // Effect to trigger hero section fade-out/fade-in
+    useEffect(() => {
+        if (currentTime >= HERO_FADE_OUT_TIME) {
+            if (!shouldHeroFadeOut) {
+                // Transitioning to faded out
+                setHeroHasFadedOutOnce(true);
+            }
+            setShouldHeroFadeOut(true);
+        } else {
+            setShouldHeroFadeOut(false); // Allow it to fade back in or remain visible
+        }
+    }, [currentTime, shouldHeroFadeOut]); // Added shouldHeroFadeOut
 
     // Setup GSAP smooth scrolling (modified)
     useEffect(() => {
@@ -241,10 +260,46 @@ export default function HomePage() {
     const scenesContainerHeight = `${MAX_SCENES * 100}vh`;
 
     return (
-        // Removed the outer .app div, as body/html are handled by layout.tsx
-        // Removed scrollableRef for now, as scrolling is on window
         <>
-            {/* Scene navigation dots removed */}
+            {/* Hero Section */}
+            <div
+                className={`fixed inset-0 flex flex-col justify-center items-center text-center z-10 pointer-events-none ${
+                    shouldHeroFadeOut
+                        ? "animate-hero-section-fade-out"
+                        : heroHasFadedOutOnce
+                        ? "animate-hero-section-fade-in"
+                        : "" // Initially, h1/h2 animations control fade-in
+                }`}
+                style={{
+                    // Ensures hero is above the video/scenes but below interactive nav elements if nav has higher z-index
+                    // Add a subtle gradient or scrim if needed for text readability over complex video parts, e.g.:
+                    // background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.3) 100%)",
+                    transform: "translateY(0) !important", // Keep this to ensure no vertical shift from other sources
+                }}
+            >
+                <h1
+                    className="text-white font-bold tracking-tight leading-tight opacity-0 animate-fadeInSlow"
+                    style={{
+                        fontSize: "clamp(3rem, 7vw, 5.5rem)", // Responsive font size
+                        textShadow: "0px 2px 10px rgba(0, 0, 0, 0.5)", // Subtle shadow for readability
+                        transform: "translateY(0) !important", // Force no vertical movement
+                    }}
+                >
+                    Vayyar Care AI
+                </h1>
+                <h2
+                    className="text-gray-200 mt-4 tracking-normal opacity-0 animate-fadeInSlower"
+                    style={{
+                        fontSize: "clamp(1.25rem, 3vw, 2rem)", // Responsive font size
+                        textShadow: "0px 1px 8px rgba(0, 0, 0, 0.4)", // Subtle shadow
+                        transform: "translateY(0) !important", // Force no vertical movement
+                    }}
+                >
+                    Turn <span style={{ color: VAYYAR_BLUE }}>Data</span> to
+                    smarter, safer{" "}
+                    <span style={{ color: VAYYAR_BLUE }}>Care</span>
+                </h2>
+            </div>
 
             {/* Main container for scenes */}
             <div

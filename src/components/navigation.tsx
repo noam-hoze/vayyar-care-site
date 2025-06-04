@@ -23,13 +23,13 @@ const timecodeToSeconds = (tc: string, frameRate: number = 30): number => {
 
 const BUTTON_CONFIG = [
     {
-        name: "Vayyar Care AI",
+        name: "AI-Healthcare",
         startTimeString: "00:00:12:02",
         endTimeString: "00:00:29:18",
         baseTextColor: "text-neutral-500",
     },
     {
-        name: "Real-time Detection",
+        name: "Real-time Insights",
         startTimeString: "00:00:29:19",
         endTimeString: "00:01:17:00",
         baseTextColor: "text-gray-500",
