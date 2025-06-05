@@ -19,7 +19,7 @@ const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 const TIMED_TEXTS_CONFIG = [
     {
         id: 1,
-        text: "Smarter Care Plan",
+        text: <h1>Smarter Care Plan</h1>,
         startTime: 5 + 8 / 30,
         endTime: 5 + 22 / 30,
         style: {
@@ -29,7 +29,7 @@ const TIMED_TEXTS_CONFIG = [
     },
     {
         id: 2,
-        text: "Reduced Costs",
+        text: <h1>Reduced Costs</h1>,
         startTime: 5 + 24 / 30,
         endTime: 6 + 8 / 30,
         style: {
@@ -39,7 +39,7 @@ const TIMED_TEXTS_CONFIG = [
     },
     {
         id: 3,
-        text: "AI-Powered operations",
+        text: <h1>AI-Powered operations</h1>,
         startTime: 6 + 14 / 30,
         endTime: 7 + 12 / 30,
         style: {
@@ -51,7 +51,7 @@ const TIMED_TEXTS_CONFIG = [
         id: 5,
         text: (
             <>
-                <span
+                <h1
                     style={{
                         display: "block",
                         fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
@@ -65,8 +65,8 @@ const TIMED_TEXTS_CONFIG = [
                         &nbsp;with <br />
                         AI-powered insights
                     </span>
-                </span>
-                <span
+                </h1>
+                <h3
                     style={{
                         display: "block",
                         fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
@@ -79,7 +79,7 @@ const TIMED_TEXTS_CONFIG = [
                     <br />
                     - Without wearables
                     <br />- Without a camera
-                </span>
+                </h3>
             </>
         ),
         startTime: 16 + 20 / 30, // 16.22s
@@ -102,7 +102,7 @@ const TIMED_TEXTS_CONFIG = [
         id: 6, // New ID for the duplicated text
         text: (
             <>
-                <span
+                <h1
                     style={{
                         display: "block",
                         fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
@@ -117,8 +117,8 @@ const TIMED_TEXTS_CONFIG = [
                             Privacy
                         </span>
                     </span>
-                </span>
-                <span
+                </h1>
+                <h3
                     style={{
                         display: "block",
                         fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
@@ -128,7 +128,7 @@ const TIMED_TEXTS_CONFIG = [
                     }}
                 >
                     VayyarCare sees what matters, without exposing what doesn't
-                </span>
+                </h3>
             </>
         ),
         startTime: 48 + 22 / 30, // 00:00:48:22
@@ -463,6 +463,11 @@ export default function HomePage() {
                     {/* Inner container for text and cloud */}
                     <div
                         className="relative flex flex-col items-center justify-center p-8 group" // Added padding and group for potential future use
+                        style={{
+                            height: `calc(100% - 64px)`,
+                            width: `100%`,
+                            top: `73px`
+                        }}
                         // No box-shadow here anymore
                     >
                         {/* NEW Cloud Div */}
@@ -470,9 +475,10 @@ export default function HomePage() {
                             className="absolute inset-[-40px] -z-10"
                             style={{
                                 background:
-                                    "linear-gradient(to bottom, rgba(33, 30, 30, 0.73),rgba(65, 60, 60, 0.43))",
-                                filter: "blur(40px)",
-                                borderRadius: "50%", // For soft, organic edges
+                                    "linear-gradient(to bottom, rgba(1, 32, 64, 0.73),rgba(1, 32, 64, 0.43))",
+                                opacity: Math.max(0, 1 - (currentTime / HERO_FADE_OUT_TIME) * 1),
+                                // filter: "blur(40px)",
+                                // borderRadius: "50%", // For soft, organic edges
                             }}
                         ></div>
 
@@ -519,17 +525,18 @@ export default function HomePage() {
                                 opacity: timedTextsVisibility[config.id]
                                     ? 1
                                     : 0,
-                                padding: "20px",
+                                padding: "30px",
                             }}
                         >
                             <div
                                 className="absolute -z-10"
                                 style={{
                                     inset: "-30px",
-                                    background:
-                                        "linear-gradient(to bottom, rgba(107, 106, 106, 0.33),rgba(65, 60, 60, 0.43))",
-                                    filter: "blur(35px)",
-                                    borderRadius: "30px",
+                                    // background:
+                                    //     "linear-gradient(to bottom, rgba(107, 106, 106, 0.33),rgba(65, 60, 60, 0.43))",
+                                    backdropFilter: `blur(20px)`,
+                                    // filter: "blur(35px)",
+                                    // borderRadius: "30px",
                                 }}
                             ></div>
                             {config.text}

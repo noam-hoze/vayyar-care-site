@@ -1,6 +1,60 @@
+@font-face {
+    font-family: 'Magistral';
+    src: url('fonts/Magistral-Bold.eot');
+    src: local('Magistral Bold'), local('Magistral-Bold'),
+    url('fonts/Magistral-Bold.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Magistral-Bold.woff2') format('woff2'),
+    url('fonts/Magistral-Bold.woff') format('woff'),
+    url('fonts/Magistral-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Magistral';
+    src: url('fonts/Magistral-Medium.eot');
+    src: local('Magistral Medium'), local('Magistral-Medium'),
+    url('fonts/Magistral-Medium.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Magistral-Medium.woff2') format('woff2'),
+    url('fonts/Magistral-Medium.woff') format('woff'),
+    url('fonts/Magistral-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Magistral Book';
+    src: url('fonts/Magistral-Book.eot');
+    src: local('Magistral Book'), local('Magistral-Book'),
+    url('fonts/Magistral-Book.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Magistral-Book.woff2') format('woff2'),
+    url('fonts/Magistral-Book.woff') format('woff'),
+    url('fonts/Magistral-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @tailwind preflight;
 @tailwind components;
 @tailwind utilities;
+
+h1 {
+    font-family: 'Magistral', serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+h2 {
+    font-family: 'Magistral', serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+h3 {
+    font-family: 'Magistral Book', serif;
+    font-weight: normal;
+    font-style: normal;
+}
 
 /* 
  * Main styles file - imports all modular LESS files
