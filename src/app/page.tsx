@@ -534,7 +534,7 @@ export default function HomePage() {
                                     inset: "-30px",
                                     // background:
                                     //     "linear-gradient(to bottom, rgba(107, 106, 106, 0.33),rgba(65, 60, 60, 0.43))",
-                                    backdropFilter: `blur(20px)`,
+                                    backdropFilter: `contrast(0.4)`,
                                     // filter: "blur(35px)",
                                     // borderRadius: "30px",
                                 }}
