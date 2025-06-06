@@ -84,7 +84,7 @@ body {
 /* New: Animation for hero section to fade out */
 @keyframes heroSectionFadeOut {
   from { opacity: 1; }
-  to { opacity: 0; pointer-events: none; } /* Make it non-interactive after fade */
+  to { opacity: 0; }
 }
 
 .animate-hero-section-fade-out {
@@ -93,8 +93,8 @@ body {
 
 /* New: Animation for hero section to fade back in */
 @keyframes heroSectionFadeIn {
-  from { opacity: 0; pointer-events: none; } /* Start from faded out state */
-  to { opacity: 1; pointer-events: auto; }   /* Fade to visible */
+  from { opacity: 0; } /* Start from faded out state */
+  to { opacity: 1; }   /* Fade to visible */
 }
 
 .animate-hero-section-fade-in {
