@@ -170,7 +170,7 @@ export default function NavBar() {
     }, [isDemoModalOpen]); // Depend on context state
 
     return (
-        <nav className="bg-[#f0f1fa] shadow-md relative">
+        <nav className="bg-[#f0f1fa] shadow-md relative" style={{fontFamily: "Magistral"}}>
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center h-16">
                     <div className="flex-shrink-0">

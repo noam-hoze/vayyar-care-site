@@ -2901,3 +2901,8 @@ code {
   background-image: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7));
   z-index: 0;
 }
+
+nav button {
+    padding-top: 9px;
+    padding-bottom: 7px;
+}
