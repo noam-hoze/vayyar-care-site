@@ -9,6 +9,10 @@ import { MAX_SCENES, isValidScene, SCENES } from "@/data/sceneRegistry"; // Use 
 import { useVideoTime } from "@/contexts/VideoTimeContext"; // Import context hook
 import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
 import { videoConfig } from "@/config/videoConfig"; // Import videoConfig
+import { homeSections } from "@/data/homeSections";
+import MobileHomeSection from "@/components/mobile/MobileHomeSection";
+import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
+import MobileHeroSection from "@/components/mobile/MobileHeroSection";
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
 gsap.registerPlugin(ScrollTrigger);
@@ -171,24 +175,23 @@ interface TimedTextConfigItem {
 
 // Renamed function to match Next.js convention (can be any name, but default export is the page)
 export default function HomePage() {
+    // All hooks at the top, before any return or conditional
+    const [isMobile, setIsMobile] = useState<null | boolean>(null);
     const [index, setIndex] = useState(0);
     const [subScrollProgress, setSubScrollProgress] = useState(0);
-    // const scrollableRef = useRef(null); // Commented out as it's unused
-
-    const { registerScrollToTime, videoDuration, currentTime } = useVideoTime(); // Get registration function and videoDuration, added currentTime
-    const { isDemoModalOpen } = useDemoModal(); // Use new context
-
+    const { registerScrollToTime, videoDuration, currentTime } = useVideoTime();
+    const { isDemoModalOpen } = useDemoModal();
     const [shouldHeroFadeOut, setShouldHeroFadeOut] = useState(false);
-    const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false); // New state
-    const [timedTextsVisibility, setTimedTextsVisibility] = useState<{
-        [key: number]: boolean;
-    }>({});
-
-    // Refs for smooth scrolling logic, lifted from useEffect
+    const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false);
+    const [timedTextsVisibility, setTimedTextsVisibility] = useState<{ [key: number]: boolean }>({});
     const targetY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const currentY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const rafId = useRef<number | null>(null);
-    const isScrollingProgrammatically = useRef(false); // Flag to manage programmatic scroll
+    const isScrollingProgrammatically = useRef(false);
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth <= 768);
+    }, []);
 
     // Effect to trigger hero section fade-out/fade-in
     useEffect(() => {
@@ -231,6 +234,7 @@ export default function HomePage() {
 
     // Setup GSAP smooth scrolling (modified)
     useEffect(() => {
+        if (isMobile) return; // Only run on desktop
         const smoothness = 0.08;
         // targetY, currentY, and rafId are now refs
 
@@ -391,7 +395,7 @@ export default function HomePage() {
                 rafId.current = null;
             }
         };
-    }, [registerScrollToTime, videoDuration]); // Add videoDuration as dependency
+    }, [isMobile, registerScrollToTime, videoDuration]); // Add isMobile as dependency
 
     // Scroll progress calculation
     useEffect(() => {
@@ -442,6 +446,24 @@ export default function HomePage() {
 
     // Note: height calculation might move or change based on scroll implementation
     const scenesContainerHeight = `${MAX_SCENES * 100}vh`;
+
+    // Place this after all hooks
+    if (isMobile === null) {
+        return null;
+    }
+
+    if (isMobile) {
+        return (
+            <MobileHomeVideoProvider>
+                <div style={{ maxWidth: 480, margin: "0 auto", background: "#fff" }}>
+                    <MobileHeroSection />
+                    {homeSections.map((section, idx) => (
+                        <MobileHomeSection key={idx} section={section} index={idx} sectionId={`section-${idx}`} />
+                    ))}
+                </div>
+            </MobileHomeVideoProvider>
+        );
+    }
 
     return (
         <>
