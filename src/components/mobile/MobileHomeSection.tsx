@@ -2,6 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { defaultConfig } from "@/config/videoConfig";
 import { HomeSection } from "@/data/homeSections";
 import { useMobileHomeVideo } from "./MobileHomeVideoContext";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface MobileHomeSectionProps {
   section: HomeSection;
@@ -13,19 +17,74 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0); // 0 to 1
-  const { currentPlaying, manualOverrideIndex, requestPlay, clearManualOverride } = useMobileHomeVideo();
-  const isCurrent = typeof index === "number" && currentPlaying === index;
-  const [inView, setInView] = useState(false);
+  const { manualOverrideIndex, requestPlay, clearManualOverride } = useMobileHomeVideo();
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
   // Only relevant for video sections
   const start = section.type === "video" ? section.video!.start : 0;
   const end = section.type === "video" ? section.video!.end : 0;
+
+  // Initialize video and ScrollTrigger
+  useEffect(() => {
+    if (section.type !== "video") return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    const initializeVideo = async () => {
+      try {
+        // Load the video
+        await video.load();
+        // Set initial time
+        video.currentTime = start;
+        // Pause the video
+        video.pause();
+      } catch (error) {
+        console.error('Error initializing video:', error);
+      }
+    };
+
+    initializeVideo();
+
+    // Create ScrollTrigger
+    scrollTriggerRef.current = ScrollTrigger.create({
+      trigger: video,
+      start: "top 80%",
+      end: "bottom 20%",
+      onEnter: () => {
+        if (video.currentTime >= end - 0.01) {
+          video.currentTime = start;
+        }
+        video.play();
+        setPlaying(true);
+      },
+      onEnterBack: () => {
+        if (video.currentTime >= end - 0.01) {
+          video.currentTime = start;
+        }
+        video.play();
+        setPlaying(true);
+      },
+      onLeave: () => {
+        video.pause();
+        setPlaying(false);
+      },
+      onLeaveBack: () => {
+        video.pause();
+        setPlaying(false);
+      },
+    });
+
+    return () => {
+      scrollTriggerRef.current?.kill();
+    };
+  }, [section.type, start, end]);
 
   // Restrict playback to [start, end] for video
   useEffect(() => {
     if (section.type !== "video") return;
     const video = videoRef.current;
     if (!video) return;
+    
     const onTimeUpdate = () => {
       if (video.currentTime < start) video.currentTime = start;
       if (video.currentTime > end) {
@@ -35,103 +94,32 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
       }
       setProgress((video.currentTime - start) / (end - start));
     };
+    
     video.addEventListener("timeupdate", onTimeUpdate);
-    // Seek to start on mount
-    video.currentTime = start;
-    setProgress(0);
     return () => video.removeEventListener("timeupdate", onTimeUpdate);
   }, [start, end, section.type]);
 
-  // Play/pause handler
+  // Manual play/pause handler
   const togglePlay = () => {
     if (typeof index !== "number") return;
-    if (playing && isCurrent) {
-      // User is pausing the video
-      videoRef.current?.pause();
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (playing) {
+      video.pause();
       setPlaying(false);
-      // If this was the manual override, clear it
       if (manualOverrideIndex === index) {
         clearManualOverride();
       }
     } else {
-      // User is playing the video
       requestPlay(index, { manual: true });
-      const video = videoRef.current;
-      if (!video) return;
-      // If at end, always seek to start
       if (video.currentTime >= end - 0.01) {
         video.currentTime = start;
       }
-      // Pause all other videos on the page except this one
-      document.querySelectorAll('video').forEach((el) => {
-        if (el !== video && el.getAttribute('data-section-video') === 'true') {
-          el.pause();
-        }
-      });
       video.play();
       setPlaying(true);
     }
   };
-
-  // Pause if section changes or not current
-  useEffect(() => {
-    if (section.type !== "video") return;
-    setPlaying(false);
-    if (videoRef.current) videoRef.current.pause();
-  }, [start, end, section.type]);
-
-  // Pause if not currentPlaying
-  useEffect(() => {
-    if (section.type !== "video") return;
-    const video = videoRef.current;
-    if (!isCurrent && video) {
-      video.pause();
-      setPlaying(false);
-    }
-  }, [isCurrent, section.type]);
-
-  // IntersectionObserver for in-viewport detection
-  useEffect(() => {
-    if (section.type !== "video") return;
-    const el = videoRef.current;
-    if (!el) return;
-    const observer = new window.IntersectionObserver(
-      ([entry]) => {
-        setInView(entry.isIntersecting);
-      },
-      { threshold: 0.6 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [section.type]);
-
-  // Auto play/pause based on viewport and currentPlaying
-  useEffect(() => {
-    if (section.type !== "video") return;
-    // Only auto-play if no manual override or this is the manual one
-    if (inView && typeof index === "number" && (manualOverrideIndex === null || manualOverrideIndex === index)) {
-      requestPlay(index);
-    }
-  }, [inView, index, requestPlay, section.type, manualOverrideIndex]);
-
-  useEffect(() => {
-    if (section.type !== "video") return;
-    const video = videoRef.current;
-    if (!video) return;
-    if (isCurrent && inView) {
-      // Pause all other videos on the page except this one
-      document.querySelectorAll('video').forEach((el) => {
-        if (el !== video && el.getAttribute('data-section-video') === 'true') {
-          el.pause();
-        }
-      });
-      video.play();
-      setPlaying(true);
-    } else {
-      video.pause();
-      setPlaying(false);
-    }
-  }, [isCurrent, inView, section.type]);
 
   if (section.type === "text") {
     return (
@@ -152,6 +140,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
         controls={false}
         playsInline
         muted
+        preload="auto"
         data-section-video="true"
       />
       {/* Play/Pause button with circular progress */}
@@ -211,7 +200,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
           }}
           aria-label={playing ? "Pause video" : "Play video"}
         >
-          {playing && isCurrent ? (
+          {playing ? (
             <span style={{ fontWeight: "bold" }}>&#10073;&#10073;</span> // Pause icon
           ) : (
             <span style={{ fontWeight: "bold" }}>&#9654;</span> // Play icon
