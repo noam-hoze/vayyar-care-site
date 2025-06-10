@@ -19,6 +19,7 @@ const MobileHeroSection: React.FC = () => (
       justifyContent: "center",
       alignItems: "center",
       padding: 0,
+      marginTop: "calc(var(--spacing) * -16)",
     }}
   >
     {/* Video background (static, not playing) */}

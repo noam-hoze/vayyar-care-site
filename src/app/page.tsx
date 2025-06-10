@@ -190,7 +190,22 @@ export default function HomePage() {
     const isScrollingProgrammatically = useRef(false);
 
     useEffect(() => {
-        setIsMobile(window.innerWidth <= 768);
+        // Function to check and update mobile state
+        const checkMobile = () => {
+            // 1024 is the breakpoint for desktop, to be synced with Tailwindcss layout breakpoints
+            setIsMobile(document.documentElement.clientWidth < 1024);
+        };
+
+        // Initial check
+        checkMobile();
+
+        // Add resize event listener
+        window.addEventListener('resize', checkMobile);
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('resize', checkMobile);
+        };
     }, []);
 
     // Effect to trigger hero section fade-out/fade-in
@@ -455,7 +470,7 @@ export default function HomePage() {
     if (isMobile) {
         return (
             <MobileHomeVideoProvider>
-                <div style={{ maxWidth: 480, margin: "0 auto", background: "#fff" }}>
+                <div style={{ margin: "0 auto", background: "#fff" }}>
                     <MobileHeroSection />
                     {homeSections.map((section, idx) => (
                         <MobileHomeSection key={idx} section={section} index={idx} sectionId={`section-${idx}`} />

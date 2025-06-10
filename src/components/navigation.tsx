@@ -72,8 +72,9 @@ export default function NavBar({
     }, [isDemoModalOpen]);
 
     return (
-        <nav className="bg-[#f0f1fa] shadow-md relative z-50" style={{fontFamily: "Magistral"}}>
-            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav className="relative z-50" style={{fontFamily: "Magistral"}}>
+            <div className="w-full h-full absolute" style={{backgroundColor: "rgba(250, 250, 252, 0.8)", backdropFilter: "saturate(1.8) blur(20px)"}}></div>
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-7">
                 <div className="flex items-center h-16">
                     <div className="flex-shrink-0">
                         <Link href="/">
@@ -85,7 +86,7 @@ export default function NavBar({
                         </Link>
                     </div>
                     {/* Desktop nav buttons */}
-                    <div className="flex-1 justify-center items-center space-x-4 hidden md:flex">
+                    <div className="flex-1 justify-center items-center space-x-4 hidden lg:flex">
                         {buttonDisplayData.map((data) => (
                             <button
                                 key={data.name}
@@ -105,7 +106,7 @@ export default function NavBar({
                         ))}
                     </div>
                     {/* Mobile menu button */}
-                    <div className="flex-1 flex justify-end items-center md:hidden">
+                    <div className="flex-1 flex justify-end items-center lg:hidden">
                         <button
                             className="ml-2 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-200 focus:outline-none mobile-menu"
                             aria-label="Open menu"

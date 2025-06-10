@@ -68,7 +68,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             )}
             {/* Mobile overlay menu rendered here, outside NavBar */}
             {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center transition-all duration-300 md:hidden">
+                <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center transition-all duration-300 lg:hidden">
                     <button
                         className="absolute top-6 right-6 text-black text-3xl focus:outline-none"
                         aria-label="Close menu"
