@@ -9,10 +9,11 @@ import { MAX_SCENES, isValidScene, SCENES } from "@/data/sceneRegistry"; // Use 
 import { useVideoTime } from "@/contexts/VideoTimeContext"; // Import context hook
 import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
 import { videoConfig } from "@/config/videoConfig"; // Import videoConfig
-import { homeSections } from "@/data/homeSections";
+import { homeSections, HomeSection } from "@/data/homeSections";
 import MobileHomeSection from "@/components/mobile/MobileHomeSection";
 import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
 import MobileHeroSection from "@/components/mobile/MobileHeroSection";
+import Breather from "@/components/Breather"; // Import the new Breather component
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
 gsap.registerPlugin(ScrollTrigger);
@@ -33,7 +34,7 @@ const TIMED_TEXTS_CONFIG = [
     },
     {
         id: 2,
-        text: <h1>Reduced Costs</h1>,
+        text: <h1>Improve NOI</h1>,
         startTime: 5 + 24 / 30,
         endTime: 6 + 8 / 30,
         style: {
@@ -43,63 +44,12 @@ const TIMED_TEXTS_CONFIG = [
     },
     {
         id: 3,
-        text: <h1>AI-Powered operations</h1>,
+        text: <h1>AI-Powered Insights</h1>,
         startTime: 6 + 14 / 30,
         endTime: 7 + 12 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
-        },
-    },
-    {
-        id: 5,
-        text: (
-            <>
-                <h1
-                    style={{
-                        display: "block",
-                        fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
-                        fontWeight: "800",
-                        marginBottom: "0.4em",
-                        textAlign: "center",
-                    }}
-                >
-                    <span style={{ color: "#06aeef" }}>Save time</span>
-                    <span style={{ fontWeight: "300" }}>
-                        &nbsp;with <br />
-                        AI-powered insights
-                    </span>
-                </h1>
-                <h3
-                    style={{
-                        display: "block",
-                        fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
-                        fontWeight: "300",
-                        lineHeight: "1.45",
-                        textAlign: "center",
-                    }}
-                >
-                    - Delivered in real time
-                    <br />
-                    - Without wearables
-                    <br />- Without a camera
-                </h3>
-            </>
-        ),
-        startTime: 16 + 20 / 30, // 16.22s
-        fadeInDuration: 0.5,
-        visibleDuration: 8,
-        fadeOutDuration: 0.5,
-        isRightAligned: true,
-        style: {
-            // fontSize, fontWeight, lineHeight, whiteSpace are now controlled by inner spans or not needed
-            fontFamily: "Manrope, Inter, sans-serif",
-            fontWeight: "normal", // Set a base fontWeight, inner spans will override
-            color: "#FFFFFF",
-            textShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
-            letterSpacing: "0.01em", // Adjusted letter spacing slightly
-            maxWidth: "480px", // Adjusted maxWidth
-            transition: "opacity 0.5s ease-in-out",
         },
     },
     {
@@ -116,10 +66,10 @@ const TIMED_TEXTS_CONFIG = [
                     }}
                 >
                     <span style={{ fontWeight: "300" }}>
-                        Preserve{" "}
+                        Care with{" "}
                         <span style={{ color: "#06aeef", fontWeight: "800" }}>
                             Privacy
-                        </span>
+                        </span> and Dignity
                     </span>
                 </h1>
                 <h3
@@ -131,7 +81,7 @@ const TIMED_TEXTS_CONFIG = [
                         textAlign: "center",
                     }}
                 >
-                    VayyarCare sees what matters, without exposing what doesn't
+                    Enhanced Coverage, Optimal Privacy
                 </h3>
             </>
         ),
@@ -609,6 +559,22 @@ export default function HomePage() {
                     subScrollProgress={subScrollProgress}
                 />
             </div>
+
+            {/* Breather components with homeSections data */}
+            {homeSections
+                .filter(section => section.type === "text")
+                .map((section, idx) => {
+                    return (
+                        <Breather
+                            key={idx}
+                            appearAtTime={section.text?.start}
+                            disappearAtTime={section.text?.end}
+                            title={section.header || section.title}
+                            content={section.content}
+                        />
+                    );
+                })
+            }
         </>
     );
 }

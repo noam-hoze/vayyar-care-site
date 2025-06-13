@@ -123,7 +123,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
 
   if (section.type === "text") {
     return (
-      <div id={sectionId} style={{ padding: "24px 16px", fontSize: 18, minHeight: '70vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', scrollMarginTop: '64px' }}>
+      <div id={sectionId} style={{ padding: "24px", fontSize: 18, minHeight: '70vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', scrollMarginTop: '64px' }}>
         {section.header && <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', fontWeight: 'bold', marginBottom: '16px' }}>{section.header}</h2>}
         <p>{section.content}</p>
       </div>
