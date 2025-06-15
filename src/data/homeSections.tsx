@@ -57,7 +57,7 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 15, end: 25 },
+        text: { start: 5, end: 11 },
     },
     { type: "video", title: "Video 1", video: { start: 0, end: 30 } },
     {
@@ -138,7 +138,7 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 40, end: 50 },
+        text: { start: 36, end: 46 },
     },
     { type: "video", title: "Video 2", video: { start: 30, end: 60 } },
     {

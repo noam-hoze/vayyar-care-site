@@ -22,7 +22,7 @@ const Breather = ({
     style,
 }: BreatherProps) => {
     const [isVisible, setIsVisible] = useState(false);
-    const { videoDuration, currentTime } = useVideoTime();
+    const { videoDuration, currentTime, scrollToTime } = useVideoTime();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const breatherRef = useRef<HTMLDivElement>(null);
     const breatherHeight = useRef<number>(0);
@@ -297,8 +297,11 @@ const Breather = ({
                                 </div>
                                 <div style={{ marginTop: "20px" }}>
                                     <button
-                                        onClick={openModal}
+                                        onClick={() =>
+                                            scrollToTime(12 + 18 / 30)
+                                        }
                                         style={{
+                                            marginTop: "20px",
                                             display: "inline-flex",
                                             alignItems: "center",
                                             justifyContent: "center",
@@ -328,7 +331,10 @@ const Breather = ({
                                                 clipRule="evenodd"
                                             />
                                         </svg>
-                                        <span>Learn more</span>
+                                        <span>
+                                            Learn more about workforce
+                                            optimization
+                                        </span>
                                     </button>
                                 </div>
                             </div>
