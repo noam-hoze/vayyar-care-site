@@ -94,7 +94,7 @@ const MobileHeroSection: React.FC = () => {
             textShadow: "0px 1px 3px rgba(0,0,0,0.6), 0px 3px 8px rgba(0,0,0,0.4)",
           }}
         >
-          Turn <span style={{ color: VAYYAR_BLUE }}>Data</span> to smarter, safer <span style={{ color: VAYYAR_BLUE }}>Care</span>
+          Gain The <span style={{ color: VAYYAR_BLUE }}>Edge:</span>  Optimize Care. Reduce Costs. Scale Faster. <span style={{ color: VAYYAR_BLUE }}>Care</span>
         </h2>
       </div>
     </section>

@@ -65,36 +65,47 @@ export const homeSections: HomeSection[] = [
         title: "Intro",
         header: (
             <>
-                Faster response.
-                <br />
-                Lower risk
+                <span
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5em",
+                    }}
+                >
+                    <span style={{ color: "#E53E3E", fontWeight: "bold" }}>
+                        ✘
+                    </span>{" "}
+                    cameras.
+                </span>
+                <span
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5em",
+                    }}
+                >
+                    <span style={{ color: "#E53E3E", fontWeight: "bold" }}>
+                        ✘
+                    </span>{" "}
+                    wearables.
+                </span>
+
+                <span
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5em",
+                    }}
+                >
+                    <span style={{ color: "#48BB78", fontWeight: "bold" }}>
+                        ✔
+                    </span>{" "}
+                    dignity.
+                </span>
             </>
         ),
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
-                <li
-                    style={{
-                        display: "flex",
-                        gap: "0.5em",
-                        marginBottom: "0.5rem",
-                    }}
-                >
-                    <span style={{ color: "#05aae9" }}>›</span>
-                    <span>
-                        <span style={{ color: "#E53E3E", fontWeight: "bold" }}>
-                            ✘
-                        </span>{" "}
-                        wearables{" "}
-                        <span style={{ color: "#E53E3E", fontWeight: "bold" }}>
-                            ✘
-                        </span>{" "}
-                        cameras{" "}
-                        <span style={{ color: "#48BB78", fontWeight: "bold" }}>
-                            ✔
-                        </span>{" "}
-                        dignity.
-                    </span>
-                </li>
                 <li
                     style={{
                         display: "flex",
@@ -113,19 +124,8 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Avoid costly hospitalizations and claims</span>
+                    <span>Lower staff burden with automatic alerts</span>
                 </li>
-               
-            </ul>
-        ),
-        text: { start: 40, end: 60 },
-    },
-    {
-        type: "text",
-        title: "Section 2",
-        header: "Key Features",
-        content: (
-            <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
                     style={{
                         display: "flex",
@@ -134,21 +134,25 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>No Cameras.</span>
-                </li>
-                <li style={{ display: "flex", gap: "0.5em" }}>
-                    <span style={{ color: "#05aae9" }}>›</span>
-                    <span>No Wearables.</span>
+                    <span>Reduce risk, liability</span>
                 </li>
             </ul>
         ),
-        text: { start: 65, end: 75 },
+        text: { start: 40, end: 50 },
     },
     { type: "video", title: "Video 2", video: { start: 30, end: 60 } },
     {
         type: "text",
         title: "Summary",
-        header: "Sum up our insights capabilities",
+        header: (
+            <>
+                <span style={{ color: "#05aae9" }}>Actionable</span> insights.
+                <br />
+                Smarter <span style={{ color: "#05aae9" }}>staffing</span>.
+                <br />
+                <span style={{ color: "#05aae9" }}>Safer</span> residents.
+            </>
+        ),
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -187,6 +191,6 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 82, end: 90 },
+        text: { start: 80, end: 105 },
     },
 ];

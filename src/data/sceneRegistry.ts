@@ -7,8 +7,11 @@ export const SCENES = {
     JOHNS_SUMMARY: 1,
     FALL_EVENT: 2,
     DOCUMENT_EVENT: 3,
-    // VP_CLINICAL: 4,
-    // VP_FAMILY: 5,
+    VP_CLINICAL: 4,
+    VP_FAMILY: 5,
+    LAST: 6,
+    LAST_1: 7,
+    LAST_2: 8,
 };
 
 // Helper function to validate a scene index is valid
@@ -30,4 +33,4 @@ export function getTotalScenes() {
 }
 
 // The number of scenes we want to display in the app
-export const MAX_SCENES = 4;
+export const MAX_SCENES = 9;

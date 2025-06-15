@@ -84,6 +84,7 @@ const AnimatedTabletScene1: React.FC<AnimatedTabletScene1Props> = ({
             responseStartThreshold={35}
             transitionStartThreshold={85}
             contentTransitionThreshold={95}
+            showChatInput={true}
         >
             {visualResponse}
         </TabletLayout>

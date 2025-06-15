@@ -21,15 +21,15 @@ gsap.registerPlugin(ScrollTrigger);
 const VAYYAR_BLUE = "#06aeef"; // Define Vayyar blue for use in styles
 const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 
-const TIMED_TEXTS_CONFIG = [
+const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     {
         id: 1,
         text: (
             <h1 style={{ margin: 0 }}>
-                <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
+                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
                     ›
                 </span>
-                Smarter Care Plan
+                Smarter Care Plan */}
             </h1>
         ),
         startTime: 5 + 8 / 30,
@@ -43,10 +43,10 @@ const TIMED_TEXTS_CONFIG = [
         id: 2,
         text: (
             <h1 style={{ margin: 0 }}>
-                <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
+                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
                     ›
                 </span>
-                Improve NOI
+                Improve NOI */}
             </h1>
         ),
         startTime: 5 + 24 / 30,
@@ -60,10 +60,10 @@ const TIMED_TEXTS_CONFIG = [
         id: 3,
         text: (
             <h1 style={{ margin: 0 }}>
-                <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
+                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
                     ›
                 </span>
-                AI-Powered Insights
+                AI-Powered Insights */}
             </h1>
         ),
         startTime: 6 + 14 / 30,
@@ -73,55 +73,55 @@ const TIMED_TEXTS_CONFIG = [
             transition: "opacity 0.3s ease-in-out",
         },
     },
-    {
-        id: 6, // New ID for the duplicated text
-        text: (
-            <>
-                <h1
-                    style={{
-                        display: "block",
-                        fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
-                        fontWeight: "800",
-                        marginBottom: "0.4em",
-                        textAlign: "center",
-                    }}
-                >
-                    <span style={{ fontWeight: "300" }}>
-                        Care with{" "}
-                        <span style={{ color: "#06aeef", fontWeight: "800" }}>
-                            Privacy
-                        </span>{" "}
-                        and Dignity
-                    </span>
-                </h1>
-                <h3
-                    style={{
-                        display: "block",
-                        fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
-                        fontWeight: "300",
-                        lineHeight: "1.45",
-                        textAlign: "center",
-                    }}
-                >
-                    Enhanced Coverage, Optimal Privacy
-                </h3>
-            </>
-        ),
-        startTime: 48 + 22 / 30, // 00:00:48:22
-        fadeInDuration: 0.5,
-        visibleDuration: 9, // Same as the original id: 5
-        fadeOutDuration: 0.5,
-        isRightAligned: true,
-        style: {
-            fontFamily: "Manrope, Inter, sans-serif",
-            fontWeight: "normal",
-            color: "#FFFFFF",
-            textShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
-            letterSpacing: "0.01em",
-            maxWidth: "480px",
-            transition: "opacity 0.5s ease-in-out",
-        },
-    },
+    // {
+    //     id: 6, // New ID for the duplicated text
+    //     text: (
+    //         <>
+    //             <h1
+    //                 style={{
+    //                     display: "block",
+    //                     fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
+    //                     fontWeight: "800",
+    //                     marginBottom: "0.4em",
+    //                     textAlign: "center",
+    //                 }}
+    //             >
+    //                 <span style={{ fontWeight: "300" }}>
+    //                     Care with{" "}
+    //                     <span style={{ color: "#06aeef", fontWeight: "800" }}>
+    //                         Privacy
+    //                     </span>{" "}
+    //                     and Dignity
+    //                 </span>
+    //             </h1>
+    //             <h3
+    //                 style={{
+    //                     display: "block",
+    //                     fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
+    //                     fontWeight: "300",
+    //                     lineHeight: "1.45",
+    //                     textAlign: "center",
+    //                 }}
+    //             >
+    //                 Enhanced Coverage, Optimal Privacy
+    //             </h3>
+    //         </>
+    //     ),
+    //     startTime: 48 + 22 / 30, // 00:00:48:22
+    //     fadeInDuration: 0.5,
+    //     visibleDuration: 9, // Same as the original id: 5
+    //     fadeOutDuration: 0.5,
+    //     isRightAligned: true,
+    //     style: {
+    //         fontFamily: "Manrope, Inter, sans-serif",
+    //         fontWeight: "normal",
+    //         color: "#FFFFFF",
+    //         textShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
+    //         letterSpacing: "0.01em",
+    //         maxWidth: "480px",
+    //         transition: "opacity 0.5s ease-in-out",
+    //     },
+    // },
 ];
 
 interface TimedTextConfigItem {
@@ -142,6 +142,7 @@ interface TimedTextConfigItem {
         lineHeight?: string;
         maxWidth?: string;
         whiteSpace?: React.CSSProperties["whiteSpace"];
+        transition?: string;
     };
 }
 
@@ -209,11 +210,11 @@ export default function HomePage() {
                 // New logic for texts with explicit durations
                 const animationStartTime = config.startTime;
                 const fullyVisibleTime =
-                    animationStartTime + config.fadeInDuration;
+                    animationStartTime + (config.fadeInDuration || 0);
                 const startFadeOutTime =
-                    fullyVisibleTime + config.visibleDuration;
+                    fullyVisibleTime + (config.visibleDuration || 0);
                 const animationEndTime =
-                    startFadeOutTime + config.fadeOutDuration;
+                    startFadeOutTime + (config.fadeOutDuration || 0);
                 newVisibility[config.id] =
                     currentTime >= animationStartTime &&
                     currentTime < animationEndTime;
@@ -538,21 +539,30 @@ export default function HomePage() {
                                 // transform: "translateY(0) !important", // Likely not needed due to parent flex
                             }}
                         >
-                            Vayyar Care AI
+                            Vayyar Care
+                            <sup
+                                style={{
+                                    fontSize: "0.6em",
+                                    top: "-0.5em",
+                                    position: "relative",
+                                    color: VAYYAR_BLUE,
+                                    marginLeft: "0.1em",
+                                    zIndex: -1,
+                                }}
+                            >
+                                AI
+                            </sup>
                         </h1>
                         <h2
-                            className="text-white mt-4 tracking-normal opacity-0 animate-fadeInSlower relative z-0"
+                            className="text-white mt-4 tracking-wide font-light opacity-0 animate-fadeInSlower relative z-0"
                             style={{
                                 fontSize: "clamp(1.25rem, 3vw, 2rem)",
-                                textShadow:
-                                    "0px 1px 3px rgba(0,0,0,0.6), 0px 3px 8px rgba(0,0,0,0.4)",
+                                textShadow: "0px 2px 12px rgba(0,0,0,0.5)",
                                 // transform: "translateY(0) !important", // Likely not needed
                             }}
                         >
-                            Turn{" "}
-                            <span style={{ color: VAYYAR_BLUE }}>Data</span> to
-                            smarter, safer{" "}
-                            <span style={{ color: VAYYAR_BLUE }}>Care</span>
+                            Optimize Care &nbsp;·&nbsp; Scale Faster
+                            &nbsp;·&nbsp; Increase NOI
                         </h2>
                     </div>{" "}
                     {/* END Inner container */}

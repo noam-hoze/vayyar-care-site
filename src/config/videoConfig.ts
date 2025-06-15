@@ -17,10 +17,16 @@ export const defaultConfig = {
     // Timing configuration for each scene
     // These times should match your video timestamps
     sceneTiming: [
-        { scene: SCENES.MORNING_SHIFT, videoTime: 0 }, // Scene 0 starts at 0s
-        { scene: SCENES.JOHNS_SUMMARY, videoTime: 7 }, // Scene 0 starts at 0s
-        { scene: SCENES.FALL_EVENT, videoTime: 27 }, // Scene 1 starts at 3s
-        // { scene: SCENES.DOCUMENT_EVENT, videoTime: 50 },
+        { scene: SCENES.MORNING_SHIFT, videoTime: 0 },
+        { scene: SCENES.JOHNS_SUMMARY, videoTime: 15 },
+        { scene: SCENES.FALL_EVENT, videoTime: 40 },
+        { scene: SCENES.DOCUMENT_EVENT, videoTime: 65 },
+        { scene: SCENES.VP_CLINICAL, videoTime: 90 },
+        { scene: SCENES.VP_FAMILY, videoTime: 115 },
+        { scene: SCENES.LAST, videoTime: 140 },
+        { scene: SCENES.LAST_1, videoTime: 165 },
+        { scene: SCENES.LAST_2, videoTime: 190 },
+    
         // { scene: SCENES.VP_CLINICAL, videoTime: 70 },
     ],
 };

@@ -527,51 +527,47 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
                         )}
                     </div>
 
-                    {/* Chat input - always visible */}
-                    <div className="tablet-layout-input">
-                        <input
-                            type="text"
-                            className="tablet-layout-input-field"
-                            placeholder="Ask Vayyar something..."
-                            value={
-                                animationState.buttonClicked
-                                    ? ""
-                                    : animationState.showTypingNextQuery
-                                    ? animationState.nextInputValue
-                                    : animationState.showTypingCurrentQuery
-                                    ? animationState.currentInputValue
-                                    : ""
-                            }
-                            readOnly
-                        />
-                        <button
-                            className="tablet-layout-input-button"
-                            style={{
-                                transition:
-                                    "transform 0.2s ease, box-shadow 0.2s ease",
-                                transform: animationState.buttonClicked
-                                    ? "scale(0.9)"
-                                    : "scale(1)",
-                                boxShadow: animationState.buttonClicked
-                                    ? "0 0 0 rgba(0,0,0,0)"
-                                    : "0 2px 4px rgba(0,0,0,0.2)",
-                            }}
-                        >
-                            <img
-                                src="/images/vayyar-logo-white.png"
-                                alt="Vayyar"
+                    {/* Chat input - styled like ChatGPT */}
+                    {showChatInput && (
+                        <div className="tablet-chat-input-container">
+                            <input
+                                type="text"
+                                className="tablet-chat-input-field"
+                                placeholder="Send a message..."
+                                value={
+                                    animationState.buttonClicked
+                                        ? ""
+                                        : animationState.showTypingNextQuery
+                                        ? animationState.nextInputValue
+                                        : animationState.showTypingCurrentQuery
+                                        ? animationState.currentInputValue
+                                        : ""
+                                }
+                                readOnly
+                            />
+                            <button
+                                className="tablet-chat-send-button"
                                 style={{
-                                    width: "60%",
-                                    height: "60%",
-                                    objectFit: "contain",
-                                    transition: "transform 0.2s ease",
                                     transform: animationState.buttonClicked
                                         ? "scale(0.9)"
                                         : "scale(1)",
                                 }}
-                            />
-                        </button>
-                    </div>
+                            >
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M7 11l5-5 5 5M12 18V6" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
