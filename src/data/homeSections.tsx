@@ -51,7 +51,7 @@ export const homeSections: HomeSection[] = [
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Turn Insights Into Action That Cuts Waste and Drives
+                        Turn Insights Into Action That Cuts Waste and Drive
                         Margin
                     </span>
                 </li>
@@ -134,7 +134,9 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Confirm that care routines are followed</span>
+                    <span>
+                        Confirm that care routines are thoroughly followed
+                    </span>
                 </li>
             </ul>
         ),
