@@ -100,7 +100,7 @@ export const homeSections: HomeSection[] = [
                     <span style={{ color: "#48BB78", fontWeight: "bold" }}>
                         ✔
                     </span>{" "}
-                    dignity.
+                    privacy.
                 </span>
             </>
         ),
@@ -124,7 +124,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Lower staff burden with automatic alerts</span>
+                    <span>Lower staff overload with automatic alerts</span>
                 </li>
                 <li
                     style={{
@@ -134,7 +134,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Reduce risk, liability</span>
+                    <span>Confirm that care routines are followed</span>
                 </li>
             </ul>
         ),
@@ -191,6 +191,6 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 80, end: 105 },
+        text: { start: 80, end: 92 },
     },
 ];

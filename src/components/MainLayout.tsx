@@ -26,8 +26,8 @@ const timecodeToSeconds = (tc: string, frameRate: number = 30): number => {
 
 const BUTTON_CONFIG = [
     {
-        name: "AI Optimization",
-        startTimeString: "00:00:06:20",
+        name: "Workforce Optimization",
+        startTimeString: "00:00:06:12",
         endTimeString: "00:00:29:18",
         baseTextColor: "text-neutral-500",
     },
@@ -39,7 +39,7 @@ const BUTTON_CONFIG = [
     },
     {
         name: "AI Insights",
-        startTimeString: "00:01:28:10",
+        startTimeString: "00:01:22:27",
         endTimeString: "00:02:09:15",
         baseTextColor: "text-gray-500",
     },
