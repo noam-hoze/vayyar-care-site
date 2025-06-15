@@ -24,7 +24,14 @@ const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 const TIMED_TEXTS_CONFIG = [
     {
         id: 1,
-        text: <h1>Smarter Care Plan</h1>,
+        text: (
+            <h1 style={{ margin: 0 }}>
+                <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
+                    ›
+                </span>
+                Smarter Care Plan
+            </h1>
+        ),
         startTime: 5 + 8 / 30,
         endTime: 5 + 22 / 30,
         style: {
@@ -34,7 +41,14 @@ const TIMED_TEXTS_CONFIG = [
     },
     {
         id: 2,
-        text: <h1>Improve NOI</h1>,
+        text: (
+            <h1 style={{ margin: 0 }}>
+                <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
+                    ›
+                </span>
+                Improve NOI
+            </h1>
+        ),
         startTime: 5 + 24 / 30,
         endTime: 6 + 8 / 30,
         style: {
@@ -44,7 +58,14 @@ const TIMED_TEXTS_CONFIG = [
     },
     {
         id: 3,
-        text: <h1>AI-Powered Insights</h1>,
+        text: (
+            <h1 style={{ margin: 0 }}>
+                <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
+                    ›
+                </span>
+                AI-Powered Insights
+            </h1>
+        ),
         startTime: 6 + 14 / 30,
         endTime: 7 + 12 / 30,
         style: {
@@ -69,7 +90,8 @@ const TIMED_TEXTS_CONFIG = [
                         Care with{" "}
                         <span style={{ color: "#06aeef", fontWeight: "800" }}>
                             Privacy
-                        </span> and Dignity
+                        </span>{" "}
+                        and Dignity
                     </span>
                 </h1>
                 <h3
@@ -133,7 +155,9 @@ export default function HomePage() {
     const { isDemoModalOpen } = useDemoModal();
     const [shouldHeroFadeOut, setShouldHeroFadeOut] = useState(false);
     const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false);
-    const [timedTextsVisibility, setTimedTextsVisibility] = useState<{ [key: number]: boolean }>({});
+    const [timedTextsVisibility, setTimedTextsVisibility] = useState<{
+        [key: number]: boolean;
+    }>({});
     const targetY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const currentY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const rafId = useRef<number | null>(null);
@@ -150,11 +174,11 @@ export default function HomePage() {
         checkMobile();
 
         // Add resize event listener
-        window.addEventListener('resize', checkMobile);
+        window.addEventListener("resize", checkMobile);
 
         // Cleanup
         return () => {
-            window.removeEventListener('resize', checkMobile);
+            window.removeEventListener("resize", checkMobile);
         };
     }, []);
 
@@ -174,8 +198,14 @@ export default function HomePage() {
     // Effect to trigger timed texts fade-in/out
     useEffect(() => {
         const newVisibility: { [key: number]: boolean } = {};
+        const stackingTextIds = [1, 2, 3];
+
         TIMED_TEXTS_CONFIG.forEach((config) => {
-            if (config.fadeInDuration) {
+            if (stackingTextIds.includes(config.id)) {
+                // For stacking texts, they become visible at their start time.
+                // The parent container will handle the group's final disappearance.
+                newVisibility[config.id] = currentTime >= config.startTime;
+            } else if (config.fadeInDuration) {
                 // New logic for texts with explicit durations
                 const animationStartTime = config.startTime;
                 const fullyVisibleTime =
@@ -412,6 +442,27 @@ export default function HomePage() {
     // Note: height calculation might move or change based on scroll implementation
     const scenesContainerHeight = `${MAX_SCENES * 100}vh`;
 
+    const stackingTextConfigs = TIMED_TEXTS_CONFIG.filter((c) =>
+        [1, 2, 3].includes(c.id)
+    );
+    const otherTextConfigs = TIMED_TEXTS_CONFIG.filter(
+        (c) => ![1, 2, 3].includes(c.id)
+    );
+
+    // Determine when the entire stacked group should be visible
+    const firstStackingText =
+        stackingTextConfigs.length > 0 ? stackingTextConfigs[0] : null;
+    const lastStackingText =
+        stackingTextConfigs.length > 0
+            ? stackingTextConfigs[stackingTextConfigs.length - 1]
+            : null;
+
+    const isStackingGroupVisible =
+        firstStackingText && lastStackingText
+            ? currentTime >= firstStackingText.startTime &&
+              currentTime < (lastStackingText.endTime || 0)
+            : false;
+
     // Place this after all hooks
     if (isMobile === null) {
         return null;
@@ -423,7 +474,12 @@ export default function HomePage() {
                 <div style={{ margin: "0 auto", background: "#fff" }}>
                     <MobileHeroSection />
                     {homeSections.map((section, idx) => (
-                        <MobileHomeSection key={idx} section={section} index={idx} sectionId={`section-${idx}`} />
+                        <MobileHomeSection
+                            key={idx}
+                            section={section}
+                            index={idx}
+                            sectionId={`section-${idx}`}
+                        />
                     ))}
                 </div>
             </MobileHomeVideoProvider>
@@ -453,7 +509,7 @@ export default function HomePage() {
                         style={{
                             height: `calc(100% - 64px)`,
                             width: `100%`,
-                            top: `73px`
+                            top: `73px`,
                         }}
                         // No box-shadow here anymore
                     >
@@ -463,7 +519,10 @@ export default function HomePage() {
                             style={{
                                 background:
                                     "linear-gradient(to bottom, rgba(1, 32, 64, 0.73),rgba(1, 32, 64, 0.43))",
-                                opacity: Math.max(0, 1 - (currentTime / HERO_FADE_OUT_TIME) * 1),
+                                opacity: Math.max(
+                                    0,
+                                    1 - (currentTime / HERO_FADE_OUT_TIME) * 1
+                                ),
                                 // filter: "blur(40px)",
                                 // borderRadius: "50%", // For soft, organic edges
                             }}
@@ -500,8 +559,39 @@ export default function HomePage() {
                 </div>
             )}
 
-            {/* Timed Texts Section - Fade In/Out */}
-            {TIMED_TEXTS_CONFIG.map((config: TimedTextConfigItem) => {
+            {/* Timed Texts Section */}
+            {/* 1. Container for stacking texts */}
+            <div
+                className="fixed inset-0 flex flex-col justify-center items-center text-white font-bold pointer-events-none z-40"
+                style={{
+                    opacity: isStackingGroupVisible ? 1 : 0,
+                    transition: "opacity 0.3s ease-in-out", // Consistent transition for the group
+                }}
+            >
+                <div style={{ textAlign: "left" }}>
+                    {stackingTextConfigs.map((config) => (
+                        <div
+                            key={config.id}
+                            style={{
+                                ...config.style,
+                                position: "relative", // Ensure stacking within the flex container
+                                opacity: timedTextsVisibility[config.id]
+                                    ? 1
+                                    : 0,
+                                textShadow:
+                                    config.style.textShadow ||
+                                    "0px 2px 8px rgba(0,0,0,0.7)", // Add back the shadow for contrast
+                                // The transition is already in config.style, so it will apply on opacity change
+                            }}
+                        >
+                            {config.text}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* 2. Render other texts as before */}
+            {otherTextConfigs.map((config: TimedTextConfigItem) => {
                 if (config.isRightAligned) {
                     return (
                         <div
@@ -562,19 +652,18 @@ export default function HomePage() {
 
             {/* Breather components with homeSections data */}
             {homeSections
-                .filter(section => section.type === "text")
+                .filter((section) => section.type === "text")
                 .map((section, idx) => {
                     return (
                         <Breather
                             key={idx}
-                            appearAtTime={section.text?.start}
-                            disappearAtTime={section.text?.end}
+                            appearAtTime={section.text?.start || 0}
+                            disappearAtTime={section.text?.end || 0}
                             title={section.header || section.title}
                             content={section.content}
                         />
                     );
-                })
-            }
+                })}
         </>
     );
 }

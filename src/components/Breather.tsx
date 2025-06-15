@@ -7,11 +7,10 @@ import { useDemoModal } from "@/contexts/DemoModalContext";
 import ContactModal from "@/components/ContactModal";
 
 interface BreatherProps {
-    appearAtTime: number; // The video timecode when the div should appear (in seconds)
-    disappearAtTime?: number; // The video timecode when the div should be scrolled out (in seconds)
-    title?: string;
-    content?: React.ReactNode;
-    children?: React.ReactNode;
+    appearAtTime: number;
+    disappearAtTime?: number;
+    title: React.ReactNode;
+    content: React.ReactNode;
     style?: React.CSSProperties;
 }
 
@@ -20,68 +19,66 @@ const Breather = ({
     disappearAtTime,
     title,
     content,
-    children,
-    style
+    style,
 }: BreatherProps) => {
     const [isVisible, setIsVisible] = useState(false);
     const { videoDuration, currentTime } = useVideoTime();
-    const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const breatherRef = useRef<HTMLDivElement>(null);
     const breatherHeight = useRef<number>(0);
     const lastTopPosition = useRef<number | null>(null);
-    const targetTopPosition = useRef<number | null>(null);
     const animationFrameId = useRef<number | null>(null);
     const hasInitialized = useRef<boolean>(false);
 
-    // Calculate the position based on video time
-    const calculatePosition = useCallback((time: number) => {
-        if (!videoDuration) return null;
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
-        // Find which scene contains the timecode
-        let targetSceneIndex = 0;
-        let progressWithinScene = 0;
+    const calculatePosition = useCallback(
+        (time: number) => {
+            if (!videoDuration) return null;
 
-        for (let i = 0; i < videoConfig.sceneTiming.length; i++) {
-            const currentScene = videoConfig.sceneTiming[i];
-            const nextScene = videoConfig.sceneTiming[i + 1];
+            let targetSceneIndex = 0;
+            let progressWithinScene = 0;
 
-            const sceneStart = currentScene.videoTime ?? 0;
-            const sceneEnd = nextScene?.videoTime ?? videoDuration;
+            for (let i = 0; i < videoConfig.sceneTiming.length; i++) {
+                const currentScene = videoConfig.sceneTiming[i];
+                const nextScene = videoConfig.sceneTiming[i + 1];
+                const sceneStart = currentScene.videoTime ?? 0;
+                const sceneEnd = nextScene?.videoTime ?? videoDuration;
 
-            if (time >= sceneStart && time < sceneEnd) {
-                targetSceneIndex = currentScene.scene;
-                progressWithinScene = (time - sceneStart) / (sceneEnd - sceneStart);
-                break;
+                if (time >= sceneStart && time < sceneEnd) {
+                    targetSceneIndex = currentScene.scene;
+                    progressWithinScene =
+                        (time - sceneStart) / (sceneEnd - sceneStart);
+                    break;
+                }
+
+                if (!nextScene && time >= sceneStart) {
+                    targetSceneIndex = currentScene.scene;
+                    progressWithinScene = 1;
+                    break;
+                }
             }
 
-            if (!nextScene && time >= sceneStart) {
-                targetSceneIndex = currentScene.scene;
-                progressWithinScene = 1;
-                break;
-            }
-        }
+            progressWithinScene = Math.max(0, Math.min(1, progressWithinScene));
+            const windowHeight = window.innerHeight;
+            return (
+                targetSceneIndex * windowHeight +
+                progressWithinScene * windowHeight
+            );
+        },
+        [videoDuration]
+    );
 
-        // Clamp progress between 0 and 1
-        progressWithinScene = Math.max(0, Math.min(1, progressWithinScene));
-
-        // Convert to scroll position
-        const windowHeight = window.innerHeight;
-        return targetSceneIndex * windowHeight + progressWithinScene * windowHeight;
-    }, [videoDuration]);
-
-    // Measure the breather height when it's rendered
     useEffect(() => {
         if (breatherRef.current && isVisible) {
-            // Get actual height of the breather element
             const height = breatherRef.current.offsetHeight;
             breatherHeight.current = height;
         }
     }, [isVisible]);
 
-    // Reset state when component unmounts or when props change significantly
     useEffect(() => {
         return () => {
-            // Clean up when component unmounts
             hasInitialized.current = false;
             lastTopPosition.current = null;
             if (animationFrameId.current) {
@@ -89,267 +86,260 @@ const Breather = ({
                 animationFrameId.current = null;
             }
         };
-    }, [appearAtTime, disappearAtTime]); // Reset when timecodes change
+    }, [appearAtTime, disappearAtTime]);
 
-    // Handle breather initialization - crucial to prevent jumping
+    const animateToTarget = useCallback(
+        (targetPosition: number) => {
+            if (!breatherRef.current || !isVisible) return;
+
+            if (animationFrameId.current) {
+                cancelAnimationFrame(animationFrameId.current);
+            }
+
+            const animate = () => {
+                if (!breatherRef.current || !isVisible) {
+                    if (animationFrameId.current) {
+                        cancelAnimationFrame(animationFrameId.current);
+                        animationFrameId.current = null;
+                    }
+                    return;
+                }
+
+                if (
+                    lastTopPosition.current !== null &&
+                    Math.abs(lastTopPosition.current - targetPosition) < 0.5
+                ) {
+                    lastTopPosition.current = targetPosition;
+                    breatherRef.current.style.top = `${targetPosition}px`;
+                    animationFrameId.current = null;
+                    return;
+                }
+
+                if (lastTopPosition.current !== null) {
+                    const easeFactor = 0.12;
+                    const newPosition =
+                        lastTopPosition.current +
+                        (targetPosition - lastTopPosition.current) * easeFactor;
+
+                    lastTopPosition.current = newPosition;
+                    breatherRef.current.style.top = `${newPosition}px`;
+                    animationFrameId.current = requestAnimationFrame(animate);
+                }
+            };
+            animate();
+        },
+        [isVisible]
+    );
+
     const initializeBreather = useCallback(() => {
         if (hasInitialized.current || !breatherRef.current) return;
-
-        // Always start at the bottom of the viewport for a consistent entry
         const appearPosition = calculatePosition(appearAtTime);
         if (appearPosition === null) return;
-
         const initialPosition = appearPosition + window.innerHeight;
         breatherRef.current.style.top = `${initialPosition}px`;
         lastTopPosition.current = initialPosition;
         hasInitialized.current = true;
+    }, [appearAtTime, calculatePosition]);
 
-        // Apply any progress if already between appear and disappear times
-        if (disappearAtTime && currentTime > appearAtTime && currentTime <= disappearAtTime) {
-            // Schedule the first animation frame after a brief delay to ensure
-            // the initial position has been properly rendered
-            setTimeout(() => {
-                const progress = Math.min(1, (currentTime - appearAtTime) / (disappearAtTime - appearAtTime));
-                const endY = calculatePosition(disappearAtTime) || appearPosition;
-                const fullExitY = endY - breatherHeight.current;
-
-                // Cubic easing for natural movement
-                const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-                const easedProgress = easeOutCubic(progress);
-
-                const targetPosition = initialPosition + easedProgress * (fullExitY - initialPosition);
-
-                // Start smooth animation to the correct position
-                animateToTarget(targetPosition);
-            }, 50); // Small delay to ensure DOM updates
-        }
-    }, [appearAtTime, disappearAtTime, calculatePosition, currentTime]);
-
-    // Separated animation function for clarity
-    const animateToTarget = useCallback((targetPosition: number) => {
-        if (!breatherRef.current || !isVisible) return;
-
-        if (animationFrameId.current) {
-            cancelAnimationFrame(animationFrameId.current);
-        }
-
-        const animate = () => {
-            if (!breatherRef.current || !isVisible) {
-                if (animationFrameId.current) {
-                    cancelAnimationFrame(animationFrameId.current);
-                    animationFrameId.current = null;
-                }
-                return;
-            }
-
-            // If we're close enough to target, snap to it
-            if (lastTopPosition.current !== null && Math.abs(lastTopPosition.current - targetPosition) < 0.5) {
-                lastTopPosition.current = targetPosition;
-                breatherRef.current.style.top = `${targetPosition}px`;
-                animationFrameId.current = null;
-                return;
-            }
-
-            // Smoothly interpolate with easing
-            if (lastTopPosition.current !== null) {
-                // More consistent easing factor for smoother motion
-                const easeFactor = 0.12;
-                const newPosition = lastTopPosition.current + (targetPosition - lastTopPosition.current) * easeFactor;
-
-                lastTopPosition.current = newPosition;
-                breatherRef.current.style.top = `${newPosition}px`;
-
-                animationFrameId.current = requestAnimationFrame(animate);
-            }
-        };
-
-        animate();
-    }, [isVisible]);
-
-    // Handle visibility and positioning
     useEffect(() => {
         if (!videoDuration) return;
 
-        // Determine visibility based on current time
-        const shouldBeVisible = currentTime >= appearAtTime &&
+        const shouldBeVisible =
+            currentTime >= appearAtTime &&
             (disappearAtTime === undefined || currentTime <= disappearAtTime);
 
         if (shouldBeVisible && !isVisible) {
-            // When first becoming visible
             setIsVisible(true);
         } else if (!shouldBeVisible && isVisible) {
-            // When becoming invisible
             setIsVisible(false);
             hasInitialized.current = false;
             lastTopPosition.current = null;
-
             if (animationFrameId.current) {
                 cancelAnimationFrame(animationFrameId.current);
                 animationFrameId.current = null;
             }
         }
 
-        // Handle positioning once visible
         if (shouldBeVisible && isVisible) {
-            // First-time initialization
             if (!hasInitialized.current) {
                 initializeBreather();
                 return;
             }
 
-            // Regular positioning updates
             const appearPosition = calculatePosition(appearAtTime);
             if (appearPosition === null) return;
 
-            // Base position (bottom of viewport)
             let topPosition = appearPosition + window.innerHeight;
 
-            // Calculate progress and apply scroll-out effect if needed
-            if (disappearAtTime && currentTime >= appearAtTime && currentTime <= disappearAtTime) {
-                const progress = (currentTime - appearAtTime) / (disappearAtTime - appearAtTime);
+            if (
+                disappearAtTime &&
+                currentTime >= appearAtTime &&
+                currentTime <= disappearAtTime
+            ) {
+                const progress =
+                    (currentTime - appearAtTime) /
+                    (disappearAtTime - appearAtTime);
                 const startY = appearPosition + window.innerHeight;
-                const endY = calculatePosition(disappearAtTime) || appearPosition;
+                const endY =
+                    calculatePosition(disappearAtTime) || appearPosition;
                 const fullExitY = endY - breatherHeight.current;
-
-                // Cubic easing for natural movement
                 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
                 const easedProgress = easeOutCubic(progress);
-
                 topPosition = startY + easedProgress * (fullExitY - startY);
             }
 
-            // Only animate if position changed significantly
-            if (lastTopPosition.current === null || Math.abs(lastTopPosition.current - topPosition) > 0.5) {
-                targetTopPosition.current = topPosition;
+            if (
+                lastTopPosition.current === null ||
+                Math.abs(lastTopPosition.current - topPosition) > 0.5
+            ) {
                 animateToTarget(topPosition);
             }
         }
 
-        // Clean up animation on unmount
         return () => {
             if (animationFrameId.current) {
                 cancelAnimationFrame(animationFrameId.current);
                 animationFrameId.current = null;
             }
         };
-    }, [currentTime, appearAtTime, disappearAtTime, videoDuration, isVisible, calculatePosition, animateToTarget, initializeBreather]);
+    }, [
+        currentTime,
+        appearAtTime,
+        disappearAtTime,
+        videoDuration,
+        isVisible,
+        calculatePosition,
+        animateToTarget,
+        initializeBreather,
+    ]);
 
-    // Handle modal controls
-    const openContactModal = () => {
-        setIsDemoModalOpen(true);
-    };
-
-    const handleContactModalClose = () => {
-        setIsDemoModalOpen(false);
-    };
-
-    // Control body scroll when modal is open
     useEffect(() => {
-        document.body.style.overflow = isDemoModalOpen ? "hidden" : "auto";
+        document.body.style.overflow = isModalOpen ? "hidden" : "auto";
         return () => {
             document.body.style.overflow = "auto";
         };
-    }, [isDemoModalOpen]);
+    }, [isModalOpen]);
 
     if (!isVisible) return null;
 
-    // Define a blue accent color for highlights
-    const VAYYAR_BLUE = "#06aeef";
-
     return (
-        <div
-            ref={breatherRef}
-            data-breather="true"
-            data-time={`${appearAtTime}-${disappearAtTime}`}
-            style={{
-                position: 'absolute',
-                left: 0,
-                width: '100%',
-                zIndex: 10,
-                willChange: 'top', // Performance optimization for animations
-                opacity: hasInitialized.current ? 1 : 0, // Only show after properly positioned
-                transition: 'opacity 0.2s ease-in',
-                ...style
-            }}
-        >
-            {children || (
-                <div style={{
-                    background: '#FFFFFF',
-                    padding: '250px 0',
-                    width: '100%',
-                    boxShadow: '0 -4px 8px rgba(0, 0, 0, 0.1)',
-                }}>
-                    <div style={{
-                        maxWidth: '1200px',
-                        margin: '0 auto',
-                        padding: '0 32px',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        gap: '4rem',
-                    }}>
-                        {/* Left Column - Title */}
-                        <div style={{
-                            flex: '1 1 300px',
-                        }}>
-                            {title && (
-                                <h2 style={{
-                                    fontSize: "clamp(2.5rem, 5vw, 3.5rem)",
-                                    fontWeight: "800",
-                                    marginBottom: '0.7em',
-                                    fontFamily: "Manrope, Inter, sans-serif",
-                                    lineHeight: 1.2,
-                                    color: '#111827'
-                                }}>
-                                    <span style={{ color: VAYYAR_BLUE }}>
-                                        {title.split(' ')[0]}
-                                    </span>
-                                    {title.includes(' ') ? ' ' + title.split(' ').slice(1).join(' ') : ''}
-                                </h2>
-                            )}
-                        </div>
-
-                        {/* Right Column - Content and Button */}
-                        <div style={{
-                            flex: '1 1 500px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                        }}>
-                            {content && (
-                                <h3 style={{
-                                    fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
-                                    fontWeight: "300",
-                                    lineHeight: "1.6",
-                                    color: '#333333',
-                                    fontFamily: "Manrope, Inter, sans-serif",
-                                }}>
-                                    {content}
-                                </h3>
-                            )}
-
-                            {/* Book a Demo Button */}
-                            <div style={{ marginTop: '2rem' }}>
-                                <button
-                                    onClick={openContactModal}
-                                    className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
-                                    style={{ backgroundColor: "#FFA500" }}
+        <>
+            <div
+                ref={breatherRef}
+                data-breather="true"
+                data-time={`${appearAtTime}-${disappearAtTime ?? ""}`}
+                style={{
+                    position: "absolute",
+                    left: 0,
+                    width: "100%",
+                    zIndex: 10,
+                    willChange: "top",
+                    opacity: hasInitialized.current ? 1 : 0,
+                    transition: "opacity 0.2s ease-in",
+                    fontFamily:
+                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+                    ...style,
+                }}
+            >
+                <div
+                    style={{
+                        backgroundColor: "#fff",
+                        color: "#1d1d1f",
+                        width: "100%",
+                        padding: "128px 0",
+                    }}
+                >
+                    <div
+                        style={{
+                            maxWidth: "980px",
+                            margin: "0 auto",
+                            padding: "0 22px",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(5, 1fr)",
+                                gap: "64px",
+                                alignItems: "start",
+                            }}
+                        >
+                            {/* Left Column: Title */}
+                            <div style={{ gridColumn: "span 2 / span 2" }}>
+                                <h2
+                                    style={{
+                                        fontSize: "28px",
+                                        fontWeight: "700",
+                                        lineHeight: 1.1,
+                                        letterSpacing: "0em",
+                                        margin: 0,
+                                    }}
                                 >
-                                    <span className="inline-block">Book a Demo</span>
-                                </button>
+                                    {title}
+                                </h2>
+                            </div>
+                            {/* Right Column: Content */}
+                            <div
+                                style={{
+                                    gridColumn: "span 3 / span 3",
+                                    marginTop: "4px",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        fontSize: "18px",
+                                        color: "#6e6e73",
+                                        lineHeight: 1.47,
+                                        fontWeight: 700,
+                                    }}
+                                >
+                                    {content}
+                                </div>
+                                <div style={{ marginTop: "20px" }}>
+                                    <button
+                                        onClick={openModal}
+                                        style={{
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            gap: "8px",
+                                            padding: "12px 24px",
+                                            fontSize: "17px",
+                                            fontWeight: "600",
+                                            color: "#fff",
+                                            backgroundColor: "#f56300",
+                                            borderRadius: "9999px",
+                                            border: "none",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        <svg
+                                            style={{
+                                                width: "20px",
+                                                height: "20px",
+                                            }}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                        <span>Learn more</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            {isModalOpen && (
+                <ContactModal isOpen={isModalOpen} onClose={closeModal} />
             )}
-
-            {/* Contact Modal */}
-            {isDemoModalOpen && (
-                <ContactModal
-                    isOpen={isDemoModalOpen}
-                    onClose={handleContactModalClose}
-                />
-            )}
-        </div>
+        </>
     );
 };
 

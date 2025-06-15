@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config: Config = {
     content: [
@@ -14,6 +15,9 @@ const config: Config = {
                 // You can add more custom colors like this:
                 // 'another-color': '#ff00ff',
             },
+            fontFamily: {
+                sans: ["Inter", ...fontFamily.sans],
+            },
             // You can extend other theme aspects here if needed
             // backgroundImage: {
             //   'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -21,6 +25,6 @@ const config: Config = {
             // },
         },
     },
-    plugins: [],
+    plugins: [require("@tailwindcss/typography")],
 };
 export default config;
