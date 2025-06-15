@@ -27,7 +27,7 @@ const timecodeToSeconds = (tc: string, frameRate: number = 30): number => {
 const BUTTON_CONFIG = [
     { name: "AI-Healthcare", startTimeString: "00:00:17:07", endTimeString: "00:00:29:18", baseTextColor: "text-neutral-500" },
     { name: "Real-time Alerts", startTimeString: "00:00:29:19", endTimeString: "00:01:17:00", baseTextColor: "text-gray-500" },
-    { name: "Insights", startTimeString: "00:01:17:01", endTimeString: "00:02:09:15", baseTextColor: "text-gray-500" },
+    { name: "Insights", startTimeString: "00:01:28:10", endTimeString: "00:02:09:15", baseTextColor: "text-gray-500" },
     { name: "Staff Optimization", startTimeString: "00:02:09:06", endTimeString: "00:02:50:19", baseTextColor: "text-gray-500" },
     { name: "Dedicated Care", startTimeString: "00:02:50:20", endTimeString: "00:03:00:29", baseTextColor: "text-gray-500" },
 ].map((btn) => ({

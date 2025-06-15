@@ -18,6 +18,7 @@ import { SCENES } from "../data/sceneRegistry";
 import { Scene } from "@/types";
 import Link from "next/link";
 import { useVideoTime } from "@/contexts/VideoTimeContext";
+import ChatGpt from "./ChatGpt";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -64,6 +65,9 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // State to track when the wipe animation should trigger
     const [shouldWipe, setShouldWipe] = useState(false);
+
+    // State for ChatGPT component opacity
+    const [chatGptOpacity, setChatGptOpacity] = useState(0);
 
     // Renamed local states for time and frame display
     const [displayTime, setDisplayTime] = useState(0);
@@ -460,6 +464,37 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         );
     };
 
+    const chatGPTAppearTime = 12 + 1 / 30; // 00:00:12:01
+    const chatGPTDisappearTime = 14; // 00:00:14:00
+    const chatGPTFadeDuration = 0.2; // 0.2 seconds for fade
+
+    // Effect to handle ChatGPT component fade in/out
+    useEffect(() => {
+        const fadeInStartTime = chatGPTAppearTime;
+        const fadeInEndTime = chatGPTAppearTime + chatGPTFadeDuration;
+        const fadeOutStartTime = chatGPTDisappearTime - chatGPTFadeDuration;
+        const fadeOutEndTime = chatGPTDisappearTime;
+
+        let newOpacity = 0;
+
+        if (displayTime >= fadeInStartTime && displayTime < fadeInEndTime) {
+            newOpacity = (displayTime - fadeInStartTime) / chatGPTFadeDuration;
+        } else if (
+            displayTime >= fadeInEndTime &&
+            displayTime < fadeOutStartTime
+        ) {
+            newOpacity = 1;
+        } else if (
+            displayTime >= fadeOutStartTime &&
+            displayTime < fadeOutEndTime
+        ) {
+            newOpacity =
+                1 - (displayTime - fadeOutStartTime) / chatGPTFadeDuration;
+        }
+
+        setChatGptOpacity(newOpacity);
+    }, [displayTime]);
+
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
             {/* Fullscreen Video Background */}
@@ -560,6 +595,26 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     </div>
                 )}
             </div>
+
+            {/* Render ChatGPT component */}
+            {chatGptOpacity > 0 && (
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: chatGptOpacity,
+                        transition: "opacity 0.3s ease-in-out",
+                    }}
+                >
+                    <ChatGpt />
+                </div>
+            )}
 
             {/* Tablet Wrapper - Currently hidden */}
             <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden">
