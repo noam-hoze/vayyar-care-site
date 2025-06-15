@@ -1,4 +1,10 @@
 import React from "react";
+import {
+    ClipboardDocumentListIcon,
+    ClockIcon,
+    ChartBarIcon,
+    LightBulbIcon,
+} from "@heroicons/react/24/outline";
 
 const Icon = ({
     path,
@@ -21,13 +27,11 @@ const Icon = ({
 );
 
 const SuggestionButton = ({
-    icon,
+    icon: Icon,
     text,
-    subtext,
 }: {
-    icon: string;
+    icon: React.ElementType;
     text: string;
-    subtext?: string;
 }) => (
     <div
         style={{
@@ -48,7 +52,7 @@ const SuggestionButton = ({
             pointerEvents: "none",
         }}
     >
-        <Icon path={icon} size={18} color="#1D1D1F" />
+        <Icon style={{ width: "18px", height: "18px", color: "#1D1D1F" }} />
         <p
             style={{
                 margin: 0,
@@ -57,7 +61,7 @@ const SuggestionButton = ({
                 whiteSpace: "nowrap",
             }}
         >
-            {[text, subtext].filter(Boolean).join(" ")}
+            {text}
         </p>
     </div>
 );
@@ -163,21 +167,15 @@ const ChatGpt = () => {
                     }}
                 >
                     <SuggestionButton
-                        icon="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"
+                        icon={ClipboardDocumentListIcon}
                         text="Shift Summary"
                     />
+                    <SuggestionButton icon={ClockIcon} text="Fall History" />
                     <SuggestionButton
-                        icon="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM7 15h10v-2H7v2zm5-4H7v-2h5v2z"
-                        text="Fall History"
-                    />
-                    <SuggestionButton
-                        icon="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM16 18H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                        icon={ChartBarIcon}
                         text="Resident Patterns"
                     />
-                    <SuggestionButton
-                        icon="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2z"
-                        text="AI Insights"
-                    />
+                    <SuggestionButton icon={LightBulbIcon} text="AI Insights" />
                 </div>
             </div>
         </div>
