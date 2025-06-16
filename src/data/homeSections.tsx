@@ -21,11 +21,12 @@ export const homeSections: HomeSection[] = [
         title: "Intro",
         header: (
             <>
-                <span style={{ color: "#05aae9" }}>Better</span> operations.
+                <span style={{ color: "#05aae9" }}>Smooth</span> operations.
                 <br />
-                Higher <span style={{ color: "#05aae9" }}>returns.</span>
+                High <span style={{ color: "#05aae9" }}>returns.</span>
             </>
         ),
+
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -36,7 +37,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Spot Costly Patient Issues Before They Escalate</span>
+                    <span>Spot Costly Issues Before They Escalate</span>
                 </li>
                 <li
                     style={{
@@ -51,7 +52,7 @@ export const homeSections: HomeSection[] = [
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Turn Insights Into Action That Cuts Waste and Drive
+                        Turn Insights Into Actions That Cut Waste and Drive
                         Margin
                     </span>
                 </li>
@@ -114,17 +115,9 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Respond to critical events in real time</span>
-                </li>
-                <li
-                    style={{
-                        display: "flex",
-                        gap: "0.5em",
-                        marginBottom: "0.5rem",
-                    }}
-                >
-                    <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Lower staff overload with automatic alerts</span>
+                    <span>
+                        24/7 Automated Patient Monitoring.
+                    </span>
                 </li>
                 <li
                     style={{
@@ -135,7 +128,20 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Confirm that care routines are thoroughly followed
+                        Real-time emergency alerts, enabling fast staff
+                        response.
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Verified emergency patient care.
                     </span>
                 </li>
             </ul>
@@ -179,9 +185,8 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Filter through endless day-to-day activities and events,
-                        establishing the links between resident falls and their
-                        causes - current medication plan or other.
+                        Establish the links between resident falls and their
+                        causes.
                     </span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
