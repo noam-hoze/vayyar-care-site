@@ -38,4 +38,12 @@ export const homeSections: HomeSection[] = [
           <li>Ensure complience with care plans and validate execution of staffing plans</li>
         </ul>
       ), text: { start: 82, end: 90 } },
+    { type: "video", title: "Video 3", video: { start: 60, end: 90 } },
+    { type: "text", title: "Summary", header: "Facility-wide Coverage", content: (
+            <ul className="list-disc">
+                <li>Make thousands of residents feel like the #1 priority</li>
+                <li>Optimize staffing, avoiding burnout and enabling higher attention to detail</li>
+                <li>Utilize the power of hi-tech to enhance the human connection</li>
+            </ul>
+        ), text: { start: 153, end: 170 } },
 ];

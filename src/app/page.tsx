@@ -14,6 +14,7 @@ import MobileHomeSection from "@/components/mobile/MobileHomeSection";
 import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
 import MobileHeroSection from "@/components/mobile/MobileHeroSection";
 import Breather from "@/components/Breather"; // Import the new Breather component
+import Image from "next/image";
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
 gsap.registerPlugin(ScrollTrigger);
@@ -21,7 +22,7 @@ gsap.registerPlugin(ScrollTrigger);
 const VAYYAR_BLUE = "#06aeef"; // Define Vayyar blue for use in styles
 const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 
-const TIMED_TEXTS_CONFIG = [
+const TIMED_TEXTS_CONFIG: Array<TimedTextConfigItem> = [
     {
         id: 1,
         text: <h1>Smarter Care Plan</h1>,
@@ -53,7 +54,47 @@ const TIMED_TEXTS_CONFIG = [
         },
     },
     {
-        id: 6, // New ID for the duplicated text
+        id: 4,
+        text: (
+            <div className={"relative left-[-28%]"}>
+                <Image
+                    src={"/images/phone_14_01.svg"}
+                    alt={"phone"}
+                    width={434}
+                    height={860}
+                />
+                <div style={{
+                    position: "absolute",
+                    top: "100px",
+                    left: "50px",
+                    color: "black",
+                }}>
+                    <h3 style={{
+                        fontSize: "50px",
+                        textShadow: "none",
+                    }}>Vayyar Care</h3>
+                    <span style={{
+                        fontSize: "50px",
+                        textShadow: "none",
+                        fontWeight: 300,
+                        fontFamily: 'Magistral Book',
+                    }}>Shift Summary</span>
+                </div>
+            </div>
+        ),
+        startTime: 27 + 1 / 30,
+        endTime: 35 + 12 / 30,
+        useSlideAnimation: true, // Use slide animation for this element
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "transform 0.5s ease-in-out",
+            transform: "translateX(0)",
+            enterAnimation: "translateX(-100%)", // Coming in from left
+            exitAnimation: "translateX(100%)", // Going out to right
+        },
+    },
+    {
+        id: 5, // New ID for the duplicated text
         text: (
             <>
                 <h1
@@ -100,6 +141,84 @@ const TIMED_TEXTS_CONFIG = [
             transition: "opacity 0.5s ease-in-out",
         },
     },
+    {
+        id: 6,
+        text: (
+            <div className={"relative"} style={{
+                transform: "rotate(358deg)",
+                scale: "0.8",
+                top: "-12px",
+            }}>
+                <Image
+                    src={"/images/phone_14_01.svg"}
+                    alt={"phone"}
+                    width={434}
+                    height={860}
+                />
+                <div style={{
+                    position: "absolute",
+                    top: "100px",
+                    left: "50px",
+                    color: "black",
+                    paddingRight: "30px",
+                }}>
+                    <span style={{
+                        textShadow: "none",
+                        fontWeight: 300,
+                        fontSize: "30px",
+                        fontFamily: 'Magistral Book',
+                    }}>Fall pattern detected. 70% falls between 9am - 11am. Senior pills were changed during last week.</span>
+                </div>
+            </div>
+        ),
+        startTime: 75 + 10 / 30,
+        endTime: 78 + 12 / 30,
+        useSlideAnimation: true, // Use slide animation for this element
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "transform 0.5s ease-in-out",
+            transform: "translateX(0)",
+            enterAnimation: "translateX(100%)", // Coming in from left
+            exitAnimation: "translateX(-100%)", // Going out to right
+        },
+    },
+    {
+        id: 7,
+        text: (
+            <div className={"relative right-[-28%]"}>
+                <Image
+                    src={"/images/phone_14_01.svg"}
+                    alt={"phone"}
+                    width={434}
+                    height={860}
+                />
+                <div style={{
+                    position: "absolute",
+                    top: "100px",
+                    left: "50px",
+                    color: "black",
+                    paddingRight: "30px",
+                }}>
+                    <span style={{
+                        textShadow: "none",
+                        fontWeight: 300,
+                        fontSize: "30px",
+                        fontFamily: 'Magistral Book',
+                    }}>The insights keep loading</span>
+                </div>
+            </div>
+        ),
+        startTime: 92 + 10 / 30,
+        endTime: 104 + 20 / 30,
+        useSlideAnimation: true, // Use slide animation for this element
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "transform 0.5s ease-in-out",
+            transform: "translateX(0)",
+            enterAnimation: "translateX(100%)", // Coming in from left
+            exitAnimation: "translateX(-100%)", // Going out to right
+        },
+    },
 ];
 
 interface TimedTextConfigItem {
@@ -111,6 +230,7 @@ interface TimedTextConfigItem {
     visibleDuration?: number;
     fadeOutDuration?: number;
     isRightAligned?: boolean;
+    useSlideAnimation?: boolean; // New property to indicate slide animation should be used
     style: React.CSSProperties & {
         fontSize?: string;
         fontFamily?: string;
@@ -120,6 +240,9 @@ interface TimedTextConfigItem {
         lineHeight?: string;
         maxWidth?: string;
         whiteSpace?: React.CSSProperties["whiteSpace"];
+        enterAnimation?: string; // Animation value when entering
+        exitAnimation?: string; // Animation value when exiting
+        transform?: string; // Default transform value
     };
 }
 
@@ -520,7 +643,7 @@ export default function HomePage() {
                                 style={{
                                     inset: "-30px",
                                     // background:
-                                    //     "linear-gradient(to bottom, rgba(107, 106, 106, 0.33),rgba(65, 60, 60, 0.43))",
+                                    //     "linear-gradient to bottom, rgba(107, 106, 106, 0.33),rgba(65, 60, 60, 0.43))",
                                     backdropFilter: `contrast(0.4)`,
                                     // filter: "blur(35px)",
                                     // borderRadius: "30px",
@@ -531,6 +654,31 @@ export default function HomePage() {
                     );
                 }
                 // Default centered rendering for other texts
+                if (config.useSlideAnimation || (!!config.style.enterAnimation && !!config.style.exitAnimation)) {
+                    // For elements with slide animations
+                    return (
+                        <div
+                            key={config.id}
+                            className="fixed inset-0 flex justify-center items-center text-center text-white font-bold pointer-events-none z-40"
+                            style={{
+                                ...config.style,
+                                opacity: 1, // Always visible for slide animations
+                                transform: timedTextsVisibility[config.id]
+                                    ? config.style.transform || 'translateX(0)'
+                                    : !timedTextsVisibility[config.id] && config.style.enterAnimation
+                                        ? config.style.enterAnimation
+                                        : config.style.exitAnimation,
+                                textShadow:
+                                    config.style.textShadow ||
+                                    "0px 2px 8px rgba(0,0,0,0.7)",
+                            }}
+                        >
+                            {config.text}
+                        </div>
+                    );
+                }
+
+                // Default rendering for elements with opacity animations
                 return (
                     <div
                         key={config.id}
@@ -540,7 +688,7 @@ export default function HomePage() {
                             opacity: timedTextsVisibility[config.id] ? 1 : 0,
                             textShadow:
                                 config.style.textShadow ||
-                                "0px 2px 8px rgba(0,0,0,0.7)", // Keep original default if not specified in config
+                                "0px 2px 8px rgba(0,0,0,0.7)",
                         }}
                     >
                         {config.text}
