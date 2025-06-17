@@ -173,7 +173,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         if (!video || !currentVideoSrc) return;
 
         // Debug current scene
-        console.log("Current scene:", scene.scene, "Scene index:", index);
+        // console.log("Current scene:", scene.scene, "Scene index:", index);
 
         // Function to update video time based on scroll progress
         const updateVideoTime = () => {
@@ -181,8 +181,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             if (!sceneTimings || !video.duration || isNaN(video.duration))
                 return; // Add NaN check
 
-            console.log("Current scroll progress:", subScrollProgress);
-            console.log("Current scene index:", index);
+            // console.log("Current scroll progress:", subScrollProgress);
+            // console.log("Current scene index:", index);
 
             const currentSceneTiming = sceneTimings.find(
                 (t) => t.scene === index
@@ -249,11 +249,11 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
                 if (!isNaN(videoTime)) {
                     video.currentTime = videoTime;
-                    console.log(
-                        "Setting video time to:",
-                        videoTime,
-                        "using percentage mapping"
-                    );
+                    // console.log(
+                    //     "Setting video time to:",
+                    //     videoTime,
+                    //     "using percentage mapping"
+                    // );
                 }
             } else {
                 // Handle cases WITHOUT scrollingPercentage
@@ -334,11 +334,11 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 }
 
                 video.currentTime = videoTime;
-                console.log(
-                    "Setting video time to:",
-                    videoTime,
-                    "using traditional mapping"
-                );
+                // console.log(
+                //     "Setting video time to:",
+                //     videoTime,
+                //     "using traditional mapping"
+                // );
             }
         };
 

@@ -1,6 +1,6 @@
 "use client"; // Mark this as a Client Component
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { scenes } from "@/data/scenes"; // Use alias
 import SceneViewer from "@/components/SceneViewer"; // Use alias
 import { gsap } from "gsap";
@@ -13,7 +13,9 @@ import { homeSections, HomeSection } from "@/data/homeSections";
 import MobileHomeSection from "@/components/mobile/MobileHomeSection";
 import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
 import MobileHeroSection from "@/components/mobile/MobileHeroSection";
-import Breather from "@/components/Breather"; // Import the new Breather component
+import Breather from "@/components/Breather";
+import {timecodeToSeconds} from "@/lib/utils";
+import ContactModal from "@/components/ContactModal"; // Import the new Breather component
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
 gsap.registerPlugin(ScrollTrigger);
@@ -122,6 +124,62 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     //         transition: "opacity 0.5s ease-in-out",
     //     },
     // },
+    {
+        id: 7,
+        text: (
+            <h1 style={{ margin: 0 }}>
+                Workforce Optimization
+            </h1>
+        ),
+        startTime: 15 + 12 / 30,
+        endTime: 26 + 5 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
+    {
+        id: 8,
+        text: (
+            <h1 style={{ margin: 0 }}>
+                Realtime Alerts
+            </h1>
+        ),
+        startTime: 45 + 15 / 30,
+        endTime: 60 + 15 + 5 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
+    {
+        id: 9,
+        text: (
+            <h1 style={{ margin: 0 }}>
+                AI Insights
+            </h1>
+        ),
+        startTime: 60 + 45 + 18 / 30,
+        endTime: 2 * 60 + 7 + 1 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
+    {
+        id: 10,
+        text: (
+            <h1 style={{ margin: 0 }}>
+                Personalized Care
+            </h1>
+        ),
+        startTime: 2 * 60 + 13 + 8 / 30,
+        endTime: 2 * 60 + 50 + 19 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
 ];
 
 interface TimedTextConfigItem {
@@ -441,7 +499,7 @@ export default function HomePage() {
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
     // Note: height calculation might move or change based on scroll implementation
-    const scenesContainerHeight = `${MAX_SCENES * 100}vh`;
+    const scenesContainerHeight = `${MAX_SCENES * 100 + 100}vh`;
 
     const stackingTextConfigs = TIMED_TEXTS_CONFIG.filter((c) =>
         [1, 2, 3].includes(c.id)
@@ -480,8 +538,16 @@ export default function HomePage() {
                             section={section}
                             index={idx}
                             sectionId={`section-${idx}`}
+                            nextSectionId={`section-${idx + 1}`}
                         />
                     ))}
+                    {/* Contact form section at the end of the page */}
+                    <div id="contact-section" className="relative z-10" style={{height: "100vh"}}>
+                        <ContactModal
+                            isOpen={true}
+                            asPageElement={true}
+                        />
+                    </div>
                 </div>
             </MobileHomeVideoProvider>
         );
@@ -671,9 +737,19 @@ export default function HomePage() {
                             disappearAtTime={section.text?.end || 0}
                             title={section.header || section.title}
                             content={section.content}
+                            buttonText={section.buttonText}
+                            scrollToTimeValue={timecodeToSeconds(section.scrollToTimeValue!)}
                         />
                     );
                 })}
+
+            {/* Contact form section at the end of the page */}
+            <div id="contact-section" className="relative z-10" style={{height: "100vh"}}>
+                <ContactModal
+                    isOpen={true}
+                    asPageElement={true}
+                />
+            </div>
         </>
     );
 }

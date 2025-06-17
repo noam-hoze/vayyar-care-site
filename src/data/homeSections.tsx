@@ -13,6 +13,8 @@ export interface HomeSection {
         start: number; // in seconds
         end?: number; // in seconds
     };
+    buttonText?: string;
+    scrollToTimeValue?: string;
 }
 
 export const homeSections: HomeSection[] = [
@@ -26,6 +28,8 @@ export const homeSections: HomeSection[] = [
                 Higher <span style={{ color: "#05aae9" }}>returns.</span>
             </>
         ),
+        buttonText: "workforce optimization",
+        scrollToTimeValue: "00:00:12:06",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -104,6 +108,8 @@ export const homeSections: HomeSection[] = [
                 </span>
             </>
         ),
+        buttonText: "realtime alerts",
+        scrollToTimeValue: "00:00:45:13",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -155,6 +161,8 @@ export const homeSections: HomeSection[] = [
                 <span style={{ color: "#05aae9" }}>Safer</span> residents.
             </>
         ),
+        buttonText: "AI insights",
+        scrollToTimeValue: "00:01:32:33",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -195,4 +203,5 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 80, end: 92 },
     },
+    { type: "video", title: "Video 3", video: { start: 60, end: 90 } },
 ];

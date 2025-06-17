@@ -11,9 +11,10 @@ interface MobileHomeSectionProps {
   section: HomeSection;
   index?: number;
   sectionId?: string;
+  nextSectionId?: string; // Add prop for the next section ID
 }
 
-const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, sectionId }) => {
+const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, sectionId, nextSectionId }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0); // 0 to 1
@@ -121,11 +122,46 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
     }
   };
 
+  // Handle scroll to next section
+  const handleLearnMore = () => {
+    if (nextSectionId) {
+      const nextSection = document.getElementById(nextSectionId);
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   if (section.type === "text") {
     return (
-      <div id={sectionId} style={{ padding: "24px", fontSize: 18, minHeight: '70vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', scrollMarginTop: '64px' }}>
+      <div id={sectionId} style={{ padding: "24px", fontSize: 18, display: 'flex', flexDirection: 'column', justifyContent: 'center', scrollMarginTop: '64px' }}>
         {section.header && <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', fontWeight: 'bold', marginBottom: '16px' }}>{section.header}</h2>}
-        <p>{section.content}</p>
+        <div>{section.content}</div>
+
+        {/* Learn more about button */}
+        {section.buttonText && nextSectionId && (
+          <button
+            onClick={handleLearnMore}
+            style={{
+              marginTop: '24px',
+              backgroundColor: '#FF7A00', // Changed from #05aae9 to orange #FF7A00
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '12px 20px',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              alignSelf: 'flex-start',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            Learn more about {section.buttonText}
+            <span style={{ fontWeight: 'bold' }}>&#8250;</span>
+          </button>
+        )}
       </div>
     );
   }
@@ -211,4 +247,4 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
   );
 };
 
-export default MobileHomeSection; 
+export default MobileHomeSection;

@@ -5,24 +5,12 @@ import { usePathname } from "next/navigation"; // Import usePathname
 import NavBar from "./navigation"; // Assuming NavBar is in the same directory
 import { useVideoTime } from "@/contexts/VideoTimeContext";
 import { homeSections } from "@/data/homeSections";
+import {timecodeToSeconds} from "@/lib/utils";
 
 // Define props type to accept children
 interface MainLayoutProps {
     children: React.ReactNode;
 }
-
-const timecodeToSeconds = (tc: string, frameRate: number = 30): number => {
-    const parts = tc.split(":").map(Number);
-    let seconds = 0;
-    if (parts.length === 4) {
-        seconds = parts[0] * 3600 + parts[1] * 60 + parts[2] + parts[3] / frameRate;
-    } else if (parts.length === 3) {
-        seconds = parts[0] * 60 + parts[1] + parts[2] / frameRate;
-    } else {
-        console.warn("Invalid timecode format:", tc);
-    }
-    return seconds;
-};
 
 const BUTTON_CONFIG = [
     {
@@ -44,13 +32,13 @@ const BUTTON_CONFIG = [
         baseTextColor: "text-gray-500",
     },
     {
-        name: "Increase NOI",
+        name: "Personalized Care",
         startTimeString: "00:02:13:08",
         endTimeString: "00:02:50:19",
         baseTextColor: "text-gray-500",
     },
     {
-        name: "Personalized Care",
+        name: "Increase NOI",
         startTimeString: "00:02:50:20",
         endTimeString: "00:03:00:29",
         baseTextColor: "text-gray-500",

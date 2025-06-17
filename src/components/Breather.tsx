@@ -12,6 +12,8 @@ interface BreatherProps {
     title: React.ReactNode;
     content: React.ReactNode;
     style?: React.CSSProperties;
+    buttonText?: string;
+    scrollToTimeValue?: number;
 }
 
 const Breather = ({
@@ -20,9 +22,11 @@ const Breather = ({
     title,
     content,
     style,
+    buttonText,
+    scrollToTimeValue,
 }: BreatherProps) => {
     const [isVisible, setIsVisible] = useState(false);
-    const { videoDuration, currentTime } = useVideoTime();
+    const { videoDuration, currentTime, scrollToTime } = useVideoTime();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const breatherRef = useRef<HTMLDivElement>(null);
     const breatherHeight = useRef<number>(0);
@@ -32,6 +36,15 @@ const Breather = ({
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    // Handle button click to scroll to specified time
+    const handleButtonClick = () => {
+        if (scrollToTimeValue !== undefined) {
+            scrollToTime(scrollToTimeValue);
+        } else {
+            openModal();
+        }
+    };
 
     const calculatePosition = useCallback(
         (time: number) => {
@@ -233,107 +246,103 @@ const Breather = ({
                     left: 0,
                     width: "100%",
                     zIndex: 10,
+                    backgroundColor: "#fff",
+                    color: "#1d1d1f",
+                    padding: "128px 0",
                     willChange: "top",
+                    minHeight: "50vh",
                     opacity: hasInitialized.current ? 1 : 0,
                     transition: "opacity 0.2s ease-in",
                     fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
                     ...style,
                 }}
+                className={"flex justify-center items-center"}
             >
                 <div
                     style={{
-                        backgroundColor: "#fff",
-                        color: "#1d1d1f",
-                        width: "100%",
-                        padding: "128px 0",
+                        maxWidth: "980px",
+                        margin: "0 auto",
+                        padding: "0 22px",
                     }}
                 >
                     <div
                         style={{
-                            maxWidth: "980px",
-                            margin: "0 auto",
-                            padding: "0 22px",
+                            display: "grid",
+                            gridTemplateColumns: "repeat(5, 1fr)",
+                            gap: "64px",
+                            alignItems: "start",
                         }}
                     >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: "repeat(5, 1fr)",
-                                gap: "64px",
-                                alignItems: "start",
-                            }}
-                        >
-                            {/* Left Column: Title */}
-                            <div style={{ gridColumn: "span 2 / span 2" }}>
-                                <h2
-                                    style={{
-                                        fontSize: "28px",
-                                        fontWeight: "700",
-                                        lineHeight: 1.1,
-                                        letterSpacing: "0em",
-                                        margin: 0,
-                                    }}
-                                >
-                                    {title}
-                                </h2>
-                            </div>
-                            {/* Right Column: Content */}
-                            <div
+                        {/* Left Column: Title */}
+                        <div style={{ gridColumn: "span 2 / span 2" }}>
+                            <h2
                                 style={{
-                                    gridColumn: "span 3 / span 3",
-                                    marginTop: "4px",
+                                    fontSize: "28px",
+                                    fontWeight: "700",
+                                    lineHeight: 1.1,
+                                    letterSpacing: "0em",
+                                    margin: 0,
                                 }}
                             >
-                                <div
+                                {title}
+                            </h2>
+                        </div>
+                        {/* Right Column: Content */}
+                        <div
+                            style={{
+                                gridColumn: "span 3 / span 3",
+                                marginTop: "4px",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    fontSize: "18px",
+                                    color: "#6e6e73",
+                                    lineHeight: 1.47,
+                                    fontWeight: 700,
+                                }}
+                            >
+                                {content}
+                            </div>
+                            <div style={{ marginTop: "20px" }}>
+                                <button
+                                    onClick={handleButtonClick}
                                     style={{
-                                        fontSize: "18px",
-                                        color: "#6e6e73",
-                                        lineHeight: 1.47,
-                                        fontWeight: 700,
+                                        marginTop: "20px",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "8px",
+                                        padding: "12px 24px",
+                                        fontSize: "17px",
+                                        fontWeight: "600",
+                                        color: "#fff",
+                                        backgroundColor: "#f56300",
+                                        borderRadius: "9999px",
+                                        border: "none",
+                                        cursor: "pointer",
                                     }}
                                 >
-                                    {content}
-                                </div>
-                                <div style={{ marginTop: "20px" }}>
-                                    <button
+                                    <svg
                                         style={{
-                                            marginTop: "20px",
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            gap: "8px",
-                                            padding: "12px 24px",
-                                            fontSize: "17px",
-                                            fontWeight: "600",
-                                            color: "#fff",
-                                            backgroundColor: "#f56300",
-                                            borderRadius: "9999px",
-                                            border: "none",
-                                            cursor: "pointer",
+                                            width: "20px",
+                                            height: "20px",
                                         }}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
                                     >
-                                        <svg
-                                            style={{
-                                                width: "20px",
-                                                height: "20px",
-                                            }}
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20"
-                                            fill="currentColor"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                        <span>
-                                            Learn more about workforce
-                                            optimization
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                    <span>
+                                            Learn more about{" "}{buttonText}
                                         </span>
-                                    </button>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
