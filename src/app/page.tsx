@@ -13,6 +13,7 @@ import { homeSections, HomeSection } from "@/data/homeSections";
 import MobileHomeSection from "@/components/mobile/MobileHomeSection";
 import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
 import MobileHeroSection from "@/components/mobile/MobileHeroSection";
+import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay"; // Import the TheaterModeOverlay component
 import Breather from "@/components/Breather";
 import {timecodeToSeconds} from "@/lib/utils";
 import ContactModal from "@/components/ContactModal"; // Import the new Breather component
@@ -548,6 +549,9 @@ export default function HomePage() {
                             asPageElement={true}
                         />
                     </div>
+
+                    {/* Global theater mode overlay */}
+                    <TheaterModeOverlay />
                 </div>
             </MobileHomeVideoProvider>
         );

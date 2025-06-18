@@ -1,25 +1,38 @@
 import React, { useRef, useState, useEffect } from "react";
 import { defaultConfig } from "@/config/videoConfig";
-import { HomeSection } from "@/data/homeSections";
+import { HomeSection, homeSections } from "@/data/homeSections";
 import { useMobileHomeVideo } from "./MobileHomeVideoContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
+import "@/styles/theater-mode.css"; // Import the theater mode styles
 
-gsap.registerPlugin(ScrollTrigger);
+// Register both ScrollTrigger and ScrollToPlugin
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 interface MobileHomeSectionProps {
   section: HomeSection;
   index?: number;
   sectionId?: string;
-  nextSectionId?: string; // Add prop for the next section ID
+  nextSection?: HomeSection; // Changed from nextSectionId to nextSection
+  nextSectionId?: string; // Keep for backward compatibility
 }
 
-const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, sectionId, nextSectionId }) => {
+const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, sectionId, nextSection, nextSectionId }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0); // 0 to 1
-  const { manualOverrideIndex, requestPlay, clearManualOverride } = useMobileHomeVideo();
+  const {
+    manualOverrideIndex,
+    requestPlay,
+    clearManualOverride,
+    theaterMode,
+    setTheaterMode,
+    activeVideoId
+  } = useMobileHomeVideo();
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const isActiveVideo = activeVideoId === sectionId;
 
   // Only relevant for video sections
   const start = section.type === "video" ? section.video!.start : 0;
@@ -122,12 +135,90 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
     }
   };
 
-  // Handle scroll to next section
+  // Add body class for theater mode to hide all videos
+  useEffect(() => {
+    if (theaterMode) {
+      document.body.classList.add('theater-mode-active');
+    } else {
+      document.body.classList.remove('theater-mode-active');
+    }
+
+    return () => {
+      document.body.classList.remove('theater-mode-active');
+    };
+  }, [theaterMode]);
+
+  // Animate theater mode overlay
+  useEffect(() => {
+    if (section.type !== "video" || !overlayRef.current) return;
+
+    if (theaterMode) {
+      gsap.to(overlayRef.current, {
+        opacity: 0.9,
+        duration: 0.5,
+        display: 'block',
+        ease: "power2.inOut"
+      });
+    } else {
+      gsap.to(overlayRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+        onComplete: () => {
+          if (overlayRef.current) {
+            overlayRef.current.style.display = 'none';
+          }
+        }
+      });
+    }
+  }, [theaterMode, section.type]);
+
+  // Handle scroll to next section and enable theater mode
   const handleLearnMore = () => {
-    if (nextSectionId) {
-      const nextSection = document.getElementById(nextSectionId);
-      if (nextSection) {
-        nextSection.scrollIntoView({ behavior: 'smooth' });
+    // Check if we have nextSection or need to fallback to nextSectionId
+    if (nextSection || nextSectionId) {
+      // Get the DOM element for the section
+      const nextSectionElement = nextSectionId ? document.getElementById(nextSectionId) : null;
+      if (nextSectionElement) {
+        // Use nextSection directly if available, otherwise use the fallback
+        const nextSectionData = nextSection || (nextSectionId ? homeSections[parseInt(nextSectionId.split('-')[1], 10)] : null);
+
+        if (nextSectionData) {
+          // Get start time directly from the nextSection object
+          const nextSectionStartTime = nextSectionData.type === "video" ? nextSectionData.video!.start : 0;
+
+          // Find the video element in the next section and reset it to start
+          const videoElement = nextSectionElement.querySelector('video');
+          if (videoElement) {
+            // Use the correct start time from the next section
+            videoElement.currentTime = nextSectionStartTime;
+            // Set playing state to ensure video starts playing
+            videoElement.play();
+          }
+
+          // Get the scrollMarginTop value from the style and convert it to a number
+          const scrollMarginTopStyle = window.getComputedStyle(nextSectionElement).scrollMarginTop;
+          const scrollMarginTopValue = parseInt(scrollMarginTopStyle, 10) || 64; // Default to 64px if parsing fails
+
+          // Enable theater mode immediately so fade-in starts in parallel with scrolling
+          setTheaterMode(true, nextSectionId);
+
+          // Calculate target scroll position, accounting for any scroll margin
+          const targetY = nextSectionElement.getBoundingClientRect().top + window.scrollY - scrollMarginTopValue;
+
+          // Use a simpler direct scrollTo approach with GSAP
+          gsap.to(window, {
+            scrollTo: targetY,
+            duration: 1,
+            ease: "power2.out",
+            onStart: () => {
+              // Nothing to disable - maintain normal scrolling ability
+            },
+            onComplete: () => {
+              // Nothing to re-enable - normal scrolling was never disabled
+            }
+          });
+        }
       }
     }
   };
@@ -168,83 +259,76 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
 
   // Video section rendering
   return (
-    <div id={sectionId} style={{ position: "relative", margin: "32px 0", scrollMarginTop: '64px' }}>
-      <video
-        ref={videoRef}
-        src={defaultConfig.videoSrc}
-        style={{ width: "100%", borderRadius: 12, background: "#000" }}
-        controls={false}
-        playsInline
-        muted
-        preload="auto"
-        data-section-video="true"
-      />
-      {/* Play/Pause button with circular progress */}
-      <div style={{
-        position: "absolute",
-        top: 12,
-        right: 12,
-        width: 48,
-        height: 48,
-        zIndex: 2,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
-        <svg
-          width={48}
-          height={48}
-          style={{ position: "absolute", top: 0, left: 0, transform: "rotate(-90deg)" }}
-        >
-          <circle
-            cx={24}
-            cy={24}
-            r={20}
-            stroke="rgba(255,255,255,0.25)"
-            strokeWidth={4}
-            fill="none"
-          />
-          <circle
-            cx={24}
-            cy={24}
-            r={20}
-            stroke="#fff"
-            strokeWidth={4}
-            fill="none"
-            strokeDasharray={2 * Math.PI * 20}
-            strokeDashoffset={2 * Math.PI * 20 * (1 - Math.max(0, Math.min(1, progress)))}
-            style={{ transition: "stroke-dashoffset 0.2s linear" }}
-            strokeLinecap="round"
-          />
-        </svg>
-        <button
-          onClick={togglePlay}
-          style={{
-            position: "relative",
-            background: "transparent",
-            border: "none",
-            borderRadius: "50%",
-            width: 40,
-            height: 40,
-            color: "#fff",
-            fontSize: 20,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 2,
-            cursor: "pointer",
-          }}
-          aria-label={playing ? "Pause video" : "Play video"}
-        >
-          {playing ? (
-            <span style={{ fontWeight: "bold" }}>&#10073;&#10073;</span> // Pause icon
-          ) : (
-            <span style={{ fontWeight: "bold" }}>&#9654;</span> // Play icon
-          )}
-        </button>
+    <div id={sectionId} className="relative my-8" style={{ scrollMarginTop: '64px' }}>
+      {/* Theater mode overlay is now a global component, removed from individual sections */}
+
+      <div className="relative">
+        <video
+          ref={videoRef}
+          src={defaultConfig.videoSrc}
+          className={`w-full rounded-xl bg-black ${isActiveVideo && theaterMode ? 'theater-mode-current-video' : ''}`}
+          controls={false}
+          playsInline
+          muted
+          preload="auto"
+          data-section-video="true"
+        />
+
+        {/* Exit theater mode button - only show for active video */}
+        {isActiveVideo && theaterMode && (
+          <button
+            onClick={() => setTheaterMode(false)}
+            className="theater-mode-controls absolute top-3 left-3 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 text-white cursor-pointer"
+            aria-label="Exit theater mode"
+          >
+            ✕
+          </button>
+        )}
+
+        {/* Play/Pause button with circular progress */}
+        <div className="theater-mode-controls absolute top-3 right-3 w-12 h-12 flex items-center justify-center">
+          <svg
+            width={48}
+            height={48}
+            className="absolute top-0 left-0 -rotate-90"
+          >
+            <circle
+              cx={24}
+              cy={24}
+              r={20}
+              stroke="rgba(255,255,255,0.25)"
+              strokeWidth={4}
+              fill="none"
+            />
+            <circle
+              cx={24}
+              cy={24}
+              r={20}
+              stroke="#fff"
+              strokeWidth={4}
+              fill="none"
+              strokeDasharray={2 * Math.PI * 20}
+              strokeDashoffset={2 * Math.PI * 20 * (1 - Math.max(0, Math.min(1, progress)))}
+              style={{ transition: "stroke-dashoffset 0.2s linear" }}
+              strokeLinecap="round"
+            />
+          </svg>
+          <button
+            onClick={togglePlay}
+            className="relative bg-transparent border-0 rounded-full w-10 h-10 text-white text-xl flex items-center justify-center cursor-pointer z-10"
+            aria-label={playing ? "Pause video" : "Play video"}
+          >
+            {playing ? (
+              <span className="font-bold">&#10073;&#10073;</span> // Pause icon
+            ) : (
+              <span className="font-bold">&#9654;</span> // Play icon
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
 export default MobileHomeSection;
+

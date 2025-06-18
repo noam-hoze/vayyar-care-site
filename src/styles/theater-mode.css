@@ -1,0 +1,72 @@
+/*
+  Theater mode styles for the mobile video overlay
+  This provides fade-in animations and proper z-indexing
+*/
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.9; /* Increased opacity to better hide other elements */
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.theater-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: 0;
+  display: none;
+  z-index: 40; /* Reduced to be below nav's z-index 50 */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.theater-mode-overlay.active {
+  display: block;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.theater-mode-overlay.closing {
+  display: block;
+  animation: fadeOut 0.5s ease-in-out forwards;
+}
+
+/*
+ * Instead of hiding other videos, we'll ensure the active video has a higher z-index
+ * This keeps all videos visible on the page but places them under the overlay
+ */
+.theater-mode-current-video {
+  position: relative;
+  z-index: 45; /* Above the overlay but below the header */
+}
+
+/* Hide video controls for all sections except the active one */
+.theater-mode-active .relative:not(:has(.theater-mode-current-video)) .theater-mode-controls {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Ensure controls for the active video remain visible */
+.theater-mode-active .relative:has(.theater-mode-current-video) .theater-mode-controls {
+  visibility: visible;
+  opacity: 1;
+}
+
+.theater-mode-controls {
+  position: absolute;
+  z-index: 49; /* Just below the nav's z-index 50 */
+  transition: visibility 0.2s, opacity 0.2s;
+}
