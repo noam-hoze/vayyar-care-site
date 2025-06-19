@@ -19,6 +19,7 @@ import { Scene } from "@/types";
 import Link from "next/link";
 import { useVideoTime } from "@/contexts/VideoTimeContext";
 import ChatGpt from "./ChatGpt";
+import { chatGptConfig } from "../config/chatGptConfig";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -66,8 +67,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State to track when the wipe animation should trigger
     const [shouldWipe, setShouldWipe] = useState(false);
 
-    // State for ChatGPT component opacity
-    const [chatGptOpacity, setChatGptOpacity] = useState(0);
+    // NEW: State for ChatGPT component instances
+    const [chatGptInstances, setChatGptInstances] = useState<Record<number, number>>({});
 
     // Renamed local states for time and frame display
     const [displayTime, setDisplayTime] = useState(0);
@@ -405,6 +406,33 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         };
     }, [setGlobalCurrentTime, frameRate]); // Dependency: context's setter
 
+    // NEW: Effect to handle ChatGPT instances visibility based on time and mode
+    useEffect(() => {
+        const newInstances: Record<number, number> = {};
+
+        chatGptConfig.forEach((instance, index) => {
+
+            const fadeInStartTime = instance.appearTime;
+            const fadeInEndTime = instance.appearTime + (instance.fadeDuration || 0.2);
+            const fadeOutStartTime = instance.disappearTime - (instance.fadeDuration || 0.2);
+            const fadeOutEndTime = instance.disappearTime;
+
+            let opacity = 0;
+
+            if (displayTime >= fadeInStartTime && displayTime < fadeInEndTime) {
+                opacity = (displayTime - fadeInStartTime) / (instance.fadeDuration || 0.2);
+            } else if (displayTime >= fadeInEndTime && displayTime < fadeOutStartTime) {
+                opacity = 1;
+            } else if (displayTime >= fadeOutStartTime && displayTime < fadeOutEndTime) {
+                opacity = 1 - (displayTime - fadeOutStartTime) / (instance.fadeDuration || 0.2);
+            }
+
+            newInstances[index] = opacity;
+        });
+
+        setChatGptInstances(newInstances);
+    }, [displayTime]);
+
     // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
         () => ({
@@ -463,37 +491,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             </>
         );
     };
-
-    const chatGPTAppearTime = 12 + 1 / 30; // 00:00:12:01
-    const chatGPTDisappearTime = 14; // 00:00:14:00
-    const chatGPTFadeDuration = 0.2; // 0.2 seconds for fade
-
-    // Effect to handle ChatGPT component fade in/out
-    useEffect(() => {
-        const fadeInStartTime = chatGPTAppearTime;
-        const fadeInEndTime = chatGPTAppearTime + chatGPTFadeDuration;
-        const fadeOutStartTime = chatGPTDisappearTime - chatGPTFadeDuration;
-        const fadeOutEndTime = chatGPTDisappearTime;
-
-        let newOpacity = 0;
-
-        if (displayTime >= fadeInStartTime && displayTime < fadeInEndTime) {
-            newOpacity = (displayTime - fadeInStartTime) / chatGPTFadeDuration;
-        } else if (
-            displayTime >= fadeInEndTime &&
-            displayTime < fadeOutStartTime
-        ) {
-            newOpacity = 1;
-        } else if (
-            displayTime >= fadeOutStartTime &&
-            displayTime < fadeOutEndTime
-        ) {
-            newOpacity =
-                1 - (displayTime - fadeOutStartTime) / chatGPTFadeDuration;
-        }
-
-        setChatGptOpacity(newOpacity);
-    }, [displayTime]);
 
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
@@ -596,25 +593,40 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 )}
             </div>
 
-            {/* Render ChatGPT component */}
-            {chatGptOpacity > 0 && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        opacity: chatGptOpacity,
-                        transition: "opacity 0.3s ease-in-out",
-                    }}
-                >
-                    <ChatGpt />
-                </div>
-            )}
+            {/* NEW: Render ChatGPT instances */}
+            {Object.entries(chatGptInstances).map(([instanceIndexStr, opacity]) => {
+                if (opacity <= 0) return null;
+
+                const instanceIndex = parseInt(instanceIndexStr);
+                const instance = chatGptConfig[instanceIndex];
+
+                return (
+                    <div
+                        key={`chatgpt-instance-${instanceIndex}`}
+                        style={{
+                            position: "absolute",
+                            opacity,
+                            transition: "opacity 0.3s ease-in-out",
+                            zIndex: instance.zIndex || 20,
+                            top: instance.position?.top || 0,
+                            left: instance.position?.left,
+                            right: instance.position?.right,
+                            bottom: instance.position?.bottom,
+                            width: instance.position?.width || "100%",
+                            height: instance.position?.height || "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <ChatGpt
+                            mode={instance.mode}
+                            customMessage={instance.content?.message}
+                            customClass={instance.content?.customClass}
+                        />
+                    </div>
+                );
+            })}
 
             {/* Tablet Wrapper - Currently hidden */}
             <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden">

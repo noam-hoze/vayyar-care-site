@@ -26,12 +26,16 @@ const Icon = ({
     </svg>
 );
 
+type Mode = "desktop" | "mobile";
+
 const SuggestionButton = ({
     icon: Icon,
     text,
+    mode = "desktop",
 }: {
     icon: React.ElementType;
     text: string;
+    mode?: Mode;
 }) => (
     <div
         style={{
@@ -40,7 +44,7 @@ const SuggestionButton = ({
             borderRadius: "14px",
             color: "#1D1D1F",
             padding: "12px",
-            width: "auto",
+            width: mode === "mobile" ? "100%" : "auto",
             height: "auto",
             display: "flex",
             flexDirection: "row",
@@ -56,7 +60,7 @@ const SuggestionButton = ({
         <p
             style={{
                 margin: 0,
-                fontSize: "14px",
+                fontSize: mode === "mobile" ? "12px" : "14px",
                 fontWeight: 400,
                 whiteSpace: "nowrap",
             }}
@@ -66,7 +70,13 @@ const SuggestionButton = ({
     </div>
 );
 
-const ChatGpt = () => {
+interface ChatGptProps {
+    mode?: Mode;
+}
+
+const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop" }) => {
+    const isMobile = mode === "mobile";
+
     return (
         <div
             style={{
@@ -76,16 +86,16 @@ const ChatGpt = () => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: isMobile ? "space-between" : "center",
                 fontFamily:
                     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                gap: "20px",
+                gap: isMobile ? "12px" : "20px",
             }}
         >
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", margin: isMobile ? "auto" : "initial", }}>
                 <div
                     style={{
-                        fontSize: "38px",
+                        fontSize: isMobile ? "24px" : "38px",
                         fontWeight: "400",
                         color: "#1D1D1F",
                     }}
@@ -96,18 +106,18 @@ const ChatGpt = () => {
 
             <div
                 style={{
-                    width: "720px",
+                    width: isMobile ? "90%" : "720px",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: "24px",
+                    gap: isMobile ? "16px" : "24px",
                 }}
             >
                 <div
                     style={{
                         background: "#F0F0F0",
-                        borderRadius: "32px",
-                        padding: "8px",
+                        borderRadius: isMobile ? "24px" : "32px",
+                        padding: isMobile ? "6px" : "8px",
                         display: "flex",
                         alignItems: "center",
                         width: "100%",
@@ -120,8 +130,8 @@ const ChatGpt = () => {
                             background: "transparent",
                             border: "none",
                             color: "#8E8E93",
-                            fontSize: "20px",
-                            padding: "12px 20px",
+                            fontSize: isMobile ? "16px" : "20px",
+                            padding: isMobile ? "8px 16px" : "12px 20px",
                             outline: "none",
                         }}
                     >
@@ -139,20 +149,20 @@ const ChatGpt = () => {
                             style={{
                                 background: "#E5E5E7",
                                 border: "none",
-                                borderRadius: "24px",
+                                borderRadius: isMobile ? "20px" : "24px",
                                 color: "#1D1D1F",
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "8px",
-                                padding: "12px 20px",
+                                padding: isMobile ? "8px 16px" : "12px 20px",
                                 cursor: "default",
-                                fontSize: "16px",
+                                fontSize: isMobile ? "14px" : "16px",
                                 fontWeight: 500,
                             }}
                         >
                             <Icon
                                 path="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM16 11a1 1 0 0 1-1 1h-1v3a1 1 0 0 1-2 0v-3H9a1 1 0 0 1 0-2h1V4a1 1 0 0 1 2 0v5h1a1 1 0 0 1 1 1z"
-                                size={18}
+                                size={isMobile ? 16 : 18}
                                 color="#1D1D1F"
                             />
                             Voice
@@ -162,20 +172,33 @@ const ChatGpt = () => {
                 <div
                     style={{
                         display: "flex",
+                        flexDirection: isMobile ? "column" : "row",
                         justifyContent: "center",
-                        gap: "16px",
+                        alignItems: isMobile ? "stretch" : "center",
+                        gap: isMobile ? "8px" : "16px",
+                        width: "100%",
                     }}
                 >
                     <SuggestionButton
                         icon={ClipboardDocumentListIcon}
                         text="Shift Summary"
+                        mode={mode}
                     />
-                    <SuggestionButton icon={ClockIcon} text="Fall History" />
+                    <SuggestionButton
+                        icon={ClockIcon}
+                        text="Fall History"
+                        mode={mode}
+                    />
                     <SuggestionButton
                         icon={ChartBarIcon}
                         text="Resident Patterns"
+                        mode={mode}
                     />
-                    <SuggestionButton icon={LightBulbIcon} text="AI Insights" />
+                    <SuggestionButton
+                        icon={LightBulbIcon}
+                        text="AI Insights"
+                        mode={mode}
+                    />
                 </div>
             </div>
         </div>
