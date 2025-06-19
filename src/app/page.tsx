@@ -15,7 +15,7 @@ import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoCont
 import MobileHeroSection from "@/components/mobile/MobileHeroSection";
 import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay"; // Import the TheaterModeOverlay component
 import Breather from "@/components/Breather";
-import {timecodeToSeconds} from "@/lib/utils";
+import { timecodeToSeconds } from "@/lib/utils";
 import ContactModal from "@/components/ContactModal"; // Import the new Breather component
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
@@ -134,28 +134,24 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                     fontSize: "40px",
                     textAlign: "center",
                     maxWidth: "800px",
-                    position: "absolute",
-                    left: "50%",
-                    top: "50%",
-                    transform: "translate(-50%, -50%)",
                     fontFamily:
                         "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                 }}
             >
-                Automated shift summaries that surface critical trends
+                Vayyar care automated shift summary surfaces criticl trends
                 <br /> <br />
-                From frequent bathroom visits to gait changes to prolonged inactivity.{" "}
-                <br />
-                <br /> This level of visibility lets you align staff to real
-                needs, not assumptions. Small operational shifts. Compounding
-                impact.
+                From frequent bathroom visits to gait changes and prolonged
+                inactivity. <br />
+                <br /> Now, you can align your staff to real
+                needs, not assumptions. 
             </h1>
         ),
-        startTime: 15 + 12 / 30,
+        startTime: 17 + 12 / 30,
         endTime: 26 + 5 / 30,
+        isScrolling: true,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
+            // transition: "opacity 0.3s ease-in-out",
         },
     },
     {
@@ -199,6 +195,7 @@ interface TimedTextConfigItem {
     visibleDuration?: number;
     fadeOutDuration?: number;
     isRightAligned?: boolean;
+    isScrolling?: boolean;
     style: React.CSSProperties & {
         fontSize?: string;
         fontFamily?: string;
@@ -222,6 +219,7 @@ export default function HomePage() {
     const { isDemoModalOpen } = useDemoModal();
     const [shouldHeroFadeOut, setShouldHeroFadeOut] = useState(false);
     const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false);
+    const [dimAmount, setDimAmount] = useState(0);
     const [timedTextsVisibility, setTimedTextsVisibility] = useState<{
         [key: number]: boolean;
     }>({});
@@ -229,6 +227,53 @@ export default function HomePage() {
     const currentY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const rafId = useRef<number | null>(null);
     const isScrollingProgrammatically = useRef(false);
+
+    const timeToScrollY = (time: number): number => {
+        if (videoDuration === 0) return 0;
+
+        let targetSceneIndex = 0;
+        let progressWithinTargetScene = 0;
+
+        // Find the scene and progress for the given time
+        for (let i = 0; i < videoConfig.sceneTiming.length; i++) {
+            const currentSceneInfo = videoConfig.sceneTiming[i];
+            const nextSceneInfo = videoConfig.sceneTiming[i + 1];
+
+            const sceneStartTime = currentSceneInfo.videoTime ?? 0;
+            const sceneEndTime = nextSceneInfo?.videoTime ?? videoDuration; // Use videoDuration for the last scene
+
+            if (time >= sceneStartTime && time < sceneEndTime) {
+                targetSceneIndex = currentSceneInfo.scene; // Assuming scene in config matches index directly, or map if needed
+                if (sceneEndTime - sceneStartTime > 0) {
+                    progressWithinTargetScene =
+                        (time - sceneStartTime) /
+                        (sceneEndTime - sceneStartTime);
+                } else {
+                    progressWithinTargetScene = 0; // Avoid division by zero if scene duration is 0
+                }
+                break;
+            }
+            // If time is beyond the start of the last configured scene, snap to it
+            if (!nextSceneInfo && time >= sceneStartTime) {
+                targetSceneIndex = currentSceneInfo.scene;
+                progressWithinTargetScene = 0; // Or 1, depending on desired behavior at exact end time
+                break;
+            }
+        }
+
+        progressWithinTargetScene = Math.max(
+            0,
+            Math.min(1, progressWithinTargetScene)
+        ); // Clamp
+
+        const windowHeight =
+            typeof window !== "undefined" ? window.innerHeight : 0;
+        const scrollY =
+            targetSceneIndex * windowHeight +
+            progressWithinTargetScene * windowHeight;
+
+        return scrollY;
+    };
 
     useEffect(() => {
         // Function to check and update mobile state
@@ -504,6 +549,39 @@ export default function HomePage() {
         // Add index and subScrollProgress as dependencies to get their current values in the checks
     }, [index, subScrollProgress]);
 
+    // Effect to calculate scene dimming
+    useEffect(() => {
+        const scrollingTexts = TIMED_TEXTS_CONFIG.filter(
+            (c) => ![1, 2, 3].includes(c.id) && c.isScrolling
+        );
+
+        let maxOpacity = 0;
+
+        scrollingTexts.forEach((config) => {
+            if (!config.endTime) return;
+
+            const duration = config.endTime - config.startTime;
+            const progress = (currentTime - config.startTime) / duration;
+
+            if (progress >= 0 && progress <= 1) {
+                const fadeDurationAsProgress = 0.15; // Same as text fade
+                let currentOpacity = 0;
+                if (progress < fadeDurationAsProgress) {
+                    currentOpacity = progress / fadeDurationAsProgress;
+                } else if (progress > 1 - fadeDurationAsProgress) {
+                    currentOpacity = (1 - progress) / fadeDurationAsProgress;
+                } else {
+                    currentOpacity = 1;
+                }
+                if (currentOpacity > maxOpacity) {
+                    maxOpacity = currentOpacity;
+                }
+            }
+        });
+
+        setDimAmount(maxOpacity);
+    }, [currentTime]);
+
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
     // Note: height calculation might move or change based on scroll implementation
@@ -514,6 +592,10 @@ export default function HomePage() {
     );
     const otherTextConfigs = TIMED_TEXTS_CONFIG.filter(
         (c) => ![1, 2, 3].includes(c.id)
+    );
+    const scrollingTextConfigs = otherTextConfigs.filter((c) => c.isScrolling);
+    const fixedOtherTextConfigs = otherTextConfigs.filter(
+        (c) => !c.isScrolling
     );
 
     // Determine when the entire stacked group should be visible
@@ -550,11 +632,12 @@ export default function HomePage() {
                         />
                     ))}
                     {/* Contact form section at the end of the page */}
-                    <div id="contact-section" className="relative z-10" style={{height: "100vh"}}>
-                        <ContactModal
-                            isOpen={true}
-                            asPageElement={true}
-                        />
+                    <div
+                        id="contact-section"
+                        className="relative z-10"
+                        style={{ height: "100vh" }}
+                    >
+                        <ContactModal isOpen={true} asPageElement={true} />
                     </div>
 
                     {/* Global theater mode overlay */}
@@ -678,7 +761,7 @@ export default function HomePage() {
             </div>
 
             {/* 2. Render other texts as before */}
-            {otherTextConfigs.map((config: TimedTextConfigItem) => {
+            {fixedOtherTextConfigs.map((config: TimedTextConfigItem) => {
                 if (config.isRightAligned) {
                     return (
                         <div
@@ -730,11 +813,77 @@ export default function HomePage() {
                 className="scenes-container relative w-full"
                 style={{ height: scenesContainerHeight }} // Height set based on number of scenes
             >
+                <div
+                    className="absolute inset-0 z-[5] pointer-events-none"
+                    style={{
+                        backgroundColor: `rgba(0, 0, 0, ${dimAmount * 0.5})`, // Dim up to 50% black
+                        transition: "background-color 0.1s ease-in-out", // A quick transition for smoothness
+                    }}
+                />
                 <SceneViewer
                     scene={scene}
                     index={index}
                     subScrollProgress={subScrollProgress}
                 />
+                {/* Scrolling Texts */}
+                {scrollingTextConfigs.map((config) => {
+                    if (!config.endTime) return null;
+
+                    // The text will be centered on screen at the midpoint of its duration
+                    const yPos = timeToScrollY(
+                        (config.startTime + config.endTime) / 2
+                    );
+                    const { transition, ...restOfStyle } = config.style;
+
+                    const duration = config.endTime - config.startTime;
+                    const progress =
+                        (currentTime - config.startTime) / duration;
+
+                    // Don't render if we are not in the time range for this text
+                    if (progress < 0 || progress > 1) {
+                        return null;
+                    }
+
+                    // Animate translateY from 60vh to -60vh. This makes the text
+                    // travel from below the viewport to above it.
+                    const transform = `translateY(${(0.5 - progress) * 120}vh)`;
+
+                    // Fade in at the beginning and fade out at the end for a smoother appearance.
+                    const fadeDurationAsProgress = 0.15; // Use 15% of the time for fade-in and 15% for fade-out.
+                    let opacity = 1;
+                    if (progress < fadeDurationAsProgress) {
+                        opacity = progress / fadeDurationAsProgress;
+                    } else if (progress > 1 - fadeDurationAsProgress) {
+                        opacity = (1 - progress) / fadeDurationAsProgress;
+                    }
+
+                    return (
+                        <div
+                            key={config.id}
+                            className="text-white font-bold pointer-events-none"
+                            style={{
+                                ...restOfStyle,
+                                position: "absolute",
+                                top: `${yPos}px`,
+                                left: "0",
+                                width: "100%",
+                                height: "100vh",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                                opacity: opacity,
+                                transform: transform,
+                                zIndex: 10,
+                                textShadow:
+                                    config.style.textShadow ||
+                                    "0px 2px 8px rgba(0,0,0,0.7)",
+                            }}
+                        >
+                            {config.text}
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Breather components with homeSections data */}
@@ -749,17 +898,20 @@ export default function HomePage() {
                             title={section.header || section.title}
                             content={section.content}
                             buttonText={section.buttonText}
-                            scrollToTimeValue={timecodeToSeconds(section.scrollToTimeValue!)}
+                            scrollToTimeValue={timecodeToSeconds(
+                                section.scrollToTimeValue!
+                            )}
                         />
                     );
                 })}
 
             {/* Contact form section at the end of the page */}
-            <div id="contact-section" className="relative z-10" style={{height: "100vh"}}>
-                <ContactModal
-                    isOpen={true}
-                    asPageElement={true}
-                />
+            <div
+                id="contact-section"
+                className="relative z-10"
+                style={{ height: "100vh" }}
+            >
+                <ContactModal isOpen={true} asPageElement={true} />
             </div>
         </>
     );
