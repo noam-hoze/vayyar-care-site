@@ -26,106 +26,6 @@ const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 
 const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     {
-        id: 1,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
-                    ›
-                </span>
-                Smarter Care Plan */}
-            </h1>
-        ),
-        startTime: 5 + 8 / 30,
-        endTime: 5 + 22 / 30,
-        style: {
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
-        },
-    },
-    {
-        id: 2,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
-                    ›
-                </span>
-                Improve NOI */}
-            </h1>
-        ),
-        startTime: 5 + 24 / 30,
-        endTime: 6 + 8 / 30,
-        style: {
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
-        },
-    },
-    {
-        id: 3,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
-                    ›
-                </span>
-                AI-Powered Insights */}
-            </h1>
-        ),
-        startTime: 6 + 14 / 30,
-        endTime: 7 + 12 / 30,
-        style: {
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
-        },
-    },
-    // {
-    //     id: 6, // New ID for the duplicated text
-    //     text: (
-    //         <>
-    //             <h1
-    //                 style={{
-    //                     display: "block",
-    //                     fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
-    //                     fontWeight: "800",
-    //                     marginBottom: "0.4em",
-    //                     textAlign: "center",
-    //                 }}
-    //             >
-    //                 <span style={{ fontWeight: "300" }}>
-    //                     Care with{" "}
-    //                     <span style={{ color: "#06aeef", fontWeight: "800" }}>
-    //                         Privacy
-    //                     </span>{" "}
-    //                     and Dignity
-    //                 </span>
-    //             </h1>
-    //             <h3
-    //                 style={{
-    //                     display: "block",
-    //                     fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
-    //                     fontWeight: "300",
-    //                     lineHeight: "1.45",
-    //                     textAlign: "center",
-    //                 }}
-    //             >
-    //                 Enhanced Coverage, Optimal Privacy
-    //             </h3>
-    //         </>
-    //     ),
-    //     startTime: 48 + 22 / 30, // 00:00:48:22
-    //     fadeInDuration: 0.5,
-    //     visibleDuration: 9, // Same as the original id: 5
-    //     fadeOutDuration: 0.5,
-    //     isRightAligned: true,
-    //     style: {
-    //         fontFamily: "Manrope, Inter, sans-serif",
-    //         fontWeight: "normal",
-    //         color: "#FFFFFF",
-    //         textShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
-    //         letterSpacing: "0.01em",
-    //         maxWidth: "480px",
-    //         transition: "opacity 0.5s ease-in-out",
-    //     },
-    // },
-    {
         id: 7,
         text: (
             <h1
@@ -142,8 +42,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 <br /> <br />
                 From frequent bathroom visits to gait changes and prolonged
                 inactivity. <br />
-                <br /> Now, you can align your staff to real
-                needs, not assumptions. 
+                <br /> Now, you can align your staff to real needs, not
+                assumptions.
             </h1>
         ),
         startTime: 17 + 12 / 30,
@@ -151,14 +51,41 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         isScrolling: true,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            // transition: "opacity 0.3s ease-in-out",
         },
     },
     {
         id: 8,
-        text: <h1 style={{ margin: 0 }}>Realtime Alerts</h1>,
+        text: (
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Dignity comes first{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Realtime alerts protect privacy while surfacing insights
+                    that elevate care and efficiency.
+                </h1>
+            </div>
+        ),
         startTime: 45 + 15 / 30,
-        endTime: 60 + 15 + 5 / 30,
+        endTime: 67 + 2 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -166,9 +93,36 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     },
     {
         id: 9,
-        text: <h1 style={{ margin: 0 }}>AI Insights</h1>,
-        startTime: 60 + 45 + 18 / 30,
-        endTime: 2 * 60 + 7 + 1 / 30,
+        text: (
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    {/* See the context. */} Act with clarity.{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Our AI reveals the patterns <br /> behind the incident.
+                </h1>
+            </div>
+        ),
+        startTime: 93 + 18 / 30,
+        endTime: 105 + 0 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -176,9 +130,74 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     },
     {
         id: 10,
-        text: <h1 style={{ margin: 0 }}>Personalized Care</h1>,
-        startTime: 2 * 60 + 13 + 8 / 30,
-        endTime: 2 * 60 + 50 + 19 / 30,
+        text: (
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Confidence, earned.{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Transparent insights turn uncertainty into trust, and trust
+                    into action.
+                </h1>
+            </div>
+        ),
+        startTime: 2 * 60 + 18 + 8 / 30,
+        endTime: 2 * 60 + 33 + 0 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+    },
+    {
+        id: 11,
+        text: (
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    {/* A new standard for care. */} Built to scale.{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Turn insights into enterprise-wide transformation.
+                </h1>
+            </div>
+        ),
+        startTime: 2 * 60 + 40 + 0 / 30,
+        endTime: 2 * 60 + 58 + 0 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
