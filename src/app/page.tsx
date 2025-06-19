@@ -128,8 +128,27 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     {
         id: 7,
         text: (
-            <h1 style={{ margin: 0 }}>
-                Workforce Optimization
+            <h1
+                style={{
+                    margin: "0 auto",
+                    fontSize: "40px",
+                    textAlign: "center",
+                    maxWidth: "800px",
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                    fontFamily:
+                        "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                }}
+            >
+                Automated shift summaries that surface critical trends
+                <br /> <br />
+                From frequent bathroom visits to gait changes to prolonged inactivity.{" "}
+                <br />
+                <br /> This level of visibility lets you align staff to real
+                needs, not assumptions. Small operational shifts. Compounding
+                impact.
             </h1>
         ),
         startTime: 15 + 12 / 30,
@@ -141,11 +160,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     },
     {
         id: 8,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                Realtime Alerts
-            </h1>
-        ),
+        text: <h1 style={{ margin: 0 }}>Realtime Alerts</h1>,
         startTime: 45 + 15 / 30,
         endTime: 60 + 15 + 5 / 30,
         style: {
@@ -155,11 +170,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     },
     {
         id: 9,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                AI Insights
-            </h1>
-        ),
+        text: <h1 style={{ margin: 0 }}>AI Insights</h1>,
         startTime: 60 + 45 + 18 / 30,
         endTime: 2 * 60 + 7 + 1 / 30,
         style: {
@@ -169,11 +180,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     },
     {
         id: 10,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                Personalized Care
-            </h1>
-        ),
+        text: <h1 style={{ margin: 0 }}>Personalized Care</h1>,
         startTime: 2 * 60 + 13 + 8 / 30,
         endTime: 2 * 60 + 50 + 19 / 30,
         style: {
