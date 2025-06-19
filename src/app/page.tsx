@@ -52,6 +52,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
         },
+        dimMultiplier: 0.5,
     },
     {
         id: 8,
@@ -90,6 +91,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.4,
     },
     {
         id: 9,
@@ -127,6 +129,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.2,
     },
     {
         id: 10,
@@ -165,6 +168,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.2,
     },
     {
         id: 11,
@@ -202,6 +206,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.2,
     },
 ];
 
@@ -215,6 +220,7 @@ interface TimedTextConfigItem {
     fadeOutDuration?: number;
     isRightAligned?: boolean;
     isScrolling?: boolean;
+    dimMultiplier?: number;
     style: React.CSSProperties & {
         fontSize?: string;
         fontFamily?: string;
@@ -575,6 +581,7 @@ export default function HomePage() {
         );
 
         let maxOpacity = 0;
+        let dimMultiplier = 0; // Default to 0, so no dimming if no text is active
 
         textsForDimming.forEach((config) => {
             if (!config.endTime) return;
@@ -594,11 +601,12 @@ export default function HomePage() {
                 }
                 if (currentOpacity > maxOpacity) {
                     maxOpacity = currentOpacity;
+                    dimMultiplier = config.dimMultiplier ?? 0.5; // Use configured value or default
                 }
             }
         });
 
-        setDimAmount(maxOpacity);
+        setDimAmount(maxOpacity * dimMultiplier);
     }, [currentTime]);
 
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
@@ -835,7 +843,7 @@ export default function HomePage() {
                 <div
                     className="absolute inset-0 z-[5] pointer-events-none"
                     style={{
-                        backgroundColor: `rgba(0, 0, 0, ${dimAmount * 0.5})`, // Dim up to 50% black
+                        backgroundColor: `rgba(0, 0, 0, ${dimAmount})`, // Dim amount is now pre-calculated
                         transition: "background-color 0.1s ease-in-out", // A quick transition for smoothness
                     }}
                 />
