@@ -5,7 +5,8 @@ import { useMobileHomeVideo } from "./MobileHomeVideoContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
-import "@/styles/theater-mode.css"; // Import the theater mode styles
+import "@/styles/theater-mode.css";
+import {timecodeToSeconds} from "@/lib/utils"; // Import the theater mode styles
 
 // Register both ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -35,8 +36,8 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
   const isActiveVideo = activeVideoId === sectionId;
 
   // Only relevant for video sections
-  const start = section.type === "video" ? section.video!.start : 0;
-  const end = section.type === "video" ? section.video!.end : 0;
+  const start = section.type === "video" ? timecodeToSeconds(section.video!.start) : 0;
+  const end = section.type === "video" ? timecodeToSeconds(section.video!.end) : 0;
 
   // Initialize video and ScrollTrigger
   useEffect(() => {
@@ -185,7 +186,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
 
         if (nextSectionData) {
           // Get start time directly from the nextSection object
-          const nextSectionStartTime = nextSectionData.type === "video" ? nextSectionData.video!.start : 0;
+          const nextSectionStartTime = nextSectionData.type === "video" ? timecodeToSeconds(nextSectionData.video!.start) : 0;
 
           // Find the video element in the next section and reset it to start
           const videoElement = nextSectionElement.querySelector('video');

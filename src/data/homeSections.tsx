@@ -6,8 +6,8 @@ export interface HomeSection {
     header?: React.ReactNode;
     content?: string | JSX.Element; // for text
     video?: {
-        start: number; // in seconds
-        end: number; // in seconds
+        start: string;
+        end: string;
     };
     text?: {
         start: number; // in seconds
@@ -63,7 +63,7 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 5, end: 11 },
     },
-    { type: "video", title: "Video 1", video: { start: 0, end: 30 } },
+    { type: "video", title: "Video 1", video: { start: "00:12:06", end: "00:34:11" } },
     {
         type: "text",
         title: "Intro",
@@ -148,7 +148,7 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 36, end: 46 },
     },
-    { type: "video", title: "Video 2", video: { start: 30, end: 60 } },
+    { type: "video", title: "Video 2", video: { start: "00:35:04", end: "01:17:26" } },
     {
         type: "text",
         title: "Summary",
@@ -203,5 +203,5 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 80, end: 92 },
     },
-    { type: "video", title: "Video 3", video: { start: 60, end: 90 } },
+    { type: "video", title: "Video 3", video: { start: "01:33:02", end: "02:10:03" } },
 ];
