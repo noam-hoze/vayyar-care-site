@@ -34,13 +34,13 @@ const BUTTON_CONFIG = [
     {
         name: "Personalized Care",
         startTimeString: "00:02:13:08",
-        endTimeString: "00:02:50:19",
+        endTimeString: "00:02:34:29",
         baseTextColor: "text-gray-500",
     },
     {
         name: "Increase NOI",
-        startTimeString: "00:02:50:20",
-        endTimeString: "00:03:00:29",
+        startTimeString: "00:02:35:00",
+        endTimeString: "00:02:58:01",
         baseTextColor: "text-gray-500",
     },
 ].map((btn) => ({

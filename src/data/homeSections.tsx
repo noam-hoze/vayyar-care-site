@@ -204,4 +204,54 @@ export const homeSections: HomeSection[] = [
         text: { start: 80, end: 92 },
     },
     { type: "video", title: "Video 3", video: { start: "01:33:02", end: "02:10:03" } },
+    {
+        type: "text",
+        title: "Summary",
+        header: (
+            <>
+                The <span style={{ color: "#05aae9" }}>right</span> care. <br />
+                At the right <span style={{ color: "#05aae9" }}>rate.</span>
+            </>
+        ),
+        buttonText: "AI insights",
+        scrollToTimeValue: "00:01:32:33",
+        content: (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Data-backed conversations support higher levels of care,
+                        aligned with actual resident needs.
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        More informed families = stronger trust, longer stays,
+                        fewer disputes.
+                    </span>
+                </li>
+                <li style={{ display: "flex", gap: "0.5em" }}>
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Precision in care planning enables justified rate
+                        adjustments and improved NOI.
+                    </span>
+                </li>
+            </ul>
+        ),
+        text: { start: 113, end: 130 },
+    },
 ];

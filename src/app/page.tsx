@@ -15,7 +15,7 @@ import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoCont
 import MobileHeroSection from "@/components/mobile/MobileHeroSection";
 import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay"; // Import the TheaterModeOverlay component
 import Breather from "@/components/Breather";
-import {timecodeToSeconds} from "@/lib/utils";
+import { timecodeToSeconds } from "@/lib/utils";
 import ContactModal from "@/components/ContactModal"; // Import the new Breather component
 
 // Register GSAP plugins - needs to be done in a client component or useEffect
@@ -26,160 +26,187 @@ const HERO_FADE_OUT_TIME = 4 + 19 / 30; // 00:00:04:19 assuming 30fps
 
 const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     {
-        id: 1,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
-                    ›
-                </span>
-                Smarter Care Plan */}
-            </h1>
-        ),
-        startTime: 5 + 8 / 30,
-        endTime: 5 + 22 / 30,
-        style: {
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
-        },
-    },
-    {
-        id: 2,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
-                    ›
-                </span>
-                Improve NOI */}
-            </h1>
-        ),
-        startTime: 5 + 24 / 30,
-        endTime: 6 + 8 / 30,
-        style: {
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
-        },
-    },
-    {
-        id: 3,
-        text: (
-            <h1 style={{ margin: 0 }}>
-                {/* <span style={{ color: VAYYAR_BLUE, marginRight: "1rem" }}>
-                    ›
-                </span>
-                AI-Powered Insights */}
-            </h1>
-        ),
-        startTime: 6 + 14 / 30,
-        endTime: 7 + 12 / 30,
-        style: {
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
-        },
-    },
-    // {
-    //     id: 6, // New ID for the duplicated text
-    //     text: (
-    //         <>
-    //             <h1
-    //                 style={{
-    //                     display: "block",
-    //                     fontSize: "clamp(1.9rem, 3.8vw, 2.5rem)",
-    //                     fontWeight: "800",
-    //                     marginBottom: "0.4em",
-    //                     textAlign: "center",
-    //                 }}
-    //             >
-    //                 <span style={{ fontWeight: "300" }}>
-    //                     Care with{" "}
-    //                     <span style={{ color: "#06aeef", fontWeight: "800" }}>
-    //                         Privacy
-    //                     </span>{" "}
-    //                     and Dignity
-    //                 </span>
-    //             </h1>
-    //             <h3
-    //                 style={{
-    //                     display: "block",
-    //                     fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
-    //                     fontWeight: "300",
-    //                     lineHeight: "1.45",
-    //                     textAlign: "center",
-    //                 }}
-    //             >
-    //                 Enhanced Coverage, Optimal Privacy
-    //             </h3>
-    //         </>
-    //     ),
-    //     startTime: 48 + 22 / 30, // 00:00:48:22
-    //     fadeInDuration: 0.5,
-    //     visibleDuration: 9, // Same as the original id: 5
-    //     fadeOutDuration: 0.5,
-    //     isRightAligned: true,
-    //     style: {
-    //         fontFamily: "Manrope, Inter, sans-serif",
-    //         fontWeight: "normal",
-    //         color: "#FFFFFF",
-    //         textShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
-    //         letterSpacing: "0.01em",
-    //         maxWidth: "480px",
-    //         transition: "opacity 0.5s ease-in-out",
-    //     },
-    // },
-    {
         id: 7,
         text: (
-            <h1 style={{ margin: 0 }}>
-                Workforce Optimization
+            <h1
+                style={{
+                    margin: "0 auto",
+                    fontSize: "40px",
+                    textAlign: "center",
+                    maxWidth: "800px",
+                    fontFamily:
+                        "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                }}
+            >
+                Vayyar care automated shift summary, surfaces criticl trends.
+                <br /> <br />
+                From frequent bathroom visits to gait changes and prolonged
+                inactivity. <br />
+                <br /> Now, you can align your staff to real needs, not
+                assumptions.
             </h1>
         ),
-        startTime: 15 + 12 / 30,
+        startTime: 17 + 12 / 30,
         endTime: 26 + 5 / 30,
+        isScrolling: true,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.5,
     },
     {
         id: 8,
         text: (
-            <h1 style={{ margin: 0 }}>
-                Realtime Alerts
-            </h1>
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Dignity comes first{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Protect privacy while surfacing insights that elevate care
+                    and efficiency.
+                </h1>
+            </div>
         ),
         startTime: 45 + 15 / 30,
-        endTime: 60 + 15 + 5 / 30,
+        endTime: 67 + 2 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.4,
     },
     {
         id: 9,
         text: (
-            <h1 style={{ margin: 0 }}>
-                AI Insights
-            </h1>
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    {/* See the context. */} Act with clarity.{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Our AI reveals the patterns <br /> behind the incident.
+                </h1>
+            </div>
         ),
-        startTime: 60 + 45 + 18 / 30,
-        endTime: 2 * 60 + 7 + 1 / 30,
+        startTime: 93 + 18 / 30,
+        endTime: 105 + 0 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.2,
     },
     {
         id: 10,
         text: (
-            <h1 style={{ margin: 0 }}>
-                Personalized Care
-            </h1>
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Confidence, earned.{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Transparent insights turn uncertainty into trust, and trust
+                    into action.
+                </h1>
+            </div>
         ),
-        startTime: 2 * 60 + 13 + 8 / 30,
-        endTime: 2 * 60 + 50 + 19 / 30,
+        startTime: 2 * 60 + 18 + 8 / 30,
+        endTime: 2 * 60 + 33 + 0 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
+        dimMultiplier: 0.2,
+    },
+    {
+        id: 11,
+        text: (
+            <div>
+                <h3
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "28px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    {/* A new standard for care. */} Built to scale.{" "}
+                </h3>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "40px",
+                        textAlign: "center",
+                        maxWidth: "800px",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    Turn insights into enterprise-wide transformation.
+                </h1>
+            </div>
+        ),
+        startTime: 2 * 60 + 40 + 0 / 30,
+        endTime: 2 * 60 + 58 + 0 / 30,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+        dimMultiplier: 0.2,
     },
 ];
 
@@ -192,6 +219,8 @@ interface TimedTextConfigItem {
     visibleDuration?: number;
     fadeOutDuration?: number;
     isRightAligned?: boolean;
+    isScrolling?: boolean;
+    dimMultiplier?: number;
     style: React.CSSProperties & {
         fontSize?: string;
         fontFamily?: string;
@@ -215,6 +244,7 @@ export default function HomePage() {
     const { isDemoModalOpen } = useDemoModal();
     const [shouldHeroFadeOut, setShouldHeroFadeOut] = useState(false);
     const [heroHasFadedOutOnce, setHeroHasFadedOutOnce] = useState(false);
+    const [dimAmount, setDimAmount] = useState(0);
     const [timedTextsVisibility, setTimedTextsVisibility] = useState<{
         [key: number]: boolean;
     }>({});
@@ -222,6 +252,53 @@ export default function HomePage() {
     const currentY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
     const rafId = useRef<number | null>(null);
     const isScrollingProgrammatically = useRef(false);
+
+    const timeToScrollY = (time: number): number => {
+        if (videoDuration === 0) return 0;
+
+        let targetSceneIndex = 0;
+        let progressWithinTargetScene = 0;
+
+        // Find the scene and progress for the given time
+        for (let i = 0; i < videoConfig.sceneTiming.length; i++) {
+            const currentSceneInfo = videoConfig.sceneTiming[i];
+            const nextSceneInfo = videoConfig.sceneTiming[i + 1];
+
+            const sceneStartTime = currentSceneInfo.videoTime ?? 0;
+            const sceneEndTime = nextSceneInfo?.videoTime ?? videoDuration; // Use videoDuration for the last scene
+
+            if (time >= sceneStartTime && time < sceneEndTime) {
+                targetSceneIndex = currentSceneInfo.scene; // Assuming scene in config matches index directly, or map if needed
+                if (sceneEndTime - sceneStartTime > 0) {
+                    progressWithinTargetScene =
+                        (time - sceneStartTime) /
+                        (sceneEndTime - sceneStartTime);
+                } else {
+                    progressWithinTargetScene = 0; // Avoid division by zero if scene duration is 0
+                }
+                break;
+            }
+            // If time is beyond the start of the last configured scene, snap to it
+            if (!nextSceneInfo && time >= sceneStartTime) {
+                targetSceneIndex = currentSceneInfo.scene;
+                progressWithinTargetScene = 0; // Or 1, depending on desired behavior at exact end time
+                break;
+            }
+        }
+
+        progressWithinTargetScene = Math.max(
+            0,
+            Math.min(1, progressWithinTargetScene)
+        ); // Clamp
+
+        const windowHeight =
+            typeof window !== "undefined" ? window.innerHeight : 0;
+        const scrollY =
+            targetSceneIndex * windowHeight +
+            progressWithinTargetScene * windowHeight;
+
+        return scrollY;
+    };
 
     useEffect(() => {
         // Function to check and update mobile state
@@ -497,6 +574,41 @@ export default function HomePage() {
         // Add index and subScrollProgress as dependencies to get their current values in the checks
     }, [index, subScrollProgress]);
 
+    // Effect to calculate scene dimming
+    useEffect(() => {
+        const textsForDimming = TIMED_TEXTS_CONFIG.filter(
+            (c) => ![1, 2, 3].includes(c.id)
+        );
+
+        let maxOpacity = 0;
+        let dimMultiplier = 0; // Default to 0, so no dimming if no text is active
+
+        textsForDimming.forEach((config) => {
+            if (!config.endTime) return;
+
+            const duration = config.endTime - config.startTime;
+            const progress = (currentTime - config.startTime) / duration;
+
+            if (progress >= 0 && progress <= 1) {
+                const fadeDurationAsProgress = 0.15; // Same as text fade
+                let currentOpacity = 0;
+                if (progress < fadeDurationAsProgress) {
+                    currentOpacity = progress / fadeDurationAsProgress;
+                } else if (progress > 1 - fadeDurationAsProgress) {
+                    currentOpacity = (1 - progress) / fadeDurationAsProgress;
+                } else {
+                    currentOpacity = 1;
+                }
+                if (currentOpacity > maxOpacity) {
+                    maxOpacity = currentOpacity;
+                    dimMultiplier = config.dimMultiplier ?? 0.5; // Use configured value or default
+                }
+            }
+        });
+
+        setDimAmount(maxOpacity * dimMultiplier);
+    }, [currentTime]);
+
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
     // Note: height calculation might move or change based on scroll implementation
@@ -507,6 +619,10 @@ export default function HomePage() {
     );
     const otherTextConfigs = TIMED_TEXTS_CONFIG.filter(
         (c) => ![1, 2, 3].includes(c.id)
+    );
+    const scrollingTextConfigs = otherTextConfigs.filter((c) => c.isScrolling);
+    const fixedOtherTextConfigs = otherTextConfigs.filter(
+        (c) => !c.isScrolling
     );
 
     // Determine when the entire stacked group should be visible
@@ -543,11 +659,12 @@ export default function HomePage() {
                         />
                     ))}
                     {/* Contact form section at the end of the page */}
-                    <div id="contact-section" className="relative z-10" style={{height: "100vh"}}>
-                        <ContactModal
-                            isOpen={true}
-                            asPageElement={true}
-                        />
+                    <div
+                        id="contact-section"
+                        className="relative z-10"
+                        style={{ height: "100vh" }}
+                    >
+                        <ContactModal isOpen={true} asPageElement={true} />
                     </div>
 
                     {/* Global theater mode overlay */}
@@ -671,7 +788,7 @@ export default function HomePage() {
             </div>
 
             {/* 2. Render other texts as before */}
-            {otherTextConfigs.map((config: TimedTextConfigItem) => {
+            {fixedOtherTextConfigs.map((config: TimedTextConfigItem) => {
                 if (config.isRightAligned) {
                     return (
                         <div
@@ -723,11 +840,77 @@ export default function HomePage() {
                 className="scenes-container relative w-full"
                 style={{ height: scenesContainerHeight }} // Height set based on number of scenes
             >
+                <div
+                    className="absolute inset-0 z-[5] pointer-events-none"
+                    style={{
+                        backgroundColor: `rgba(0, 0, 0, ${dimAmount})`, // Dim amount is now pre-calculated
+                        transition: "background-color 0.1s ease-in-out", // A quick transition for smoothness
+                    }}
+                />
                 <SceneViewer
                     scene={scene}
                     index={index}
                     subScrollProgress={subScrollProgress}
                 />
+                {/* Scrolling Texts */}
+                {scrollingTextConfigs.map((config) => {
+                    if (!config.endTime) return null;
+
+                    // The text will be centered on screen at the midpoint of its duration
+                    const yPos = timeToScrollY(
+                        (config.startTime + config.endTime) / 2
+                    );
+                    const { transition, ...restOfStyle } = config.style;
+
+                    const duration = config.endTime - config.startTime;
+                    const progress =
+                        (currentTime - config.startTime) / duration;
+
+                    // Don't render if we are not in the time range for this text
+                    if (progress < 0 || progress > 1) {
+                        return null;
+                    }
+
+                    // Animate translateY from 60vh to -60vh. This makes the text
+                    // travel from below the viewport to above it.
+                    const transform = `translateY(${(0.5 - progress) * 120}vh)`;
+
+                    // Fade in at the beginning and fade out at the end for a smoother appearance.
+                    const fadeDurationAsProgress = 0.15; // Use 15% of the time for fade-in and 15% for fade-out.
+                    let opacity = 1;
+                    if (progress < fadeDurationAsProgress) {
+                        opacity = progress / fadeDurationAsProgress;
+                    } else if (progress > 1 - fadeDurationAsProgress) {
+                        opacity = (1 - progress) / fadeDurationAsProgress;
+                    }
+
+                    return (
+                        <div
+                            key={config.id}
+                            className="text-white font-bold pointer-events-none"
+                            style={{
+                                ...restOfStyle,
+                                position: "absolute",
+                                top: `${yPos}px`,
+                                left: "0",
+                                width: "100%",
+                                height: "100vh",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                                opacity: opacity,
+                                transform: transform,
+                                zIndex: 10,
+                                textShadow:
+                                    config.style.textShadow ||
+                                    "0px 2px 8px rgba(0,0,0,0.7)",
+                            }}
+                        >
+                            {config.text}
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Breather components with homeSections data */}
@@ -742,17 +925,20 @@ export default function HomePage() {
                             title={section.header || section.title}
                             content={section.content}
                             buttonText={section.buttonText}
-                            scrollToTimeValue={timecodeToSeconds(section.scrollToTimeValue!)}
+                            scrollToTimeValue={timecodeToSeconds(
+                                section.scrollToTimeValue!
+                            )}
                         />
                     );
                 })}
 
             {/* Contact form section at the end of the page */}
-            <div id="contact-section" className="relative z-10" style={{height: "100vh"}}>
-                <ContactModal
-                    isOpen={true}
-                    asPageElement={true}
-                />
+            <div
+                id="contact-section"
+                className="relative z-10"
+                style={{ height: "100vh" }}
+            >
+                <ContactModal isOpen={true} asPageElement={true} />
             </div>
         </>
     );
