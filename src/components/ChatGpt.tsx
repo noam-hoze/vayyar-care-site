@@ -71,10 +71,11 @@ const SuggestionButton = ({
 );
 
 interface ChatGptProps {
+    customMessage: string;
     mode?: Mode;
 }
 
-const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop" }) => {
+const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop", customMessage = "" }) => {
     const isMobile = mode === "mobile";
 
     return (
@@ -100,7 +101,7 @@ const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop" }) => {
                         color: "#1D1D1F",
                     }}
                 >
-                    Hi Alice, how can I help?
+                    {customMessage}
                 </div>
             </div>
 
@@ -169,7 +170,7 @@ const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop" }) => {
                         </button>
                     </div>
                 </div>
-                <div
+                {!isMobile && <div
                     style={{
                         display: "flex",
                         flexDirection: isMobile ? "column" : "row",
@@ -199,7 +200,7 @@ const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop" }) => {
                         text="AI Insights"
                         mode={mode}
                     />
-                </div>
+                </div>}
             </div>
         </div>
     );

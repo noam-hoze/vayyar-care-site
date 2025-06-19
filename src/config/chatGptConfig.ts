@@ -32,6 +32,9 @@ export const chatGptConfig: ChatGptInstance[] = [
       left: '0',
       width: '100%',
       height: '100%'
+    },
+    content: {
+      message: "Hi Alice, how can I help?"
     }
   },
   // First mobile instance
@@ -42,22 +45,28 @@ export const chatGptConfig: ChatGptInstance[] = [
     mode: 'mobile',
     position: {
       top: "226px",
-      left: "190px",
-      width: "370px",
+      left: "200px",
+      width: "350px",
       height: "790px",
+    },
+    content: {
+      message: "Perfect answer to Alice's question."
     },
   },
   // Second mobile instance
   {
     appearTime: 60 + 32 + 25/30, // 00:00:28:00
-    disappearTime: 60 + 55 + 25/30,      // 00:00:30:00
+    disappearTime: 60 + 44 + 24/30,      // 00:00:30:00
     fadeDuration: 0.2,
     mode: 'mobile',
     position: {
       top: "260px",
-      right: "40px",
-      width: "370px",
+      right: "50px",
+      width: "350px",
       height: "790px",
+    },
+    content: {
+      message: "Perfect answer to Alice's question."
     },
   }
 ];
