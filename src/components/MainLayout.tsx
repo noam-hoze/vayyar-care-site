@@ -40,7 +40,7 @@ const BUTTON_CONFIG = [
     {
         name: "Increase NOI",
         startTimeString: "00:02:35:00",
-        endTimeString: "00:02:58:00",
+        endTimeString: "00:02:58:01",
         baseTextColor: "text-gray-500",
     },
 ].map((btn) => ({
