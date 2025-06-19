@@ -654,8 +654,8 @@ export default function HomePage() {
                             key={idx}
                             section={section}
                             index={idx}
-                            sectionId={`section-${idx}`}
-                            nextSectionId={`section-${idx + 1}`}
+                            sectionId={`section-${section.id}`}
+                            nextSectionId={`section-${section.id + 1}`}
                         />
                     ))}
                     {/* Contact form section at the end of the page */}

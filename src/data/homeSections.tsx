@@ -1,6 +1,7 @@
 import { JSX } from "react";
 
 export interface HomeSection {
+    id: number;
     type: "text" | "video";
     title: string;
     header?: React.ReactNode;
@@ -19,8 +20,9 @@ export interface HomeSection {
 
 export const homeSections: HomeSection[] = [
     {
+        id: 0,
         type: "text",
-        title: "Intro",
+        title: "Workforce Optimization",
         header: (
             <>
                 <span style={{ color: "#05aae9" }}>Better</span> operations.
@@ -63,10 +65,11 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 5, end: 11 },
     },
-    { type: "video", title: "Video 1", video: { start: "00:12:06", end: "00:34:11" } },
+    { id: 1, type: "video", title: "Video 1", video: { start: "00:12:06", end: "00:34:11" } },
     {
+        id: 2,
         type: "text",
-        title: "Intro",
+        title: "Real-time Alerts",
         header: (
             <>
                 <span
@@ -108,7 +111,7 @@ export const homeSections: HomeSection[] = [
                 </span>
             </>
         ),
-        buttonText: "realtime alerts",
+        buttonText: "real-time alerts",
         scrollToTimeValue: "00:00:45:13",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
@@ -148,10 +151,11 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 36, end: 46 },
     },
-    { type: "video", title: "Video 2", video: { start: "00:35:04", end: "01:17:26" } },
+    { id: 3, type: "video", title: "Video 2", video: { start: "00:35:04", end: "01:17:26" } },
     {
+        id: 4,
         type: "text",
-        title: "Summary",
+        title: "AI insights",
         header: (
             <>
                 <span style={{ color: "#05aae9" }}>Actionable</span> insights.
@@ -203,18 +207,19 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 80, end: 92 },
     },
-    { type: "video", title: "Video 3", video: { start: "01:33:02", end: "02:10:03" } },
+    { id: 5, type: "video", title: "Video 3", video: { start: "01:33:02", end: "02:10:03" } },
     {
+        id: 6,
         type: "text",
-        title: "Summary",
+        title: "Personalized Care",
         header: (
             <>
                 The <span style={{ color: "#05aae9" }}>right</span> care. <br />
                 At the right <span style={{ color: "#05aae9" }}>rate.</span>
             </>
         ),
-        buttonText: "AI insights",
-        scrollToTimeValue: "00:01:32:33",
+        buttonText: "Personalized Care",
+        scrollToTimeValue: "00:02:12:00",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -254,4 +259,34 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 113, end: 130 },
     },
+    { id: 7, type: "video", title: "Video 3", video: { start: "02:13:07", end: "02:33:03" } },
+    {
+        id: 8,
+        type: "text",
+        title: "Increase NOI",
+        header: (
+            <>
+                Built to <span style={{ color: "#05aae9" }}>scale</span>.
+            </>
+        ),
+        buttonText: "increase NOI",
+        scrollToTimeValue: "00:01:32:33",
+        content: (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Turn insights into enterprise-wide transformation.
+                    </span>
+                </li>
+            </ul>
+        ),
+    },
+    { id: 9, type: "video", title: "Video 3", video: { start: "02:33:03", end: "02:58:00" } },
 ];

@@ -90,11 +90,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                         &times;
                     </button>
                     <div className="flex flex-col gap-8 w-full max-w-xs mx-auto" style={{fontFamily: "Magistral"}}>
-                        {homeSections.map((section, idx) => (
+                        {homeSections
+                            .filter(section => section.type === "text")
+                            .map((section, idx) => (
                             <button
                                 key={section.title + idx}
                                 onClick={() => {
-                                    const el = document.getElementById(`section-${idx}`);
+                                    const el = document.getElementById(`section-${section.id}`);
                                     if (el) {
                                         el.scrollIntoView({ behavior: "smooth", block: "start" });
                                     }
