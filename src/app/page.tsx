@@ -38,7 +38,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                         "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                 }}
             >
-                Vayyar care automated shift summary surfaces criticl trends
+                Vayyar care automated shift summary, surfaces criticl trends.
                 <br /> <br />
                 From frequent bathroom visits to gait changes and prolonged
                 inactivity. <br />
@@ -79,8 +79,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    Realtime alerts protect privacy while surfacing insights
-                    that elevate care and efficiency.
+                    Protect privacy while surfacing insights that elevate care
+                    and efficiency.
                 </h1>
             </div>
         ),
@@ -570,13 +570,13 @@ export default function HomePage() {
 
     // Effect to calculate scene dimming
     useEffect(() => {
-        const scrollingTexts = TIMED_TEXTS_CONFIG.filter(
-            (c) => ![1, 2, 3].includes(c.id) && c.isScrolling
+        const textsForDimming = TIMED_TEXTS_CONFIG.filter(
+            (c) => ![1, 2, 3].includes(c.id)
         );
 
         let maxOpacity = 0;
 
-        scrollingTexts.forEach((config) => {
+        textsForDimming.forEach((config) => {
             if (!config.endTime) return;
 
             const duration = config.endTime - config.startTime;
