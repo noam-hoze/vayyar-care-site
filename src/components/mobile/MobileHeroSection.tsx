@@ -1,32 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { defaultConfig } from "@/config/videoConfig";
+import React from "react";
 
 const VAYYAR_BLUE = "#06aeef";
 
 const MobileHeroSection: React.FC = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // Load the video and set it to the first frame
-    const loadVideo = async () => {
-      try {
-        // Load the video
-        await video.load();
-        // Set currentTime to 0 to ensure we're at the first frame
-        video.currentTime = 0;
-        // Pause the video
-        video.pause();
-      } catch (error) {
-        console.error('Error loading video:', error);
-      }
-    };
-
-    loadVideo();
-  }, []);
-
   return (
     <section
       style={{
@@ -46,30 +22,23 @@ const MobileHeroSection: React.FC = () => {
         marginTop: "calc(var(--spacing) * -16)",
       }}
     >
-      {/* Video background (static, not playing) */}
-      <video
-        ref={videoRef}
-        src={defaultConfig.videoSrc}
-        muted
-        playsInline
-        preload="auto"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      />
+    <img src={"/images/fireball.mp4 (1080 x 1920 px).png"}
+         style={{
+             position: "absolute",
+             top: 0,
+             left: 0,
+             width: "100%",
+             height: "100%",
+             objectFit: "cover",
+             zIndex: 0,
+             pointerEvents: "none",
+         }}/>
       {/* Gradient overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(to bottom, rgba(1,32,64,0.73),rgba(1,32,64,0.43), #fff 100%)",
+          background: "linear-gradient(to bottom, rgba(1,32,64,0.73),rgba(1,32,64,0.43))",
           zIndex: 1,
           pointerEvents: "none",
         }}
