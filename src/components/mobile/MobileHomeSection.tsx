@@ -204,20 +204,20 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
           // Enable theater mode immediately so fade-in starts in parallel with scrolling
           setTheaterMode(true, nextSectionId);
 
-          // Calculate target scroll position, accounting for any scroll margin
-          const targetY = nextSectionElement.getBoundingClientRect().top + window.scrollY - scrollMarginTopValue;
+          // Calculate target scroll position to center the element in the viewport
+          const elementRect = nextSectionElement.getBoundingClientRect();
+          const elementHeight = elementRect.height;
+          const windowHeight = window.innerHeight;
+          const elementTop = elementRect.top + window.scrollY;
+
+          // Center the element in the viewport (subtract half of viewport height minus half of element height)
+          const targetY = elementTop - (windowHeight / 2) + (elementHeight / 2);
 
           // Use a simpler direct scrollTo approach with GSAP
           gsap.to(window, {
             scrollTo: targetY,
             duration: 1,
             ease: "power2.out",
-            onStart: () => {
-              // Nothing to disable - maintain normal scrolling ability
-            },
-            onComplete: () => {
-              // Nothing to re-enable - normal scrolling was never disabled
-            }
           });
         }
       }
@@ -225,42 +225,97 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
   };
 
   if (section.type === "text") {
-    return (
-      <div id={sectionId} style={{ padding: "24px", fontSize: 18, display: 'flex', flexDirection: 'column', justifyContent: 'center', scrollMarginTop: '64px' }}>
-        {section.header && <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', fontWeight: 'bold', marginBottom: '16px' }}>{section.header}</h2>}
-        <div>{section.content}</div>
+    // Get all text sections to calculate proper zebra striping
+    const textSections = homeSections.filter(s => s.type === "text");
+    // Find index of current section within text sections array
+    const textSectionIndex = textSections.findIndex(s => s.id === section.id);
+    // Determine background color based on text section index
+    const sectionBgColor = textSectionIndex % 2 === 0 ? '#ffffff' : '#f5f5f7';
 
-        {/* Learn more about button */}
-        {section.buttonText && nextSectionId && (
-          <button
-            onClick={handleLearnMore}
-            style={{
-              marginTop: '24px',
-              backgroundColor: '#FF7A00', // Changed from #05aae9 to orange #FF7A00
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              padding: '12px 20px',
-              fontSize: '16px',
+    return (
+      <div
+        id={sectionId}
+        style={{
+          fontSize: 18,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          scrollMarginTop: '64px',
+          backgroundColor: sectionBgColor
+        }}
+      >
+        {section.title && (
+          <div style={{
+            padding: '60px 24px 30px',
+            textAlign: 'center',
+            borderBottom: '1px solid rgba(0,0,0,0.08)'
+          }}>
+            <h3 style={{
+              fontSize: '2.2rem',
               fontWeight: 'bold',
-              cursor: 'pointer',
-              alignSelf: 'flex-start',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-          >
-            Learn more about {section.buttonText}
-            <span style={{ fontWeight: 'bold' }}>&#8250;</span>
-          </button>
+              color: '#171717',
+              marginBottom: '0'
+            }}>
+              {section.title}
+            </h3>
+          </div>
         )}
+        <div style={{ padding: "40px 24px 24px" }}>
+          {section.header && (
+            <h2 style={{
+              fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
+              fontWeight: 'bold',
+              marginBottom: '24px',
+              lineHeight: '1.2'
+            }}>
+              {section.header}
+            </h2>
+          )}
+          <div style={{ lineHeight: '1.6' }}>{section.content}</div>
+
+          {/* Learn more about button */}
+          {section.buttonText && nextSectionId && (
+            <button
+              onClick={handleLearnMore}
+              style={{
+                marginTop: '24px',
+                backgroundColor: '#FF7A00', // Changed from #05aae9 to orange #FF7A00
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                padding: '12px 20px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                alignSelf: 'flex-start',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              Learn more about {section.buttonText}
+              <span style={{ fontWeight: 'bold' }}>&#8250;</span>
+            </button>
+          )}
+        </div>
       </div>
     );
   }
 
   // Video section rendering
+  const videoSections = homeSections.filter(s => s.type === "video");
+  const videoSectionIndex = videoSections.findIndex(s => s.id === section.id);
+  const videoBgColor = videoSectionIndex % 2 === 0 ? '#ffffff' : '#f5f5f7';
+
   return (
-    <div id={sectionId} className="relative my-8" style={{ scrollMarginTop: '64px' }}>
+    <div
+      id={sectionId}
+      className="relative"
+      style={{
+        scrollMarginTop: '64px',
+        backgroundColor: videoBgColor,
+      }}
+    >
       {/* Theater mode overlay is now a global component, removed from individual sections */}
 
       <div className="relative">
@@ -332,4 +387,3 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
 };
 
 export default MobileHomeSection;
-
