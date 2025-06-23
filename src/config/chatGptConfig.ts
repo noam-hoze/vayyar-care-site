@@ -50,7 +50,7 @@ export const chatGptConfig: ChatGptInstance[] = [
       height: "790px",
     },
     content: {
-      message: "Perfect answer to Alice's question."
+      message: ""
     },
   },
   // Second mobile instance
@@ -66,7 +66,7 @@ export const chatGptConfig: ChatGptInstance[] = [
       height: "790px",
     },
     content: {
-      message: "Perfect answer to Alice's question."
+      message: ""
     },
   }
 ];

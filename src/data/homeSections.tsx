@@ -10,11 +10,14 @@ export interface HomeSection {
         start: string;
         end: string;
     };
+    // The start and end time for haveing the breather going from down to up 
     text?: {
         start: number; // in seconds
         end?: number; // in seconds
     };
     buttonText?: string;
+    // This is a timecode that indicate where
+    // the orange button will scroll to
     scrollToTimeValue?: string;
 }
 
@@ -65,7 +68,13 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 5, end: 11 },
     },
-    { id: 1, type: "video", title: "Video 1", video: { start: "00:12:06", end: "00:34:11" } },
+    {
+        id: 1,
+        type: "video",
+        title: "Video 1",
+        // Controls the progress bar of the navigation buttons
+        video: { start: "00:12:06", end: "00:34:11" },
+    },
     {
         id: 2,
         type: "text",
@@ -111,8 +120,8 @@ export const homeSections: HomeSection[] = [
                 </span>
             </>
         ),
-        buttonText: "real-time alerts",
-        scrollToTimeValue: "00:00:45:13",
+        buttonText: "how we protect privacy",
+        scrollToTimeValue: "00:00:46:03",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -151,7 +160,12 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 36, end: 46 },
     },
-    { id: 3, type: "video", title: "Video 2", video: { start: "00:35:04", end: "01:17:26" } },
+    {
+        id: 3,
+        type: "video",
+        title: "Video 2",
+        video: { start: "00:35:04", end: "01:17:26" },
+    },
     {
         id: 4,
         type: "text",
@@ -207,7 +221,12 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 80, end: 92 },
     },
-    { id: 5, type: "video", title: "Video 3", video: { start: "01:33:02", end: "02:10:03" } },
+    {
+        id: 5,
+        type: "video",
+        title: "Video 3",
+        video: { start: "01:33:02", end: "02:10:03" },
+    },
     {
         id: 6,
         type: "text",
@@ -259,7 +278,12 @@ export const homeSections: HomeSection[] = [
         ),
         text: { start: 113, end: 130 },
     },
-    { id: 7, type: "video", title: "Video 3", video: { start: "02:13:07", end: "02:33:03" } },
+    {
+        id: 7,
+        type: "video",
+        title: "Video 3",
+        video: { start: "02:13:07", end: "02:33:03" },
+    },
     {
         id: 8,
         type: "text",
@@ -288,5 +312,10 @@ export const homeSections: HomeSection[] = [
             </ul>
         ),
     },
-    { id: 9, type: "video", title: "Video 3", video: { start: "02:33:03", end: "02:58:00" } },
+    {
+        id: 9,
+        type: "video",
+        title: "Video 3",
+        video: { start: "02:33:03", end: "02:58:00" },
+    },
 ];

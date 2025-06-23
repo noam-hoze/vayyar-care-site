@@ -340,7 +340,7 @@ const Breather = ({
                                         />
                                     </svg>
                                     <span>
-                                            Learn more about{" "}{buttonText}
+                                            Learn about{" "}{buttonText}
                                         </span>
                                 </button>
                             </div>

@@ -15,6 +15,7 @@ interface MainLayoutProps {
 const BUTTON_CONFIG = [
     {
         name: "Workforce Optimization",
+        // Controls to which timecode the navigation button will lead to
         startTimeString: "00:00:06:12",
         endTimeString: "00:00:29:18",
         baseTextColor: "text-neutral-500",
@@ -34,12 +35,12 @@ const BUTTON_CONFIG = [
     {
         name: "Personalized Care",
         startTimeString: "00:02:13:08",
-        endTimeString: "00:02:34:29",
+        endTimeString: "00:02:40:16",
         baseTextColor: "text-gray-500",
     },
     {
         name: "Increase NOI",
-        startTimeString: "00:02:35:00",
+        startTimeString: "00:02:40:17",
         endTimeString: "00:02:58:01",
         baseTextColor: "text-gray-500",
     },
