@@ -73,9 +73,16 @@ const SuggestionButton = ({
 interface ChatGptProps {
     customMessage: string;
     mode?: Mode;
+    customClass?: string;
+    showPhoneBackground?: boolean; // New flag to control phone image display
+    animation?: {
+        type: 'fade' | 'slide';
+        direction?: 'left-to-right' | 'right-to-left';
+        duration?: number;
+    };
 }
 
-const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop", customMessage = "" }) => {
+const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop", customMessage = "", showPhoneBackground = false }) => {
     const isMobile = mode === "mobile";
 
     return (
@@ -83,91 +90,115 @@ const ChatGpt: React.FC<ChatGptProps> = ({ mode = "desktop", customMessage = "" 
             style={{
                 width: "100%",
                 height: "100%",
-                background: "transparent",
+                background: isMobile && showPhoneBackground
+                    ? `url('/images/phone_14_01.svg') no-repeat center center`
+                    : "transparent",
+                backgroundSize: isMobile ? "contain" : "auto",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: isMobile ? "space-between" : "center",
                 fontFamily:
                     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                gap: isMobile ? "12px" : "20px",
+                position: "relative",
             }}
         >
-            <div style={{ textAlign: "center", margin: isMobile ? "auto" : "initial", }}>
-                <div
-                    style={{
-                        fontSize: isMobile ? "24px" : "38px",
-                        fontWeight: "400",
-                        color: "#1D1D1F",
-                    }}
-                >
-                    {customMessage}
-                </div>
-            </div>
-
+            {/* Actual content container with proper positioning */}
             <div
                 style={{
-                    width: isMobile ? "90%" : "720px",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: isMobile ? "16px" : "24px",
+                    justifyContent: "space-between",
+                    gap: isMobile ? "12px" : "20px",
+                    width: isMobile ? "100%" : "initial",
+                    height: isMobile ? "100%" : "initial",
+                    maxWidth: "75%",
+                    maxHeight: "75%",
+                    position: isMobile ? "absolute" : "relative",
+                    top: isMobile ? "50%" : "auto",
+                    left: isMobile ? "50%" : "auto",
+                    transform: isMobile ? "translate(-50%, -50%)" : "none",
+                    padding: isMobile ? "0" : "auto",
                 }}
+                className={"content-container"}
             >
+                <div style={{ textAlign: "center", margin: isMobile ? "auto" : "initial", }}>
+                    <div
+                        style={{
+                            fontSize: isMobile ? "24px" : "38px",
+                            fontWeight: "400",
+                            color: "#1D1D1F",
+                        }}
+                    >
+                        {customMessage}
+                    </div>
+                </div>
+
                 <div
                     style={{
-                        background: "#F0F0F0",
-                        borderRadius: isMobile ? "24px" : "32px",
-                        padding: isMobile ? "6px" : "8px",
+                        width: isMobile ? "100%" : "720px",
                         display: "flex",
+                        flexDirection: "column",
                         alignItems: "center",
-                        width: "100%",
-                        border: "1px solid #E0E0E0",
+                        gap: isMobile ? "16px" : "24px",
                     }}
                 >
                     <div
                         style={{
-                            flexGrow: 1,
-                            background: "transparent",
-                            border: "none",
-                            color: "#8E8E93",
-                            fontSize: isMobile ? "16px" : "20px",
-                            padding: isMobile ? "8px 16px" : "12px 20px",
-                            outline: "none",
-                        }}
-                    >
-                        Ask anything
-                    </div>
-                    <div
-                        style={{
+                            background: "#F0F0F0",
+                            borderRadius: isMobile ? "24px" : "32px",
+                            padding: isMobile ? "6px" : "8px",
                             display: "flex",
                             alignItems: "center",
-                            gap: "8px",
+                            width: "100%",
+                            border: "1px solid #E0E0E0",
                         }}
                     >
-                        <button
-                            disabled
+                        <div
                             style={{
-                                background: "#E5E5E7",
+                                flexGrow: 1,
+                                background: "transparent",
                                 border: "none",
-                                borderRadius: isMobile ? "20px" : "24px",
-                                color: "#1D1D1F",
+                                color: "#8E8E93",
+                                fontSize: isMobile ? "16px" : "20px",
+                                padding: isMobile ? "8px 16px" : "12px 20px",
+                                outline: "none",
+                            }}
+                        >
+                            Ask anything
+                        </div>
+                        <div
+                            style={{
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "8px",
-                                padding: isMobile ? "8px 16px" : "12px 20px",
-                                cursor: "default",
-                                fontSize: isMobile ? "14px" : "16px",
-                                fontWeight: 500,
                             }}
                         >
-                            <Icon
-                                path="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM16 11a1 1 0 0 1-1 1h-1v3a1 1 0 0 1-2 0v-3H9a1 1 0 0 1 0-2h1V4a1 1 0 0 1 2 0v5h1a1 1 0 0 1 1 1z"
-                                size={isMobile ? 16 : 18}
-                                color="#1D1D1F"
-                            />
-                            Voice
-                        </button>
+                            <button
+                                disabled
+                                style={{
+                                    background: "#E5E5E7",
+                                    border: "none",
+                                    borderRadius: isMobile ? "20px" : "24px",
+                                    color: "#1D1D1F",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: isMobile ? "8px 16px" : "12px 20px",
+                                    cursor: "default",
+                                    fontSize: isMobile ? "14px" : "16px",
+                                    fontWeight: 500,
+                                }}
+                            >
+                                <Icon
+                                    path="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM16 11a1 1 0 0 1-1 1h-1v3a1 1 0 0 1-2 0v-3H9a1 1 0 0 1 0-2h1V4a1 1 0 0 1 2 0v5h1a1 1 0 0 1 1 1z"
+                                    size={isMobile ? 16 : 18}
+                                    color="#1D1D1F"
+                                />
+                                Voice
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {!isMobile && <div
