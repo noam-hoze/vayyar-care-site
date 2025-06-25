@@ -612,7 +612,7 @@ export default function HomePage() {
     const scene = scenes.find((s) => s.scene === index) || scenes[0];
 
     // Note: height calculation might move or change based on scroll implementation
-    const scenesContainerHeight = `${MAX_SCENES * 100 + 100}vh`;
+    const scenesContainerHeight = `${MAX_SCENES * 100 - 50}vh`;
 
     const stackingTextConfigs = TIMED_TEXTS_CONFIG.filter((c) =>
         [1, 2, 3].includes(c.id)
