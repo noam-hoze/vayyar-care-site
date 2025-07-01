@@ -94,7 +94,7 @@ const MobileHeroSection: React.FC = () => {
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Optimize workstaff</span>
+                    <span>Optimize  staff</span>
                 </li>
                 <li
                     style={{
@@ -105,12 +105,12 @@ const MobileHeroSection: React.FC = () => {
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Scale Faster</span>
+                    <span>Transform Care</span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em", justifyContent: "center", }}>
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Increase NOI
+                        Operational Efficiency
                     </span>
                 </li>
             </ul>

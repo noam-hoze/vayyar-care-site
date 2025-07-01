@@ -748,8 +748,8 @@ export default function HomePage() {
                                 // transform: "translateY(0) !important", // Likely not needed
                             }}
                         >
-                            Optimize workstaff &nbsp;·&nbsp; Scale Faster
-                            &nbsp;·&nbsp; Increase NOI
+                            Optimize staff &nbsp;·&nbsp; Transform Care
+                            &nbsp;·&nbsp; Operational Efficiency
                         </h2>
                     </div>{" "}
                     {/* END Inner container */}

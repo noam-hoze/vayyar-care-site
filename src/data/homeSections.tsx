@@ -45,7 +45,10 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Spot Costly Patient Issues Before They Escalate</span>
+                    <span>
+                        Use predictive insights to address potential patient
+                        complications
+                    </span>
                 </li>
                 <li
                     style={{
@@ -55,14 +58,11 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Automate Activity Summaries to Save Staff Hours</span>
+                    <span>Reduce Administrative tasks</span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>
-                        Turn Insights Into Action That Cuts Waste and Drive
-                        Margin
-                    </span>
+                    <span>Improved Operational Efficiencies</span>
                 </li>
             </ul>
         ),
