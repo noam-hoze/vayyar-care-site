@@ -28,9 +28,9 @@ export const homeSections: HomeSection[] = [
         title: "Workforce Optimization",
         header: (
             <>
-                <span style={{ color: "#05aae9" }}>Better</span> operations.
-                <br />
-                Higher <span style={{ color: "#05aae9" }}>returns.</span>
+                <span style={{ color: "#05aae9" }}></span>Do More With Less.
+                {/* <br />
+                Higher <span style={{ color: "#05aae9" }}>returns.</span> */}
             </>
         ),
         buttonText: "workforce optimization",

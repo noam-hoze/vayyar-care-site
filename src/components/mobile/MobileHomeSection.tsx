@@ -293,7 +293,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
                 gap: '8px',
               }}
             >
-              Learn more about {section.buttonText}
+              Learn about {section.buttonText}
               <span style={{ fontWeight: 'bold' }}>&#8250;</span>
             </button>
           )}
