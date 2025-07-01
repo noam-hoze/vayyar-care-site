@@ -189,10 +189,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>
-                        Reveal patterns and uncover behavioral anomalies,
-                        enabling smart plans for evolving care needs.
-                    </span>
+                    <span>Analyze trends to detect risk.</span>
                 </li>
                 <li
                     style={{
@@ -202,18 +199,11 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>
-                        Filter through endless day-to-day activities and events,
-                        establishing the links between resident falls and their
-                        causes - current medication plan or other.
-                    </span>
+                    <span>Enhancing staff efficiency</span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>
-                        Ensure complience with care plans and validate execution
-                        of staffing plans.
-                    </span>
+                    <span>Ensure Care Plan Compliance</span>
                 </li>
             </ul>
         ),
@@ -248,8 +238,8 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Data-backed conversations support higher levels of care,
-                        aligned with actual resident needs.
+                        Enable data-driven conversations that lead to higher
+                        levels of care aligned with personalized resident needs.
                     </span>
                 </li>
                 <li
@@ -261,15 +251,15 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        More informed families = stronger trust, longer stays,
-                        fewer disputes.
+                        Enhanced confidence and partnership between families and.
+                        the community.
                     </span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Precision in care planning enables justified rate
-                        adjustments and improved NOI.
+                        Precise care planning is the key to justifying rate
+                        adjustments and maximizing net operating income.
                     </span>
                 </li>
             </ul>

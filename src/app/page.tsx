@@ -169,31 +169,55 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         id: 8,
         text: (
             <div>
-                <h3
-                    style={{
-                        margin: "0 auto",
-                        fontSize: "28px",
-                        textAlign: "center",
-                        maxWidth: "800px",
-                        fontFamily:
-                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
-                    }}
-                >
-                    Dignity comes first{" "}
-                </h3>
                 <h1
                     style={{
                         margin: "0 auto",
-                        fontSize: "40px",
-                        textAlign: "center",
+                        fontSize: "2rem",
+                        textAlign: "left",
                         maxWidth: "800px",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    - Protect privacy while providing clarity
-                    <br />- Analytics that safeguard dignity and provide
-                    actionable data
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            marginBottom: "0.75rem",
+                        }}
+                    >
+                        <span
+                            style={{
+                                color: "#05aae9",
+                                marginRight: "1rem",
+                                lineHeight: "1",
+                            }}
+                        >
+                            ›
+                        </span>
+                        <span>Protect privacy while providing clarity</span>
+                    </div>
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            marginBottom: "0.75rem",
+                        }}
+                    >
+                        <span
+                            style={{
+                                color: "#05aae9",
+                                marginRight: "1rem",
+                                lineHeight: "1",
+                            }}
+                        >
+                            ›
+                        </span>
+                        <span>
+                            Analytics that safeguard dignity and provide
+                            actionable data
+                        </span>
+                    </div>
                 </h1>
             </div>
         ),
@@ -209,29 +233,18 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         id: 9,
         text: (
             <div>
-                <h3
-                    style={{
-                        margin: "0 auto",
-                        fontSize: "28px",
-                        textAlign: "center",
-                        maxWidth: "800px",
-                        fontFamily:
-                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
-                    }}
-                >
-                    {/* See the context. */} Act with clarity.{" "}
-                </h3>
                 <h1
                     style={{
                         margin: "0 auto",
-                        fontSize: "40px",
+                        fontSize: "2rem",
                         textAlign: "center",
                         maxWidth: "800px",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    Our AI reveals the patterns <br /> behind the incident.
+                    Go Beyond the Event: <br />
+                    Our AI provides clarity and support
                 </h1>
             </div>
         ),
@@ -247,30 +260,18 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         id: 10,
         text: (
             <div>
-                <h3
-                    style={{
-                        margin: "0 auto",
-                        fontSize: "28px",
-                        textAlign: "center",
-                        maxWidth: "800px",
-                        fontFamily:
-                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
-                    }}
-                >
-                    Confidence, earned.{" "}
-                </h3>
                 <h1
                     style={{
                         margin: "0 auto",
-                        fontSize: "40px",
+                        fontSize: "2rem",
                         textAlign: "center",
                         maxWidth: "800px",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    Transparent insights turn uncertainty into trust, and trust
-                    into action.
+                    From insight action: <br />
+                    We provide transparent data that builds trust
                 </h1>
             </div>
         ),
@@ -286,18 +287,6 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         id: 11,
         text: (
             <div>
-                <h3
-                    style={{
-                        margin: "0 auto",
-                        fontSize: "28px",
-                        textAlign: "center",
-                        maxWidth: "800px",
-                        fontFamily:
-                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
-                    }}
-                >
-                    {/* A new standard for care. */} Built to scale.{" "}
-                </h3>
                 <h1
                     style={{
                         margin: "0 auto",
@@ -308,7 +297,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    Turn insights into enterprise-wide transformation.
+                    Bridge the gap between technology and care, while
+                    experiencing improved operational efficiency.
                 </h1>
             </div>
         ),

@@ -411,6 +411,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         const newInstances: Record<number, number> = {};
 
         chatGptConfig.forEach((instance, index) => {
+
             const fadeInStartTime = instance.appearTime;
             const fadeInEndTime = instance.appearTime + (instance.fadeDuration || 0.2);
             const fadeOutStartTime = instance.disappearTime - (instance.fadeDuration || 0.2);
@@ -424,9 +425,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                 opacity = 1;
             } else if (displayTime >= fadeOutStartTime && displayTime < fadeOutEndTime) {
                 opacity = 1 - (displayTime - fadeOutStartTime) / (instance.fadeDuration || 0.2);
-            } else if (displayTime >= fadeOutEndTime && displayTime < fadeOutEndTime + 0.5 && instance.animation?.type === 'slide') {
-                // Keep component with 0 opacity during the slide-out animation
-                opacity = 0.00001; // Tiny value to keep component rendered but invisible
             }
 
             newInstances[index] = opacity;
@@ -607,49 +605,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                         key={`chatgpt-instance-${instanceIndex}`}
                         style={{
                             position: "absolute",
-                            opacity: instance.animation?.type === 'slide' ? 1 : opacity, // Full opacity for slide animations
-                            transition: instance.animation?.type === 'slide'
-                                ? `transform ${instance.animation?.duration || 0.3}s ease-in-out`
-                                : `opacity ${instance.animation?.duration || 0.3}s ease-in-out`,
-                            transform: (() => {
-                                // Apply transform for slide animations
-                                if (instance.animation?.type === 'slide') {
-                                    const isAppearing = opacity < 1 && opacity > 0 && displayTime < instance.appearTime + (instance.fadeDuration || 0.2);
-                                    const isDisappearing = opacity < 1 && displayTime >= instance.disappearTime - (instance.fadeDuration || 0.2);
-
-                                    // Use larger offset to ensure component starts completely off-screen
-                                    const offset = 2000; // Much larger value to ensure it's off-screen
-
-                                    if (instance.animation?.direction === 'left-to-right') {
-                                        // Left-to-right: always starts and ends at left border
-                                        if (isAppearing) {
-                                            // Appear animation - slide from left to position
-                                            const slideValue = -offset + (opacity * offset);
-                                            return `translateX(${slideValue}px)`;
-                                        } else if (isDisappearing) {
-                                            // Disappear animation - slide from position to left
-                                            const disappearProgress = 1 - opacity;
-                                            const slideValue = -disappearProgress * offset;
-                                            return `translateX(${slideValue}px)`;
-                                        }
-                                        return 'translateX(0)';
-                                    } else if (instance.animation?.direction === 'right-to-left') {
-                                        // Right-to-left: always starts and ends at right border
-                                        if (isAppearing) {
-                                            // Appear animation - slide from right to position
-                                            const slideValue = offset - (opacity * offset);
-                                            return `translateX(${slideValue}px)`;
-                                        } else if (isDisappearing) {
-                                            // Disappear animation - slide from position to right
-                                            const disappearProgress = 1 - opacity;
-                                            const slideValue = disappearProgress * offset;
-                                            return `translateX(${slideValue}px)`;
-                                        }
-                                        return 'translateX(0)';
-                                    }
-                                }
-                                return 'none';
-                            })(),
+                            opacity,
+                            transition: "opacity 0.3s ease-in-out",
                             zIndex: instance.zIndex || 20,
                             top: instance.position?.top || 0,
                             left: instance.position?.left,
@@ -660,15 +617,12 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            overflow: "hidden", // Prevent content from being visible outside container
                         }}
-                        className={instance.content?.customClass}
                     >
                         <ChatGpt
                             mode={instance.mode}
                             customMessage={instance.content?.message}
-                            animation={instance.animation}
-                            showPhoneBackground={instance.showPhoneBackground}
+                            customClass={instance.content?.customClass}
                         />
                     </div>
                 );
