@@ -303,7 +303,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             </div>
         ),
         startTime: 2 * 60 + 40 + 0 / 30,
-        endTime: 2 * 60 + 58 + 0 / 30,
+        endTime: 2 * 60 + 53 + 29 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
