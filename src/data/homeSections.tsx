@@ -132,7 +132,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Respond to critical events in real time</span>
+                    <span>Empower the care team with automated alerts.</span>
                 </li>
                 <li
                     style={{
@@ -142,7 +142,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Lower staff overload with automatic alerts</span>
+                    <span>Ensure Care Plan Compliance</span>
                 </li>
                 <li
                     style={{
@@ -152,9 +152,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>
-                        Confirm that care routines are thoroughly followed
-                    </span>
+                    <span>Real Time Detection</span>
                 </li>
             </ul>
         ),

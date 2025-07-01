@@ -28,29 +28,140 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
     {
         id: 7,
         text: (
-            <h1
+            <div
                 style={{
+                    fontSize: "2rem",
+                    textAlign: "left",
+                    maxWidth: "700px",
                     margin: "0 auto",
-                    fontSize: "40px",
-                    textAlign: "center",
-                    maxWidth: "800px",
                     fontFamily:
                         "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    lineHeight: "1.5",
+                    fontWeight: "500",
                 }}
             >
-                Vayyar care automated shift summary, surfaces criticl trends.
-                <br /> <br />
-                From frequent bathroom visits to gait changes and prolonged
-                inactivity. <br />
-                <br /> Now, you can align your staff to real needs, not
-                assumptions.
-            </h1>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginBottom: "0.75rem",
+                    }}
+                >
+                    <span
+                        style={{
+                            color: "#05aae9",
+                            marginRight: "1rem",
+                            lineHeight: "1",
+                        }}
+                    >
+                        ›
+                    </span>
+                    <span>
+                        Moves beyond “what” happened and helps teams understand
+                        “why,” allowing for truly preventive and personalized
+                        care.
+                    </span>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginBottom: "0.75rem",
+                    }}
+                >
+                    <span
+                        style={{
+                            color: "#05aae9",
+                            marginRight: "1rem",
+                            lineHeight: "1",
+                        }}
+                    >
+                        ›
+                    </span>
+                    <span>Comprehensive Touchless Data Collection</span>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginBottom: "0.75rem",
+                        marginLeft: "2.5rem",
+                    }}
+                >
+                    <span
+                        style={{
+                            color: "#05aae9",
+                            marginRight: "1rem",
+                            lineHeight: "1",
+                        }}
+                    >
+                        ›
+                    </span>
+                    <span>AI Driven</span>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginBottom: "0.75rem",
+                        marginLeft: "2.5rem",
+                    }}
+                >
+                    <span
+                        style={{
+                            color: "#05aae9",
+                            marginRight: "1rem",
+                            lineHeight: "1",
+                        }}
+                    >
+                        ›
+                    </span>
+                    <span>Mobility and Activity Levels</span>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginBottom: "0.75rem",
+                        marginLeft: "2.5rem",
+                    }}
+                >
+                    <span
+                        style={{
+                            color: "#05aae9",
+                            marginRight: "1rem",
+                            lineHeight: "1",
+                        }}
+                    >
+                        ›
+                    </span>
+                    <span>Time Spent In Bed</span>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginLeft: "2.5rem",
+                    }}
+                >
+                    <span
+                        style={{
+                            color: "#05aae9",
+                            marginRight: "1rem",
+                            lineHeight: "1",
+                        }}
+                    >
+                        ›
+                    </span>
+                    <span>Bathroom Visits</span>
+                </div>
+            </div>
         ),
         startTime: 17 + 12 / 30,
         endTime: 26 + 5 / 30,
         isScrolling: true,
         style: {
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            // fontSize: "clamp(2.5rem, 6vw, 5rem)", // Removed to use the size defined in the text component
         },
         dimMultiplier: 0.5,
     },
@@ -80,8 +191,9 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    Protect privacy while surfacing insights that elevate care
-                    and efficiency.
+                    - Protect privacy while providing clarity
+                    <br />- Analytics that safeguard dignity and provide
+                    actionable data
                 </h1>
             </div>
         ),
