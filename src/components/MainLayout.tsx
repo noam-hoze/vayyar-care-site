@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation"; // Import usePathname
 import NavBar from "./navigation"; // Assuming NavBar is in the same directory
 import { useVideoTime } from "@/contexts/VideoTimeContext";
 import { homeSections } from "@/data/homeSections";
-import {timecodeToSeconds} from "@/lib/utils";
+import { timecodeToSeconds } from "@/lib/utils";
+import { videoConfig } from "@/config/videoConfig";
 
 // Define props type to accept children
 interface MainLayoutProps {
@@ -14,34 +15,34 @@ interface MainLayoutProps {
 
 const BUTTON_CONFIG = [
     {
-        name: "Workforce Optimization",
+        name: "Staff Optimization",
         // Controls to which timecode the navigation button will lead to
-        startTimeString: "00:00:06:12",
-        endTimeString: "00:00:29:18",
+        startTimeString: "00:06:12",
+        endTimeString: "00:29:18",
         baseTextColor: "text-neutral-500",
     },
     {
         name: "Real-time Alerts",
-        startTimeString: "00:00:35:05",
-        endTimeString: "00:01:17:00",
+        startTimeString: "00:35:05",
+        endTimeString: "01:17:00",
         baseTextColor: "text-gray-500",
     },
     {
         name: "AI Insights",
-        startTimeString: "00:01:22:27",
-        endTimeString: "00:02:09:15",
+        startTimeString: "01:22:27",
+        endTimeString: "01:57:13",
         baseTextColor: "text-gray-500",
     },
     {
         name: "Personalized Care",
-        startTimeString: "00:02:13:08",
-        endTimeString: "00:02:40:16",
+        startTimeString: "01:57:14",
+        endTimeString: "02:46:11",
         baseTextColor: "text-gray-500",
     },
     {
         name: "Increase NOI",
-        startTimeString: "00:02:40:17",
-        endTimeString: "00:02:58:01",
+        startTimeString: "02:46:12",
+        endTimeString: "02:60:01",
         baseTextColor: "text-gray-500",
     },
 ].map((btn) => ({
@@ -62,9 +63,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         let progress = 0;
         if (videoDuration > 0 && endTime > startTime) {
             if (currentTime >= endTime) progress = 100;
-            else if (currentTime > startTime) progress = ((currentTime - startTime) / (endTime - startTime)) * 100;
+            else if (currentTime > startTime)
+                progress =
+                    ((currentTime - startTime) / (endTime - startTime)) * 100;
         }
-        return { ...config, progress: Math.max(0, Math.min(100, progress)), startTime };
+        return {
+            ...config,
+            progress: Math.max(0, Math.min(100, progress)),
+            startTime,
+        };
     });
 
     return (
@@ -72,9 +79,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             {showNavBar && (
                 <div className="sticky top-0 z-50">
                     <NavBar
-                        isMobileMenuOpen={isMobileMenuOpen}
                         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
-                        onCloseMobileMenu={() => setIsMobileMenuOpen(false)}
                         buttonDisplayData={buttonDisplayData}
                         scrollToTime={scrollToTime}
                     />
@@ -90,24 +95,32 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     >
                         &times;
                     </button>
-                    <div className="flex flex-col gap-8 w-full max-w-xs mx-auto" style={{fontFamily: "Magistral"}}>
+                    <div
+                        className="flex flex-col gap-8 w-full max-w-xs mx-auto"
+                        style={{ fontFamily: "Magistral" }}
+                    >
                         {homeSections
-                            .filter(section => section.type === "text")
+                            .filter((section) => section.type === "text")
                             .map((section, idx) => (
-                            <button
-                                key={section.title + idx}
-                                onClick={() => {
-                                    const el = document.getElementById(`section-${section.id}`);
-                                    if (el) {
-                                        el.scrollIntoView({ behavior: "smooth", block: "start" });
-                                    }
-                                    setIsMobileMenuOpen(false);
-                                }}
-                                className="w-full py-4 text-2xl font-semibold rounded-full border border-black text-black bg-transparent hover:bg-[#06aeef] hover:text-white transition-all duration-150 relative"
-                            >
-                                {section.title}
-                            </button>
-                        ))}
+                                <button
+                                    key={section.title + idx}
+                                    onClick={() => {
+                                        const el = document.getElementById(
+                                            `section-${section.id}`
+                                        );
+                                        if (el) {
+                                            el.scrollIntoView({
+                                                behavior: "smooth",
+                                                block: "start",
+                                            });
+                                        }
+                                        setIsMobileMenuOpen(false);
+                                    }}
+                                    className="w-full py-4 text-2xl font-semibold rounded-full border border-black text-black bg-transparent hover:bg-[#06aeef] hover:text-white transition-all duration-150 relative"
+                                >
+                                    {section.title}
+                                </button>
+                            ))}
                     </div>
                 </div>
             )}

@@ -1,4 +1,5 @@
 import { JSX } from "react";
+import { videoConfig } from "@/config/videoConfig";
 
 export interface HomeSection {
     id: number;
@@ -10,7 +11,7 @@ export interface HomeSection {
         start: string;
         end: string;
     };
-    // The start and end time for haveing the breather going from down to up 
+    // The start and end time for haveing the breather going from down to up
     text?: {
         start: number; // in seconds
         end?: number; // in seconds
@@ -25,7 +26,7 @@ export const homeSections: HomeSection[] = [
     {
         id: 0,
         type: "text",
-        title: "Workforce Optimization",
+        title: "Staff Optimization",
         header: (
             <>
                 <span style={{ color: "#05aae9" }}></span>Do More With Less.
@@ -33,8 +34,8 @@ export const homeSections: HomeSection[] = [
                 Higher <span style={{ color: "#05aae9" }}>returns.</span> */}
             </>
         ),
-        buttonText: "workforce optimization",
-        scrollToTimeValue: "00:00:12:06",
+        buttonText: "Staff optimization",
+        scrollToTimeValue: "00:12:25",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -121,7 +122,10 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "how we protect privacy",
-        scrollToTimeValue: "00:00:46:03",
+        scrollToTimeValue: videoConfig.calculateTextTime(
+            "00:46:03",
+            videoConfig.compensation
+        ),
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -156,13 +160,25 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 36, end: 46 },
+        text: {
+            start: 36 + videoConfig.compensation,
+            end: 46 + videoConfig.compensation,
+        },
     },
     {
         id: 3,
         type: "video",
         title: "Video 2",
-        video: { start: "00:35:04", end: "01:17:26" },
+        video: {
+            start: videoConfig.calculateTextTime(
+                "00:35:04",
+                videoConfig.compensation
+            ),
+            end: videoConfig.calculateTextTime(
+                "01:17:26",
+                videoConfig.compensation
+            ),
+        },
     },
     {
         id: 4,
@@ -178,7 +194,7 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "AI insights",
-        scrollToTimeValue: "00:01:32:33",
+        scrollToTimeValue: "01:41:21",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -207,13 +223,25 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 80, end: 92 },
+        text: {
+            start: 80 + videoConfig.compensation,
+            end: 92 + videoConfig.compensation,
+        },
     },
     {
         id: 5,
         type: "video",
         title: "Video 3",
-        video: { start: "01:33:02", end: "02:10:03" },
+        video: {
+            start: videoConfig.calculateTextTime(
+                "01:33:02",
+                videoConfig.compensation
+            ),
+            end: videoConfig.calculateTextTime(
+                "02:10:03",
+                videoConfig.compensation
+            ),
+        },
     },
     {
         id: 6,
@@ -226,7 +254,7 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "Personalized Care",
-        scrollToTimeValue: "00:02:12:00",
+        scrollToTimeValue: "02:20:19",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -251,8 +279,8 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Enhanced confidence and partnership between families and.
-                        the community.
+                        Enhanced confidence and partnership between families
+                        and. the community.
                     </span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
@@ -264,13 +292,25 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 113, end: 130 },
+        text: {
+            start: 113 + videoConfig.compensation,
+            end: 130 + videoConfig.compensation,
+        },
     },
     {
         id: 7,
         type: "video",
         title: "Video 3",
-        video: { start: "02:13:07", end: "02:33:03" },
+        video: {
+            start: videoConfig.calculateTextTime(
+                "02:13:07",
+                videoConfig.compensation
+            ),
+            end: videoConfig.calculateTextTime(
+                "02:33:03",
+                videoConfig.compensation
+            ),
+        },
     },
     {
         id: 8,
@@ -304,6 +344,15 @@ export const homeSections: HomeSection[] = [
         id: 9,
         type: "video",
         title: "Video 3",
-        video: { start: "02:33:03", end: "02:58:00" },
+        video: {
+            start: videoConfig.calculateTextTime(
+                "02:33:03",
+                videoConfig.compensation
+            ),
+            end: videoConfig.calculateTextTime(
+                "02:58:00",
+                videoConfig.compensation
+            ),
+        },
     },
 ];

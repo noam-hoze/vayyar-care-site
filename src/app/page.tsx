@@ -157,8 +157,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </div>
             </div>
         ),
-        startTime: 17 + 12 / 30,
-        endTime: 26 + 5 / 30,
+        startTime: (15 + videoConfig.compensation) + 12 / 30,
+        endTime: (24 + videoConfig.compensation) + 5 / 30,
         isScrolling: true,
         style: {
             // fontSize: "clamp(2.5rem, 6vw, 5rem)", // Removed to use the size defined in the text component
@@ -221,8 +221,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </h1>
             </div>
         ),
-        startTime: 45 + 15 / 30,
-        endTime: 67 + 2 / 30,
+        startTime: 45 + videoConfig.compensation + 15 / 30,
+        endTime: 67 + videoConfig.compensation + 2 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -248,8 +248,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </h1>
             </div>
         ),
-        startTime: 93 + 18 / 30,
-        endTime: 105 + 0 / 30,
+        startTime: 93 + videoConfig.compensation + 18 / 30,
+        endTime: 105 + videoConfig.compensation + 0 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -270,13 +270,13 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    From insight action: <br />
+                    From insight to action: <br />
                     We provide transparent data that builds trust
                 </h1>
             </div>
         ),
-        startTime: 2 * 60 + 18 + 8 / 30,
-        endTime: 2 * 60 + 33 + 0 / 30,
+        startTime: (2 * 60 + 24 + videoConfig.compensation) + 8 / 30,
+        endTime: (2 * 60 + 39 + videoConfig.compensation) + 0 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -302,8 +302,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </h1>
             </div>
         ),
-        startTime: 2 * 60 + 40 + 0 / 30,
-        endTime: 2 * 60 + 53 + 29 / 30,
+        startTime: (2 * 60 + 40 + videoConfig.compensation) + 0 / 30,
+        endTime: (2 * 60 + 53 + videoConfig.compensation) + 29 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",

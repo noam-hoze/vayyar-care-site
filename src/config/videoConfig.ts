@@ -5,6 +5,28 @@ export const STORAGE_KEY = "vayyar_custom_video";
 
 // Default video configuration
 export const defaultConfig = {
+    // How many seconds to compensate for the video
+    compensation: 5.5,
+    frameRate: 30,
+    calculateTextTime(time: string, compensation: number) {
+        // Convert timecode (mm:ss:ff) to seconds
+        const [minutes, seconds, frames] = time.split(":").map(Number);
+        const totalSeconds = minutes * 60 + seconds + frames / this.frameRate;
+
+        // Add compensation
+        const adjustedSeconds = totalSeconds + compensation;
+
+        // Convert back to timecode (mm:ss:ff)
+        const totalFrames = Math.round(adjustedSeconds * this.frameRate);
+        const f = totalFrames % this.frameRate;
+        const totalSecondsOnly = Math.floor(totalFrames / this.frameRate);
+        const s = totalSecondsOnly % 60;
+        const m = Math.floor(totalSecondsOnly / 60);
+
+        return `${m.toString().padStart(2, "0")}:${s
+            .toString()
+            .padStart(2, "0")}:${f.toString().padStart(2, "0")}`;
+    },
     // How many viewport heights to scroll through
     scrollMultiplier: MAX_SCENES,
 
@@ -26,7 +48,7 @@ export const defaultConfig = {
         { scene: SCENES.LAST, videoTime: 140 },
         { scene: SCENES.LAST_1, videoTime: 165 },
         { scene: SCENES.LAST_2, videoTime: 190 },
-    
+
         // { scene: SCENES.VP_CLINICAL, videoTime: 70 },
     ],
 };

@@ -619,11 +619,11 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                             justifyContent: "center",
                         }}
                     >
-                        <ChatGpt
+                        {/* <ChatGpt
                             mode={instance.mode}
                             customMessage={instance.content?.message}
                             customClass={instance.content?.customClass}
-                        />
+                        /> */}
                     </div>
                 );
             })}
