@@ -157,8 +157,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </div>
             </div>
         ),
-        startTime: (15 + videoConfig.compensation) + 12 / 30,
-        endTime: (24 + videoConfig.compensation) + 5 / 30,
+        startTime: 15 + videoConfig.compensation + 12 / 30,
+        endTime: 24 + videoConfig.compensation + 5 / 30,
         isScrolling: true,
         style: {
             // fontSize: "clamp(2.5rem, 6vw, 5rem)", // Removed to use the size defined in the text component
@@ -275,8 +275,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </h1>
             </div>
         ),
-        startTime: (2 * 60 + 24 + videoConfig.compensation) + 8 / 30,
-        endTime: (2 * 60 + 39 + videoConfig.compensation) + 0 / 30,
+        startTime: 2 * 60 + 24 + videoConfig.compensation + 8 / 30,
+        endTime: 2 * 60 + 34 + videoConfig.compensation + 20 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -302,13 +302,70 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </h1>
             </div>
         ),
-        startTime: (2 * 60 + 40 + videoConfig.compensation) + 0 / 30,
-        endTime: (2 * 60 + 53 + videoConfig.compensation) + 29 / 30,
+        startTime: 2 * 60 + 47 + videoConfig.compensation + 0 / 30,
+        endTime: 2 * 60 + 53 + videoConfig.compensation + 29 / 30,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
         dimMultiplier: 0.2,
+    },
+    {
+        id: 12,
+        text: (
+            <div
+                style={{
+                    fontSize: "2rem",
+                    textAlign: "left",
+                    maxWidth: "700px",
+                    margin: "0 auto",
+                    fontFamily:
+                        "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    lineHeight: "1.5",
+                    fontWeight: "500",
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginBottom: "0.75rem",
+                    }}
+                >
+                    <span>
+                        Enable{" "}
+                        <span style={{ color: "#05aae9" }}>data-driven </span>{" "}
+                        conversations that lead to higher levels of care aligned
+                        with{" "}
+                        <span style={{ color: "#05aae9" }}>personalized </span>
+                        resident needs.
+                    </span>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        marginBottom: "0.75rem",
+                    }}
+                >
+                    <span>
+                        Fostering enhanced confidence and partnership between
+                        families and the community, where{" "}
+                        <span style={{ color: "#05aae9" }}>precise</span> care
+                        planning is the key to justifying rate adjustments and
+                        <span style={{ color: "#05aae9" }}> maximizing</span>{" "}
+                        net operating income.
+                    </span>
+                </div>
+            </div>
+        ),
+        startTime: 60 + 57 + 14 / 30,
+        endTime: 2 * 60 + 15,
+        isScrolling: true,
+        style: {
+            // fontSize: "clamp(2.5rem, 6vw, 5rem)", // Removed to use the size defined in the text component
+        },
+        dimMultiplier: 0.5,
     },
 ];
 

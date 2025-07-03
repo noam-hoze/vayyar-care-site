@@ -246,15 +246,16 @@ export const homeSections: HomeSection[] = [
     {
         id: 6,
         type: "text",
-        title: "Personalized Care",
+        title: "Increase NOI",
         header: (
             <>
-                The <span style={{ color: "#05aae9" }}>right</span> care. <br />
-                At the right <span style={{ color: "#05aae9" }}>rate.</span>
+                The <span style={{ color: "#05aae9" }}>right</span> strategy.{" "}
+                <br />
+                At the right <span style={{ color: "#05aae9" }}>return.</span>
             </>
         ),
-        buttonText: "Personalized Care",
-        scrollToTimeValue: "02:20:19",
+        buttonText: "Increase NOI",
+        scrollToTimeValue: "02:53:06",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -266,8 +267,8 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Enable data-driven conversations that lead to higher
-                        levels of care aligned with personalized resident needs.
+                        Uncover hidden efficiencies that reduce unnecessary
+                        labor hours and care mismatches.
                     </span>
                 </li>
                 <li
@@ -279,22 +280,22 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Enhanced confidence and partnership between families
-                        and. the community.
+                        Align care levels with reimbursement potential to
+                        support justified rate increases.
                     </span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Precise care planning is the key to justifying rate
-                        adjustments and maximizing net operating income.
+                        Optimize NOI by transforming real-time insights into
+                        smarter operational decisions.
                     </span>
                 </li>
             </ul>
         ),
         text: {
-            start: 113 + videoConfig.compensation,
-            end: 130 + videoConfig.compensation,
+            start: 2 * 60 + 41,
+            end: 2 * 60 + 50,
         },
     },
     {

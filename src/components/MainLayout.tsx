@@ -35,13 +35,13 @@ const BUTTON_CONFIG = [
     },
     {
         name: "Personalized Care",
-        startTimeString: "01:57:14",
-        endTimeString: "02:46:11",
+        startTimeString: "02:06:18",
+        endTimeString: "02:43:01",
         baseTextColor: "text-gray-500",
     },
     {
         name: "Increase NOI",
-        startTimeString: "02:46:12",
+        startTimeString: "02:43:02",
         endTimeString: "02:60:01",
         baseTextColor: "text-gray-500",
     },
