@@ -52,6 +52,10 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // Video reference
     const videoRef = useRef<HTMLVideoElement>(null);
+    const preloadedVideoRef = useRef<HTMLVideoElement>(null); // New ref for preloaded video
+
+    // State to track which video is visible
+    const [showPreloadedVideo, setShowPreloadedVideo] = useState(false);
 
     // State for the video source URL, initialized to null for SSR safety
     const [currentVideoSrc, setCurrentVideoSrc] = useState<string | null>(null);
@@ -121,24 +125,57 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // NEW: Effect to switch video source to preloaded version when ready
     useEffect(() => {
-        const video = videoRef.current;
-        if (video && videoPreloader.preloadedUrl && !videoPreloader.isLoading) {
-            // Only switch if we're not already using the preloaded URL
-            if (video.src !== videoPreloader.preloadedUrl) {
-                console.log('Switching to preloaded video URL');
-                const currentTime = video.currentTime;
-                video.src = videoPreloader.preloadedUrl;
-                video.load();
+        if (videoPreloader.preloadedUrl && !videoPreloader.isLoading) {
+            const originalVideo = videoRef.current;
+            const preloadedVideo = preloadedVideoRef.current;
 
-                // Restore current time after switching source
-                const restoreTime = () => {
-                    video.currentTime = currentTime;
-                    video.removeEventListener('loadedmetadata', restoreTime);
+            if (originalVideo && preloadedVideo && !showPreloadedVideo) {
+                console.log('Preparing preloaded video');
+
+                // Set the source of the preloaded video
+                preloadedVideo.src = videoPreloader.preloadedUrl;
+
+                // Sync the current time from the original video to the preloaded video
+                const currentTime = originalVideo.currentTime;
+
+                // Add event listener for when preloaded video metadata is loaded
+                const handleMetadataLoaded = () => {
+                    // Set the current time of preloaded video to match original
+                    preloadedVideo.currentTime = currentTime;
+
+                    // Switch visibility once preloaded video is ready and at correct time
+                    setShowPreloadedVideo(true);
+                    console.log('Switched to preloaded video');
+
+                    // Remove the event listener
+                    preloadedVideo.removeEventListener('loadedmetadata', handleMetadataLoaded);
                 };
-                video.addEventListener('loadedmetadata', restoreTime);
+
+                preloadedVideo.addEventListener('loadedmetadata', handleMetadataLoaded);
+                preloadedVideo.load();
             }
         }
-    }, [videoPreloader.preloadedUrl, videoPreloader.isLoading]);
+    }, [videoPreloader.preloadedUrl, videoPreloader.isLoading, showPreloadedVideo]);
+
+
+    // This useEffect updates the preloaded video time when original video time changes
+    useEffect(() => {
+        const originalVideo = videoRef.current;
+        const preloadedVideo = preloadedVideoRef.current;
+
+        if (originalVideo && preloadedVideo && showPreloadedVideo) {
+            // When scrolling changes the original video time, sync with preloaded video
+            const syncTime = () => {
+                preloadedVideo.currentTime = originalVideo.currentTime;
+            };
+
+            originalVideo.addEventListener('timeupdate', syncTime);
+
+            return () => {
+                originalVideo.removeEventListener('timeupdate', syncTime);
+            };
+        }
+    }, [showPreloadedVideo]);
 
 
     // Handle extra descriptions that show at specific scroll percentages
@@ -522,7 +559,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             <video
                 ref={videoRef}
                 src={currentVideoSrc ?? undefined}
-                className="absolute top-0 left-0 w-full h-full object-cover z-[-10]" // Fullscreen, behind content, NEGATIVE Z-INDEX
+                className={`absolute top-0 left-0 w-full h-full object-cover z-[-10] ${showPreloadedVideo ? 'hidden' : 'block'}`}
                 playsInline
                 preload="auto"
                 muted
@@ -540,6 +577,24 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                         setDisplayFrame(
                             Math.floor((initialTime % 1) * frameRate)
                         );
+                    }
+                }}
+            />
+
+            {/* Preloaded Video Element */}
+            <video
+                ref={preloadedVideoRef}
+                className={`absolute top-0 left-0 w-full h-full object-cover z-[-10] ${showPreloadedVideo ? 'block' : 'hidden'}`}
+                playsInline
+                preload="auto"
+                muted
+                onTimeUpdate={() => {
+                    if (showPreloadedVideo && preloadedVideoRef.current) {
+                        const time = preloadedVideoRef.current.currentTime;
+                        const frame = Math.floor((time % 1) * frameRate);
+                        setGlobalCurrentTime(time);
+                        setDisplayTime(time);
+                        setDisplayFrame(frame);
                     }
                 }}
             />
