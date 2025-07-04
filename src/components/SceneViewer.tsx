@@ -4,10 +4,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
 import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
-// Removed unused scene imports
-// import AnimatedTabletScene3 from "./animations/AnimatedTabletScene3";
-// import AnimatedTabletScene4 from "./animations/AnimatedTabletScene4";
-// import AnimatedTabletScene5 from "./animations/AnimatedTabletScene5";
 import {
     videoConfig,
     SceneTiming,
@@ -20,6 +16,7 @@ import Link from "next/link";
 import { useVideoTime } from "@/contexts/VideoTimeContext";
 import ChatGpt from "./ChatGpt";
 import { chatGptConfig } from "../config/chatGptConfig";
+import { useVideoPreloader } from "../hooks/useVideoPreloader";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -37,8 +34,9 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 }) => {
     const { setCurrentTime: setGlobalCurrentTime, setVideoDuration } =
         useVideoTime();
+
     // Flag to control debug info visibility
-    const showDebugInfo = false; // Set to false to hide debug info
+    const showDebugInfo = false;
 
     // Calculate sub-scroll progress for animations
     const [animationProgress, setAnimationProgress] = useState(0);
@@ -57,6 +55,10 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // State for the video source URL, initialized to null for SSR safety
     const [currentVideoSrc, setCurrentVideoSrc] = useState<string | null>(null);
+
+    // NEW: Use video preloader hook
+    const videoPreloader = useVideoPreloader(currentVideoSrc);
+
 
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
@@ -116,6 +118,28 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         // Set state after checking. Use null if the resulting src is empty.
         setCurrentVideoSrc(initialSrc || null);
     }, []); // Empty dependency array runs only once on mount
+
+    // NEW: Effect to switch video source to preloaded version when ready
+    useEffect(() => {
+        const video = videoRef.current;
+        if (video && videoPreloader.preloadedUrl && !videoPreloader.isLoading) {
+            // Only switch if we're not already using the preloaded URL
+            if (video.src !== videoPreloader.preloadedUrl) {
+                console.log('Switching to preloaded video URL');
+                const currentTime = video.currentTime;
+                video.src = videoPreloader.preloadedUrl;
+                video.load();
+
+                // Restore current time after switching source
+                const restoreTime = () => {
+                    video.currentTime = currentTime;
+                    video.removeEventListener('loadedmetadata', restoreTime);
+                };
+                video.addEventListener('loadedmetadata', restoreTime);
+            }
+        }
+    }, [videoPreloader.preloadedUrl, videoPreloader.isLoading]);
+
 
     // Handle extra descriptions that show at specific scroll percentages
     useEffect(() => {
@@ -494,6 +518,19 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
+            {/* NEW: Video Loading Indicator */}
+            {videoPreloader.isLoading && (
+                <div className="absolute top-4 left-4 bg-black bg-opacity-75 text-white px-4 py-2 rounded-lg z-30 flex items-center space-x-3">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="text-sm">
+                        <div>Preloading video...</div>
+                        <div className="text-xs text-gray-300">
+                            {Math.round(videoPreloader.progress)}%
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Fullscreen Video Background */}
             <video
                 ref={videoRef}
@@ -523,6 +560,17 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             {/* Timecode Display uses local displayTime and displayFrame */}
             <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded font-mono text-sm z-20">
                 {formatTimecode(displayTime, displayFrame)}
+                {/* NEW: Show video source status */}
+                {videoPreloader.preloadedUrl && (
+                    <div className="text-xs text-green-400 mt-1">
+                        ● Preloaded
+                    </div>
+                )}
+                {videoPreloader.error && (
+                    <div className="text-xs text-red-400 mt-1">
+                        ● Error: {videoPreloader.error}
+                    </div>
+                )}
             </div>
 
             {/* Overlay Content - Positioned on the right */}
