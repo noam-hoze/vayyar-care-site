@@ -93,7 +93,7 @@ export const homeSections: HomeSection[] = [
                 </span>
             </>
         ),
-        buttonText: "how we protect privacy",
+        buttonText: "Real-time alerts",
         scrollToTimeValue: videoConfig.calculateTextTime(
             "00:46:03",
             videoConfig.compensation
@@ -248,7 +248,7 @@ export const homeSections: HomeSection[] = [
                         gap: "0.5em",
                     }}
                 >
-                    Some title.
+                    Personalized care that drives outcomes.
                 </span>
             </>
         ),
@@ -269,7 +269,7 @@ export const homeSections: HomeSection[] = [
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
                         Enable data-driven conversations that lead to higher
-                        levels of care aligned withpersonalized resident needs
+                        levels of care aligned with personalized resident needs.
                     </span>
                 </li>
                 <li
@@ -282,8 +282,7 @@ export const homeSections: HomeSection[] = [
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
                         Foster enhanced confidence and partnership between
-                        families and the community, where precise care planning
-                        is the key to justifying rate adjustments and maximizing NOI
+                        families and the community.
                     </span>
                 </li>
                 <li
@@ -294,7 +293,10 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Real Time Detection</span>
+                    <span>
+                        Justify rate adjustments and maximize NOI through
+                        precise care planning.
+                    </span>
                 </li>
             </ul>
         ),
@@ -363,7 +365,7 @@ export const homeSections: HomeSection[] = [
         ),
         text: {
             start: 80 + videoConfig.compensation,
-            end: 92 + videoConfig.compensation,
+            end: 96 + videoConfig.compensation,
         },
     },
     {

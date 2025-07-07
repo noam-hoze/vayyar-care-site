@@ -17,7 +17,7 @@ const BUTTON_CONFIG = [
     {
         name: "Staff Optimization",
         // Controls to which timecode the navigation button will lead to
-        startTimeString: "00:06:12",
+        startTimeString: "00:05:28",
         endTimeString: "00:29:18",
         baseTextColor: "text-neutral-500",
     },
@@ -35,13 +35,13 @@ const BUTTON_CONFIG = [
     },
     {
         name: "Personalized Care",
-        startTimeString: "02:06:18",
+        startTimeString: "02:05:03",
         endTimeString: "02:43:01",
         baseTextColor: "text-gray-500",
     },
     {
         name: "Increase NOI",
-        startTimeString: "02:43:02",
+        startTimeString: "02:44:15",
         endTimeString: "02:60:01",
         baseTextColor: "text-gray-500",
     },

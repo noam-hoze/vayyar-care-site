@@ -136,7 +136,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             </div>
         ),
         startTime: 31,
-        endTime: 35,
+        endTime: 42,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -178,9 +178,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             <div>
                 <h1
                     style={{
-                        margin: "0 auto",
+                        paddingLeft: "10px",
                         fontSize: "2rem",
-                        textAlign: "center",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
@@ -188,15 +187,17 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                     <span style={{ fontSize: "20px" }}>AI Revolution </span>{" "}
                     <br />
                     <span style={{ fontSize: "38px", lineHeight: "20px" }}>
-                        Stay ahead with cutting-edge AI insights from our
-                        <br /> sensors and an array of smart data, all right at
-                        <br /> your fingertips without compromising privacy.{" "}
+                        Stay ahead with cutting-edge <br />
+                        AI insights from our sensors and <br />
+                        an array of smart data.
+                        {/* all right at
+                        <br /> your fingertips without compromising privacy.{" "} */}
                     </span>{" "}
                 </h1>
             </div>
         ),
-        startTime: 79,
-        endTime: 82,
+        startTime: 82,
+        endTime: 86,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -226,7 +227,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             </div>
         ),
         startTime: 98,
-        endTime: 102,
+        endTime: 104,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -282,7 +283,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                     </span>{" "}
                     <br />
                     <span style={{ fontSize: "38px", lineHeight: "20px" }}>
-                        Unlock Vayyar’s AI insights to optimize your business,
+                        Unlock Vayyar's AI insights to optimize your business,
                         <br />
                         elevate care, and grow your bottom line.
                     </span>{" "}
@@ -910,13 +911,32 @@ export default function HomePage() {
                 return (
                     <div
                         key={config.id}
-                        className="fixed inset-0 flex justify-center items-center text-center text-white font-bold pointer-events-none z-40"
+                        className={`fixed inset-0 flex items-center text-white font-bold pointer-events-none z-40 ${
+                            config.id === 91
+                                ? "justify-end text-center"
+                                : config.id === 93
+                                ? "justify-start"
+                                : "justify-center text-center"
+                        }`}
                         style={{
                             ...config.style,
+                            textAlign: "center",
                             opacity: timedTextsVisibility[config.id] ? 1 : 0,
                             textShadow:
                                 config.style.textShadow ||
                                 "0px 2px 8px rgba(0,0,0,0.7)", // Keep original default if not specified in config
+                            paddingRight: config.id === 91 ? "15%" : "0",
+                            paddingLeft: config.id === 93 ? "0" : "0",
+                            transform:
+                                config.id === 91
+                                    ? timedTextsVisibility[config.id]
+                                        ? "translateX(0)"
+                                        : "translateX(50%)"
+                                    : undefined,
+                            transition:
+                                config.id === 91
+                                    ? "opacity 0.5s ease-out, transform 0.5s ease-out"
+                                    : config.style.transition,
                         }}
                     >
                         {config.text}
