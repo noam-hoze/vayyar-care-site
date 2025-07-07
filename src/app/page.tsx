@@ -30,135 +30,55 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         text: (
             <div
                 style={{
-                    fontSize: "2rem",
-                    textAlign: "left",
-                    maxWidth: "700px",
-                    margin: "0 auto",
                     fontFamily:
                         "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    fontSize: "38px",
+                    textAlign: "center",
+                    maxWidth: "900px",
+                    margin: "0 auto",
                     lineHeight: "1.5",
-                    fontWeight: "500",
+                    fontWeight: "700",
                 }}
             >
                 <div
                     style={{
                         display: "flex",
-                        alignItems: "flex-start",
+                        justifyContent: "center",
                         marginBottom: "0.75rem",
                     }}
                 >
-                    <span
-                        style={{
-                            color: "#05aae9",
-                            marginRight: "1rem",
-                            lineHeight: "1",
-                        }}
-                    >
-                        ›
-                    </span>
                     <span>
-                        Moves beyond “what” happened and helps teams understand
-                        “why,” allowing for truly preventive and personalized
-                        care.
+                        Vayyar's technology records the daily life of your
+                        residents without camera or sound
                     </span>
                 </div>
+                <br />
                 <div
                     style={{
                         display: "flex",
-                        alignItems: "flex-start",
+                        justifyContent: "center",
                         marginBottom: "0.75rem",
                     }}
                 >
-                    <span
-                        style={{
-                            color: "#05aae9",
-                            marginRight: "1rem",
-                            lineHeight: "1",
-                        }}
-                    >
-                        ›
+                    <span>
+                        So you can improve the care you provide while increasing
+                        your NOI and your staff's efficiency
                     </span>
-                    <span>Comprehensive Touchless Data Collection</span>
                 </div>
+                <br />
                 <div
                     style={{
                         display: "flex",
-                        alignItems: "flex-start",
+                        justifyContent: "center",
                         marginBottom: "0.75rem",
-                        marginLeft: "2.5rem",
                     }}
                 >
-                    <span
-                        style={{
-                            color: "#05aae9",
-                            marginRight: "1rem",
-                            lineHeight: "1",
-                        }}
-                    >
-                        ›
-                    </span>
-                    <span>AI Driven</span>
-                </div>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        marginBottom: "0.75rem",
-                        marginLeft: "2.5rem",
-                    }}
-                >
-                    <span
-                        style={{
-                            color: "#05aae9",
-                            marginRight: "1rem",
-                            lineHeight: "1",
-                        }}
-                    >
-                        ›
-                    </span>
-                    <span>Mobility and Activity Levels</span>
-                </div>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        marginBottom: "0.75rem",
-                        marginLeft: "2.5rem",
-                    }}
-                >
-                    <span
-                        style={{
-                            color: "#05aae9",
-                            marginRight: "1rem",
-                            lineHeight: "1",
-                        }}
-                    >
-                        ›
-                    </span>
-                    <span>Time Spent In Bed</span>
-                </div>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        marginLeft: "2.5rem",
-                    }}
-                >
-                    <span
-                        style={{
-                            color: "#05aae9",
-                            marginRight: "1rem",
-                            lineHeight: "1",
-                        }}
-                    >
-                        ›
-                    </span>
-                    <span>Bathroom Visits</span>
+                    <span>The Era of AI-based care is here</span>
                 </div>
             </div>
         ),
-        startTime: 15 + videoConfig.compensation + 12 / 30,
-        endTime: 24 + videoConfig.compensation + 5 / 30,
+        startTime: 4 + 23 / 30,
+        endTime: 7,
         isScrolling: true,
         style: {
             // fontSize: "clamp(2.5rem, 6vw, 5rem)", // Removed to use the size defined in the text component
@@ -166,68 +86,122 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         dimMultiplier: 0.5,
     },
     {
-        id: 8,
+        id: 90,
         text: (
             <div>
                 <h1
                     style={{
                         margin: "0 auto",
                         fontSize: "2rem",
-                        textAlign: "left",
-                        maxWidth: "800px",
+                        textAlign: "center",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            marginBottom: "0.75rem",
-                        }}
-                    >
-                        <span
-                            style={{
-                                color: "#05aae9",
-                                marginRight: "1rem",
-                                lineHeight: "1",
-                            }}
-                        >
-                            ›
-                        </span>
-                        <span>Protect privacy while providing clarity</span>
-                    </div>
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            marginBottom: "0.75rem",
-                        }}
-                    >
-                        <span
-                            style={{
-                                color: "#05aae9",
-                                marginRight: "1rem",
-                                lineHeight: "1",
-                            }}
-                        >
-                            ›
-                        </span>
-                        <span>
-                            Analytics that safeguard dignity and provide
-                            actionable data
-                        </span>
-                    </div>
+                    <span style={{ fontSize: "20px" }}>Efficiency </span> <br />
+                    <span style={{ fontSize: "38px", lineHeight: "20px" }}>
+                        Optimize your staff work <br />
+                        and reduce their burden
+                    </span>{" "}
                 </h1>
             </div>
         ),
-        startTime: 45 + videoConfig.compensation + 15 / 30,
-        endTime: 67 + videoConfig.compensation + 2 / 30,
+        startTime: 8,
+        endTime: 10,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
         },
-        dimMultiplier: 0.4,
+        dimMultiplier: 0.2,
+    },
+    {
+        id: 91,
+        text: (
+            <div>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "2rem",
+                        textAlign: "center",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    <span style={{ fontSize: "20px" }}>Real-time Alerts </span>{" "}
+                    <br />
+                    <span style={{ fontSize: "38px", lineHeight: "20px" }}>
+                        Alert your staff as things happen
+                    </span>{" "}
+                </h1>
+            </div>
+        ),
+        startTime: 33,
+        endTime: 36,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+        dimMultiplier: 0.2,
+    },
+    {
+        id: 92,
+        text: (
+            <div>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "2rem",
+                        textAlign: "center",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    <span style={{ fontSize: "20px" }}>Privacy </span> <br />
+                    <span style={{ fontSize: "38px", lineHeight: "20px" }}>
+                        Monitoring every movement <br />
+                        without compromising privacy.{" "}
+                    </span>{" "}
+                </h1>
+            </div>
+        ),
+        startTime: 49,
+        endTime: 52,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+        dimMultiplier: 0.2,
+    },
+    {
+        id: 93,
+        text: (
+            <div>
+                <h1
+                    style={{
+                        margin: "0 auto",
+                        fontSize: "2rem",
+                        textAlign: "center",
+                        fontFamily:
+                            "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                >
+                    <span style={{ fontSize: "20px" }}>AI Revolution </span>{" "}
+                    <br />
+                    <span style={{ fontSize: "38px", lineHeight: "20px" }}>
+                        Stay ahead with cutting-edge AI insights from our
+                        <br /> sensors and an array of smart data, all right at
+                        <br/> your fingertips without compromising privacy.{" "}
+                    </span>{" "}
+                </h1>
+            </div>
+        ),
+        startTime: 79,
+        endTime: 82,
+        style: {
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            transition: "opacity 0.3s ease-in-out",
+        },
+        dimMultiplier: 0.2,
     },
     {
         id: 9,
@@ -353,7 +327,10 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                         families and the community, where{" "}
                         <span style={{ color: "#05aae9" }}>precise</span> care
                         planning is the key to justifying rate adjustments and
-                        <span style={{ color: "#05aae9" }}> maximizing</span>{" "}
+                        <span style={{ color: "#05aae9" }}>
+                            {" "}
+                            maximizing
+                        </span>{" "}
                         net operating income.
                     </span>
                 </div>

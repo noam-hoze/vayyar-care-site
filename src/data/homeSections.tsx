@@ -47,8 +47,8 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Use predictive insights to address potential patient
-                        complications
+                        Use Vayyar's sensor to give you alerts on behavioral
+                        chnages
                     </span>
                 </li>
                 <li
@@ -67,7 +67,7 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 5, end: 11 },
+        text: { start: 21, end: 33 },
     },
     {
         id: 1,
@@ -78,6 +78,76 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 2,
+        type: "text",
+        title: "Real-time Alerts",
+        header: (
+            <>
+                <span
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5em",
+                    }}
+                >
+                    Real-time Alerts
+                </span>
+            </>
+        ),
+        buttonText: "how we protect privacy",
+        scrollToTimeValue: videoConfig.calculateTextTime(
+            "00:46:03",
+            videoConfig.compensation
+        ),
+        content: (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Receive immediate alerts when a resident experiences a
+                        fall, ensuring faster assistance and peace of mind.
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Stay informed about unusual movement patterns that could
+                        signal health or safety concerns.
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Enhance resident safety and staff efficiency with
+                        real-time notifications tailored for elderly care.
+                    </span>
+                </li>
+            </ul>
+        ),
+        text: {
+            start: 36 + videoConfig.compensation,
+            end: 46 + videoConfig.compensation,
+        },
+    },
+    {
+        id: 90,
         type: "text",
         title: "Real-time Alerts",
         header: (
@@ -161,8 +231,8 @@ export const homeSections: HomeSection[] = [
             </ul>
         ),
         text: {
-            start: 36 + videoConfig.compensation,
-            end: 46 + videoConfig.compensation,
+            start: 56,
+            end: 80,
         },
     },
     {
