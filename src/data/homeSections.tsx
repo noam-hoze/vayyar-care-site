@@ -236,6 +236,74 @@ export const homeSections: HomeSection[] = [
         },
     },
     {
+        id: 92,
+        type: "text",
+        title: "Real-time Alerts",
+        header: (
+            <>
+                <span
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5em",
+                    }}
+                >
+                    Some title.
+                </span>
+            </>
+        ),
+        buttonText: "how we protect privacy",
+        scrollToTimeValue: videoConfig.calculateTextTime(
+            "00:46:03",
+            videoConfig.compensation
+        ),
+        content: (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Enable data-driven conversations that lead to higher
+                        levels of care aligned withpersonalized resident needs
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Foster enhanced confidence and partnership between
+                        families and the community, where precise care planning
+                        is the key to justifying rate adjustments and maximizing NOI
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>Real Time Detection</span>
+                </li>
+            </ul>
+        ),
+        text: {
+            start: 117,
+            end: 142,
+        },
+    },
+    {
         id: 3,
         type: "video",
         title: "Video 2",
@@ -365,7 +433,7 @@ export const homeSections: HomeSection[] = [
         ),
         text: {
             start: 2 * 60 + 41,
-            end: 2 * 60 + 50,
+            end: 2 * 60 + 55,
         },
     },
     {

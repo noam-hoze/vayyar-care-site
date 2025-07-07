@@ -135,8 +135,8 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                 </h1>
             </div>
         ),
-        startTime: 33,
-        endTime: 36,
+        startTime: 31,
+        endTime: 35,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -165,7 +165,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             </div>
         ),
         startTime: 49,
-        endTime: 52,
+        endTime: 54,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -190,7 +190,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                     <span style={{ fontSize: "38px", lineHeight: "20px" }}>
                         Stay ahead with cutting-edge AI insights from our
                         <br /> sensors and an array of smart data, all right at
-                        <br/> your fingertips without compromising privacy.{" "}
+                        <br /> your fingertips without compromising privacy.{" "}
                     </span>{" "}
                 </h1>
             </div>
@@ -204,7 +204,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         dimMultiplier: 0.2,
     },
     {
-        id: 9,
+        id: 94,
         text: (
             <div>
                 <h1
@@ -212,18 +212,21 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                         margin: "0 auto",
                         fontSize: "2rem",
                         textAlign: "center",
-                        maxWidth: "800px",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    Go Beyond the Event: <br />
-                    Our AI provides clarity and support
+                    <span style={{ fontSize: "20px" }}>Personalize care </span>{" "}
+                    <br />
+                    <span style={{ fontSize: "38px", lineHeight: "20px" }}>
+                        Experience the power of immediate, <br />
+                        accurate insights for truly personalized care.
+                    </span>{" "}
                 </h1>
             </div>
         ),
-        startTime: 93 + videoConfig.compensation + 18 / 30,
-        endTime: 105 + videoConfig.compensation + 0 / 30,
+        startTime: 98,
+        endTime: 102,
         style: {
             fontSize: "clamp(2.5rem, 6vw, 5rem)",
             transition: "opacity 0.3s ease-in-out",
@@ -231,7 +234,7 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         dimMultiplier: 0.2,
     },
     {
-        id: 10,
+        id: 95,
         text: (
             <div>
                 <h1
@@ -239,13 +242,16 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
                         margin: "0 auto",
                         fontSize: "2rem",
                         textAlign: "center",
-                        maxWidth: "800px",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    From insight to action: <br />
-                    We provide transparent data that builds trust
+                    <span style={{ fontSize: "20px" }}> Improve NOI </span>{" "}
+                    <br />
+                    <span style={{ fontSize: "38px", lineHeight: "20px" }}>
+                        Boost your NOI and maximize returns through <br />
+                        trusted, data-driven care plans.
+                    </span>{" "}
                 </h1>
             </div>
         ),
@@ -258,21 +264,28 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
         dimMultiplier: 0.2,
     },
     {
-        id: 11,
+        id: 96,
         text: (
             <div>
                 <h1
                     style={{
                         margin: "0 auto",
-                        fontSize: "40px",
+                        fontSize: "2rem",
                         textAlign: "center",
-                        maxWidth: "800px",
                         fontFamily:
                             "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                 >
-                    Bridge the gap between technology and care, while
-                    experiencing improved operational efficiency.
+                    <span style={{ fontSize: "20px" }}>
+                        {" "}
+                        Prosper. Care. Protect.{" "}
+                    </span>{" "}
+                    <br />
+                    <span style={{ fontSize: "38px", lineHeight: "20px" }}>
+                        Unlock Vayyar’s AI insights to optimize your business,
+                        <br />
+                        elevate care, and grow your bottom line.
+                    </span>{" "}
                 </h1>
             </div>
         ),
@@ -283,66 +296,6 @@ const TIMED_TEXTS_CONFIG: TimedTextConfigItem[] = [
             transition: "opacity 0.3s ease-in-out",
         },
         dimMultiplier: 0.2,
-    },
-    {
-        id: 12,
-        text: (
-            <div
-                style={{
-                    fontSize: "2rem",
-                    textAlign: "left",
-                    maxWidth: "700px",
-                    margin: "0 auto",
-                    fontFamily:
-                        "SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif",
-                    lineHeight: "1.5",
-                    fontWeight: "500",
-                }}
-            >
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        marginBottom: "0.75rem",
-                    }}
-                >
-                    <span>
-                        Enable{" "}
-                        <span style={{ color: "#05aae9" }}>data-driven </span>{" "}
-                        conversations that lead to higher levels of care aligned
-                        with{" "}
-                        <span style={{ color: "#05aae9" }}>personalized </span>
-                        resident needs.
-                    </span>
-                </div>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        marginBottom: "0.75rem",
-                    }}
-                >
-                    <span>
-                        Fostering enhanced confidence and partnership between
-                        families and the community, where{" "}
-                        <span style={{ color: "#05aae9" }}>precise</span> care
-                        planning is the key to justifying rate adjustments and
-                        <span style={{ color: "#05aae9" }}>
-                            {" "}
-                            maximizing
-                        </span>{" "}
-                        net operating income.
-                    </span>
-                </div>
-            </div>
-        ),
-        startTime: 60 + 57 + 14 / 30,
-        endTime: 2 * 60 + 15,
-        isScrolling: true,
-        style: {
-            // fontSize: "clamp(2.5rem, 6vw, 5rem)", // Removed to use the size defined in the text component
-        },
-        dimMultiplier: 0.5,
     },
 ];
 
