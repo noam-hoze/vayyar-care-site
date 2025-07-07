@@ -246,7 +246,7 @@ export const homeSections: HomeSection[] = [
     {
         id: 6,
         type: "text",
-        title: "Increase NOI",
+        title: "Personalized Care",
         header: (
             <>
                 The <span style={{ color: "#05aae9" }}>right</span> strategy.{" "}
@@ -254,7 +254,7 @@ export const homeSections: HomeSection[] = [
                 At the right <span style={{ color: "#05aae9" }}>return.</span>
             </>
         ),
-        buttonText: "Increase NOI",
+        buttonText: "Personalized Care",
         scrollToTimeValue: "02:53:06",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>

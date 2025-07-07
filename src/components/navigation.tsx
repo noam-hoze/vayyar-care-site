@@ -3,21 +3,30 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Changed from react-router-dom
 import ContactModal from "@/components/ContactModal";
 import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
+import { useMobileHomeVideo } from "@/components/mobile/MobileHomeVideoContext";
+import { homeSections } from "@/data/homeSections";
 
 // TODO: Type buttonDisplayData properly
 interface NavBarProps {
     buttonDisplayData: Array<Record<string, any>>;
-    scrollToTime: (time: number) => void;
     onOpenMobileMenu: () => void;
 }
 
 export default function NavBar({
     buttonDisplayData,
-    scrollToTime,
     onOpenMobileMenu,
 }: NavBarProps) {
     const [hasLastButtonBeenFilled, setHasLastButtonBeenFilled] = useState(false);
     const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
+    const { setTheaterMode } = useMobileHomeVideo();
+
+    const scrollToSection = (sectionId: string) => {
+        setTheaterMode(false, null);
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start", });
+        }
+    };
 
     // Effect to latch the orange state
     useEffect(() => {
@@ -89,9 +98,9 @@ export default function NavBar({
                     <div className="flex-1 justify-center items-center space-x-4 hidden lg:flex">
                         {buttonDisplayData.map((data) => (
                             <button
-                                key={data.name}
-                                onClick={() => scrollToTime(data.startTime)}
-                                className={`relative ${data.baseTextColor} bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium cursor-pointer overflow-hidden`}
+                                key={data.id}
+                                onClick={() => scrollToSection(data.id)}
+                                className={`relative text-gray-500 bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium cursor-pointer overflow-hidden`}
                             >
                                 {data.name}
                                 <div

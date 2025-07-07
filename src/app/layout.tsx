@@ -6,6 +6,7 @@ import MainLayout from "@/components/MainLayout";
 import ScrollToTop from "@/components/ScrollToTop";
 import { VideoTimeProvider } from "@/contexts/VideoTimeContext";
 import { DemoModalProvider } from "@/contexts/DemoModalContext";
+import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -34,8 +35,10 @@ export default function RootLayout({
             >
                 <VideoTimeProvider>
                     <DemoModalProvider>
-                        <ScrollToTop />
-                        <MainLayout>{children}</MainLayout>
+                        <MobileHomeVideoProvider>
+                            <ScrollToTop />
+                            <MainLayout>{children}</MainLayout>
+                        </MobileHomeVideoProvider>
                     </DemoModalProvider>
                 </VideoTimeProvider>
             </body>

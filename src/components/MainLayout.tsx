@@ -3,76 +3,58 @@
 import React from "react";
 import { usePathname } from "next/navigation"; // Import usePathname
 import NavBar from "./navigation"; // Assuming NavBar is in the same directory
-import { useVideoTime } from "@/contexts/VideoTimeContext";
 import { homeSections } from "@/data/homeSections";
-import { timecodeToSeconds } from "@/lib/utils";
-import { videoConfig } from "@/config/videoConfig";
 
 // Define props type to accept children
 interface MainLayoutProps {
     children: React.ReactNode;
 }
 
-const BUTTON_CONFIG = [
-    {
-        name: "Staff Optimization",
-        // Controls to which timecode the navigation button will lead to
-        startTimeString: "00:06:12",
-        endTimeString: "00:29:18",
-        baseTextColor: "text-neutral-500",
-    },
-    {
-        name: "Real-time Alerts",
-        startTimeString: "00:35:05",
-        endTimeString: "01:17:00",
-        baseTextColor: "text-gray-500",
-    },
-    {
-        name: "AI Insights",
-        startTimeString: "01:22:27",
-        endTimeString: "01:57:13",
-        baseTextColor: "text-gray-500",
-    },
-    {
-        name: "Personalized Care",
-        startTimeString: "02:06:18",
-        endTimeString: "02:43:01",
-        baseTextColor: "text-gray-500",
-    },
-    {
-        name: "Increase NOI",
-        startTimeString: "02:43:02",
-        endTimeString: "02:60:01",
-        baseTextColor: "text-gray-500",
-    },
-].map((btn) => ({
-    ...btn,
-    startTime: timecodeToSeconds(btn.startTimeString),
-    endTime: timecodeToSeconds(btn.endTimeString),
-}));
-
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const pathname = usePathname(); // Get current path
     // Determine if NavBar should be shown (hide on /demo)
     const showNavBar = !["/demo"].includes(pathname);
-    const { currentTime, videoDuration, scrollToTime } = useVideoTime();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-    // Calculate buttonDisplayData (duplicate logic from navigation.tsx if needed)
-    const buttonDisplayData = (BUTTON_CONFIG as any[]).map((config: any) => {
-        const { startTime, endTime } = config;
-        let progress = 0;
-        if (videoDuration > 0 && endTime > startTime) {
-            if (currentTime >= endTime) progress = 100;
-            else if (currentTime > startTime)
-                progress =
-                    ((currentTime - startTime) / (endTime - startTime)) * 100;
-        }
-        return {
-            ...config,
-            progress: Math.max(0, Math.min(100, progress)),
-            startTime,
+    const [sectionProgress, setSectionProgress] = React.useState<
+        Record<string, number>
+    >({});
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            const newProgress: Record<string, number> = {};
+            homeSections.forEach((section) => {
+                if (section.type === "text") {
+                    const el = document.getElementById(`section-${section.id}`);
+                    if (el) {
+                        const rect = el.getBoundingClientRect();
+                        const viewportHeight = window.innerHeight;
+                        const totalScroll = viewportHeight + el.offsetHeight;
+                        const scrolled = viewportHeight - rect.top;
+                        const progress = (scrolled / totalScroll) * 100;
+                        newProgress[`section-${section.id}`] = Math.max(
+                            0,
+                            Math.min(100, progress)
+                        );
+                    } else {
+                        newProgress[`section-${section.id}`] = 0;
+                    }
+                }
+            });
+            setSectionProgress(newProgress);
         };
-    });
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        handleScroll(); // Initial calculation
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const buttonDisplayData = homeSections
+        .filter((section) => section.type === "text")
+        .map((section) => ({
+            name: section.title,
+            id: `section-${section.id}`,
+            progress: sectionProgress[`section-${section.id}`] || 0,
+        }));
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
@@ -81,7 +63,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <NavBar
                         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
                         buttonDisplayData={buttonDisplayData}
-                        scrollToTime={scrollToTime}
                     />
                 </div>
             )}

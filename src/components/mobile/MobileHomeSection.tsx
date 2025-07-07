@@ -20,10 +20,12 @@ interface MobileHomeSectionProps {
 }
 
 const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, sectionId, nextSection, nextSectionId }) => {
+  const [isDesktop, setIsDesktop] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0); // 0 to 1
+  const [videoSrc, setVideoSrc] = useState(section.type === "video" ? defaultConfig.videoSrc.split("?")[0] : "");
   const {
     manualOverrideIndex,
     requestPlay,
@@ -34,6 +36,15 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
   } = useMobileHomeVideo();
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const isActiveVideo = activeVideoId === sectionId;
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
 
   // Only relevant for video sections
   const start = section.type === "video" ? timecodeToSeconds(section.video!.start) : 0;
@@ -197,27 +208,13 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
             videoElement.play();
           }
 
-          // Get the scrollMarginTop value from the style and convert it to a number
-          const scrollMarginTopStyle = window.getComputedStyle(nextSectionElement).scrollMarginTop;
-          const scrollMarginTopValue = parseInt(scrollMarginTopStyle, 10) || 64; // Default to 64px if parsing fails
-
           // Enable theater mode immediately so fade-in starts in parallel with scrolling
           setTheaterMode(true, nextSectionId);
 
-          // Calculate target scroll position to center the element in the viewport
-          const elementRect = nextSectionElement.getBoundingClientRect();
-          const elementHeight = elementRect.height;
-          const windowHeight = window.innerHeight;
-          const elementTop = elementRect.top + window.scrollY;
-
-          // Center the element in the viewport (subtract half of viewport height minus half of element height)
-          const targetY = elementTop - (windowHeight / 2) + (elementHeight / 2);
-
-          // Use a simpler direct scrollTo approach with GSAP
-          gsap.to(window, {
-            scrollTo: targetY,
-            duration: 1,
-            ease: "power2.out",
+          nextSectionElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center'
           });
         }
       }
@@ -231,6 +228,117 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
     const textSectionIndex = textSections.findIndex(s => s.id === section.id);
     // Determine background color based on text section index
     const sectionBgColor = textSectionIndex % 2 === 0 ? '#ffffff' : '#f5f5f7';
+
+    if (isDesktop) {
+      return (
+        <div
+          id={sectionId}
+          className="flex justify-center items-center"
+          style={{
+            width: "100%",
+            zIndex: 10,
+            backgroundColor: sectionBgColor,
+            color: "#1d1d1f",
+            padding: "128px 0",
+            minHeight: "50vh",
+            scrollMarginTop: '64px',
+            fontFamily:
+              "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          }}
+        >
+          <div
+            style={{
+              maxWidth: "980px",
+              margin: "0 auto",
+              padding: "0 22px",
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(5, 1fr)",
+                gap: "64px",
+                alignItems: "start",
+              }}
+            >
+              {/* Left Column: Title */}
+              <div style={{ gridColumn: "span 2 / span 2" }}>
+                <h2
+                  style={{
+                    fontSize: "28px",
+                    fontWeight: "700",
+                    lineHeight: 1.1,
+                    letterSpacing: "0em",
+                    margin: 0,
+                  }}
+                >
+                  {section.header}
+                </h2>
+              </div>
+              {/* Right Column: Content */}
+              <div
+                style={{
+                  gridColumn: "span 3 / span 3",
+                  marginTop: "4px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "18px",
+                    color: "#6e6e73",
+                    lineHeight: 1.47,
+                    fontWeight: 700,
+                  }}
+                >
+                  {section.content}
+                </div>
+                {section.buttonText && nextSectionId && (
+                <div style={{ marginTop: "20px" }}>
+                  <button
+                    onClick={handleLearnMore}
+                    style={{
+                      marginTop: "20px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      padding: "12px 24px",
+                      fontSize: "17px",
+                      fontWeight: "600",
+                      color: "#fff",
+                      backgroundColor: "#f56300",
+                      borderRadius: "9999px",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <svg
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                      }}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>
+                      Learn about {section.buttonText}
+                    </span>
+                  </button>
+                </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
 
     return (
       <div
@@ -321,7 +429,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({ section, index, s
       <div className="relative">
         <video
           ref={videoRef}
-          src={defaultConfig.videoSrc}
+          src={videoSrc}
           className={`w-full rounded-xl bg-black ${isActiveVideo && theaterMode ? 'theater-mode-current-video' : ''}`}
           controls={false}
           playsInline
