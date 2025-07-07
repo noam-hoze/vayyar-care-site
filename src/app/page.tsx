@@ -907,8 +907,8 @@ export default function HomePage() {
                                 // transform: "translateY(0) !important", // Likely not needed
                             }}
                         >
-                            Optimize staff &nbsp;·&nbsp; Transform Care
-                            &nbsp;·&nbsp; Operational Efficiency
+                            Increase NOI &nbsp;·&nbsp; Improve Care
+                            &nbsp;·&nbsp; Maintain Privacy
                         </h2>
                     </div>{" "}
                     {/* END Inner container */}
