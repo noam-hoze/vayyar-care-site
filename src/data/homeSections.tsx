@@ -206,7 +206,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Empower the care team with automated alerts.</span>
+                    <span>World leading radio wave sensing.</span>
                 </li>
                 <li
                     style={{
@@ -216,7 +216,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Ensure Care Plan Compliance</span>
+                    <span>Monitoring in full darkness and steam.</span>
                 </li>
                 <li
                     style={{
@@ -226,7 +226,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Real Time Detection</span>
+                    <span>No lens, no optics, full privacy</span>
                 </li>
             </ul>
         ),
