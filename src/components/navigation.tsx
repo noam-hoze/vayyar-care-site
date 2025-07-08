@@ -1,84 +1,142 @@
 "use client"; // Add this for useState
-import React, { useState, useEffect } from "react"; // Removed useEffect
+import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Changed from react-router-dom
 import ContactModal from "@/components/ContactModal";
+import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
 
-export default function NavBar() {
-    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-    const [opacity, setOpacity] = useState(0);
+// TODO: Type buttonDisplayData properly
+interface NavBarProps {
+    buttonDisplayData: Array<Record<string, any>>;
+    scrollToTime: (time: number) => void;
+    onOpenMobileMenu: () => void;
+}
+
+export default function NavBar({
+    buttonDisplayData,
+    scrollToTime,
+    onOpenMobileMenu,
+}: NavBarProps) {
+    const [hasLastButtonBeenFilled, setHasLastButtonBeenFilled] = useState(false);
+    const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
+
+    // Effect to latch the orange state
+    useEffect(() => {
+        if (!hasLastButtonBeenFilled && buttonDisplayData.length > 0) {
+            if (
+                buttonDisplayData[buttonDisplayData.length - 1].progress >= 99.9
+            ) {
+                setHasLastButtonBeenFilled(true);
+            }
+        }
+    }, [buttonDisplayData, hasLastButtonBeenFilled]); // Depend on buttonDisplayData and the latch state
+
+    const bookADemoBackgroundColor = hasLastButtonBeenFilled
+        ? "#FFA500"
+        : "#06aeef"; // Orange or Vayyar Blue
+
+    // Original useEffect for scroll percentage - can be removed or commented out
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const element = document.documentElement;
+    //         const body = document.body;
+    //         const scrollTop = element.scrollTop || body.scrollTop;
+    //         const scrollHeight = element.scrollHeight || body.scrollHeight;
+    //         const clientHeight = element.clientHeight;
+
+    //         if (scrollHeight - clientHeight === 0) {
+    //             setScrollPercentage(0);
+    //             return;
+    //         }
+
+    //         const percentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+    //         setScrollPercentage(percentage > 100 ? 100 : percentage < 0 ? 0 : percentage);
+    //     };
+
+    //     window.addEventListener("scroll", handleScroll, { passive: true });
+    //     handleScroll(); // Initial call
+
+    //     return () => window.removeEventListener("scroll", handleScroll);
+    // }, []);
 
     const openContactModal = () => {
-        setIsContactModalOpen(true);
+        setIsDemoModalOpen(true);
     };
-
     const handleContactModalClose = () => {
-        setIsContactModalOpen(false);
-    }
-
+        setIsDemoModalOpen(false);
+    };
     useEffect(() => {
-        document.body.style.overflow = isContactModalOpen ? 'hidden' : 'auto';
-
+        document.body.style.overflow = isDemoModalOpen ? "hidden" : "auto";
         return () => {
-            document.body.style.overflow = 'auto';
-        }
-    }, [isContactModalOpen]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollPosition = window.scrollY;
-            // Calculate opacity based on scroll position
-            // At 0px scroll -> opacity 0
-            // At 150px scroll -> opacity 1
-            // Linear interpolation between these values
-            const newOpacity = Math.max(0, Math.min(1, scrollPosition / 150));
-            setOpacity(newOpacity);
+            document.body.style.overflow = "auto";
         };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [isDemoModalOpen]);
 
     return (
-        <>
-            <nav className="relative" 
-                style={{ 
-                    backgroundColor: `rgba(255, 255, 255, ${opacity})`,
-                    backdropFilter: `blur(${opacity * 10}px)`
-                }}>
-                <div className="relative mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16 items-center">
-                        {/* Logo or Brand Name */}
-                        <div className="flex-shrink-0">
-                            {/* Use Link for the logo to go to homepage */}
-                            <Link href="/">
-                                {/* Replace text with image */}
-                                <img
-                                    className="h-8 w-auto" /* Adjust height/width as needed */
-                                    src="/images/vayyar-logo-text.png"
-                                    alt="Vayyar Logo"
-                                />
-                            </Link>
-                        </div>
-
-                        {/* Right Side - CTA and Menu Toggle */}
-                        <div className="flex items-center space-x-4">
-                            {/* Let's Talk Button (CTA) */}
+        <nav className="relative z-50" style={{fontFamily: "Magistral"}}>
+            <div className="w-full h-full absolute" style={{backgroundColor: "rgba(250, 250, 252, 0.8)", backdropFilter: "saturate(1.8) blur(20px)"}}></div>
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-7">
+                <div className="flex items-center h-16">
+                    <div className="flex-shrink-0">
+                        <Link href="/">
+                            <img
+                                className="h-8 w-auto"
+                                src="/images/vayyar-logo-text.png"
+                                alt="Vayyar Logo"
+                            />
+                        </Link>
+                    </div>
+                    {/* Desktop nav buttons */}
+                    <div className="flex-1 justify-center items-center space-x-4 hidden lg:flex">
+                        {buttonDisplayData.map((data) => (
                             <button
-                                onClick={openContactModal}
-                                className="group relative bg-vayyar-blue text-white px-5 py-2 rounded-sm text-sm font-medium hover:bg-[#d91f5c] cursor-pointer transition duration-150 ease-in-out flex items-center justify-center overflow-hidden"
+                                key={data.name}
+                                onClick={() => scrollToTime(data.startTime)}
+                                className={`relative ${data.baseTextColor} bg-transparent border border-neutral-400 hover:bg-[#06aeef] hover:text-white hover:border-[#06aeef] px-3 py-2 rounded-full text-sm font-medium cursor-pointer overflow-hidden`}
                             >
-                                {/* Text Span - Transitions transform */}
-                                <span className="inline-block uppercase">
-                                    Let&apos;s Talk
-                                </span>
+                                {data.name}
+                                <div
+                                    className="absolute top-0 left-0 h-full overflow-hidden bg-[#06aeef]"
+                                    style={{ width: `${data.progress}%` }}
+                                >
+                                    <span className="block text-white px-3 py-2 text-sm font-medium whitespace-nowrap">
+                                        {data.name}
+                                    </span>
+                                </div>
                             </button>
-                        </div>
+                        ))}
+                    </div>
+                    {/* Mobile menu button */}
+                    <div className="flex-1 flex justify-end items-center lg:hidden">
+                        <button
+                            className="ml-2 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-200 focus:outline-none mobile-menu"
+                            aria-label="Open menu"
+                            onClick={onOpenMobileMenu}
+                        >
+                            <span className="block w-5 h-8 relative">
+                                <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-2"></span>
+                                <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-4"></span>
+                                <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-6"></span>
+                            </span>
+                        </button>
+                    </div>
+                    {/* Book a Demo always visible */}
+                    <div className="flex-shrink-0 ml-2">
+                        <button
+                            onClick={openContactModal}
+                            className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
+                            style={{ backgroundColor: bookADemoBackgroundColor }}
+                        >
+                            <span className="inline-block">Book a Demo</span>
+                        </button>
                     </div>
                 </div>
-            </nav>
-            {isContactModalOpen && (
-                <ContactModal onClose={handleContactModalClose} />
+            </div>
+            {isDemoModalOpen && (
+                <ContactModal
+                    isOpen={isDemoModalOpen}
+                    onClose={handleContactModalClose}
+                />
             )}
-        </>
+        </nav>
     );
 }

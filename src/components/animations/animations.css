@@ -1083,4 +1083,9 @@
 .send-hint-arrow {
   /* Position is set via inline style in component */
   animation: bounceUpAndDown 1.2s infinite ease-in-out;
+}
+
+.next-query .animated-tablet-user-message-text {
+    /* Position is set via inline style in component */
+    animation: bounceUpAndDown 1.2s infinite ease-in-out;
 } 

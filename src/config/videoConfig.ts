@@ -3,62 +3,30 @@ import { SCENES, MAX_SCENES } from "../data/sceneRegistry";
 // Storage key for local storage
 export const STORAGE_KEY = "vayyar_custom_video";
 
-// Video chunk configuration
-export const VIDEO_CHUNKS = {
-    get totalChunks() {
-        return this.chunks.length;
-    },
-    get totalDuration() {
-        return this.chunks.reduce((total, chunk) => total + chunk.duration, 0);
-    },
-    chunks: [
-        {
-            id: 0,
-            path: '/videos/output-00.mp4',
-            duration: 30,
-            startTime: 0
-        },
-        {
-            id: 1,
-            path: '/videos/output-01.mp4',
-            duration: 30,
-            startTime: 30
-        },
-        {
-            id: 2,
-            path: '/videos/output-02.mp4',
-            duration: 30,
-            startTime: 60
-        },
-        {
-            id: 3,
-            path: '/videos/output-03.mp4',
-            duration: 30,
-            startTime: 90
-        },
-        {
-            id: 4,
-            path: '/videos/output-04.mp4',
-            duration: 30,
-            startTime: 120
-        },
-        {
-            id: 5,
-            path: '/videos/output-05.mp4',
-            duration: 30,
-            startTime: 150
-        },
-        {
-            id: 6,
-            path: '/videos/output-06.mp4',
-            duration: 2,
-            startTime: 180
-        },
-    ]
-};
-
 // Default video configuration
 export const defaultConfig = {
+    // How many seconds to compensate for the video
+    compensation: 5.5,
+    frameRate: 30,
+    calculateTextTime(time: string, compensation: number) {
+        // Convert timecode (mm:ss:ff) to seconds
+        const [minutes, seconds, frames] = time.split(":").map(Number);
+        const totalSeconds = minutes * 60 + seconds + frames / this.frameRate;
+
+        // Add compensation
+        const adjustedSeconds = totalSeconds + compensation;
+
+        // Convert back to timecode (mm:ss:ff)
+        const totalFrames = Math.round(adjustedSeconds * this.frameRate);
+        const f = totalFrames % this.frameRate;
+        const totalSecondsOnly = Math.floor(totalFrames / this.frameRate);
+        const s = totalSecondsOnly % 60;
+        const m = Math.floor(totalSecondsOnly / 60);
+
+        return `${m.toString().padStart(2, "0")}:${s
+            .toString()
+            .padStart(2, "0")}:${f.toString().padStart(2, "0")}`;
+    },
     // How many viewport heights to scroll through
     scrollMultiplier: MAX_SCENES,
 
@@ -66,15 +34,21 @@ export const defaultConfig = {
     scrubSmoothness: 1,
 
     // Video source path - added timestamp for cache busting
-    videoSrc: VIDEO_CHUNKS.chunks[0].path + `?t=${Date.now()}`,
+    videoSrc: `/videos/output_vid_960_new_new.mp4?t=${Date.now()}`,
 
     // Timing configuration for each scene
     // These times should match your video timestamps
     sceneTiming: [
-        { scene: SCENES.MORNING_SHIFT, videoTime: 0 }, // Scene 0 starts at 0s
-        { scene: SCENES.JOHNS_SUMMARY, videoTime: 7 }, // Scene 0 starts at 0s
-        { scene: SCENES.FALL_EVENT, videoTime: 27 }, // Scene 1 starts at 3s
-        // { scene: SCENES.DOCUMENT_EVENT, videoTime: 50 },
+        { scene: SCENES.MORNING_SHIFT, videoTime: 0 },
+        { scene: SCENES.JOHNS_SUMMARY, videoTime: 15 },
+        { scene: SCENES.FALL_EVENT, videoTime: 40 },
+        { scene: SCENES.DOCUMENT_EVENT, videoTime: 65 },
+        { scene: SCENES.VP_CLINICAL, videoTime: 90 },
+        { scene: SCENES.VP_FAMILY, videoTime: 115 },
+        { scene: SCENES.LAST, videoTime: 140 },
+        { scene: SCENES.LAST_1, videoTime: 165 },
+        { scene: SCENES.LAST_2, videoTime: 190 },
+
         // { scene: SCENES.VP_CLINICAL, videoTime: 70 },
     ],
 };
@@ -121,20 +95,11 @@ export interface SceneTiming {
     scrollingPercentage?: Record<number, { videoTime: number }>;
 }
 
-// Interface for video chunk
-export interface VideoChunk {
-    id: number;
-    path: string;
-    duration: number;
-    startTime: number;
-}
-
 // Interface for the entire video configuration
 export interface VideoConfig {
     videoSrc: string | null;
     sceneTiming: SceneTiming[];
     scrubSmoothness?: number;
-    currentChunk?: VideoChunk;
 }
 
 // Function to update the video source

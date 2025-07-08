@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
@@ -11,12 +11,15 @@ import AnimatedTabletScene2 from "./animations/AnimatedTabletScene2";
 import {
     videoConfig,
     SceneTiming,
-    VIDEO_CHUNKS,
+    STORAGE_KEY,
+    defaultConfig,
 } from "../config/videoConfig";
 import { SCENES } from "../data/sceneRegistry";
 import { Scene } from "@/types";
 import Link from "next/link";
-import VideoPlayer from './VideoPlayer';
+import { useVideoTime } from "@/contexts/VideoTimeContext";
+import ChatGpt from "./ChatGpt";
+import { chatGptConfig } from "../config/chatGptConfig";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -32,6 +35,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     index = 0,
     subScrollProgress = 0,
 }) => {
+    const { setCurrentTime: setGlobalCurrentTime, setVideoDuration } =
+        useVideoTime();
     // Flag to control debug info visibility
     const showDebugInfo = false; // Set to false to hide debug info
 
@@ -47,6 +52,12 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State to control scene card animation
     const [animateCard, setAnimateCard] = useState(true);
 
+    // Video reference
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    // State for the video source URL, initialized to null for SSR safety
+    const [currentVideoSrc, setCurrentVideoSrc] = useState<string | null>(null);
+
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
 
@@ -56,22 +67,14 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State to track when the wipe animation should trigger
     const [shouldWipe, setShouldWipe] = useState(false);
 
-    // State for current time and frame
-    const [currentTime, setCurrentTime] = useState(0);
-    const [currentFrame, setCurrentFrame] = useState(0);
-    const frameRate = 30; // Assuming 30fps, adjust if your video has a different frame rate
-    const lastSetTimeRef = useRef<number>(0);
+    // NEW: State for ChatGPT component instances
+    const [chatGptInstances, setChatGptInstances] = useState<Record<number, number>>({});
 
-    // Memoize the time update handler
-    const handleTimeUpdate = useCallback((time: number) => {
-        // Only update if the time has changed significantly (more than 0.1 seconds)
-        if (Math.abs(time - lastSetTimeRef.current) > 0.1) {
-            lastSetTimeRef.current = time;
-            setCurrentTime(time);
-        }
-    }, []);
+    // Renamed local states for time and frame display
+    const [displayTime, setDisplayTime] = useState(0);
+    const [displayFrame, setDisplayFrame] = useState(0);
+    const frameRate = 30;
 
-    // Function to format timecode
     const formatTimecode = (time: number, frame: number) => {
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor((time % 3600) / 60);
@@ -85,7 +88,33 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // Load video source from localStorage on client-side mount
     useEffect(() => {
-        setCurrentTime(0);
+        let initialSrc = defaultConfig.videoSrc; // Start with default
+        // Check if running in browser
+        if (typeof window !== "undefined") {
+            try {
+                const savedVideo = localStorage.getItem(STORAGE_KEY);
+                if (savedVideo) {
+                    // Validate if it's a Firebase URL (or your expected format)
+                    if (
+                        savedVideo.startsWith(
+                            "https://firebasestorage.googleapis.com"
+                        )
+                    ) {
+                        initialSrc = savedVideo;
+                    } else {
+                        // Clear invalid entry if needed
+                        localStorage.removeItem(STORAGE_KEY);
+                    }
+                }
+            } catch (error) {
+                console.error(
+                    "Error loading saved video in SceneViewer:",
+                    error
+                );
+            }
+        }
+        // Set state after checking. Use null if the resulting src is empty.
+        setCurrentVideoSrc(initialSrc || null);
     }, []); // Empty dependency array runs only once on mount
 
     // Handle extra descriptions that show at specific scroll percentages
@@ -140,50 +169,187 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     // Set up video scroll control
     useEffect(() => {
-        const sceneTimings = videoConfig.sceneTiming;
-        if (!sceneTimings) return;
+        const video = videoRef.current;
+        // Ensure video exists AND the source is loaded before manipulating time
+        if (!video || !currentVideoSrc) return;
 
-        console.log("Current scroll progress:", subScrollProgress);
-        console.log("Current scene index:", index);
+        // Debug current scene
+        // console.log("Current scene:", scene.scene, "Scene index:", index);
 
-        const currentSceneTiming = sceneTimings.find(
-            (t) => t.scene === index
-        ) as SceneTiming | undefined;
+        // Function to update video time based on scroll progress
+        const updateVideoTime = () => {
+            const sceneTimings = videoConfig.sceneTiming;
+            if (!sceneTimings || !video.duration || isNaN(video.duration))
+                return; // Add NaN check
 
-        if (!currentSceneTiming) {
-            console.warn("Scene timing not found for index:", index);
-            return;
-        }
+            // console.log("Current scroll progress:", subScrollProgress);
+            // console.log("Current scene index:", index);
 
-        // Get the next scene timing for interpolation
-        const nextSceneIndex = index + 1;
-        const nextSceneTiming = sceneTimings.find(
-            (t) => t.scene === nextSceneIndex
-        ) as SceneTiming | undefined;
+            const currentSceneTiming = sceneTimings.find(
+                (t) => t.scene === index
+            ) as SceneTiming | undefined; // Cast result to SceneTiming | undefined
 
-        let videoTime: number;
-        const startTime = currentSceneTiming.videoTime ?? 0;
+            if (!currentSceneTiming) {
+                console.warn("Scene timing not found for index:", index);
+                return;
+            }
 
-        if (nextSceneTiming) {
-            // If we have a next scene, interpolate between current and next scene times
-            const nextSceneTime = nextSceneTiming.videoTime ?? startTime;
-            videoTime = startTime + (nextSceneTime - startTime) * subScrollProgress;
-        } else {
-            // If this is the last scene, use the total video duration
-            videoTime = startTime + (VIDEO_CHUNKS.totalDuration - startTime) * subScrollProgress;
-        }
+            // Check if scrollingPercentage exists BEFORE trying to use it
+            if (currentSceneTiming.scrollingPercentage) {
+                const scrollPercentage = Math.floor(subScrollProgress * 100);
+                const percentagePoints = Object.keys(
+                    currentSceneTiming.scrollingPercentage // Safe to access now
+                )
+                    .map(Number)
+                    .sort((a, b) => a - b);
 
-        // Ensure videoTime is within bounds
-        videoTime = Math.max(0, Math.min(VIDEO_CHUNKS.totalDuration, videoTime));
-        
-        console.log("Setting video time to:", videoTime, "based on scroll progress:", subScrollProgress);
-        setCurrentTime(videoTime);
-    }, [index, subScrollProgress]);
+                let lowerPoint = percentagePoints[0];
+                let upperPoint = percentagePoints[percentagePoints.length - 1];
 
-    // Update frame based on current time
-    useEffect(() => {
-        setCurrentFrame(Math.floor(currentTime * frameRate));
-    }, [currentTime]);
+                for (let i = 0; i < percentagePoints.length; i++) {
+                    if (scrollPercentage >= percentagePoints[i]) {
+                        lowerPoint = percentagePoints[i];
+                    }
+                    if (scrollPercentage <= percentagePoints[i]) {
+                        upperPoint = percentagePoints[i];
+                        break;
+                    }
+                }
+
+                // Access safely using the check above and type assertion
+                const percentageData = currentSceneTiming.scrollingPercentage; // Assign for clarity
+                const lowerData =
+                    percentageData?.[lowerPoint as keyof typeof percentageData];
+                const upperData =
+                    percentageData?.[upperPoint as keyof typeof percentageData];
+
+                if (!lowerData || !upperData) {
+                    console.warn(
+                        "Invalid percentage points data for interpolation:",
+                        lowerPoint,
+                        upperPoint,
+                        percentageData
+                    );
+                    // Fallback to simple videoTime if percentage data is bad
+                    video.currentTime = currentSceneTiming.videoTime ?? 0;
+                    return;
+                }
+
+                const lowerTime = lowerData.videoTime;
+                const upperTime = upperData.videoTime;
+
+                let factor = 0;
+                if (upperPoint > lowerPoint) {
+                    factor =
+                        (scrollPercentage - lowerPoint) /
+                        (upperPoint - lowerPoint);
+                }
+                factor = Math.max(0, Math.min(1, factor)); // Ensure factor is between 0 and 1
+
+                const videoTime = lowerTime + (upperTime - lowerTime) * factor;
+
+                if (!isNaN(videoTime)) {
+                    video.currentTime = videoTime;
+                    // console.log(
+                    //     "Setting video time to:",
+                    //     videoTime,
+                    //     "using percentage mapping"
+                    // );
+                }
+            } else {
+                // Handle cases WITHOUT scrollingPercentage
+                const nextSceneIndex = index + 1;
+                const nextSceneTiming = sceneTimings.find(
+                    (t) => t.scene === nextSceneIndex
+                ) as SceneTiming | undefined; // Cast result
+
+                let videoTime: number;
+                const startTime = currentSceneTiming.videoTime ?? 0;
+
+                if (nextSceneTiming) {
+                    let nextSceneStartTime: number;
+                    // Check if NEXT scene has scrollingPercentage
+                    if (nextSceneTiming.scrollingPercentage) {
+                        const percentageData =
+                            nextSceneTiming.scrollingPercentage;
+                        const firstPercentage = Math.min(
+                            ...Object.keys(percentageData).map(Number)
+                        );
+                        const firstPercentageData =
+                            percentageData[
+                                firstPercentage as keyof typeof percentageData
+                            ];
+
+                        if (firstPercentageData) {
+                            nextSceneStartTime = firstPercentageData.videoTime;
+                        } else {
+                            console.warn(
+                                "Could not find video time for first percentage:",
+                                firstPercentage,
+                                nextSceneTiming.scrollingPercentage
+                            );
+                            // Fallback if data missing for first percentage
+                            nextSceneStartTime =
+                                nextSceneTiming.videoTime ?? startTime;
+                        }
+                    } else {
+                        // If next scene also doesn't have percentage mapping
+                        nextSceneStartTime =
+                            nextSceneTiming.videoTime ?? startTime;
+                    }
+
+                    if (isNaN(nextSceneStartTime)) {
+                        console.warn(
+                            "Invalid next scene start time for interpolation.",
+                            nextSceneStartTime
+                        );
+                        videoTime = startTime;
+                    } else {
+                        videoTime =
+                            startTime +
+                            (nextSceneStartTime - startTime) *
+                                subScrollProgress;
+                    }
+                } else {
+                    // Last scene
+                    const endTime = video.duration;
+                    if (isNaN(endTime)) {
+                        console.warn(
+                            "Invalid end time for last scene interpolation."
+                        );
+                        videoTime = startTime;
+                    } else {
+                        videoTime =
+                            startTime +
+                            (endTime - startTime) * subScrollProgress;
+                    }
+                }
+
+                if (isNaN(videoTime)) {
+                    videoTime = startTime;
+                } else if (!isNaN(video.duration)) {
+                    videoTime = Math.max(
+                        0,
+                        Math.min(video.duration, videoTime)
+                    );
+                }
+
+                video.currentTime = videoTime;
+                // console.log(
+                //     "Setting video time to:",
+                //     videoTime,
+                //     "using traditional mapping"
+                // );
+            }
+        };
+
+        // Call immediately and add listener
+        updateVideoTime();
+        // No need for scroll listener here as progress is passed via props
+
+        // Cleanup function - not strictly needed if progress updates trigger re-render
+        // return () => window.removeEventListener('scroll', handleScroll);
+    }, [scene, index, subScrollProgress, currentVideoSrc]); // Add currentVideoSrc dependency
 
     // Reset animations when scene changes
     useEffect(() => {
@@ -215,6 +381,57 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             setShowCallout(false);
         }
     }, [subScrollProgress, scene, animationProgress]);
+
+    // This useEffect updates context and local display time from video element
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const updateTimeAndFrame = () => {
+            const time = video.currentTime;
+            const frame = Math.floor((time % 1) * frameRate);
+
+            setGlobalCurrentTime(time); // Update context
+            setDisplayTime(time); // Update local state for display
+            setDisplayFrame(frame); // Update local state for display
+        };
+
+        video.addEventListener("timeupdate", updateTimeAndFrame);
+        // Also call on loadedmetadata to set initial time in context if video doesn't auto-play from 0
+        video.addEventListener("loadedmetadata", updateTimeAndFrame);
+
+        return () => {
+            video.removeEventListener("timeupdate", updateTimeAndFrame);
+            video.removeEventListener("loadedmetadata", updateTimeAndFrame);
+        };
+    }, [setGlobalCurrentTime, frameRate]); // Dependency: context's setter
+
+    // NEW: Effect to handle ChatGPT instances visibility based on time and mode
+    useEffect(() => {
+        const newInstances: Record<number, number> = {};
+
+        chatGptConfig.forEach((instance, index) => {
+
+            const fadeInStartTime = instance.appearTime;
+            const fadeInEndTime = instance.appearTime + (instance.fadeDuration || 0.2);
+            const fadeOutStartTime = instance.disappearTime - (instance.fadeDuration || 0.2);
+            const fadeOutEndTime = instance.disappearTime;
+
+            let opacity = 0;
+
+            if (displayTime >= fadeInStartTime && displayTime < fadeInEndTime) {
+                opacity = (displayTime - fadeInStartTime) / (instance.fadeDuration || 0.2);
+            } else if (displayTime >= fadeInEndTime && displayTime < fadeOutStartTime) {
+                opacity = 1;
+            } else if (displayTime >= fadeOutStartTime && displayTime < fadeOutEndTime) {
+                opacity = 1 - (displayTime - fadeOutStartTime) / (instance.fadeDuration || 0.2);
+            }
+
+            newInstances[index] = opacity;
+        });
+
+        setChatGptInstances(newInstances);
+    }, [displayTime]);
 
     // Define tablet components map - use SCENES constants for keys
     const tabletComponentsMap = useMemo(
@@ -278,16 +495,34 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
             {/* Fullscreen Video Background */}
-            <div className="video-container absolute inset-0 w-full h-full">
-                <VideoPlayer
-                    currentTime={currentTime}
-                    onTimeUpdate={handleTimeUpdate}
-                />
-            </div>
+            <video
+                ref={videoRef}
+                src={currentVideoSrc ?? undefined}
+                className="absolute top-0 left-0 w-full h-full object-cover z-[-10]" // Fullscreen, behind content, NEGATIVE Z-INDEX
+                playsInline
+                preload="auto"
+                muted
+                onLoadedMetadata={() => {
+                    if (videoRef.current) {
+                        console.log(
+                            "Video metadata loaded, duration:",
+                            videoRef.current?.duration
+                        );
+                        setVideoDuration(videoRef.current.duration); // Update context with video duration
+                        // Initial time update in case 'timeupdate' doesn't fire immediately or video is paused at a non-zero time
+                        const initialTime = videoRef.current.currentTime;
+                        setGlobalCurrentTime(initialTime);
+                        setDisplayTime(initialTime);
+                        setDisplayFrame(
+                            Math.floor((initialTime % 1) * frameRate)
+                        );
+                    }
+                }}
+            />
 
-            {/* Timecode Display */}
+            {/* Timecode Display uses local displayTime and displayFrame */}
             <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded font-mono text-sm z-20">
-                {formatTimecode(currentTime, currentFrame)}
+                {formatTimecode(displayTime, displayFrame)}
             </div>
 
             {/* Overlay Content - Positioned on the right */}
@@ -357,6 +592,41 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     </div>
                 )}
             </div>
+
+            {/* NEW: Render ChatGPT instances */}
+            {Object.entries(chatGptInstances).map(([instanceIndexStr, opacity]) => {
+                if (opacity <= 0) return null;
+
+                const instanceIndex = parseInt(instanceIndexStr);
+                const instance = chatGptConfig[instanceIndex];
+
+                return (
+                    <div
+                        key={`chatgpt-instance-${instanceIndex}`}
+                        style={{
+                            position: "absolute",
+                            opacity,
+                            transition: "opacity 0.3s ease-in-out",
+                            zIndex: instance.zIndex || 20,
+                            top: instance.position?.top || 0,
+                            left: instance.position?.left,
+                            right: instance.position?.right,
+                            bottom: instance.position?.bottom,
+                            width: instance.position?.width || "100%",
+                            height: instance.position?.height || "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        {/* <ChatGpt
+                            mode={instance.mode}
+                            customMessage={instance.content?.message}
+                            customClass={instance.content?.customClass}
+                        /> */}
+                    </div>
+                );
+            })}
 
             {/* Tablet Wrapper - Currently hidden */}
             <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden">

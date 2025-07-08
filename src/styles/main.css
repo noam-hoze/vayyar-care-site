@@ -1,6 +1,56 @@
-@tailwind preflight;
-@tailwind components;
-@tailwind utilities;
+@font-face {
+    font-family: 'Magistral';
+    src: url('fonts/Magistral-Bold.eot');
+    src: local('Magistral Bold'), local('Magistral-Bold'),
+    url('fonts/Magistral-Bold.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Magistral-Bold.woff2') format('woff2'),
+    url('fonts/Magistral-Bold.woff') format('woff'),
+    url('fonts/Magistral-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Magistral';
+    src: url('fonts/Magistral-Medium.eot');
+    src: local('Magistral Medium'), local('Magistral-Medium'),
+    url('fonts/Magistral-Medium.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Magistral-Medium.woff2') format('woff2'),
+    url('fonts/Magistral-Medium.woff') format('woff'),
+    url('fonts/Magistral-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Magistral Book';
+    src: url('fonts/Magistral-Book.eot');
+    src: local('Magistral Book'), local('Magistral-Book'),
+    url('fonts/Magistral-Book.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Magistral-Book.woff2') format('woff2'),
+    url('fonts/Magistral-Book.woff') format('woff'),
+    url('fonts/Magistral-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+h1 {
+    font-family: 'Magistral', serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+h2 {
+    font-family: 'Magistral', serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+h3 {
+    font-family: 'Magistral Book', serif;
+    font-weight: normal;
+    font-style: normal;
+}
 
 /* 
  * Main styles file - imports all modular LESS files
@@ -2542,36 +2592,7 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
 }
-.text-center {
-    text-align: center;
-}
-.flex {
-    display: flex;
-}
-.flex-column {
-    flex-direction: column;
-}
-.items-center {
-    align-items: center;
-}
-.justify-center {
-    justify-content: center;
-}
-.justify-between {
-    justify-content: space-between;
-}
-.w-full {
-    width: 100%;
-}
-.h-full {
-    height: 100%;
-}
-.m-0 {
-    margin: 0;
-}
-.p-0 {
-    padding: 0;
-}
+
 @keyframes alert-flicker {
     0%,
     100% {
@@ -2846,4 +2867,9 @@ code {
   /* You might want to adjust this to match your purple-50 theme */
   background-image: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7));
   z-index: 0;
+}
+
+nav button:not(.mobile-menu) {
+    padding-top: 9px;
+    padding-bottom: 7px;
 }

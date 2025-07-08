@@ -56,3 +56,96 @@ body {
 .page-fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
+
+/* Animations for Hero Section Text */
+@keyframes fadeInSlow {
+  0% { opacity: 0 !important; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeInSlower {
+  0% { opacity: 0 !important; }
+  50% { opacity: 0 !important; } /* Still starts effectively later due to class delay */
+  100% { opacity: 1; }
+}
+
+.animate-fadeInSlow {
+  /* transform: translateY(0); */ /* Removed as inline style handles this */
+  animation: fadeInSlow 1.2s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+.animate-fadeInSlower {
+  /* transform: translateY(0); */ /* Removed as inline style handles this */
+  animation: fadeInSlower 1.5s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+/* New: Animation for hero section to fade out */
+@keyframes heroSectionFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.animate-hero-section-fade-out {
+  animation: heroSectionFadeOut 0.7s ease-out forwards; /* Duration can be adjusted */
+}
+
+/* New: Animation for hero section to fade back in */
+@keyframes heroSectionFadeIn {
+  from { opacity: 0; } /* Start from faded out state */
+  to { opacity: 1; }   /* Fade to visible */
+}
+
+.animate-hero-section-fade-in {
+  animation: heroSectionFadeIn 0.7s ease-out forwards; /* Match duration of fade-out */
+}
+
+/* Modal Fade Animations */
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes modalFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+.animate-modal-fade-in {
+  animation: modalFadeIn 0.2s ease-out forwards;
+}
+
+.animate-modal-fade-out {
+  animation: modalFadeOut 0.2s ease-out forwards;
+}
+
+/* Ensure html and body take full height if not already set, useful for sticky footers or full-screen layouts */
+/* html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+} */
+
+/* You might have other global styles below or above this point */
+
+@layer base {
+  /* Example: Custom base styles if you have them */
+  /* body {
+    @apply bg-gray-100 text-gray-900;
+  } */
+}
+
+@layer components {
+  /* Example: Custom component styles */
+  /* .btn-primary {
+    @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  } */
+}
+
+@layer utilities {
+  /* Example: Custom utility classes */
+  /* .text-balance {
+    text-wrap: balance;
+  } */
+}
