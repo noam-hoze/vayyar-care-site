@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useVideoTime } from "@/contexts/VideoTimeContext";
 import ChatGpt from "./ChatGpt";
 import { chatGptConfig } from "../config/chatGptConfig";
+import { useCanvasVideoRenderer } from "./animations/hooks/useCanvasVideoRenderer";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -53,8 +54,9 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // State to control scene card animation
     const [animateCard, setAnimateCard] = useState(true);
 
-    // Video reference
+    // Video and Canvas references
     const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     // State for the HLS URL
     const [hlsUrl, setHlsUrl] = useState<string | null>(null);
@@ -78,6 +80,9 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     const [displayFrame, setDisplayFrame] = useState(0);
     const frameRate = 30;
 
+    // Use the new hook to render video to canvas
+    useCanvasVideoRenderer(videoRef, canvasRef);
+
     const formatTimecode = (time: number, frame: number) => {
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor((time % 3600) / 60);
@@ -97,7 +102,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        videoId: "18f25275e13a06e9db2ffd4b0f96831c",
+                        videoId: "443c212670e2482abf89bd99148c5f9a",
                     }),
                 });
                 if (!response.ok) {
@@ -514,34 +519,24 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
     return (
         <div className="scene-container sticky top-0 left-0 w-screen h-screen box-border overflow-hidden z-0">
-            {/* Fullscreen Video Background */}
+            {/* Canvas for video playback */}
+            <canvas
+                ref={canvasRef}
+                className="absolute top-0 left-0 w-full h-full object-cover z-[-10]"
+            />
+            {/* Hidden video element */}
             <video
                 ref={videoRef}
-                className="absolute top-0 left-0 w-full h-full object-cover z-[-10]" // Fullscreen, behind content, NEGATIVE Z-INDEX
+                src="https://pub-b79e8d4ed1344c3d8baec84528f27e6a.r2.dev/output_scrubbable.mp4"
+                muted
                 playsInline
                 preload="auto"
-                muted
-                onLoadedMetadata={() => {
-                    if (videoRef.current) {
-                        console.log(
-                            "Video metadata loaded, duration:",
-                            videoRef.current?.duration
-                        );
-                        setVideoDuration(videoRef.current.duration); // Update context with video duration
-                        // Initial time update in case 'timeupdate' doesn't fire immediately or video is paused at a non-zero time
-                        const initialTime = videoRef.current.currentTime;
-                        setGlobalCurrentTime(initialTime);
-                        setDisplayTime(initialTime);
-                        setDisplayFrame(
-                            Math.floor((initialTime % 1) * frameRate)
-                        );
-                    }
-                }}
-            />
+                style={{ display: "none" }}
+            ></video>
 
-            {/* Timecode Display uses local displayTime and displayFrame */}
-            <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded font-mono text-sm z-20">
-                {formatTimecode(displayTime, displayFrame)}
+            {/* Debug Overlay */}
+            <div className="absolute top-0 right-0 p-4 bg-black bg-opacity-50 text-white font-mono z-10">
+                <div>Time: {formatTimecode(displayTime, displayFrame)}</div>
             </div>
 
             {/* Overlay Content - Positioned on the right */}
