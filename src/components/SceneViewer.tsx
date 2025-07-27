@@ -94,42 +94,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             .padStart(2, "0")}`;
     };
 
-    // Fetch the signed HLS URL from the API route
-    useEffect(() => {
-        const fetchHlsUrl = async () => {
-            try {
-                const response = await fetch("/api/stream", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        videoId: "443c212670e2482abf89bd99148c5f9a",
-                    }),
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch HLS URL");
-                }
-                const data = await response.json();
-                setHlsUrl(data.hlsUrl);
-            } catch (error) {
-                console.error("Error fetching HLS URL:", error);
-            }
-        };
-
-        fetchHlsUrl();
-    }, []);
-
-    // Initialize hls.js when the HLS URL is available
-    useEffect(() => {
-        if (Hls.isSupported() && videoRef.current && hlsUrl) {
-            const hls = new Hls();
-            hls.loadSource(hlsUrl);
-            hls.attachMedia(videoRef.current);
-            return () => {
-                hls.destroy();
-            };
-        }
-    }, [hlsUrl]);
-
     // Handle extra descriptions that show at specific scroll percentages
     useEffect(() => {
         // Check if there's a percentageText property in the scene
