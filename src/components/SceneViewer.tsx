@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import Hls from "hls.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedTabletScene1 from "./animations/AnimatedTabletScene1";
@@ -55,8 +56,8 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     // Video reference
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    // State for the video source URL, initialized to null for SSR safety
-    const [currentVideoSrc, setCurrentVideoSrc] = useState<string | null>(null);
+    // State for the HLS URL
+    const [hlsUrl, setHlsUrl] = useState<string | null>(null);
 
     // State for extra descriptions shown based on scroll percentage
     const [extraDescriptionText, setExtraDescriptionText] = useState("");
@@ -68,7 +69,9 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     const [shouldWipe, setShouldWipe] = useState(false);
 
     // NEW: State for ChatGPT component instances
-    const [chatGptInstances, setChatGptInstances] = useState<Record<number, number>>({});
+    const [chatGptInstances, setChatGptInstances] = useState<
+        Record<number, number>
+    >({});
 
     // Renamed local states for time and frame display
     const [displayTime, setDisplayTime] = useState(0);
@@ -86,36 +89,41 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             .padStart(2, "0")}`;
     };
 
-    // Load video source from localStorage on client-side mount
+    // Fetch the signed HLS URL from the API route
     useEffect(() => {
-        let initialSrc = defaultConfig.videoSrc; // Start with default
-        // Check if running in browser
-        if (typeof window !== "undefined") {
+        const fetchHlsUrl = async () => {
             try {
-                const savedVideo = localStorage.getItem(STORAGE_KEY);
-                if (savedVideo) {
-                    // Validate if it's a Firebase URL (or your expected format)
-                    if (
-                        savedVideo.startsWith(
-                            "https://firebasestorage.googleapis.com"
-                        )
-                    ) {
-                        initialSrc = savedVideo;
-                    } else {
-                        // Clear invalid entry if needed
-                        localStorage.removeItem(STORAGE_KEY);
-                    }
+                const response = await fetch("/api/stream", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        videoId: "327acc2717e292a59f06144cb3593b61",
+                    }),
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch HLS URL");
                 }
+                const data = await response.json();
+                setHlsUrl(data.hlsUrl);
             } catch (error) {
-                console.error(
-                    "Error loading saved video in SceneViewer:",
-                    error
-                );
+                console.error("Error fetching HLS URL:", error);
             }
+        };
+
+        fetchHlsUrl();
+    }, []);
+
+    // Initialize hls.js when the HLS URL is available
+    useEffect(() => {
+        if (Hls.isSupported() && videoRef.current && hlsUrl) {
+            const hls = new Hls();
+            hls.loadSource(hlsUrl);
+            hls.attachMedia(videoRef.current);
+            return () => {
+                hls.destroy();
+            };
         }
-        // Set state after checking. Use null if the resulting src is empty.
-        setCurrentVideoSrc(initialSrc || null);
-    }, []); // Empty dependency array runs only once on mount
+    }, [hlsUrl]);
 
     // Handle extra descriptions that show at specific scroll percentages
     useEffect(() => {
@@ -171,7 +179,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     useEffect(() => {
         const video = videoRef.current;
         // Ensure video exists AND the source is loaded before manipulating time
-        if (!video || !currentVideoSrc) return;
+        if (!video) return;
 
         // Debug current scene
         // console.log("Current scene:", scene.scene, "Scene index:", index);
@@ -349,7 +357,7 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
 
         // Cleanup function - not strictly needed if progress updates trigger re-render
         // return () => window.removeEventListener('scroll', handleScroll);
-    }, [scene, index, subScrollProgress, currentVideoSrc]); // Add currentVideoSrc dependency
+    }, [scene, index, subScrollProgress]); // Add currentVideoSrc dependency
 
     // Reset animations when scene changes
     useEffect(() => {
@@ -411,20 +419,32 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         const newInstances: Record<number, number> = {};
 
         chatGptConfig.forEach((instance, index) => {
-
             const fadeInStartTime = instance.appearTime;
-            const fadeInEndTime = instance.appearTime + (instance.fadeDuration || 0.2);
-            const fadeOutStartTime = instance.disappearTime - (instance.fadeDuration || 0.2);
+            const fadeInEndTime =
+                instance.appearTime + (instance.fadeDuration || 0.2);
+            const fadeOutStartTime =
+                instance.disappearTime - (instance.fadeDuration || 0.2);
             const fadeOutEndTime = instance.disappearTime;
 
             let opacity = 0;
 
             if (displayTime >= fadeInStartTime && displayTime < fadeInEndTime) {
-                opacity = (displayTime - fadeInStartTime) / (instance.fadeDuration || 0.2);
-            } else if (displayTime >= fadeInEndTime && displayTime < fadeOutStartTime) {
+                opacity =
+                    (displayTime - fadeInStartTime) /
+                    (instance.fadeDuration || 0.2);
+            } else if (
+                displayTime >= fadeInEndTime &&
+                displayTime < fadeOutStartTime
+            ) {
                 opacity = 1;
-            } else if (displayTime >= fadeOutStartTime && displayTime < fadeOutEndTime) {
-                opacity = 1 - (displayTime - fadeOutStartTime) / (instance.fadeDuration || 0.2);
+            } else if (
+                displayTime >= fadeOutStartTime &&
+                displayTime < fadeOutEndTime
+            ) {
+                opacity =
+                    1 -
+                    (displayTime - fadeOutStartTime) /
+                        (instance.fadeDuration || 0.2);
             }
 
             newInstances[index] = opacity;
@@ -497,7 +517,6 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             {/* Fullscreen Video Background */}
             <video
                 ref={videoRef}
-                src={currentVideoSrc ?? undefined}
                 className="absolute top-0 left-0 w-full h-full object-cover z-[-10]" // Fullscreen, behind content, NEGATIVE Z-INDEX
                 playsInline
                 preload="auto"
@@ -594,39 +613,41 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             </div>
 
             {/* NEW: Render ChatGPT instances */}
-            {Object.entries(chatGptInstances).map(([instanceIndexStr, opacity]) => {
-                if (opacity <= 0) return null;
+            {Object.entries(chatGptInstances).map(
+                ([instanceIndexStr, opacity]) => {
+                    if (opacity <= 0) return null;
 
-                const instanceIndex = parseInt(instanceIndexStr);
-                const instance = chatGptConfig[instanceIndex];
+                    const instanceIndex = parseInt(instanceIndexStr);
+                    const instance = chatGptConfig[instanceIndex];
 
-                return (
-                    <div
-                        key={`chatgpt-instance-${instanceIndex}`}
-                        style={{
-                            position: "absolute",
-                            opacity,
-                            transition: "opacity 0.3s ease-in-out",
-                            zIndex: instance.zIndex || 20,
-                            top: instance.position?.top || 0,
-                            left: instance.position?.left,
-                            right: instance.position?.right,
-                            bottom: instance.position?.bottom,
-                            width: instance.position?.width || "100%",
-                            height: instance.position?.height || "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        {/* <ChatGpt
+                    return (
+                        <div
+                            key={`chatgpt-instance-${instanceIndex}`}
+                            style={{
+                                position: "absolute",
+                                opacity,
+                                transition: "opacity 0.3s ease-in-out",
+                                zIndex: instance.zIndex || 20,
+                                top: instance.position?.top || 0,
+                                left: instance.position?.left,
+                                right: instance.position?.right,
+                                bottom: instance.position?.bottom,
+                                width: instance.position?.width || "100%",
+                                height: instance.position?.height || "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            {/* <ChatGpt
                             mode={instance.mode}
                             customMessage={instance.content?.message}
                             customClass={instance.content?.customClass}
                         /> */}
-                    </div>
-                );
-            })}
+                        </div>
+                    );
+                }
+            )}
 
             {/* Tablet Wrapper - Currently hidden */}
             <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden">

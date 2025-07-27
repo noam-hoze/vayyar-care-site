@@ -12,10 +12,14 @@
         "deploy": "pnpm run build && firebase deploy --only functions,hosting"
     },
     "dependencies": {
+        "@cloudflare/stream-react": "^1.9.3",
         "@heroicons/react": "^2.2.0",
+        "@types/hls.js": "^1.0.0",
         "firebase": "^11.6.0",
         "framer-motion": "^12.9.2",
         "gsap": "^3.12.7",
+        "hls.js": "^1.6.7",
+        "jsonwebtoken": "^9.0.2",
         "next": "15.3.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
