@@ -120,14 +120,40 @@ body {
   animation: modalFadeOut 0.2s ease-out forwards;
 }
 
-/* Ensure html and body take full height if not already set, useful for sticky footers or full-screen layouts */
-/* html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-} */
+.scrolly-container {
+  position: relative;
+  height: 300vh; /* Provides scrollable space */
+}
 
-/* You might have other global styles below or above this point */
+.scrolly-video {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  background: #000;
+}
+
+.scrolly-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    text-align: center;
+}
+
+.scrolly-text p {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 1rem;
+    max-width: 80%;
+}
+
 
 @layer base {
   /* Example: Custom base styles if you have them */

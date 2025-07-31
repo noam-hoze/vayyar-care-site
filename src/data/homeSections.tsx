@@ -25,10 +25,23 @@ export interface HomeSection {
 export const homeSections: HomeSection[] = [
     {
         id: 1,
-        type: "video",
+        type: "scrolly-video",
         title: "Video 1",
         // Controls the progress bar of the navigation buttons
         video: { start: "00:12:06", end: "00:34:11" },
+        content: (
+            <>
+                <p>
+                    Vayyar's technology records the daily life of your residents
+                    without camera or sound
+                </p>
+                <p>
+                    So you can improve the care you provide while increasing
+                    your NOI and your staff's efficiency
+                </p>
+                <p>The Era of AI-based care is here</p>
+            </>
+        ),
     },
     {
         id: 0,
