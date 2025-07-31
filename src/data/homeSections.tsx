@@ -24,6 +24,13 @@ export interface HomeSection {
 
 export const homeSections: HomeSection[] = [
     {
+        id: 1,
+        type: "video",
+        title: "Video 1",
+        // Controls the progress bar of the navigation buttons
+        video: { start: "00:12:06", end: "00:34:11" },
+    },
+    {
         id: 0,
         type: "text",
         title: "Staff Optimization",
@@ -68,13 +75,6 @@ export const homeSections: HomeSection[] = [
             </ul>
         ),
         text: { start: 5, end: 11 },
-    },
-    {
-        id: 1,
-        type: "video",
-        title: "Video 1",
-        // Controls the progress bar of the navigation buttons
-        video: { start: "00:12:06", end: "00:34:11" },
     },
     {
         id: 2,
