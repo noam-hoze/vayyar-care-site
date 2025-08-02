@@ -171,13 +171,9 @@ export const homeSections: HomeSection[] = [
     {
         id: 3,
         type: "text",
-        title: "Staff Optimization",
-        header: (
-            <>
-                Real-time Alerts.
-            </>
-        ),
-        buttonText: "Staff optimization",
+        title: "Real-time Alerts",
+        header: <>Real-time Alerts.</>,
+        buttonText: "Real-time Alerts",
         scrollToTimeValue: "00:12:25",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
@@ -190,8 +186,8 @@ export const homeSections: HomeSection[] = [
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
                     <span>
-                        Use predictive insights to address potential patient
-                        complications
+                        Receive immediate alerts when a resident experiences a
+                        fall, ensuring faster assistance and peace of mind.
                     </span>
                 </li>
                 <li
@@ -202,20 +198,59 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Reduce Administrative tasks</span>
+                    <span>
+                        Stay informed about unusual movement patterns that could
+                        signal health or safety concerns.
+                    </span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Improved Operational Efficiencies</span>
+                    <span>
+                        Enhance resident safety and staff efficiency with
+                        real-time notifications tailored for elderly care.
+                    </span>
                 </li>
             </ul>
         ),
         text: { start: 5, end: 11 },
     },
     {
+        id: 3.2,
+        type: "scrolly-video",
+        title: "Video 2",
+        video: {
+            start: "00:50:04",
+            end: "01:10:26",
+        },
+        content: (
+            <p
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Privacy
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Monitoring every movement without compromising privacy
+                </p>
+            </p>
+        ),
+    },
+    {
         id: 3.5,
         type: "text",
-        title: "Real-time Alerts",
+        title: "Privacy",
         header: (
             <>
                 <span
@@ -306,17 +341,11 @@ export const homeSections: HomeSection[] = [
         type: "scrolly-video",
         title: "Video 2",
         video: {
-            start: videoConfig.calculateTextTime(
-                "00:35:04",
-                videoConfig.compensation
-            ),
-            end: videoConfig.calculateTextTime(
-                "01:17:26",
-                videoConfig.compensation
-            ),
+            start: "01:20:04",
+            end: "01:47:26",
         },
         content: (
-            <span
+            <p
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -326,7 +355,7 @@ export const homeSections: HomeSection[] = [
                 }}
             >
                 <h1 style={{ fontSize: "25px", textAlign: "center" }}>
-                    Efficiency
+                    AI Revolution
                 </h1>
                 <p
                     style={{
@@ -335,9 +364,9 @@ export const homeSections: HomeSection[] = [
                         display: "inline-block",
                     }}
                 >
-                    Optimize your staff work and reduce their burden
+                    Stay ahead with cutting-edge AI insights from our sensors and an array of smart data 
                 </p>
-            </span>
+            </p>
         ),
     },
     {
@@ -393,17 +422,11 @@ export const homeSections: HomeSection[] = [
         type: "scrolly-video",
         title: "Video 2",
         video: {
-            start: videoConfig.calculateTextTime(
-                "00:35:04",
-                videoConfig.compensation
-            ),
-            end: videoConfig.calculateTextTime(
-                "01:17:26",
-                videoConfig.compensation
-            ),
+            start: "01:57:04",
+            end: "02:40:26",
         },
         content: (
-            <span
+            <p
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -413,7 +436,7 @@ export const homeSections: HomeSection[] = [
                 }}
             >
                 <h1 style={{ fontSize: "25px", textAlign: "center" }}>
-                    Efficiency
+                    Personalize care
                 </h1>
                 <p
                     style={{
@@ -422,9 +445,9 @@ export const homeSections: HomeSection[] = [
                         display: "inline-block",
                     }}
                 >
-                    Optimize your staff work and reduce their burden
+                    Experience the power of immediate, accurate insights for truly personalized care. 
                 </p>
-            </span>
+            </p>
         ),
     },
     {
@@ -487,17 +510,11 @@ export const homeSections: HomeSection[] = [
         type: "scrolly-video",
         title: "Video 2",
         video: {
-            start: videoConfig.calculateTextTime(
-                "00:35:04",
-                videoConfig.compensation
-            ),
-            end: videoConfig.calculateTextTime(
-                "01:17:26",
-                videoConfig.compensation
-            ),
+            start: "02:45:04",
+            end: "03:02:26",
         },
         content: (
-            <span
+            <p
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -507,7 +524,7 @@ export const homeSections: HomeSection[] = [
                 }}
             >
                 <h1 style={{ fontSize: "25px", textAlign: "center" }}>
-                    Efficiency
+                    Improve NOI
                 </h1>
                 <p
                     style={{
@@ -516,76 +533,76 @@ export const homeSections: HomeSection[] = [
                         display: "inline-block",
                     }}
                 >
-                    Optimize your staff work and reduce their burden
+                    Boost your NOI and maximize returns through trusted, data-driven care plans.
                 </p>
-            </span>
+            </p>
         ),
     },
-    {
-        id: 9,
-        type: "text",
-        title: "Increase NOI",
-        header: (
-            <>
-                Built to <span style={{ color: "#05aae9" }}>scale</span>.
-            </>
-        ),
-        buttonText: "increase NOI",
-        scrollToTimeValue: "00:01:32:33",
-        content: (
-            <ul style={{ listStyle: "none", padding: 0 }}>
-                <li
-                    style={{
-                        display: "flex",
-                        gap: "0.5em",
-                        marginBottom: "0.5rem",
-                    }}
-                >
-                    <span style={{ color: "#05aae9" }}>›</span>
-                    <span>
-                        Turn insights into enterprise-wide transformation.
-                    </span>
-                </li>
-            </ul>
-        ),
-    },
-    {
-        id: 10,
-        type: "scrolly-video",
-        title: "Video 2",
-        video: {
-            start: videoConfig.calculateTextTime(
-                "00:35:04",
-                videoConfig.compensation
-            ),
-            end: videoConfig.calculateTextTime(
-                "01:17:26",
-                videoConfig.compensation
-            ),
-        },
-        content: (
-            <span
-                style={{
-                    position: "absolute",
-                    top: "20%",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "100%",
-                }}
-            >
-                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
-                    Efficiency
-                </h1>
-                <p
-                    style={{
-                        lineHeight: "1.1",
-                        textAlign: "center",
-                        display: "inline-block",
-                    }}
-                >
-                    Optimize your staff work and reduce their burden
-                </p>
-            </span>
-        ),
-    },
+    // {
+    //     id: 9,
+    //     type: "text",
+    //     title: "Increase NOI",
+    //     header: (
+    //         <>
+    //             Built to <span style={{ color: "#05aae9" }}>scale</span>.
+    //         </>
+    //     ),
+    //     buttonText: "increase NOI",
+    //     scrollToTimeValue: "00:01:32:33",
+    //     content: (
+    //         <ul style={{ listStyle: "none", padding: 0 }}>
+    //             <li
+    //                 style={{
+    //                     display: "flex",
+    //                     gap: "0.5em",
+    //                     marginBottom: "0.5rem",
+    //                 }}
+    //             >
+    //                 <span style={{ color: "#05aae9" }}>›</span>
+    //                 <span>
+    //                     Turn insights into enterprise-wide transformation.
+    //                 </span>
+    //             </li>
+    //         </ul>
+    //     ),
+    // },
+    // {
+    //     id: 10,
+    //     type: "scrolly-video",
+    //     title: "Video 2",
+    //     video: {
+    //         start: videoConfig.calculateTextTime(
+    //             "00:35:04",
+    //             videoConfig.compensation
+    //         ),
+    //         end: videoConfig.calculateTextTime(
+    //             "01:17:26",
+    //             videoConfig.compensation
+    //         ),
+    //     },
+    //     content: (
+    //         <span
+    //             style={{
+    //                 position: "absolute",
+    //                 top: "20%",
+    //                 left: "50%",
+    //                 transform: "translateX(-50%)",
+    //                 width: "100%",
+    //             }}
+    //         >
+    //             <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+    //                 Efficiency
+    //             </h1>
+    //             <p
+    //                 style={{
+    //                     lineHeight: "1.1",
+    //                     textAlign: "center",
+    //                     display: "inline-block",
+    //                 }}
+    //             >
+    //                 Optimize your staff work and reduce their burden
+    //             </p>
+    //         </span>
+    //     ),
+    // },
 ];
