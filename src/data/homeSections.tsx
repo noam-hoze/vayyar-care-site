@@ -50,20 +50,38 @@ export const homeSections: HomeSection[] = [
         title: "Product Overview",
         imageSrc: "/images/product.png",
     },
-     {
+    {
         id: 1.6,
-        type: "video",
+        type: "scrolly-video",
         title: "Video 2",
         video: {
-            start: videoConfig.calculateTextTime(
-                "00:35:04",
-                videoConfig.compensation
-            ),
-            end: videoConfig.calculateTextTime(
-                "01:17:26",
-                videoConfig.compensation
-            ),
+            start: "00:11:20",
+            end: "00:19:05",
         },
+        content: (
+            <p
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Efficiency
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Optimize your staff work and reduce their burden
+                </p>
+            </p>
+        ),
     },
     {
         id: 1,
@@ -113,18 +131,42 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 2,
-        type: "video",
+        type: "scrolly-video",
         title: "Video 2",
         video: {
             start: videoConfig.calculateTextTime(
-                "00:35:04",
+                "00:30:04",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "01:17:26",
+                "00:37:26",
                 videoConfig.compensation
             ),
         },
+        content: (
+            <span
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Efficiency
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Optimize your staff work and reduce their burden
+                </p>
+            </span>
+        ),
     },
     {
         id: 3,
@@ -217,18 +259,42 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 4,
-        type: "video",
-        title: "Video 3",
+        type: "scrolly-video",
+        title: "Video 2",
         video: {
             start: videoConfig.calculateTextTime(
-                "01:33:02",
+                "00:35:04",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "02:10:03",
+                "01:17:26",
                 videoConfig.compensation
             ),
         },
+        content: (
+            <span
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Efficiency
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Optimize your staff work and reduce their burden
+                </p>
+            </span>
+        ),
     },
     {
         id: 5,
@@ -280,18 +346,42 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 6,
-        type: "video",
-        title: "Video 3",
+        type: "scrolly-video",
+        title: "Video 2",
         video: {
             start: videoConfig.calculateTextTime(
-                "02:13:07",
+                "00:35:04",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "02:33:03",
+                "01:17:26",
                 videoConfig.compensation
             ),
         },
+        content: (
+            <span
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Efficiency
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Optimize your staff work and reduce their burden
+                </p>
+            </span>
+        ),
     },
     {
         id: 7,
@@ -350,18 +440,42 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 8,
-        type: "video",
-        title: "Video 3",
+        type: "scrolly-video",
+        title: "Video 2",
         video: {
             start: videoConfig.calculateTextTime(
-                "02:33:03",
+                "00:35:04",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "02:58:00",
+                "01:17:26",
                 videoConfig.compensation
             ),
         },
+        content: (
+            <span
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Efficiency
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Optimize your staff work and reduce their burden
+                </p>
+            </span>
+        ),
     },
     {
         id: 9,
@@ -393,17 +507,41 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 10,
-        type: "video",
-        title: "Video 3",
+        type: "scrolly-video",
+        title: "Video 2",
         video: {
             start: videoConfig.calculateTextTime(
-                "02:33:03",
+                "00:35:04",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "02:58:00",
+                "01:17:26",
                 videoConfig.compensation
             ),
         },
+        content: (
+            <span
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Efficiency
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Optimize your staff work and reduce their burden
+                </p>
+            </span>
+        ),
     },
 ];

@@ -32,7 +32,9 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     const [playing, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0); // 0 to 1
     const [videoSrc, setVideoSrc] = useState(
-        section.type === "video" || section.type === "scrolly-video"
+        section.type === "video" ||
+            section.type === "scrolly-video" ||
+            section.type === "scrolly-video-fixed"
             ? defaultConfig.videoSrc.split("?")[0]
             : ""
     );
@@ -51,7 +53,8 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
 
     useEffect(() => {
         if (
-            section.type === "scrolly-video" &&
+            (section.type === "scrolly-video" ||
+                section.type === "scrolly-video-fixed") &&
             scrollyContainerRef.current &&
             scrollyOverlayRef.current
         ) {
@@ -60,10 +63,6 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             ) as HTMLElement[];
             const overlay = scrollyOverlayRef.current;
 
-            // Set paragraphs to be immediately visible (no fade-in animation)
-            gsap.set(paragraphs, { opacity: 1, y: 0 });
-            gsap.set(overlay, { opacity: 0 });
-
             const firstParagraph = (
                 scrollyContainerRef.current as HTMLElement
             )?.querySelector(".scrolly-text p:first-child");
@@ -71,50 +70,90 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 scrollyContainerRef.current as HTMLElement
             )?.querySelector(".scrolly-text");
 
-            // Create overlay with subtle fade in/out
-            const overlayTrigger = ScrollTrigger.create({
-                trigger: firstParagraph, // Target ONLY the first paragraph
-                start: "top bottom", // When first <p> enters viewport
-                onEnter: () => {
-                    gsap.to(overlay, {
-                        opacity: 0.8,
-                        duration: 0.3,
-                        ease: "power2.out",
-                    }); // Quick fade in
-                },
-                onLeave: () => {
-                    gsap.to(overlay, {
-                        opacity: 0,
-                        duration: 0.3,
-                        ease: "power2.out",
-                    }); // Quick fade out
-                },
-                onEnterBack: () => {
-                    gsap.to(overlay, {
-                        opacity: 0.8,
-                        duration: 0.3,
-                        ease: "power2.out",
-                    }); // Quick fade in when scrolling back
-                },
-                onLeaveBack: () => {
-                    gsap.to(overlay, {
-                        opacity: 0,
-                        duration: 0.3,
-                        ease: "power2.out",
-                    }); // Quick fade out when scrolling back up
-                },
-            });
+            if (section.type === "scrolly-video-fixed") {
+                // NEW BEHAVIOR: Fixed text that appears immediately, then scrolls out
 
-            return () => {
-                if (overlayTrigger) {
-                    overlayTrigger.kill();
-                }
-                ScrollTrigger.getAll().forEach((trigger) => {
-                    if (trigger.trigger === scrollyContainerRef.current) {
-                        trigger.kill();
-                    }
+                // Set text to be immediately visible and fixed
+                gsap.set(paragraphs, { opacity: 1, y: 0 });
+                gsap.set(overlay, { opacity: 0 });
+
+                // Text appears immediately when section enters viewport (Apple-style)
+                const showTextTrigger = ScrollTrigger.create({
+                    trigger: scrollyContainerRef.current,
+                    start: "top bottom",
+                    onEnter: () => {
+                        gsap.to(overlay, { opacity: 0.8, duration: 0.3 });
+                    },
+                    onLeaveBack: () => {
+                        gsap.to(overlay, { opacity: 0, duration: 0.3 });
+                    },
                 });
-            };
+
+                // After user has seen the text, start scroll-out animation
+                const scrollOutTrigger = ScrollTrigger.create({
+                    trigger: scrollyContainerRef.current,
+                    start: "top 20%", // Start scroll-out when section is well into view
+                    end: "bottom 20%",
+                    onEnter: () => {
+                        gsap.to(overlay, { opacity: 0, duration: 0.5 });
+                    },
+                    onLeave: () => {
+                        gsap.to(overlay, { opacity: 0, duration: 0.3 });
+                    },
+                    onEnterBack: () => {
+                        gsap.to(overlay, { opacity: 0.8, duration: 0.3 });
+                    },
+                });
+
+                return () => {
+                    showTextTrigger?.kill();
+                    scrollOutTrigger?.kill();
+                };
+            } else {
+                // ORIGINAL BEHAVIOR: Regular scrolly-video
+
+                // Set paragraphs to be immediately visible (no fade-in animation)
+                gsap.set(paragraphs, { opacity: 1, y: 0 });
+                gsap.set(overlay, { opacity: 0 });
+
+                // Create overlay with subtle fade in/out
+                const overlayTrigger = ScrollTrigger.create({
+                    trigger: firstParagraph, // Target ONLY the first paragraph
+                    start: "top 90%", // Text appears much sooner - when top hits 90% down viewport
+                    onEnter: () => {
+                        gsap.to(overlay, {
+                            opacity: 0.8,
+                            duration: 0.3,
+                            ease: "power2.out",
+                        }); // Quick fade in
+                    },
+                    onLeave: () => {
+                        gsap.to(overlay, {
+                            opacity: 0,
+                            duration: 0.3,
+                            ease: "power2.out",
+                        }); // Quick fade out
+                    },
+                    onEnterBack: () => {
+                        gsap.to(overlay, {
+                            opacity: 0.8,
+                            duration: 0.3,
+                            ease: "power2.out",
+                        }); // Quick fade in when scrolling back
+                    },
+                    onLeaveBack: () => {
+                        gsap.to(overlay, {
+                            opacity: 0,
+                            duration: 0.3,
+                            ease: "power2.out",
+                        }); // Quick fade out when scrolling back up
+                    },
+                });
+
+                return () => {
+                    overlayTrigger?.kill();
+                };
+            }
         }
     }, [section.type]);
 
@@ -129,17 +168,25 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
 
     // Only relevant for video sections
     const start =
-        section.type === "video" || section.type === "scrolly-video"
+        section.type === "video" ||
+        section.type === "scrolly-video" ||
+        section.type === "scrolly-video-fixed"
             ? timecodeToSeconds(section.video!.start)
             : 0;
     const end =
-        section.type === "video" || section.type === "scrolly-video"
+        section.type === "video" ||
+        section.type === "scrolly-video" ||
+        section.type === "scrolly-video-fixed"
             ? timecodeToSeconds(section.video!.end)
             : 0;
 
     // Initialize video and ScrollTrigger
     useEffect(() => {
-        if (section.type !== "video" && section.type !== "scrolly-video")
+        if (
+            section.type !== "video" &&
+            section.type !== "scrolly-video" &&
+            section.type !== "scrolly-video-fixed"
+        )
             return;
         const video = videoRef.current;
         if (!video) return;
@@ -179,12 +226,10 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 setPlaying(true);
             },
             onLeave: () => {
-                video.pause();
-                setPlaying(false);
+                // Keep video playing even when scrolling past
             },
             onLeaveBack: () => {
-                video.pause();
-                setPlaying(false);
+                // Keep video playing even when scrolling back up
             },
         });
 
@@ -195,7 +240,11 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
 
     // Restrict playback to [start, end] for video
     useEffect(() => {
-        if (section.type !== "video" && section.type !== "scrolly-video")
+        if (
+            section.type !== "video" &&
+            section.type !== "scrolly-video" &&
+            section.type !== "scrolly-video-fixed"
+        )
             return;
         const video = videoRef.current;
         if (!video) return;
@@ -203,9 +252,8 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         const onTimeUpdate = () => {
             if (video.currentTime < start) video.currentTime = start;
             if (video.currentTime > end) {
-                video.currentTime = end;
-                video.pause();
-                setPlaying(false);
+                video.currentTime = start; // Loop back to start instead of pausing
+                // Keep playing, don't pause
             }
             setProgress((video.currentTime - start) / (end - start));
         };
@@ -322,7 +370,10 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         }
     };
 
-    if (section.type === "scrolly-video") {
+    if (
+        section.type === "scrolly-video" ||
+        section.type === "scrolly-video-fixed"
+    ) {
         return (
             <div
                 id={sectionId}

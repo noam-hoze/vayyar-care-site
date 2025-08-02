@@ -7,6 +7,8 @@ import { useMobileHomeVideo } from "@/components/mobile/MobileHomeVideoContext";
 import { homeSections } from "@/data/homeSections";
 import { scrollToSection as scrollToSectionUtil } from "@/lib/scrollUtils";
 
+const VAYYAR_ORANGE = "#f56300";
+
 // TODO: Type buttonDisplayData properly
 interface NavBarProps {
     buttonDisplayData: Array<Record<string, any>>;
@@ -37,9 +39,7 @@ export default function NavBar({
         }
     }, [buttonDisplayData, hasLastButtonBeenFilled]); // Depend on buttonDisplayData and the latch state
 
-    const bookADemoBackgroundColor = hasLastButtonBeenFilled
-        ? "#FFA500"
-        : "#06aeef"; // Orange or Vayyar Blue
+    const bookADemoBackgroundColor = VAYYAR_ORANGE;
 
     // Original useEffect for scroll percentage - can be removed or commented out
     // useEffect(() => {

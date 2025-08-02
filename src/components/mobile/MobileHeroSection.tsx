@@ -126,13 +126,11 @@ const MobileHeroSection: React.FC = () => {
                     }}
                 >
                     {/* AI-powered healthcare assistant that helps you{" "} */}
-                    <span style={{ fontWeight: 600 }}>
-                        Optimize Staff
-                    </span><br/>
+                    <span style={{ fontWeight: 600 }}>Optimize Staff</span>
+                    <br />
                     {/* scheduling and allocation, while enabling you to{" "} */}
-                    <span style={{ fontWeight: 600 }}>
-                        Transform Care
-                    </span><br/>
+                    <span style={{ fontWeight: 600 }}>Transform Care</span>
+                    <br />
                     {/* delivery through intelligent monitoring and personalized
                     patient insights, ultimately improving{" "} */}
                     <span style={{ fontWeight: 600 }}>
