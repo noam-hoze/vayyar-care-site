@@ -4,6 +4,7 @@ import React from "react";
 import { usePathname } from "next/navigation"; // Import usePathname
 import NavBar from "./navigation"; // Assuming NavBar is in the same directory
 import { homeSections } from "@/data/homeSections";
+import { scrollToSection } from "@/lib/scrollUtils";
 
 // Define props type to accept children
 interface MainLayoutProps {
@@ -86,15 +87,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                                 <button
                                     key={section.title + idx}
                                     onClick={() => {
-                                        const el = document.getElementById(
+                                        scrollToSection(
                                             `section-${section.id}`
                                         );
-                                        if (el) {
-                                            el.scrollIntoView({
-                                                behavior: "smooth",
-                                                block: "start",
-                                            });
-                                        }
                                         setIsMobileMenuOpen(false);
                                     }}
                                     className="w-full py-4 text-2xl font-semibold rounded-full border border-black text-black bg-transparent hover:bg-[#06aeef] hover:text-white transition-all duration-150 relative"

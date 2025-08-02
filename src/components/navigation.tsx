@@ -5,6 +5,7 @@ import ContactModal from "@/components/ContactModal";
 import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
 import { useMobileHomeVideo } from "@/components/mobile/MobileHomeVideoContext";
 import { homeSections } from "@/data/homeSections";
+import { scrollToSection as scrollToSectionUtil } from "@/lib/scrollUtils";
 
 // TODO: Type buttonDisplayData properly
 interface NavBarProps {
@@ -16,16 +17,13 @@ export default function NavBar({
     buttonDisplayData,
     onOpenMobileMenu,
 }: NavBarProps) {
-    const [hasLastButtonBeenFilled, setHasLastButtonBeenFilled] = useState(false);
+    const [hasLastButtonBeenFilled, setHasLastButtonBeenFilled] =
+        useState(false);
     const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
     const { setTheaterMode } = useMobileHomeVideo();
 
     const scrollToSection = (sectionId: string) => {
-        setTheaterMode(false, null);
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: "smooth", block: "start", });
-        }
+        scrollToSectionUtil(sectionId, setTheaterMode);
     };
 
     // Effect to latch the orange state
@@ -81,8 +79,14 @@ export default function NavBar({
     }, [isDemoModalOpen]);
 
     return (
-        <nav className="relative z-50" style={{fontFamily: "Magistral"}}>
-            <div className="w-full h-full absolute" style={{backgroundColor: "rgba(250, 250, 252, 0.8)", backdropFilter: "saturate(1.8) blur(20px)"}}></div>
+        <nav className="relative z-50" style={{ fontFamily: "Magistral" }}>
+            <div
+                className="w-full h-full absolute"
+                style={{
+                    backgroundColor: "rgba(250, 250, 252, 0.8)",
+                    backdropFilter: "saturate(1.8) blur(20px)",
+                }}
+            ></div>
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-7">
                 <div className="flex items-center h-16">
                     <div className="flex-shrink-0">
@@ -133,7 +137,9 @@ export default function NavBar({
                         <button
                             onClick={openContactModal}
                             className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
-                            style={{ backgroundColor: bookADemoBackgroundColor }}
+                            style={{
+                                backgroundColor: bookADemoBackgroundColor,
+                            }}
                         >
                             <span className="inline-block">Book a Demo</span>
                         </button>

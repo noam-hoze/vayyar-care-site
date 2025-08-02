@@ -1,10 +1,23 @@
 import React from "react";
 import { useDemoModal } from "@/contexts/DemoModalContext";
+import { scrollToSection } from "@/lib/scrollUtils";
 
 const VAYYAR_BLUE = "#06aeef";
 
 const MobileHeroSection: React.FC = () => {
     const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
+
+    // Mapping for hero section items to their corresponding sections
+    const heroItemMapping = {
+        "Optimize Staff": "section-1", // Staff Optimization
+        "Transform Care": "section-5", // AI insights
+        "Operational Efficiency": "section-9", // Increase NOI
+    };
+
+    const handleItemClick = (itemName: keyof typeof heroItemMapping) => {
+        scrollToSection(heroItemMapping[itemName]);
+    };
+
     const openContactModal = () => {
         setIsDemoModalOpen(true);
     };
@@ -24,9 +37,9 @@ const MobileHeroSection: React.FC = () => {
                 color: "#fff",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "flex-end",
                 alignItems: "center",
-                padding: 0,
+                paddingBottom: "15vh",
                 marginTop: "calc(var(--spacing) * -16)",
             }}
         >
@@ -35,7 +48,7 @@ const MobileHeroSection: React.FC = () => {
                 loop
                 muted
                 playsInline
-                src="/videos/output_vid_960_new_new.mp4"
+                src="/videos/hero-section.mov"
                 style={{
                     position: "absolute",
                     top: 0,
@@ -48,25 +61,44 @@ const MobileHeroSection: React.FC = () => {
                 }}
             />
             {/* Gradient overlay */}
-            <div
+            {/* <div
                 style={{
                     position: "absolute",
                     inset: 0,
                     background:
-                        "linear-gradient(to bottom, rgba(1,32,64,0.73),rgba(1,32,64,0.43))",
+                        "linear-gradient(to bottom, rgba(1,32,64,0.4),rgba(1,32,64,0.2))",
                     zIndex: 1,
                     pointerEvents: "none",
                 }}
-            />
+            /> */}
             {/* Text content */}
-            <div style={{ position: "relative", zIndex: 2, width: "100%" }}>
+            <div
+                style={{
+                    position: "absolute",
+                    bottom: "5vh",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    zIndex: 2,
+                    width: "98%",
+                    maxWidth: "600px",
+                    textAlign: "center",
+                    color: "#fff",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    paddingTop: "20px",
+                    paddingBottom: "20px",
+                    paddingLeft: "8px",
+                    paddingRight: "8px",
+                    borderRadius: "12px",
+                }}
+            >
                 <h1
                     style={{
-                        fontSize: "clamp(3.2rem, 7vw, 3.2rem)",
+                        fontSize: "clamp(2.8rem, 6.5vw, 3.2rem)",
                         fontWeight: 700,
                         margin: 0,
                         textShadow:
                             "0px 2px 4px rgba(0,0,0,0.5), 0px 4px 12px rgba(0,0,0,0.3)",
+                        lineHeight: 1.1,
                     }}
                 >
                     Vayyar Care
@@ -85,63 +117,108 @@ const MobileHeroSection: React.FC = () => {
                 </h1>
                 <h2
                     style={{
-                        fontSize: "clamp(1.4rem, 4vw, 1.6rem)",
+                        fontSize: "clamp(0.9rem, 3vw, 1.2rem)",
                         fontWeight: 400,
-                        margin: "18px 0 0 0",
+                        margin: "12px 0 0 0",
                         textShadow:
                             "0px 1px 3px rgba(0,0,0,0.6), 0px 3px 8px rgba(0,0,0,0.4)",
                         textAlign: "center",
+                        lineHeight: 1.2,
                     }}
                 >
-                    <ul style={{ listStyle: "none", padding: 0 }}>
-                        <li
-                            style={{
-                                display: "flex",
-                                gap: "0.5em",
-                                marginBottom: "0.5rem",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <span style={{ color: "#05aae9" }}>›</span>
-                            <span>Optimize staff</span>
+                    <ul
+                        style={{
+                            listStyle: "none",
+                            padding: 0,
+                            margin: 0,
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            gap: "clamp(0.5em, 1.8vw, 1em)",
+                            flexWrap: "nowrap",
+                        }}
+                    >
+                        <li>
+                            <button
+                                onClick={() =>
+                                    handleItemClick("Optimize Staff")
+                                }
+                                style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: VAYYAR_BLUE,
+                                    cursor: "pointer",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                    transition: "background-color 0.2s ease",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "rgba(255, 255, 255, 0.1)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "transparent";
+                                }}
+                            >
+                                Optimize Staff
+                            </button>
                         </li>
-                        <li
-                            style={{
-                                display: "flex",
-                                gap: "0.5em",
-                                marginBottom: "0.5rem",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <span style={{ color: "#05aae9" }}>›</span>
-                            <span>Transform Care</span>
+                        <li>
+                            <button
+                                onClick={() =>
+                                    handleItemClick("Transform Care")
+                                }
+                                style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: VAYYAR_BLUE,
+                                    cursor: "pointer",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                    transition: "background-color 0.2s ease",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "rgba(255, 255, 255, 0.1)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "transparent";
+                                }}
+                            >
+                                Transform Care
+                            </button>
                         </li>
-                        <li
-                            style={{
-                                display: "flex",
-                                gap: "0.5em",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <span style={{ color: "#05aae9" }}>›</span>
-                            <span>Operational Efficiency</span>
+                        <li>
+                            <button
+                                onClick={() =>
+                                    handleItemClick("Operational Efficiency")
+                                }
+                                style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: VAYYAR_BLUE,
+                                    cursor: "pointer",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                    transition: "background-color 0.2s ease",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "rgba(255, 255, 255, 0.1)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "transparent";
+                                }}
+                            >
+                                Operational Efficiency
+                            </button>
                         </li>
                     </ul>
                 </h2>
             </div>
-
-            <button
-                onClick={openContactModal}
-                className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
-                style={{
-                    backgroundColor: "#ff7a00",
-                    zIndex: 1,
-                    position: "absolute",
-                    bottom: "200px",
-                }}
-            >
-                <span className="inline-block">Learn more</span>
-            </button>
         </section>
     );
 };

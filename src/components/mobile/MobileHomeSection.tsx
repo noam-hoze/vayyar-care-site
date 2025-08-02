@@ -32,7 +32,9 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     const [playing, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0); // 0 to 1
     const [videoSrc, setVideoSrc] = useState(
-        section.type === "video" ? defaultConfig.videoSrc.split("?")[0] : ""
+        section.type === "video" || section.type === "scrolly-video"
+            ? defaultConfig.videoSrc.split("?")[0]
+            : ""
     );
     const {
         manualOverrideIndex,
@@ -45,14 +47,21 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
     const isActiveVideo = activeVideoId === sectionId;
     const scrollyContainerRef = useRef(null);
+    const scrollyOverlayRef = useRef(null);
 
     useEffect(() => {
-        if (section.type === "scrolly-video" && scrollyContainerRef.current) {
+        if (
+            section.type === "scrolly-video" &&
+            scrollyContainerRef.current &&
+            scrollyOverlayRef.current
+        ) {
             const paragraphs = gsap.utils.toArray(
                 ".scrolly-text p"
             ) as HTMLElement[];
+            const overlay = scrollyOverlayRef.current;
 
             gsap.set(paragraphs, { opacity: 0, y: 20 });
+            gsap.set(overlay, { opacity: 0 });
 
             const tl = gsap.timeline({
                 scrollTrigger: {
@@ -68,7 +77,14 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 y: 0,
                 stagger: 0.5,
                 ease: "power2.out",
-            });
+            }).to(
+                overlay,
+                {
+                    opacity: 0.8,
+                    ease: "power2.inOut",
+                },
+                "<"
+            ); // Animate overlay with text
 
             return () => {
                 if (tl) {
@@ -288,6 +304,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 ref={scrollyContainerRef}
                 className="scrolly-container"
             >
+                <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
                 <div className="scrolly-video">
                     <video
                         ref={videoRef}

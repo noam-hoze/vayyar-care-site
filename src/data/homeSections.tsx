@@ -3,7 +3,7 @@ import { videoConfig } from "@/config/videoConfig";
 
 export interface HomeSection {
     id: number;
-    type: "text" | "video";
+    type: "text" | "video" | "scrolly-video";
     title: string;
     header?: React.ReactNode;
     content?: string | JSX.Element; // for text
@@ -25,7 +25,7 @@ export interface HomeSection {
 export const homeSections: HomeSection[] = [
     {
         id: 0,
-        type: "video",
+        type: "scrolly-video",
         title: "Video 1",
         // Controls the progress bar of the navigation buttons
         video: { start: "00:12:06", end: "00:34:11" },

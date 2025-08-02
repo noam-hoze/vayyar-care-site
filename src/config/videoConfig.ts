@@ -34,7 +34,7 @@ export const defaultConfig = {
     scrubSmoothness: 1,
 
     // Video source path - added timestamp for cache busting
-    videoSrc: `/videos/output_vid_960_new_new.mp4?t=${Date.now()}`,
+    videoSrc: `/videos/output_vid_960_new_new.mov?t=${Date.now()}`,
 
     // Timing configuration for each scene
     // These times should match your video timestamps
