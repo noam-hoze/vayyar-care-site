@@ -24,8 +24,8 @@ export interface HomeSection {
 
 export const homeSections: HomeSection[] = [
     {
-        id: 1,
-        type: "scrolly-video",
+        id: 0,
+        type: "video",
         title: "Video 1",
         // Controls the progress bar of the navigation buttons
         video: { start: "00:12:06", end: "00:34:11" },
@@ -44,7 +44,7 @@ export const homeSections: HomeSection[] = [
         ),
     },
     {
-        id: 0,
+        id: 1,
         type: "text",
         title: "Staff Optimization",
         header: (
@@ -91,6 +91,21 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 2,
+        type: "video",
+        title: "Video 2",
+        video: {
+            start: videoConfig.calculateTextTime(
+                "00:35:04",
+                videoConfig.compensation
+            ),
+            end: videoConfig.calculateTextTime(
+                "01:17:26",
+                videoConfig.compensation
+            ),
+        },
+    },
+    {
+        id: 3,
         type: "text",
         title: "Real-time Alerts",
         header: (
@@ -179,22 +194,22 @@ export const homeSections: HomeSection[] = [
         },
     },
     {
-        id: 3,
+        id: 4,
         type: "video",
-        title: "Video 2",
+        title: "Video 3",
         video: {
             start: videoConfig.calculateTextTime(
-                "00:35:04",
+                "01:33:02",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "01:17:26",
+                "02:10:03",
                 videoConfig.compensation
             ),
         },
     },
     {
-        id: 4,
+        id: 5,
         type: "text",
         title: "AI insights",
         header: (
@@ -242,22 +257,22 @@ export const homeSections: HomeSection[] = [
         },
     },
     {
-        id: 5,
+        id: 6,
         type: "video",
         title: "Video 3",
         video: {
             start: videoConfig.calculateTextTime(
-                "01:33:02",
+                "02:13:07",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "02:10:03",
+                "02:33:03",
                 videoConfig.compensation
             ),
         },
     },
     {
-        id: 6,
+        id: 7,
         type: "text",
         title: "Personalized Care",
         header: (
@@ -312,22 +327,22 @@ export const homeSections: HomeSection[] = [
         },
     },
     {
-        id: 7,
+        id: 8,
         type: "video",
         title: "Video 3",
         video: {
             start: videoConfig.calculateTextTime(
-                "02:13:07",
+                "02:33:03",
                 videoConfig.compensation
             ),
             end: videoConfig.calculateTextTime(
-                "02:33:03",
+                "02:58:00",
                 videoConfig.compensation
             ),
         },
     },
     {
-        id: 8,
+        id: 9,
         type: "text",
         title: "Increase NOI",
         header: (
@@ -355,7 +370,7 @@ export const homeSections: HomeSection[] = [
         ),
     },
     {
-        id: 9,
+        id: 10,
         type: "video",
         title: "Video 3",
         video: {
