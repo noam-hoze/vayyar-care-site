@@ -71,21 +71,37 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 scrollyContainerRef.current as HTMLElement
             )?.querySelector(".scrolly-text");
 
-            // Create immediate toggle overlay - no fade, instant on/off
+            // Create overlay with subtle fade in/out
             const overlayTrigger = ScrollTrigger.create({
                 trigger: firstParagraph, // Target ONLY the first paragraph
                 start: "top bottom", // When first <p> enters viewport
                 onEnter: () => {
-                    gsap.set(overlay, { opacity: 0.8 }); // Immediate dark overlay
+                    gsap.to(overlay, {
+                        opacity: 0.8,
+                        duration: 0.3,
+                        ease: "power2.out",
+                    }); // Quick fade in
                 },
                 onLeave: () => {
-                    gsap.set(overlay, { opacity: 0 }); // Remove overlay when leaving
+                    gsap.to(overlay, {
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out",
+                    }); // Quick fade out
                 },
                 onEnterBack: () => {
-                    gsap.set(overlay, { opacity: 0.8 }); // Show overlay when scrolling back
+                    gsap.to(overlay, {
+                        opacity: 0.8,
+                        duration: 0.3,
+                        ease: "power2.out",
+                    }); // Quick fade in when scrolling back
                 },
                 onLeaveBack: () => {
-                    gsap.set(overlay, { opacity: 0 }); // Remove overlay when scrolling back up
+                    gsap.to(overlay, {
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out",
+                    }); // Quick fade out when scrolling back up
                 },
             });
 
@@ -113,13 +129,18 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
 
     // Only relevant for video sections
     const start =
-        section.type === "video" ? timecodeToSeconds(section.video!.start) : 0;
+        section.type === "video" || section.type === "scrolly-video"
+            ? timecodeToSeconds(section.video!.start)
+            : 0;
     const end =
-        section.type === "video" ? timecodeToSeconds(section.video!.end) : 0;
+        section.type === "video" || section.type === "scrolly-video"
+            ? timecodeToSeconds(section.video!.end)
+            : 0;
 
     // Initialize video and ScrollTrigger
     useEffect(() => {
-        if (section.type !== "video") return;
+        if (section.type !== "video" && section.type !== "scrolly-video")
+            return;
         const video = videoRef.current;
         if (!video) return;
 
@@ -174,7 +195,8 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
 
     // Restrict playback to [start, end] for video
     useEffect(() => {
-        if (section.type !== "video") return;
+        if (section.type !== "video" && section.type !== "scrolly-video")
+            return;
         const video = videoRef.current;
         if (!video) return;
 
@@ -316,10 +338,38 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                         playsInline
                         muted
                         loop
-                        autoPlay
                     />
                 </div>
                 <div className="scrolly-text">{section.content}</div>
+            </div>
+        );
+    }
+
+    if (section.type === "image") {
+        return (
+            <div
+                id={sectionId}
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "60px 20px",
+                    backgroundColor: "#ffffff",
+                    minHeight: "50vh",
+                    scrollMarginTop: "64px",
+                }}
+            >
+                <img
+                    src={section.imageSrc}
+                    alt={section.title}
+                    style={{
+                        maxWidth: "100%",
+                        maxHeight: "80vh",
+                        objectFit: "contain",
+                        borderRadius: "12px",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                    }}
+                />
             </div>
         );
     }
@@ -407,15 +457,18 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                                                 display: "inline-flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
-                                                gap: "8px",
-                                                padding: "12px 24px",
-                                                fontSize: "17px",
+                                                gap: "10px", // Increased from 8px
+                                                padding: "16px 32px", // Increased from 12px 24px
+                                                fontSize: "19px", // Increased from 17px
                                                 fontWeight: "600",
                                                 color: "#fff",
                                                 backgroundColor: "#f56300",
                                                 borderRadius: "9999px",
                                                 border: "none",
                                                 cursor: "pointer",
+                                                boxShadow:
+                                                    "0 4px 12px rgba(245, 99, 0, 0.3)", // Added shadow for more prominence
+                                                transition: "all 0.2s ease",
                                             }}
                                         >
                                             <svg
@@ -502,15 +555,17 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                                 backgroundColor: "#FF7A00", // Changed from #05aae9 to orange #FF7A00
                                 color: "white",
                                 border: "none",
-                                borderRadius: "4px",
-                                padding: "12px 20px",
-                                fontSize: "16px",
+                                borderRadius: "8px",
+                                padding: "16px 28px", // Increased from 12px 20px
+                                fontSize: "18px", // Increased from 16px
                                 fontWeight: "bold",
                                 cursor: "pointer",
                                 alignSelf: "flex-start",
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "8px",
+                                gap: "10px", // Increased from 8px
+                                boxShadow: "0 4px 12px rgba(255, 122, 0, 0.3)", // Added shadow for more prominence
+                                transition: "all 0.2s ease",
                             }}
                         >
                             Learn about {section.buttonText}
@@ -554,6 +609,16 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     muted
                     preload="auto"
                     data-section-video="true"
+                />
+
+                {/* Dark overlay to make buttons more prominent */}
+                <div
+                    className="absolute inset-0 rounded-xl pointer-events-none"
+                    style={{
+                        background:
+                            "linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%)",
+                        zIndex: 1,
+                    }}
                 />
 
                 {/* Exit theater mode button - only show for active video */}

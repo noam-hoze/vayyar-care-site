@@ -61,6 +61,17 @@ const MobileHeroSection: React.FC = () => {
                     pointerEvents: "none",
                 }}
             />
+            {/* Dark overlay to make buttons more prominent */}
+            <div
+                style={{
+                    position: "absolute",
+                    inset: 0,
+                    // background:
+                    //     "linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%)",
+                    zIndex: 1.5,
+                    pointerEvents: "none",
+                }}
+            />
             {/* Gradient overlay */}
             {/* <div
                 style={{
@@ -76,170 +87,59 @@ const MobileHeroSection: React.FC = () => {
             <div
                 style={{
                     position: "absolute",
-                    top: "85%",
+                    top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
                     zIndex: 2,
                     width: "98%",
-                    maxWidth: "600px",
+                    maxWidth: "800px",
                     textAlign: "center",
                     color: "#fff",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
                     paddingTop: "20px",
                     paddingBottom: "20px",
                     paddingLeft: "8px",
                     paddingRight: "8px",
-                    borderRadius: "12px",
                 }}
             >
-                {/* <h1
+                <img
+                    src="/images/vchat-logo.png"
+                    alt="vChat"
                     style={{
-                        fontSize: "clamp(2.8rem, 6.5vw, 3.2rem)",
-                        fontWeight: 700,
-                        margin: 0,
-                        textShadow:
-                            "0px 2px 4px rgba(0,0,0,0.5), 0px 4px 12px rgba(0,0,0,0.3)",
-                        lineHeight: 1.1,
+                        height: "clamp(5rem, 10vw, 6rem)",
+                        margin: "0 auto",
+                        display: "block",
+                        filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.5)) drop-shadow(0px 4px 12px rgba(0,0,0,0.3))",
                     }}
-                >
-                    Vayyar Care
-                    <sup
-                        style={{
-                            fontSize: "0.6em",
-                            top: "-0.5em",
-                            position: "relative",
-                            color: VAYYAR_BLUE,
-                            marginLeft: "0.1em",
-                            zIndex: -1,
-                        }}
-                    >
-                        AI
-                    </sup>
-                </h1> */}
-                <h2
+                />
+                <p
                     style={{
-                        fontSize: "clamp(0.9rem, 3vw, 1.2rem)",
+                        fontSize: "clamp(1.5rem, 2.5vw, 1.1rem)",
                         fontWeight: 400,
-                        margin: "12px 0 0 0",
-                        textShadow:
-                            "0px 1px 3px rgba(0,0,0,0.6), 0px 3px 8px rgba(0,0,0,0.4)",
+                        color: "#fff",
+                        fontFamily: "Inter, sans-serif",
                         textAlign: "center",
-                        lineHeight: 1.2,
+                        margin: 0,
+                        lineHeight: 1.5,
+                        maxWidth: "800px",
+                        textShadow:
+                            "0 0 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.6), 0 0 80px rgba(0,0,0,0.4)",
                     }}
                 >
-                    <ul
-                        style={{
-                            listStyle: "none",
-                            padding: 0,
-                            margin: 0,
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "center",
-                            gap: "clamp(0.5em, 1.8vw, 1em)",
-                            flexWrap: "nowrap",
-                        }}
-                    >
-                        <li>
-                            <button
-                                onClick={() =>
-                                    handleItemClick("Optimize Staff")
-                                }
-                                style={{
-                                    backgroundColor: ORANGE,
-                                    border: "none",
-                                    color: "white",
-                                    cursor: "pointer",
-                                    padding: "8px 16px",
-                                    borderRadius: "20px",
-                                    fontSize: "14px",
-                                    fontWeight: "600",
-                                    transition: "all 0.2s ease",
-                                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                        "#d9540a";
-                                    e.currentTarget.style.transform =
-                                        "translateY(-1px)";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                        ORANGE;
-                                    e.currentTarget.style.transform =
-                                        "translateY(0)";
-                                }}
-                            >
-                                Optimize Staff
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                onClick={() =>
-                                    handleItemClick("Transform Care")
-                                }
-                                style={{
-                                    backgroundColor: ORANGE,
-                                    border: "none",
-                                    color: "white",
-                                    cursor: "pointer",
-                                    padding: "8px 16px",
-                                    borderRadius: "20px",
-                                    fontSize: "14px",
-                                    fontWeight: "600",
-                                    transition: "all 0.2s ease",
-                                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                        "#d9540a";
-                                    e.currentTarget.style.transform =
-                                        "translateY(-1px)";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                        ORANGE;
-                                    e.currentTarget.style.transform =
-                                        "translateY(0)";
-                                }}
-                            >
-                                Transform Care
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                onClick={() =>
-                                    handleItemClick("Operational Efficiency")
-                                }
-                                style={{
-                                    backgroundColor: ORANGE,
-                                    border: "none",
-                                    color: "white",
-                                    cursor: "pointer",
-                                    padding: "8px 16px",
-                                    borderRadius: "20px",
-                                    fontSize: "14px",
-                                    fontWeight: "600",
-                                    transition: "all 0.2s ease",
-                                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                        "#d9540a";
-                                    e.currentTarget.style.transform =
-                                        "translateY(-1px)";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                        ORANGE;
-                                    e.currentTarget.style.transform =
-                                        "translateY(0)";
-                                }}
-                            >
-                                Operational Efficiency
-                            </button>
-                        </li>
-                    </ul>
-                </h2>
+                    {/* AI-powered healthcare assistant that helps you{" "} */}
+                    <span style={{ fontWeight: 600 }}>
+                        Optimize Staff
+                    </span><br/>
+                    {/* scheduling and allocation, while enabling you to{" "} */}
+                    <span style={{ fontWeight: 600 }}>
+                        Transform Care
+                    </span><br/>
+                    {/* delivery through intelligent monitoring and personalized
+                    patient insights, ultimately improving{" "} */}
+                    <span style={{ fontWeight: 600 }}>
+                        Operational Efficiency
+                    </span>{" "}
+                    {/* that reduces costs while enhancing quality of care. */}
+                </p>
             </div>
         </section>
     );

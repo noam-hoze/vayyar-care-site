@@ -39,7 +39,7 @@ export const defaultConfig = {
     // Timing configuration for each scene
     // These times should match your video timestamps
     sceneTiming: [
-        { scene: SCENES.MORNING_SHIFT, videoTime: 0 },
+        { scene: SCENES.MORNING_SHIFT, videoTime: 2 },
         { scene: SCENES.JOHNS_SUMMARY, videoTime: 15 },
         { scene: SCENES.FALL_EVENT, videoTime: 40 },
         { scene: SCENES.DOCUMENT_EVENT, videoTime: 65 },

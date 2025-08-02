@@ -3,10 +3,11 @@ import { videoConfig } from "@/config/videoConfig";
 
 export interface HomeSection {
     id: number;
-    type: "text" | "video" | "scrolly-video";
+    type: "text" | "video" | "scrolly-video" | "image";
     title: string;
     header?: React.ReactNode;
     content?: string | JSX.Element; // for text
+    imageSrc?: string; // for image sections
     video?: {
         start: string;
         end: string;
@@ -28,7 +29,7 @@ export const homeSections: HomeSection[] = [
         type: "scrolly-video",
         title: "Video 1",
         // Controls the progress bar of the navigation buttons
-        video: { start: "00:12:06", end: "00:34:11" },
+        video: { start: "00:04:12", end: "00:09:15" },
         content: (
             <>
                 <p>
@@ -42,6 +43,27 @@ export const homeSections: HomeSection[] = [
                 <p>The era of AI-based care is here</p>
             </>
         ),
+    },
+    {
+        id: 1.5,
+        type: "image",
+        title: "Product Overview",
+        imageSrc: "/images/product.png",
+    },
+     {
+        id: 1.6,
+        type: "video",
+        title: "Video 2",
+        video: {
+            start: videoConfig.calculateTextTime(
+                "00:35:04",
+                videoConfig.compensation
+            ),
+            end: videoConfig.calculateTextTime(
+                "01:17:26",
+                videoConfig.compensation
+            ),
+        },
     },
     {
         id: 1,
