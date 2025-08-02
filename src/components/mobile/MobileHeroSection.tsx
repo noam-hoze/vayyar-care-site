@@ -3,6 +3,7 @@ import { useDemoModal } from "@/contexts/DemoModalContext";
 import { scrollToSection } from "@/lib/scrollUtils";
 
 const VAYYAR_BLUE = "#06aeef";
+const ORANGE = "#f56300";
 
 const MobileHeroSection: React.FC = () => {
     const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
@@ -75,9 +76,9 @@ const MobileHeroSection: React.FC = () => {
             <div
                 style={{
                     position: "absolute",
-                    bottom: "5vh",
+                    top: "85%",
                     left: "50%",
-                    transform: "translateX(-50%)",
+                    transform: "translate(-50%, -50%)",
                     zIndex: 2,
                     width: "98%",
                     maxWidth: "600px",
@@ -91,7 +92,7 @@ const MobileHeroSection: React.FC = () => {
                     borderRadius: "12px",
                 }}
             >
-                <h1
+                {/* <h1
                     style={{
                         fontSize: "clamp(2.8rem, 6.5vw, 3.2rem)",
                         fontWeight: 700,
@@ -114,7 +115,7 @@ const MobileHeroSection: React.FC = () => {
                     >
                         AI
                     </sup>
-                </h1>
+                </h1> */}
                 <h2
                     style={{
                         fontSize: "clamp(0.9rem, 3vw, 1.2rem)",
@@ -144,21 +145,28 @@ const MobileHeroSection: React.FC = () => {
                                     handleItemClick("Optimize Staff")
                                 }
                                 style={{
-                                    background: "none",
+                                    backgroundColor: ORANGE,
                                     border: "none",
-                                    color: VAYYAR_BLUE,
+                                    color: "white",
                                     cursor: "pointer",
-                                    padding: "4px 8px",
-                                    borderRadius: "4px",
-                                    transition: "background-color 0.2s ease",
+                                    padding: "8px 16px",
+                                    borderRadius: "20px",
+                                    fontSize: "14px",
+                                    fontWeight: "600",
+                                    transition: "all 0.2s ease",
+                                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                        "rgba(255, 255, 255, 0.1)";
+                                        "#d9540a";
+                                    e.currentTarget.style.transform =
+                                        "translateY(-1px)";
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                        "transparent";
+                                        ORANGE;
+                                    e.currentTarget.style.transform =
+                                        "translateY(0)";
                                 }}
                             >
                                 Optimize Staff
@@ -170,21 +178,28 @@ const MobileHeroSection: React.FC = () => {
                                     handleItemClick("Transform Care")
                                 }
                                 style={{
-                                    background: "none",
+                                    backgroundColor: ORANGE,
                                     border: "none",
-                                    color: VAYYAR_BLUE,
+                                    color: "white",
                                     cursor: "pointer",
-                                    padding: "4px 8px",
-                                    borderRadius: "4px",
-                                    transition: "background-color 0.2s ease",
+                                    padding: "8px 16px",
+                                    borderRadius: "20px",
+                                    fontSize: "14px",
+                                    fontWeight: "600",
+                                    transition: "all 0.2s ease",
+                                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                        "rgba(255, 255, 255, 0.1)";
+                                        "#d9540a";
+                                    e.currentTarget.style.transform =
+                                        "translateY(-1px)";
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                        "transparent";
+                                        ORANGE;
+                                    e.currentTarget.style.transform =
+                                        "translateY(0)";
                                 }}
                             >
                                 Transform Care
@@ -196,21 +211,28 @@ const MobileHeroSection: React.FC = () => {
                                     handleItemClick("Operational Efficiency")
                                 }
                                 style={{
-                                    background: "none",
+                                    backgroundColor: ORANGE,
                                     border: "none",
-                                    color: VAYYAR_BLUE,
+                                    color: "white",
                                     cursor: "pointer",
-                                    padding: "4px 8px",
-                                    borderRadius: "4px",
-                                    transition: "background-color 0.2s ease",
+                                    padding: "8px 16px",
+                                    borderRadius: "20px",
+                                    fontSize: "14px",
+                                    fontWeight: "600",
+                                    transition: "all 0.2s ease",
+                                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                        "rgba(255, 255, 255, 0.1)";
+                                        "#d9540a";
+                                    e.currentTarget.style.transform =
+                                        "translateY(-1px)";
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                        "transparent";
+                                        ORANGE;
+                                    e.currentTarget.style.transform =
+                                        "translateY(0)";
                                 }}
                             >
                                 Operational Efficiency

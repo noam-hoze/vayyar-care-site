@@ -60,35 +60,38 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             ) as HTMLElement[];
             const overlay = scrollyOverlayRef.current;
 
-            gsap.set(paragraphs, { opacity: 0, y: 20 });
+            // Set paragraphs to be immediately visible (no fade-in animation)
+            gsap.set(paragraphs, { opacity: 1, y: 0 });
             gsap.set(overlay, { opacity: 0 });
 
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: scrollyContainerRef.current,
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: true,
+            const firstParagraph = (
+                scrollyContainerRef.current as HTMLElement
+            )?.querySelector(".scrolly-text p:first-child");
+            const textContainer = (
+                scrollyContainerRef.current as HTMLElement
+            )?.querySelector(".scrolly-text");
+
+            // Create immediate toggle overlay - no fade, instant on/off
+            const overlayTrigger = ScrollTrigger.create({
+                trigger: firstParagraph, // Target ONLY the first paragraph
+                start: "top bottom", // When first <p> enters viewport
+                onEnter: () => {
+                    gsap.set(overlay, { opacity: 0.8 }); // Immediate dark overlay
+                },
+                onLeave: () => {
+                    gsap.set(overlay, { opacity: 0 }); // Remove overlay when leaving
+                },
+                onEnterBack: () => {
+                    gsap.set(overlay, { opacity: 0.8 }); // Show overlay when scrolling back
+                },
+                onLeaveBack: () => {
+                    gsap.set(overlay, { opacity: 0 }); // Remove overlay when scrolling back up
                 },
             });
 
-            tl.to(paragraphs, {
-                opacity: 1,
-                y: 0,
-                stagger: 0.5,
-                ease: "power2.out",
-            }).to(
-                overlay,
-                {
-                    opacity: 0.8,
-                    ease: "power2.inOut",
-                },
-                "<"
-            ); // Animate overlay with text
-
             return () => {
-                if (tl) {
-                    tl.kill();
+                if (overlayTrigger) {
+                    overlayTrigger.kill();
                 }
                 ScrollTrigger.getAll().forEach((trigger) => {
                     if (trigger.trigger === scrollyContainerRef.current) {

@@ -32,14 +32,14 @@ export const homeSections: HomeSection[] = [
         content: (
             <>
                 <p>
-                    Vayyar's technology records the daily life of your residents
+                    Vayyar's technology records the daily life of your residents{" "}
                     without camera or sound
                 </p>
                 <p>
                     So you can improve the care you provide while increasing
                     your NOI and your staff's efficiency
                 </p>
-                <p>The Era of AI-based care is here</p>
+                <p>The era of AI-based care is here</p>
             </>
         ),
     },
