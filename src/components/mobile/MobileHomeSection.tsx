@@ -212,24 +212,26 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             start: "top 80%",
             end: "bottom 20%",
             onEnter: () => {
-                if (video.currentTime >= end - 0.01) {
-                    video.currentTime = start;
-                }
+                // Always restart from beginning when entering viewport
+                video.currentTime = start;
                 video.play();
                 setPlaying(true);
             },
             onEnterBack: () => {
-                if (video.currentTime >= end - 0.01) {
-                    video.currentTime = start;
-                }
+                // Always restart from beginning when entering viewport
+                video.currentTime = start;
                 video.play();
                 setPlaying(true);
             },
             onLeave: () => {
-                // Keep video playing even when scrolling past
+                // Pause video when leaving viewport so it can restart fresh
+                video.pause();
+                setPlaying(false);
             },
             onLeaveBack: () => {
-                // Keep video playing even when scrolling back up
+                // Pause video when leaving viewport so it can restart fresh
+                video.pause();
+                setPlaying(false);
             },
         });
 
