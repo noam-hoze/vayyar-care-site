@@ -144,7 +144,7 @@ export const homeSections: HomeSection[] = [
             ),
         },
         content: (
-            <span
+            <p
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -154,7 +154,7 @@ export const homeSections: HomeSection[] = [
                 }}
             >
                 <h1 style={{ fontSize: "25px", textAlign: "center" }}>
-                    Efficiency
+                    Real-time Alerts
                 </h1>
                 <p
                     style={{
@@ -163,13 +163,57 @@ export const homeSections: HomeSection[] = [
                         display: "inline-block",
                     }}
                 >
-                    Optimize your staff work and reduce their burden
+                    Alert your staff as things happen
                 </p>
-            </span>
+            </p>
         ),
     },
     {
         id: 3,
+        type: "text",
+        title: "Staff Optimization",
+        header: (
+            <>
+                Real-time Alerts.
+            </>
+        ),
+        buttonText: "Staff optimization",
+        scrollToTimeValue: "00:12:25",
+        content: (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Use predictive insights to address potential patient
+                        complications
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>Reduce Administrative tasks</span>
+                </li>
+                <li style={{ display: "flex", gap: "0.5em" }}>
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>Improved Operational Efficiencies</span>
+                </li>
+            </ul>
+        ),
+        text: { start: 5, end: 11 },
+    },
+    {
+        id: 3.5,
         type: "text",
         title: "Real-time Alerts",
         header: (
