@@ -3,11 +3,18 @@ import { videoConfig } from "@/config/videoConfig";
 
 export interface HomeSection {
     id: number;
-    type: "text" | "video" | "scrolly-video" | "image";
+    type:
+        | "text"
+        | "video"
+        | "scrolly-video"
+        | "scrolly-video-fixed"
+        | "scroll-scrub-video"
+        | "image";
     title: string;
     header?: React.ReactNode;
     content?: string | JSX.Element; // for text
     imageSrc?: string; // for image sections
+    videoSrc?: string; // for custom video source
     video?: {
         start: string;
         end: string;
@@ -46,9 +53,9 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 1.5,
-        type: "image",
+        type: "scroll-scrub-video",
         title: "Product Overview",
-        imageSrc: "/images/product.png",
+        videoSrc: "/videos/product-new.mp4",
     },
     {
         id: 1.6,
@@ -364,7 +371,8 @@ export const homeSections: HomeSection[] = [
                         display: "inline-block",
                     }}
                 >
-                    Stay ahead with cutting-edge AI insights from our sensors and an array of smart data 
+                    Stay ahead with cutting-edge AI insights from our sensors
+                    and an array of smart data
                 </p>
             </p>
         ),
@@ -445,7 +453,8 @@ export const homeSections: HomeSection[] = [
                         display: "inline-block",
                     }}
                 >
-                    Experience the power of immediate, accurate insights for truly personalized care. 
+                    Experience the power of immediate, accurate insights for
+                    truly personalized care.
                 </p>
             </p>
         ),
@@ -533,7 +542,8 @@ export const homeSections: HomeSection[] = [
                         display: "inline-block",
                     }}
                 >
-                    Boost your NOI and maximize returns through trusted, data-driven care plans.
+                    Boost your NOI and maximize returns through trusted,
+                    data-driven care plans.
                 </p>
             </p>
         ),

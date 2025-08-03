@@ -34,8 +34,9 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     const [videoSrc, setVideoSrc] = useState(
         section.type === "video" ||
             section.type === "scrolly-video" ||
-            section.type === "scrolly-video-fixed"
-            ? defaultConfig.videoSrc.split("?")[0]
+            section.type === "scrolly-video-fixed" ||
+            section.type === "scroll-scrub-video"
+            ? section.videoSrc || defaultConfig.videoSrc.split("?")[0]
             : ""
     );
     const {
@@ -185,7 +186,8 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         if (
             section.type !== "video" &&
             section.type !== "scrolly-video" &&
-            section.type !== "scrolly-video-fixed"
+            section.type !== "scrolly-video-fixed" &&
+            section.type !== "scroll-scrub-video"
         )
             return;
         const video = videoRef.current;
@@ -206,35 +208,65 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
 
         initializeVideo();
 
-        // Create ScrollTrigger
-        scrollTriggerRef.current = ScrollTrigger.create({
-            trigger: video,
-            start: "top 80%",
-            end:
-                section.type === "scrolly-video" ? "bottom -20%" : "bottom 20%",
-            onEnter: () => {
-                // Always restart from beginning when entering viewport
-                video.currentTime = start;
-                video.play();
-                setPlaying(true);
-            },
-            onEnterBack: () => {
-                // Always restart from beginning when entering viewport
-                video.currentTime = start;
-                video.play();
-                setPlaying(true);
-            },
-            onLeave: () => {
-                // Pause video when leaving viewport so it can restart fresh
-                video.pause();
-                setPlaying(false);
-            },
-            onLeaveBack: () => {
-                // Pause video when leaving viewport so it can restart fresh
-                video.pause();
-                setPlaying(false);
-            },
-        });
+        // Handle scroll-scrub-video differently
+        if (section.type === "scroll-scrub-video") {
+            const videoContainer = video.parentElement;
+            if (videoContainer) {
+                // Calculate pin distance based on video duration (e.g., 1 second of video = 1 viewport height of scroll)
+                const videoDurationMultiplier = video.duration || 9; // Default to 9 seconds for our product video
+                const pinDistance = Math.max(
+                    videoDurationMultiplier * 100,
+                    window.innerHeight
+                ); // At least 1 viewport height
+
+                scrollTriggerRef.current = ScrollTrigger.create({
+                    trigger: videoContainer,
+                    start: "top top", // When video reaches top of viewport
+                    end: `+=${pinDistance}`, // Pin distance based on video duration
+                    pin: videoContainer, // Pin the video container
+                    scrub: 1, // Smooth scrubbing
+                    onUpdate: (self) => {
+                        if (video.duration) {
+                            // Map scroll progress through the pinned section to video duration
+                            const targetTime = self.progress * video.duration;
+                            video.currentTime = targetTime;
+                        }
+                    },
+                });
+            }
+        } else {
+            // Original behavior for other video types
+            scrollTriggerRef.current = ScrollTrigger.create({
+                trigger: video,
+                start: "top 80%",
+                end:
+                    section.type === "scrolly-video"
+                        ? "bottom -20%"
+                        : "bottom 20%",
+                onEnter: () => {
+                    // Always restart from beginning when entering viewport
+                    video.currentTime = start;
+                    video.play();
+                    setPlaying(true);
+                },
+                onEnterBack: () => {
+                    // Always restart from beginning when entering viewport
+                    video.currentTime = start;
+                    video.play();
+                    setPlaying(true);
+                },
+                onLeave: () => {
+                    // Pause video when leaving viewport so it can restart fresh
+                    video.pause();
+                    setPlaying(false);
+                },
+                onLeaveBack: () => {
+                    // Pause video when leaving viewport so it can restart fresh
+                    video.pause();
+                    setPlaying(false);
+                },
+            });
+        }
 
         return () => {
             scrollTriggerRef.current?.kill();
@@ -395,6 +427,35 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     />
                 </div>
                 <div className="scrolly-text">{section.content}</div>
+            </div>
+        );
+    }
+
+    if (section.type === "scroll-scrub-video") {
+        return (
+            <div
+                id={sectionId}
+                style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "100vh",
+                    backgroundColor: "#ffffff",
+                    scrollMarginTop: "64px",
+                    overflow: "hidden",
+                }}
+            >
+                <video
+                    ref={videoRef}
+                    src={videoSrc || section.videoSrc}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                    }}
+                    playsInline
+                    muted
+                    preload="auto"
+                />
             </div>
         );
     }
