@@ -210,7 +210,8 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         scrollTriggerRef.current = ScrollTrigger.create({
             trigger: video,
             start: "top 80%",
-            end: "bottom 20%",
+            end:
+                section.type === "scrolly-video" ? "bottom -20%" : "bottom 20%",
             onEnter: () => {
                 // Always restart from beginning when entering viewport
                 video.currentTime = start;
@@ -403,24 +404,21 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             <div
                 id={sectionId}
                 style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "60px 20px",
+                    position: "relative",
+                    width: "100%",
+                    height: "100vh",
                     backgroundColor: "#ffffff",
-                    minHeight: "50vh",
                     scrollMarginTop: "64px",
+                    overflow: "hidden",
                 }}
             >
                 <img
                     src={section.imageSrc}
                     alt={section.title}
                     style={{
-                        maxWidth: "100%",
-                        maxHeight: "80vh",
-                        objectFit: "contain",
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
                     }}
                 />
             </div>
