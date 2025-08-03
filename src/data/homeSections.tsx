@@ -53,9 +53,9 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 1.5,
-        type: "scroll-scrub-video",
+        type: "image",
         title: "Product Overview",
-        videoSrc: "/videos/product-new.mp4",
+        imageSrc: "/images/apple-product.png",
     },
     {
         id: 1.6,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { useDemoModal } from "@/contexts/DemoModalContext";
 import { scrollToSection } from "@/lib/scrollUtils";
 
@@ -6,55 +6,13 @@ const VAYYAR_BLUE = "#06aeef";
 const ORANGE = "#f56300";
 
 const MobileHeroSection: React.FC = () => {
-    const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
-    const [hasSeenHero, setHasSeenHero] = useState(false);
-    const heroSectionRef = useRef<HTMLElement>(null);
-
-    // Mapping for hero section items to their corresponding sections
-    const heroItemMapping = {
-        "Optimize Staff": "section-1", // Staff Optimization
-        "Transform Care": "section-5", // AI insights
-        "Operational Efficiency": "section-9", // Increase NOI
-    };
-
-    const handleItemClick = (itemName: keyof typeof heroItemMapping) => {
-        scrollToSection(heroItemMapping[itemName]);
-    };
-
+    const { setIsDemoModalOpen } = useDemoModal();
     const openContactModal = () => {
         setIsDemoModalOpen(true);
     };
-    const handleContactModalClose = () => {
-        setIsDemoModalOpen(false);
-    };
-
-    // Track when user has passed through the hero section
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                // When hero section leaves viewport from the top (user scrolled past it)
-                if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-                    setHasSeenHero(true);
-                }
-            },
-            { threshold: 0, rootMargin: "-10px 0px 0px 0px" } // Trigger slightly after leaving
-        );
-
-        if (heroSectionRef.current) {
-            observer.observe(heroSectionRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, []);
-
-    // Determine which video to show
-    const videoSrc = hasSeenHero
-        ? "/videos/hero-section-relaxed.mp4"
-        : "/videos/hero-section.mp4";
 
     return (
         <section
-            ref={heroSectionRef}
             style={{
                 width: "100%",
                 height: "100vh",
@@ -72,13 +30,9 @@ const MobileHeroSection: React.FC = () => {
                 marginTop: "calc(var(--spacing) * -16)",
             }}
         >
-            <video
-                key={videoSrc} // Force re-mount when video changes
-                autoPlay
-                loop
-                muted
-                playsInline
-                src={videoSrc}
+            <img
+                src="/images/apple-hero-section.png"
+                alt="VayyarCare hero image"
                 style={{
                     position: "absolute",
                     top: 0,
