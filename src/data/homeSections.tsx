@@ -61,10 +61,7 @@ export const homeSections: HomeSection[] = [
         id: 1.6,
         type: "scrolly-video",
         title: "Video 2",
-        video: {
-            start: "00:11:20",
-            end: "00:19:05",
-        },
+        videoSrc: "/videos/optimize-staff.mp4",
         content: (
             <p
                 style={{
@@ -140,16 +137,7 @@ export const homeSections: HomeSection[] = [
         id: 2,
         type: "scrolly-video",
         title: "Video 2",
-        video: {
-            start: videoConfig.calculateTextTime(
-                "00:30:04",
-                videoConfig.compensation
-            ),
-            end: videoConfig.calculateTextTime(
-                "00:37:26",
-                videoConfig.compensation
-            ),
-        },
+        videoSrc: "/videos/real-time-alerts.mp4",
         content: (
             <p
                 style={{
@@ -225,10 +213,7 @@ export const homeSections: HomeSection[] = [
         id: 3.2,
         type: "scrolly-video",
         title: "Video 2",
-        video: {
-            start: "00:50:04",
-            end: "01:10:26",
-        },
+        videoSrc: "/videos/privacy.mp4",
         content: (
             <p
                 style={{
@@ -347,10 +332,7 @@ export const homeSections: HomeSection[] = [
         id: 4,
         type: "scrolly-video",
         title: "Video 2",
-        video: {
-            start: "01:20:04",
-            end: "01:47:26",
-        },
+        videoSrc: "/videos/ai-insights.mp4",
         content: (
             <p
                 style={{
@@ -429,10 +411,7 @@ export const homeSections: HomeSection[] = [
         id: 6,
         type: "scrolly-video",
         title: "Video 2",
-        video: {
-            start: "01:57:04",
-            end: "02:40:26",
-        },
+        videoSrc: "videos/personalize-care.mp4",
         content: (
             <p
                 style={{
@@ -518,10 +497,7 @@ export const homeSections: HomeSection[] = [
         id: 8,
         type: "scrolly-video",
         title: "Video 2",
-        video: {
-            start: "02:45:04",
-            end: "03:02:26",
-        },
+        videoSrc: "videos/increase-noi.mp4",
         content: (
             <p
                 style={{

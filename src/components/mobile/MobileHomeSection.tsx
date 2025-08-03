@@ -172,13 +172,17 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         section.type === "video" ||
         section.type === "scrolly-video" ||
         section.type === "scrolly-video-fixed"
-            ? timecodeToSeconds(section.video!.start)
+            ? section.video
+                ? timecodeToSeconds(section.video.start)
+                : 0
             : 0;
     const end =
         section.type === "video" ||
         section.type === "scrolly-video" ||
         section.type === "scrolly-video-fixed"
-            ? timecodeToSeconds(section.video!.end)
+            ? section.video
+                ? timecodeToSeconds(section.video.end)
+                : 0
             : 0;
 
     // Initialize video and ScrollTrigger
@@ -197,8 +201,12 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             try {
                 // Load the video
                 await video.load();
-                // Set initial time
-                video.currentTime = start;
+                // Set initial time only if timing is specified
+                if (end > 0) {
+                    video.currentTime = start;
+                } else {
+                    video.currentTime = 0; // Start from beginning for videos without timing
+                }
                 // Pause the video
                 video.pause();
             } catch (error) {
@@ -244,26 +252,29 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                         ? "bottom -20%"
                         : "bottom 20%",
                 onEnter: () => {
-                    // Always restart from beginning when entering viewport
-                    video.currentTime = start;
+                    // Restart from beginning when entering from top (scrolling down)
+                    video.currentTime = end > 0 ? start : 0;
                     video.play();
                     setPlaying(true);
                 },
                 onEnterBack: () => {
-                    // Always restart from beginning when entering viewport
-                    video.currentTime = start;
+                    // Just play from current position when entering from bottom (scrolling up)
                     video.play();
                     setPlaying(true);
                 },
                 onLeave: () => {
-                    // Pause video when leaving viewport so it can restart fresh
-                    video.pause();
-                    setPlaying(false);
+                    // Only pause regular video sections, let scrolly-video continue looping
+                    if (section.type === "video") {
+                        video.pause();
+                        setPlaying(false);
+                    }
                 },
                 onLeaveBack: () => {
-                    // Pause video when leaving viewport so it can restart fresh
-                    video.pause();
-                    setPlaying(false);
+                    // Only pause regular video sections, let scrolly-video continue looping
+                    if (section.type === "video") {
+                        video.pause();
+                        setPlaying(false);
+                    }
                 },
             });
         }
@@ -285,12 +296,18 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         if (!video) return;
 
         const onTimeUpdate = () => {
-            if (video.currentTime < start) video.currentTime = start;
-            if (video.currentTime > end) {
-                video.currentTime = start; // Loop back to start instead of pausing
-                // Keep playing, don't pause
+            // Only apply timing restrictions if both start and end are specified
+            if (end > 0) {
+                if (video.currentTime < start) video.currentTime = start;
+                if (video.currentTime > end) {
+                    video.currentTime = start; // Loop back to start instead of pausing
+                    // Keep playing, don't pause
+                }
+                setProgress((video.currentTime - start) / (end - start));
+            } else {
+                // For videos without timing restrictions, show natural progress
+                setProgress(video.currentTime / (video.duration || 1));
             }
-            setProgress((video.currentTime - start) / (end - start));
         };
 
         video.addEventListener("timeupdate", onTimeUpdate);
@@ -311,8 +328,13 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             }
         } else {
             requestPlay(index, { manual: true });
-            if (video.currentTime >= end - 0.01) {
+            if (end > 0 && video.currentTime >= end - 0.01) {
                 video.currentTime = start;
+            } else if (
+                end === 0 &&
+                video.currentTime >= (video.duration || 0) - 0.01
+            ) {
+                video.currentTime = 0; // Restart from beginning for videos without timing
             }
             video.play();
             setPlaying(true);
@@ -419,7 +441,11 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 <div className="scrolly-video">
                     <video
                         ref={videoRef}
-                        src={videoSrc || defaultConfig.videoSrc.split("?")[0]}
+                        src={
+                            videoSrc ||
+                            section.videoSrc ||
+                            defaultConfig.videoSrc.split("?")[0]
+                        }
                         className="w-full h-full object-cover"
                         playsInline
                         muted
