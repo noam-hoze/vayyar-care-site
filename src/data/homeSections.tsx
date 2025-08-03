@@ -28,6 +28,8 @@ export interface HomeSection {
     // This is a timecode that indicate where
     // the orange button will scroll to
     scrollToTimeValue?: string;
+    // Override where navigation button should scroll to
+    redirectTo?: string;
 }
 
 export const homeSections: HomeSection[] = [
@@ -91,6 +93,7 @@ export const homeSections: HomeSection[] = [
         id: 1,
         type: "text",
         title: "Staff Optimization",
+        redirectTo: "section-1.6",
         header: (
             <>
                 <span style={{ color: "#05aae9" }}></span>Do More With Less.
@@ -167,6 +170,7 @@ export const homeSections: HomeSection[] = [
         id: 3,
         type: "text",
         title: "Real-time Alerts",
+        redirectTo: "section-2",
         header: <>Real-time Alerts.</>,
         buttonText: "Real-time Alerts",
         scrollToTimeValue: "00:12:25",
@@ -243,6 +247,7 @@ export const homeSections: HomeSection[] = [
         id: 3.5,
         type: "text",
         title: "Privacy",
+        redirectTo: "section-3.2",
         header: (
             <>
                 <span
@@ -363,6 +368,7 @@ export const homeSections: HomeSection[] = [
         id: 5,
         type: "text",
         title: "AI insights",
+        redirectTo: "section-4",
         header: (
             <>
                 <span style={{ color: "#05aae9" }}>Actionable</span> insights.
@@ -442,6 +448,7 @@ export const homeSections: HomeSection[] = [
         id: 7,
         type: "text",
         title: "Personalized Care",
+        redirectTo: "section-6",
         header: (
             <>
                 The <span style={{ color: "#05aae9" }}>right</span> strategy.{" "}

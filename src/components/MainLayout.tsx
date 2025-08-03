@@ -53,7 +53,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         .filter((section) => section.type === "text")
         .map((section) => ({
             name: section.title,
-            id: `section-${section.id}`,
+            id: section.redirectTo || `section-${section.id}`,
             progress: sectionProgress[`section-${section.id}`] || 0,
         }));
 
