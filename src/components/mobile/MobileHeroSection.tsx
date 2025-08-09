@@ -48,9 +48,7 @@ const MobileHeroSection: React.FC = () => {
     }, []);
 
     // Determine which video to show
-    const videoSrc = hasSeenHero
-        ? "/videos/hero-section-relaxed.mp4"
-        : "/videos/hero-section.mp4";
+    const videoSrc = "/videos/hero-section.mp4";
 
     return (
         <section
@@ -75,7 +73,6 @@ const MobileHeroSection: React.FC = () => {
             <video
                 key={videoSrc} // Force re-mount when video changes
                 autoPlay
-                loop
                 muted
                 playsInline
                 src={videoSrc}

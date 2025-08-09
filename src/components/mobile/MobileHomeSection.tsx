@@ -31,6 +31,8 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     const overlayRef = useRef<HTMLDivElement>(null);
     const [playing, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0); // 0 to 1
+    const [hasSeenVideo, setHasSeenVideo] = useState(false);
+    const [showImage, setShowImage] = useState(false);
     const [videoSrc, setVideoSrc] = useState(
         section.type === "video" ||
             section.type === "scrolly-video" ||
@@ -204,8 +206,10 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 // Set initial time only if timing is specified
                 if (end > 0) {
                     video.currentTime = start;
+                } else if (section.type === "scroll-scrub-video") {
+                    video.currentTime = 2.6; // Start from 2.6 seconds for scroll-scrub-video
                 } else {
-                    video.currentTime = 0; // Start from beginning for videos without timing
+                    video.currentTime = 0; // Start from beginning for other videos
                 }
                 // Pause the video
                 video.pause();
@@ -235,8 +239,12 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     scrub: 1, // Smooth scrubbing
                     onUpdate: (self) => {
                         if (video.duration) {
-                            // Map scroll progress through the pinned section to video duration
-                            const targetTime = self.progress * video.duration;
+                            // Start from 2 seconds and map scroll progress through the remaining duration
+                            const startTime = 2.6; // Start from 2.6 seconds
+                            const availableDuration =
+                                video.duration - startTime;
+                            const targetTime =
+                                startTime + self.progress * availableDuration;
                             video.currentTime = targetTime;
                         }
                     },
@@ -283,6 +291,29 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             scrollTriggerRef.current?.kill();
         };
     }, [section.type, start, end]);
+
+    // Replace video with image when scrub reaches 90%
+    useEffect(() => {
+        if (section.type === "scroll-scrub-video") {
+            const video = videoRef.current;
+            if (!video) return;
+
+            const handleTimeUpdate = () => {
+                // When video scrub reaches 100%, replace with image
+                if (
+                    video.duration &&
+                    video.currentTime / video.duration >= 1.0
+                ) {
+                    console.log("Video reached 100%, replacing with image");
+                    setShowImage(true);
+                }
+            };
+
+            video.addEventListener("timeupdate", handleTimeUpdate);
+            return () =>
+                video.removeEventListener("timeupdate", handleTimeUpdate);
+        }
+    }, [section.id, section.type]);
 
     // Restrict playback to [start, end] for video
     useEffect(() => {
@@ -470,18 +501,31 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     overflow: "hidden",
                 }}
             >
-                <video
-                    ref={videoRef}
-                    src={videoSrc || section.videoSrc}
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                    }}
-                    playsInline
-                    muted
-                    preload="auto"
-                />
+                {/* Conditional rendering: show image if scrub reached 90% */}
+                {showImage ? (
+                    <img
+                        src="/images/product.png"
+                        alt="Product overview"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                        }}
+                    />
+                ) : (
+                    <video
+                        ref={videoRef}
+                        src={videoSrc || section.videoSrc}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                        }}
+                        playsInline
+                        muted
+                        preload="auto"
+                    />
+                )}
             </div>
         );
     }
@@ -734,20 +778,34 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             {/* Theater mode overlay is now a global component, removed from individual sections */}
 
             <div className="relative">
-                <video
-                    ref={videoRef}
-                    src={videoSrc}
-                    className={`w-full rounded-xl bg-black ${
-                        isActiveVideo && theaterMode
-                            ? "theater-mode-current-video"
-                            : ""
-                    }`}
-                    controls={false}
-                    playsInline
-                    muted
-                    preload="auto"
-                    data-section-video="true"
-                />
+                {/* Conditional rendering: show image if it's the product video and user has scrolled away */}
+                {showImage ? (
+                    <img
+                        src="/images/product.png"
+                        alt="Product overview"
+                        className={`w-full rounded-xl bg-black ${
+                            isActiveVideo && theaterMode
+                                ? "theater-mode-current-video"
+                                : ""
+                        }`}
+                        style={{ objectFit: "cover", aspectRatio: "16/9" }}
+                    />
+                ) : (
+                    <video
+                        ref={videoRef}
+                        src={videoSrc}
+                        className={`w-full rounded-xl bg-black ${
+                            isActiveVideo && theaterMode
+                                ? "theater-mode-current-video"
+                                : ""
+                        }`}
+                        controls={false}
+                        playsInline
+                        muted
+                        preload="auto"
+                        data-section-video="true"
+                    />
+                )}
 
                 {/* Dark overlay to make buttons more prominent */}
                 <div
