@@ -53,6 +53,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     const isActiveVideo = activeVideoId === sectionId;
     const scrollyContainerRef = useRef(null);
     const scrollyOverlayRef = useRef(null);
+    const hasSwappedSrc = useRef(false);
 
     useEffect(() => {
         if (
@@ -292,20 +293,18 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         };
     }, [section.type, start, end]);
 
-    // Replace video with image when scrub reaches 90%
+    // Swap video source when scrub reaches 90% (keep video, no image)
     useEffect(() => {
         if (section.type === "scroll-scrub-video") {
             const video = videoRef.current;
             if (!video) return;
 
             const handleTimeUpdate = () => {
-                // When video scrub reaches 100%, replace with image
-                if (
-                    video.duration &&
-                    video.currentTime / video.duration >= 1.0
-                ) {
-                    console.log("Video reached 100%, replacing with image");
-                    setShowImage(true);
+                if (!video.duration) return;
+                const progressRatio = video.currentTime / video.duration;
+                if (progressRatio >= 0.9 && !hasSwappedSrc.current) {
+                    hasSwappedSrc.current = true;
+                    setVideoSrc("/videos/just-product.mp4");
                 }
             };
 
@@ -501,31 +500,18 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     overflow: "hidden",
                 }}
             >
-                {/* Conditional rendering: show image if scrub reached 90% */}
-                {showImage ? (
-                    <img
-                        src="/images/product.png"
-                        alt="Product overview"
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                        }}
-                    />
-                ) : (
-                    <video
-                        ref={videoRef}
-                        src={videoSrc || section.videoSrc}
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                        }}
-                        playsInline
-                        muted
-                        preload="auto"
-                    />
-                )}
+                <video
+                    ref={videoRef}
+                    src={videoSrc || section.videoSrc}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                    }}
+                    playsInline
+                    muted
+                    preload="auto"
+                />
             </div>
         );
     }
