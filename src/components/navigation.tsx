@@ -65,8 +65,12 @@ export default function NavBar({
     //     return () => window.removeEventListener("scroll", handleScroll);
     // }, []);
 
-    const openContactModal = () => {
-        setIsDemoModalOpen(true);
+    const handleBookADemo = () => {
+        // Smooth, Apple-like scroll to the contact form section
+        scrollToSectionUtil("contact-section", setTheaterMode, {
+            durationMs: 1000,
+            offsetPx: 0,
+        });
     };
     const handleContactModalClose = () => {
         setIsDemoModalOpen(false);
@@ -135,7 +139,7 @@ export default function NavBar({
                     {/* Book a Demo always visible */}
                     <div className="flex-shrink-0 ml-2">
                         <button
-                            onClick={openContactModal}
+                            onClick={handleBookADemo}
                             className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
                             style={{
                                 backgroundColor: bookADemoBackgroundColor,
