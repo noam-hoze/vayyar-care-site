@@ -8,13 +8,13 @@
     opacity: 0;
   }
   to {
-    opacity: 0.9; /* Increased opacity to better hide other elements */
+    opacity: 0.7; /* Slightly lighter overlay */
   }
 }
 
 @keyframes fadeOut {
   from {
-    opacity: 0.9;
+    opacity: 0.7;
   }
   to {
     opacity: 0;

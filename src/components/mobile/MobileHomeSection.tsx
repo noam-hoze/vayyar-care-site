@@ -85,7 +85,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     trigger: scrollyContainerRef.current,
                     start: "top bottom",
                     onEnter: () => {
-                        gsap.to(overlay, { opacity: 0.8, duration: 0.3 });
+                        gsap.to(overlay, { opacity: 0.5, duration: 0.3 });
                     },
                     onLeaveBack: () => {
                         gsap.to(overlay, { opacity: 0, duration: 0.3 });
@@ -104,7 +104,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                         gsap.to(overlay, { opacity: 0, duration: 0.3 });
                     },
                     onEnterBack: () => {
-                        gsap.to(overlay, { opacity: 0.8, duration: 0.3 });
+                        gsap.to(overlay, { opacity: 0.5, duration: 0.3 });
                     },
                 });
 
@@ -125,7 +125,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     start: "top 90%", // Text appears much sooner - when top hits 90% down viewport
                     onEnter: () => {
                         gsap.to(overlay, {
-                            opacity: 0.8,
+                            opacity: 0.5,
                             duration: 0.3,
                             ease: "power2.out",
                         }); // Quick fade in
@@ -139,7 +139,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                     },
                     onEnterBack: () => {
                         gsap.to(overlay, {
-                            opacity: 0.8,
+                            opacity: 0.5,
                             duration: 0.3,
                             ease: "power2.out",
                         }); // Quick fade in when scrolling back
@@ -391,7 +391,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
 
         if (theaterMode) {
             gsap.to(overlayRef.current, {
-                opacity: 0.9,
+                opacity: 0.7,
                 duration: 0.5,
                 display: "block",
                 ease: "power2.inOut",
