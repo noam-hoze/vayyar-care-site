@@ -11,6 +11,7 @@ import styles from "./DefaultSection.module.css";
 import DefaultSectionIntroText from "../DefaultSection/DefaultSectionIntroText";
 import DefaultSectionVideo from "../DefaultSection/DefaultSectionVideo";
 import DefaultSectionDetails from "../DefaultSection/DefaultSectionDetails";
+import "../mobile/mobile-styles.css";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -459,6 +460,52 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             }
         }
     };
+
+    // Special mobile rendering for Efficiency section (ID 1.6)
+    if (entry.id === 1.6 && !isDesktop) {
+        return (
+            <div id={sectionId} className="mobile-apple-component">
+                {/* Part 1: Text above video */}
+                <div className="mobile-apple-part1">
+                    <div className="mobile-apple-small-title">Efficiency</div>
+                    <h2 className="mobile-apple-subtitle">
+                        Optimize your staff work and reduce their burden
+                    </h2>
+                </div>
+
+                {/* Part 2: Video */}
+                <div className="mobile-apple-video-container">
+                    <div className="mobile-apple-video">
+                        <video
+                            ref={videoRef}
+                            src={entry.videoSrc || "/videos/optimize-staff.mp4"}
+                            playsInline
+                            muted
+                            autoPlay
+                            loop
+                            controls={false}
+                        />
+                    </div>
+                </div>
+
+                {/* Part 3: Content section */}
+                <div className="mobile-apple-part3">
+                    <h3 className="mobile-apple-title">Do more with less.</h3>
+                    <div className="mobile-apple-content">
+                        <p>
+                            Use predictive insights to address potential patient
+                            complications
+                        </p>
+                        <p>Reduce Administrative tasks</p>
+                        <p>Improved Operational Efficiencies</p>
+                    </div>
+                    <button className="mobile-apple-button">
+                        + Learn more about Staff optimization
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     if (
         entry.type === "scrolly-video" ||
