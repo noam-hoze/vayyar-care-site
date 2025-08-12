@@ -68,7 +68,9 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
     const [shouldWipe, setShouldWipe] = useState(false);
 
     // NEW: State for ChatGPT component instances
-    const [chatGptInstances, setChatGptInstances] = useState<Record<number, number>>({});
+    const [chatGptInstances, setChatGptInstances] = useState<
+        Record<number, number>
+    >({});
 
     // Renamed local states for time and frame display
     const [displayTime, setDisplayTime] = useState(0);
@@ -411,20 +413,32 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
         const newInstances: Record<number, number> = {};
 
         chatGptConfig.forEach((instance, index) => {
-
             const fadeInStartTime = instance.appearTime;
-            const fadeInEndTime = instance.appearTime + (instance.fadeDuration || 0.2);
-            const fadeOutStartTime = instance.disappearTime - (instance.fadeDuration || 0.2);
+            const fadeInEndTime =
+                instance.appearTime + (instance.fadeDuration || 0.2);
+            const fadeOutStartTime =
+                instance.disappearTime - (instance.fadeDuration || 0.2);
             const fadeOutEndTime = instance.disappearTime;
 
             let opacity = 0;
 
             if (displayTime >= fadeInStartTime && displayTime < fadeInEndTime) {
-                opacity = (displayTime - fadeInStartTime) / (instance.fadeDuration || 0.2);
-            } else if (displayTime >= fadeInEndTime && displayTime < fadeOutStartTime) {
+                opacity =
+                    (displayTime - fadeInStartTime) /
+                    (instance.fadeDuration || 0.2);
+            } else if (
+                displayTime >= fadeInEndTime &&
+                displayTime < fadeOutStartTime
+            ) {
                 opacity = 1;
-            } else if (displayTime >= fadeOutStartTime && displayTime < fadeOutEndTime) {
-                opacity = 1 - (displayTime - fadeOutStartTime) / (instance.fadeDuration || 0.2);
+            } else if (
+                displayTime >= fadeOutStartTime &&
+                displayTime < fadeOutEndTime
+            ) {
+                opacity =
+                    1 -
+                    (displayTime - fadeOutStartTime) /
+                        (instance.fadeDuration || 0.2);
             }
 
             newInstances[index] = opacity;
@@ -594,39 +608,41 @@ const SceneViewer: React.FC<SceneViewerProps> = ({
             </div>
 
             {/* NEW: Render ChatGPT instances */}
-            {Object.entries(chatGptInstances).map(([instanceIndexStr, opacity]) => {
-                if (opacity <= 0) return null;
+            {Object.entries(chatGptInstances).map(
+                ([instanceIndexStr, opacity]) => {
+                    if (opacity <= 0) return null;
 
-                const instanceIndex = parseInt(instanceIndexStr);
-                const instance = chatGptConfig[instanceIndex];
+                    const instanceIndex = parseInt(instanceIndexStr);
+                    const instance = chatGptConfig[instanceIndex];
 
-                return (
-                    <div
-                        key={`chatgpt-instance-${instanceIndex}`}
-                        style={{
-                            position: "absolute",
-                            opacity,
-                            transition: "opacity 0.3s ease-in-out",
-                            zIndex: instance.zIndex || 20,
-                            top: instance.position?.top || 0,
-                            left: instance.position?.left,
-                            right: instance.position?.right,
-                            bottom: instance.position?.bottom,
-                            width: instance.position?.width || "100%",
-                            height: instance.position?.height || "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        {/* <ChatGpt
+                    return (
+                        <div
+                            key={`chatgpt-instance-${instanceIndex}`}
+                            style={{
+                                position: "absolute",
+                                opacity,
+                                transition: "opacity 0.3s ease-in-out",
+                                zIndex: instance.zIndex || 20,
+                                top: instance.position?.top || 0,
+                                left: instance.position?.left,
+                                right: instance.position?.right,
+                                bottom: instance.position?.bottom,
+                                width: instance.position?.width || "100%",
+                                height: instance.position?.height || "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            {/* <ChatGpt
                             mode={instance.mode}
                             customMessage={instance.content?.message}
                             customClass={instance.content?.customClass}
                         /> */}
-                    </div>
-                );
-            })}
+                        </div>
+                    );
+                }
+            )}
 
             {/* Tablet Wrapper - Currently hidden */}
             <div className="tablet-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden">

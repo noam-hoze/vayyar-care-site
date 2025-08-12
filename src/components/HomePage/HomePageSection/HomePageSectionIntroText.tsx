@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../HomePageSection.module.css";
+import styles from "./HomePageSection.module.css";
 
 interface IntroTextProps {
     sectionId?: string;
@@ -11,7 +11,7 @@ interface IntroTextProps {
     isLightBg: boolean;
 }
 
-const IntroText: React.FC<IntroTextProps> = ({
+const HomePageSectionIntroText: React.FC<IntroTextProps> = ({
     sectionId,
     header,
     content,
@@ -67,4 +67,4 @@ const IntroText: React.FC<IntroTextProps> = ({
     );
 };
 
-export default IntroText;
+export default HomePageSectionIntroText;

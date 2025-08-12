@@ -39,7 +39,6 @@ export default function NavBar({
 
     const bookADemoBackgroundColor = VAYYAR_ORANGE;
 
-
     const handleBookADemo = () => {
         // Smooth, Apple-like scroll to the contact form section
         scrollToSectionUtil("contact-section", setTheaterMode, {
