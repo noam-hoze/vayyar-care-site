@@ -101,13 +101,13 @@ const DefaultSectionIntroText: React.FC<IntroTextProps> = ({
             >
                 {variant === "narrow-text" ? (
                     <section className={styles.mobileIntro}>
-                        <div className={styles.mobileNarrowContainer}>
+                        <div className="mobileNarrowContainer">
                             {header && (
-                                <h2 className={styles.mobileNarrowHeading}>
+                                <h2 className="mobileNarrowHeading">
                                     {header}
                                 </h2>
                             )}
-                            <div className={styles.mobileNarrowBody}>
+                            <div className="mobileNarrowBody">
                                 {stripInlineStyles(content)}
                             </div>
                         </div>

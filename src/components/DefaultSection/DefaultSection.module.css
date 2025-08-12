@@ -266,37 +266,10 @@
   margin: 0;
 }
 
-.mobileNarrowContainer {
-  width: 76%;
-  margin: 0 auto;
-}
-.mobileNarrowHeading {
-  font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.28;
-  color: #1d1d1f;
-  margin: 0 0 18px;
-}
-.mobileNarrowBody {
-  font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 28px;
-  line-height: 1.45;
-  color: #1d1d1f;
-}
-.mobileNarrowBody :where(h1,h2,h3,p,span,div){
-  position: static !important;
-  transform: none !important;
-  top: auto !important;
-  left: auto !important;
-  width: 100% !important;
-  text-align: center !important;
-  color: #1d1d1f !important;
-}
+
 
 /* Breakpoint */
 @media (max-width: 768px) {
   .desktopIntroWrapper { display: none; }
   .mobileIntroWrapper { display: block; }
 }
-
