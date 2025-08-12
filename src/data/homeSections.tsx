@@ -327,7 +327,7 @@ export const homeSections: HomeSection[] = [
         header: (
             <>
                 <span style={{ color: "#05aae9" }}>Actionable</span> insights.
-                <br />
+                <span className="lg:hidden"><br /></span>
                 Smarter <span style={{ color: "#05aae9" }}>staffing</span>.
                 <br />
                 <span style={{ color: "#05aae9" }}>Safer</span> residents.
