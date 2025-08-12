@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { defaultConfig } from "@/config/videoConfig";
 import { HomeSection, homeSections } from "@/data/homeSections";
-import { useMobileHomeVideo } from "../../mobile/MobileHomeVideoContext";
+import { useMobileHomeVideo } from "../mobile/MobileHomeVideoContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
