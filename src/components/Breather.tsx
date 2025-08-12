@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useVideoTime } from "@/contexts/VideoTimeContext";
 import { videoConfig } from "@/config/videoConfig";
-import { useDemoModal } from "@/contexts/DemoModalContext";
-import ContactModal from "@/components/ContactModal";
+import ContactForm from "@/components/ContactForm";
 
 interface BreatherProps {
     appearAtTime: number;
@@ -339,9 +338,7 @@ const Breather = ({
                                             clipRule="evenodd"
                                         />
                                     </svg>
-                                    <span>
-                                            Learn about{" "}{buttonText}
-                                        </span>
+                                    <span>Learn about {buttonText}</span>
                                 </button>
                             </div>
                         </div>
@@ -349,7 +346,7 @@ const Breather = ({
                 </div>
             </div>
             {isModalOpen && (
-                <ContactModal isOpen={isModalOpen} onClose={closeModal} />
+                <ContactForm isOpen={isModalOpen} onClose={closeModal} />
             )}
         </>
     );

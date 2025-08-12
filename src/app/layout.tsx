@@ -3,9 +3,7 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "@/styles/main.css";
 import "./globals.css";
 import MainLayout from "@/components/MainLayout";
-import ScrollToTop from "@/components/ScrollToTop";
 import { VideoTimeProvider } from "@/contexts/VideoTimeContext";
-import { DemoModalProvider } from "@/contexts/DemoModalContext";
 import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
 
 const inter = Inter({
@@ -34,12 +32,9 @@ export default function RootLayout({
                 className={`${inter.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white`}
             >
                 <VideoTimeProvider>
-                    <DemoModalProvider>
-                        <MobileHomeVideoProvider>
-                            <ScrollToTop />
-                            <MainLayout>{children}</MainLayout>
-                        </MobileHomeVideoProvider>
-                    </DemoModalProvider>
+                    <MobileHomeVideoProvider>
+                        <MainLayout>{children}</MainLayout>
+                    </MobileHomeVideoProvider>
                 </VideoTimeProvider>
             </body>
         </html>

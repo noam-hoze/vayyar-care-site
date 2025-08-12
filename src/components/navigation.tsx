@@ -1,8 +1,7 @@
 "use client"; // Add this for useState
 import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Changed from react-router-dom
-import ContactModal from "@/components/ContactModal";
-import { useDemoModal } from "@/contexts/DemoModalContext"; // Added import
+import ContactForm from "@/components/ContactForm";
 import { useMobileHomeVideo } from "@/components/mobile/MobileHomeVideoContext";
 import { homeSections } from "@/data/homeSections";
 import { scrollToSection as scrollToSectionUtil } from "@/lib/scrollUtils";
@@ -21,7 +20,6 @@ export default function NavBar({
 }: NavBarProps) {
     const [hasLastButtonBeenFilled, setHasLastButtonBeenFilled] =
         useState(false);
-    const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
     const { setTheaterMode } = useMobileHomeVideo();
 
     const scrollToSection = (sectionId: string) => {
@@ -41,29 +39,6 @@ export default function NavBar({
 
     const bookADemoBackgroundColor = VAYYAR_ORANGE;
 
-    // Original useEffect for scroll percentage - can be removed or commented out
-    // useEffect(() => {
-    //     const handleScroll = () => {
-    //         const element = document.documentElement;
-    //         const body = document.body;
-    //         const scrollTop = element.scrollTop || body.scrollTop;
-    //         const scrollHeight = element.scrollHeight || body.scrollHeight;
-    //         const clientHeight = element.clientHeight;
-
-    //         if (scrollHeight - clientHeight === 0) {
-    //             setScrollPercentage(0);
-    //             return;
-    //         }
-
-    //         const percentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
-    //         setScrollPercentage(percentage > 100 ? 100 : percentage < 0 ? 0 : percentage);
-    //     };
-
-    //     window.addEventListener("scroll", handleScroll, { passive: true });
-    //     handleScroll(); // Initial call
-
-    //     return () => window.removeEventListener("scroll", handleScroll);
-    // }, []);
 
     const handleBookADemo = () => {
         // Smooth, Apple-like scroll to the contact form section
@@ -72,15 +47,6 @@ export default function NavBar({
             offsetPx: 0,
         });
     };
-    const handleContactModalClose = () => {
-        setIsDemoModalOpen(false);
-    };
-    useEffect(() => {
-        document.body.style.overflow = isDemoModalOpen ? "hidden" : "auto";
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, [isDemoModalOpen]);
 
     return (
         <nav className="relative z-50" style={{ fontFamily: "Magistral" }}>
@@ -150,12 +116,6 @@ export default function NavBar({
                     </div>
                 </div>
             </div>
-            {isDemoModalOpen && (
-                <ContactModal
-                    isOpen={isDemoModalOpen}
-                    onClose={handleContactModalClose}
-                />
-            )}
         </nav>
     );
 }

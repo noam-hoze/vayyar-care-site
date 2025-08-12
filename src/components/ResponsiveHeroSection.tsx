@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDemoModal } from "@/contexts/DemoModalContext";
 import { scrollToSection } from "@/lib/scrollUtils";
 
 const VAYYAR_BLUE = "#06aeef";
 const ORANGE = "#f56300";
 
-const MobileHeroSection: React.FC = () => {
-    const { isDemoModalOpen, setIsDemoModalOpen } = useDemoModal();
+const ResponsiveHeroSection: React.FC = () => {
     const [hasSeenHero, setHasSeenHero] = useState(false);
     const heroSectionRef = useRef<HTMLElement>(null);
 
@@ -19,13 +17,6 @@ const MobileHeroSection: React.FC = () => {
 
     const handleItemClick = (itemName: keyof typeof heroItemMapping) => {
         scrollToSection(heroItemMapping[itemName]);
-    };
-
-    const openContactModal = () => {
-        setIsDemoModalOpen(true);
-    };
-    const handleContactModalClose = () => {
-        setIsDemoModalOpen(false);
     };
 
     // Track when user has passed through the hero section
@@ -92,26 +83,12 @@ const MobileHeroSection: React.FC = () => {
                 style={{
                     position: "absolute",
                     inset: 0,
-                    // background:
-                    //     "linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%)",
                     zIndex: 1.5,
                     pointerEvents: "none",
                 }}
             />
-            {/* Gradient overlay */}
-            {/* <div
-                style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                        "linear-gradient(to bottom, rgba(1,32,64,0.4),rgba(1,32,64,0.2))",
-                    zIndex: 1,
-                    pointerEvents: "none",
-                }}
-            /> */}
-            {/* Text content */}
         </section>
     );
 };
 
-export default MobileHeroSection;
+export default ResponsiveHeroSection;

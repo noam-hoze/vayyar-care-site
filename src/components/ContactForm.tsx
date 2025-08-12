@@ -6,7 +6,7 @@ interface ContactModalProps {
     asPageElement?: boolean;
 }
 
-const ContactModal: React.FC<ContactModalProps> = ({
+const ContactForm: React.FC<ContactModalProps> = ({
     isOpen,
     onClose,
     asPageElement = false,
@@ -290,4 +290,4 @@ const ContactModal: React.FC<ContactModalProps> = ({
     );
 };
 
-export default ContactModal;
+export default ContactForm;
