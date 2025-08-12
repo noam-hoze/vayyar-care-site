@@ -14,16 +14,16 @@ import DefaultSectionDetails from "../DefaultSection/DefaultSectionDetails";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-interface HomePageSectionProps {
-    section: HomeSection;
+interface DefaultSectionProps {
+    entry: HomeSection;
     index?: number;
     sectionId?: string;
     nextSection?: HomeSection; // Changed from nextSectionId to nextSection
     nextSectionId?: string; // Keep for backward compatibility
 }
 
-const DefaultSection: React.FC<HomePageSectionProps> = ({
-    section,
+const DefaultSection: React.FC<DefaultSectionProps> = ({
+    entry,
     index,
     sectionId,
     nextSection,
@@ -37,11 +37,11 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
     const [hasSeenVideo, setHasSeenVideo] = useState(false);
     const [showImage, setShowImage] = useState(false);
     const [videoSrc, setVideoSrc] = useState(
-        section.type === "video" ||
-            section.type === "scrolly-video" ||
-            section.type === "scrolly-video-fixed" ||
-            section.type === "scroll-scrub-video"
-            ? section.videoSrc || defaultConfig.videoSrc.split("?")[0]
+        entry.type === "video" ||
+            entry.type === "scrolly-video" ||
+            entry.type === "scrolly-video-fixed" ||
+            entry.type === "scroll-scrub-video"
+            ? entry.videoSrc || defaultConfig.videoSrc.split("?")[0]
             : ""
     );
     const {
@@ -60,8 +60,8 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
 
     useEffect(() => {
         if (
-            (section.type === "scrolly-video" ||
-                section.type === "scrolly-video-fixed") &&
+            (entry.type === "scrolly-video" ||
+                entry.type === "scrolly-video-fixed") &&
             scrollyContainerRef.current &&
             scrollyOverlayRef.current
         ) {
@@ -77,7 +77,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                 scrollyContainerRef.current as HTMLElement
             )?.querySelector(".scrolly-text");
 
-            if (section.type === "scrolly-video-fixed") {
+            if (entry.type === "scrolly-video-fixed") {
                 // NEW BEHAVIOR: Fixed text that appears immediately, then scrolls out
 
                 // Set text to be immediately visible and fixed
@@ -162,7 +162,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                 };
             }
         }
-    }, [section.type]);
+    }, [entry.type]);
 
     useEffect(() => {
         const checkDesktop = () => {
@@ -175,29 +175,29 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
 
     // Only relevant for video sections
     const start =
-        section.type === "video" ||
-        section.type === "scrolly-video" ||
-        section.type === "scrolly-video-fixed"
-            ? section.video
-                ? timecodeToSeconds(section.video.start)
+        entry.type === "video" ||
+        entry.type === "scrolly-video" ||
+        entry.type === "scrolly-video-fixed"
+            ? entry.video
+                ? timecodeToSeconds(entry.video.start)
                 : 0
             : 0;
     const end =
-        section.type === "video" ||
-        section.type === "scrolly-video" ||
-        section.type === "scrolly-video-fixed"
-            ? section.video
-                ? timecodeToSeconds(section.video.end)
+        entry.type === "video" ||
+        entry.type === "scrolly-video" ||
+        entry.type === "scrolly-video-fixed"
+            ? entry.video
+                ? timecodeToSeconds(entry.video.end)
                 : 0
             : 0;
 
     // Initialize video and ScrollTrigger
     useEffect(() => {
         if (
-            section.type !== "video" &&
-            section.type !== "scrolly-video" &&
-            section.type !== "scrolly-video-fixed" &&
-            section.type !== "scroll-scrub-video"
+            entry.type !== "video" &&
+            entry.type !== "scrolly-video" &&
+            entry.type !== "scrolly-video-fixed" &&
+            entry.type !== "scroll-scrub-video"
         )
             return;
         const video = videoRef.current;
@@ -210,7 +210,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                 // Set initial time only if timing is specified
                 if (end > 0) {
                     video.currentTime = start;
-                } else if (section.type === "scroll-scrub-video") {
+                } else if (entry.type === "scroll-scrub-video") {
                     video.currentTime = 2.6; // Start from 2.6 seconds for scroll-scrub-video
                 } else {
                     video.currentTime = 0; // Start from beginning for other videos
@@ -225,7 +225,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
         initializeVideo();
 
         // Handle scroll-scrub-video differently
-        if (section.type === "scroll-scrub-video") {
+        if (entry.type === "scroll-scrub-video") {
             const videoContainer = video.parentElement;
             if (videoContainer) {
                 // Calculate pin distance based on video duration (e.g., 1 second of video = 1 viewport height of scroll)
@@ -260,7 +260,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                 trigger: video,
                 start: "top 80%",
                 end:
-                    section.type === "scrolly-video"
+                    entry.type === "scrolly-video"
                         ? "bottom -20%"
                         : "bottom 20%",
                 onEnter: () => {
@@ -276,14 +276,14 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                 },
                 onLeave: () => {
                     // Only pause regular video sections, let scrolly-video continue looping
-                    if (section.type === "video") {
+                    if (entry.type === "video") {
                         video.pause();
                         setPlaying(false);
                     }
                 },
                 onLeaveBack: () => {
                     // Only pause regular video sections, let scrolly-video continue looping
-                    if (section.type === "video") {
+                    if (entry.type === "video") {
                         video.pause();
                         setPlaying(false);
                     }
@@ -294,11 +294,11 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
         return () => {
             scrollTriggerRef.current?.kill();
         };
-    }, [section.type, start, end]);
+    }, [entry.type, start, end]);
 
     // Swap video source when scrub reaches 90% (keep video, no image)
     useEffect(() => {
-        if (section.type === "scroll-scrub-video") {
+        if (entry.type === "scroll-scrub-video") {
             const video = videoRef.current;
             if (!video) return;
 
@@ -315,14 +315,14 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
             return () =>
                 video.removeEventListener("timeupdate", handleTimeUpdate);
         }
-    }, [section.id, section.type]);
+    }, [entry.id, entry.type]);
 
     // Restrict playback to [start, end] for video
     useEffect(() => {
         if (
-            section.type !== "video" &&
-            section.type !== "scrolly-video" &&
-            section.type !== "scrolly-video-fixed"
+            entry.type !== "video" &&
+            entry.type !== "scrolly-video" &&
+            entry.type !== "scrolly-video-fixed"
         )
             return;
         const video = videoRef.current;
@@ -345,7 +345,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
 
         video.addEventListener("timeupdate", onTimeUpdate);
         return () => video.removeEventListener("timeupdate", onTimeUpdate);
-    }, [start, end, section.type]);
+    }, [start, end, entry.type]);
 
     // Manual play/pause handler
     const togglePlay = () => {
@@ -389,7 +389,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
 
     // Animate theater mode overlay
     useEffect(() => {
-        if (section.type !== "video" || !overlayRef.current) return;
+        if (entry.type !== "video" || !overlayRef.current) return;
 
         if (theaterMode) {
             gsap.to(overlayRef.current, {
@@ -410,7 +410,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                 },
             });
         }
-    }, [theaterMode, section.type]);
+    }, [theaterMode, entry.type]);
 
     // Handle scroll to next section and enable theater mode
     const handleLearnMore = () => {
@@ -461,8 +461,8 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
     };
 
     if (
-        section.type === "scrolly-video" ||
-        section.type === "scrolly-video-fixed"
+        entry.type === "scrolly-video" ||
+        entry.type === "scrolly-video-fixed"
     ) {
         return (
             <div
@@ -476,7 +476,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                         ref={videoRef}
                         src={
                             videoSrc ||
-                            section.videoSrc ||
+                            entry.videoSrc ||
                             defaultConfig.videoSrc.split("?")[0]
                         }
                         className="w-full h-full object-cover"
@@ -485,17 +485,17 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                         loop
                     />
                 </div>
-                <div className="scrolly-text">{section.content}</div>
+                <div className="scrolly-text">{entry.content}</div>
             </div>
         );
     }
 
-    if (section.type === "scroll-scrub-video") {
+    if (entry.type === "scroll-scrub-video") {
         return (
             <div id={sectionId} className={`${styles.scrubSection}`}>
                 <video
                     ref={videoRef}
-                    src={videoSrc || section.videoSrc}
+                    src={videoSrc || entry.videoSrc}
                     className={styles.scrubVideo}
                     playsInline
                     muted
@@ -505,24 +505,24 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
         );
     }
 
-    if (section.type === "image") {
+    if (entry.type === "image") {
         return (
             <div id={sectionId} className={styles.imageSection}>
                 <img
-                    src={section.imageSrc}
-                    alt={section.title}
+                    src={entry.imageSrc}
+                    alt={entry.title}
                     className={styles.fullBleedImage}
                 />
             </div>
         );
     }
 
-    if (section.type === "text") {
+    if (entry.type === "text") {
         // Get all text sections to calculate proper zebra striping
         const textSections = homeSections.filter((s) => s.type === "text");
         // Find index of current section within text sections array
         const textSectionIndex = textSections.findIndex(
-            (s) => s.id === section.id
+            (s) => s.id === entry.id
         );
         // Determine background color based on text section index
         const isLightTextBg = textSectionIndex % 2 === 0;
@@ -532,14 +532,14 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
             return (
                 <DefaultSectionIntroText
                     sectionId={sectionId}
-                    header={section.header}
-                    content={section.content}
+                    header={entry.header}
+                    content={entry.content}
                     learnMoreEnabled={Boolean(
-                        section.buttonText && nextSectionId
+                        entry.buttonText && nextSectionId
                     )}
                     learnMoreLabel={
-                        section.buttonText
-                            ? `Learn about ${section.buttonText}`
+                        entry.buttonText
+                            ? `Learn about ${entry.buttonText}`
                             : undefined
                     }
                     onLearnMore={handleLearnMore}
@@ -556,26 +556,24 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                     isLightTextBg ? styles.bgLight : styles.bgGray
                 }`}
             >
-                {section.title && (
+                {entry.title && (
                     <div className={styles.mobileTitleContainer}>
-                        <h3 className={styles.mobileTitle}>{section.title}</h3>
+                        <h3 className={styles.mobileTitle}>{entry.title}</h3>
                     </div>
                 )}
                 <div className={styles.mobileContentContainer}>
-                    {section.header && (
-                        <h2 className={styles.mobileHeader}>
-                            {section.header}
-                        </h2>
+                    {entry.header && (
+                        <h2 className={styles.mobileHeader}>{entry.header}</h2>
                     )}
-                    <div className={styles.mobileBody}>{section.content}</div>
+                    <div className={styles.mobileBody}>{entry.content}</div>
 
                     {/* Learn more about button */}
-                    {section.buttonText && nextSectionId && (
+                    {entry.buttonText && nextSectionId && (
                         <button
                             onClick={handleLearnMore}
                             className={styles.learnMoreButtonMobile}
                         >
-                            Learn about {section.buttonText}
+                            Learn about {entry.buttonText}
                             <span className={styles.mobileArrow}>&#8250;</span>
                         </button>
                     )}
@@ -586,9 +584,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
 
     // Video section rendering (Part 2)
     const videoSections = homeSections.filter((s) => s.type === "video");
-    const videoSectionIndex = videoSections.findIndex(
-        (s) => s.id === section.id
-    );
+    const videoSectionIndex = videoSections.findIndex((s) => s.id === entry.id);
     const isLightVideoBg = videoSectionIndex % 2 === 0;
 
     const videoNode = (
@@ -609,10 +605,10 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
     );
 
     // Desktop now also renders Part 3 (details) immediately after the video
-    if (isDesktop && section.type === "video") {
+    if (isDesktop && entry.type === "video") {
         const videoSections = homeSections.filter((s) => s.type === "video");
         const videoSectionIndex = videoSections.findIndex(
-            (s) => s.id === section.id
+            (s) => s.id === entry.id
         );
         const isLightVideoBg = videoSectionIndex % 2 === 0;
         return (
@@ -620,8 +616,8 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
                 {videoNode}
                 <DefaultSectionDetails
                     sectionId={`${sectionId}-details`}
-                    header={section.title}
-                    content={section.content}
+                    header={entry.title}
+                    content={entry.content}
                     isLightBg={isLightVideoBg}
                 />
             </>
