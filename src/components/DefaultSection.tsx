@@ -10,6 +10,7 @@ import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styl
 import styles from "./DefaultSection.module.css";
 import DefaultSectionIntroText from "./DefaultSectionIntroText";
 import DefaultSectionVideo from "./DefaultSectionVideo";
+import DefaultSectionDetails from "./DefaultSectionDetails";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -527,6 +528,7 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
         const isLightTextBg = textSectionIndex % 2 === 0;
 
         if (isDesktop) {
+            // Desktop: render IntroText (Part 1) block for this "text" section
             return (
                 <DefaultSectionIntroText
                     sectionId={sectionId}
@@ -582,14 +584,14 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
         );
     }
 
-    // Video section rendering
+    // Video section rendering (Part 2)
     const videoSections = homeSections.filter((s) => s.type === "video");
     const videoSectionIndex = videoSections.findIndex(
         (s) => s.id === section.id
     );
     const isLightVideoBg = videoSectionIndex % 2 === 0;
 
-    return (
+    const videoNode = (
         <DefaultSectionVideo
             sectionId={sectionId}
             videoRef={videoRef}
@@ -605,6 +607,28 @@ const DefaultSection: React.FC<HomePageSectionProps> = ({
             onExitTheater={() => setTheaterMode(false)}
         />
     );
+
+    // Desktop now also renders Part 3 (details) immediately after the video
+    if (isDesktop && section.type === "video") {
+        const videoSections = homeSections.filter((s) => s.type === "video");
+        const videoSectionIndex = videoSections.findIndex(
+            (s) => s.id === section.id
+        );
+        const isLightVideoBg = videoSectionIndex % 2 === 0;
+        return (
+            <>
+                {videoNode}
+                <DefaultSectionDetails
+                    sectionId={`${sectionId}-details`}
+                    header={section.title}
+                    content={section.content}
+                    isLightBg={isLightVideoBg}
+                />
+            </>
+        );
+    }
+
+    return videoNode;
 };
 
 export default DefaultSection;

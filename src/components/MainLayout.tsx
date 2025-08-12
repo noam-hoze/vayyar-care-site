@@ -6,7 +6,6 @@ import NavBar from "./navigation"; // Assuming NavBar is in the same directory
 import { homeSections } from "@/data/homeSections";
 import { scrollToSection } from "@/lib/scrollUtils";
 
-// Define props type to accept children
 interface MainLayoutProps {
     children: React.ReactNode;
 }
