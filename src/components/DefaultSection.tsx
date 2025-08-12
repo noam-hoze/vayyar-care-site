@@ -1,15 +1,15 @@
 import React, { useRef, useState, useEffect } from "react";
 import { defaultConfig } from "@/config/videoConfig";
 import { HomeSection, homeSections } from "@/data/homeSections";
-import { useMobileHomeVideo } from "../mobile/MobileHomeVideoContext";
+import { useMobileHomeVideo } from "./mobile/MobileHomeVideoContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
 import "@/styles/theater-mode.css";
 import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styles
-import styles from "./HomePageSection.module.css";
-import HomePageSectionIntroText from "./HomePageSectionIntroText";
-import HomePageSectionVideo from "./HomePageSectionVideo";
+import styles from "./DefaultSection.module.css";
+import DefaultSectionIntroText from "./DefaultSectionIntroText";
+import DefaultSectionVideo from "./DefaultSectionVideo";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -21,7 +21,7 @@ interface HomePageSectionProps {
     nextSectionId?: string; // Keep for backward compatibility
 }
 
-const HomePageSection: React.FC<HomePageSectionProps> = ({
+const DefaultSection: React.FC<HomePageSectionProps> = ({
     section,
     index,
     sectionId,
@@ -528,7 +528,7 @@ const HomePageSection: React.FC<HomePageSectionProps> = ({
 
         if (isDesktop) {
             return (
-                <HomePageSectionIntroText
+                <DefaultSectionIntroText
                     sectionId={sectionId}
                     header={section.header}
                     content={section.content}
@@ -590,7 +590,7 @@ const HomePageSection: React.FC<HomePageSectionProps> = ({
     const isLightVideoBg = videoSectionIndex % 2 === 0;
 
     return (
-        <HomePageSectionVideo
+        <DefaultSectionVideo
             sectionId={sectionId}
             videoRef={videoRef}
             videoSrc={videoSrc}
@@ -607,4 +607,4 @@ const HomePageSection: React.FC<HomePageSectionProps> = ({
     );
 };
 
-export default HomePageSection;
+export default DefaultSection;

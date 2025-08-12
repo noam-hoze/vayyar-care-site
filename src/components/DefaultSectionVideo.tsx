@@ -1,5 +1,5 @@
 import React, { MutableRefObject } from "react";
-import styles from "./HomePageSection.module.css";
+import styles from "./DefaultSection.module.css";
 
 interface MediaVideoProps {
     sectionId?: string;
@@ -17,7 +17,7 @@ interface MediaVideoProps {
     onExitTheater?: () => void;
 }
 
-const HomePageSectionVideo: React.FC<MediaVideoProps> = ({
+const DefaultSectionVideo: React.FC<MediaVideoProps> = ({
     sectionId,
     videoRef,
     videoSrc,
@@ -122,4 +122,4 @@ const HomePageSectionVideo: React.FC<MediaVideoProps> = ({
     );
 };
 
-export default HomePageSectionVideo;
+export default DefaultSectionVideo;

@@ -2,8 +2,8 @@
 
 import React from "react";
 import { homeSections } from "@/data/homeSections";
-import HomePageSection from "@/components/HomePage/HomePageSection";
-import HomePageHeroSection from "@/components/HomePage/HomePageHeroSection";
+import DefaultSection from "@/components/DefaultSection";
+import HomePageHeroSection from "@/components/HeroSection";
 import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay";
 import ContactForm from "@/components/ContactForm";
 
@@ -12,7 +12,7 @@ export default function HomePage() {
         <div style={{ margin: "0 auto", background: "#fff" }}>
             <HomePageHeroSection />
             {homeSections.map((section, idx) => (
-                <HomePageSection
+                <DefaultSection
                     key={idx}
                     section={section}
                     index={idx}
