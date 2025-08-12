@@ -30,7 +30,9 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     nextSection,
     nextSectionId,
 }) => {
-    const [isDesktop, setIsDesktop] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(
+        typeof window !== "undefined" ? window.innerWidth >= 1024 : true
+    );
     const videoRef = useRef<HTMLVideoElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const [playing, setPlaying] = useState(false);
@@ -507,9 +509,67 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         );
     }
 
+    // Special mobile rendering for Real-time Alerts section (ID 2)
+    if (entry.id === 2 && !isDesktop) {
+        return (
+            <div id={sectionId} className="mobile-apple-component white-bg">
+                {/* Part 1: Text above video */}
+                <div className="mobile-apple-part1">
+                    <div className="mobile-apple-small-title">
+                        Real-time Alerts
+                    </div>
+                    <h2 className="mobile-apple-subtitle">
+                        Alert your staff as things happen
+                    </h2>
+                </div>
+
+                {/* Part 2: Video */}
+                <div className="mobile-apple-video-container">
+                    <div className="mobile-apple-video">
+                        <video
+                            ref={videoRef}
+                            src={
+                                entry.videoSrc || "/videos/real-time-alerts.mp4"
+                            }
+                            playsInline
+                            muted
+                            autoPlay
+                            loop
+                            controls={false}
+                        />
+                    </div>
+                </div>
+
+                {/* Part 3: Content section */}
+                <div className="mobile-apple-part3">
+                    <h3 className="mobile-apple-title">Real-time Alerts</h3>
+                    <div className="mobile-apple-content">
+                        <p>
+                            Receive immediate alerts when a resident experiences
+                            a fall, ensuring faster assistance and peace of
+                            mind.
+                        </p>
+                        <p>
+                            Stay informed about unusual movement patterns that
+                            could signal health or safety concerns.
+                        </p>
+                        <p>
+                            Enhance resident safety and staff efficiency with
+                            real-time notifications tailored for elderly care.
+                        </p>
+                    </div>
+                    <button className="mobile-apple-button">
+                        + Learn more about Real-time Alerts
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     if (
-        entry.type === "scrolly-video" ||
-        entry.type === "scrolly-video-fixed"
+        (entry.type === "scrolly-video" ||
+            entry.type === "scrolly-video-fixed") &&
+        !((entry.id === 1.6 || entry.id === 2) && !isDesktop)
     ) {
         return (
             <div
@@ -537,7 +597,10 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         );
     }
 
-    if (entry.type === "scroll-scrub-video") {
+    if (
+        entry.type === "scroll-scrub-video" &&
+        !(entry.id === 1.5 && !isDesktop)
+    ) {
         return (
             <div id={sectionId} className={`${styles.scrubSection}`}>
                 <video
@@ -564,7 +627,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         );
     }
 
-    if (entry.type === "text") {
+    if (
+        entry.type === "text" &&
+        !(entry.id === 1 && !isDesktop) &&
+        !(entry.id === 3 && !isDesktop)
+    ) {
         // Get all text sections to calculate proper zebra striping
         const textSections = homeSections.filter((s) => s.type === "text");
         // Find index of current section within text sections array
@@ -669,6 +736,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 />
             </>
         );
+    }
+
+    // Don't render hidden mobile sections as video fallback
+    if ((entry.id === 1 || entry.id === 3) && !isDesktop) {
+        return null;
     }
 
     return videoNode;

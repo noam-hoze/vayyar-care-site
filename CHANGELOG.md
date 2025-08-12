@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2024-12-21
+
+### Fixed
+- **CRITICAL**: Fixed desktop scrolly-video functionality that was broken in 0.1.1
+- Resolved issue where mobile Apple-style sections were incorrectly rendering on desktop
+- Fixed `isDesktop` state initialization to prevent mobile-first rendering on desktop
+- Restored proper scrolly-video overlay and interactive functionality on desktop
+- Added proper fallback exclusion for hidden mobile sections (ID 1, 3) to prevent video rendering
+
+### Technical Details
+- Fixed boolean logic in scrolly-video conditions to properly exclude mobile-only sections
+- Updated `isDesktop` useState initialization to detect screen size immediately
+- Added null return for hidden text sections on mobile to prevent fallback video rendering
+- **Desktop Preserved**: All desktop functionality restored to original working state
+
 ## [0.1.1] - 2024-12-21
 
 ### Added
