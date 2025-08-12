@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2024-12-21
+
+### Added
+- **MAJOR**: Complete Apple Vision Pro mobile layout implementation for all main sections
+- Apple-style mobile layouts for Privacy, AI Insights, Personalized Care, and Increase NOI sections
+- Alternating grey/white background pattern following Apple's design language
+- Consistent three-part mobile structure: clean text header, 16:9 video, content with button
+- Blue arrow indicators (>) for all bullet points in mobile view
+- Proper button centering with flexbox layout for mobile sections
+
+### Enhanced
+- Extended mobile-specific rendering to cover 6 total sections:
+  1. Efficiency (ID 1.6) - Grey background
+  2. Real-time Alerts (ID 2) - White background  
+  3. Privacy (ID 3.2) - Grey background
+  4. AI Insights (ID 4) - White background
+  5. Personalized Care (ID 6) - Grey background
+  6. Increase NOI (ID 8) - White background
+
+### Technical Details
+- Added mobile Apple-style rendering for sections 3.2, 4, 6, and 8
+- Extended scrolly-video exclusion logic to prevent desktop interference
+- Hidden corresponding text sections (3.5, 5, 7) on mobile to prevent duplicates
+- Added fallback exclusion for all hidden mobile text sections
+- Improved button centering with flexbox `align-self: center`
+- **Desktop Preserved**: All desktop functionality remains completely untouched
+
+### Design
+- Perfect Apple Vision Pro design replication on mobile
+- Clean typography hierarchy with SF Pro Display / Magistral fonts
+- Consistent spacing and padding following Apple's generous design principles
+- Orange accent buttons with proper rounded corners and hover states
+
 ## [0.1.2] - 2024-12-21
 
 ### Fixed

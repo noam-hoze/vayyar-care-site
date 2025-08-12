@@ -184,7 +184,7 @@
   transition: all 0.2s ease;
   display: inline-block;
   text-decoration: none;
-  margin: 0 auto 80px auto;
+  margin: 0 0 80px 0;
   text-align: center;
   white-space: nowrap;
   min-width: max-content;
@@ -197,4 +197,15 @@
 
 .mobile-apple-button:active {
   transform: translateY(0);
+}
+
+/* Center the button within Part 3 */
+.mobile-apple-part3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mobile-apple-part3 .mobile-apple-button {
+  align-self: center;
 } 

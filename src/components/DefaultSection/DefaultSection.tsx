@@ -566,10 +566,228 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         );
     }
 
+    // Special mobile rendering for Privacy section (ID 3.2)
+    if (entry.id === 3.2 && !isDesktop) {
+        return (
+            <div id={sectionId} className="mobile-apple-component">
+                {/* Part 1: Text above video */}
+                <div className="mobile-apple-part1">
+                    <div className="mobile-apple-small-title">Privacy</div>
+                    <h2 className="mobile-apple-subtitle">
+                        Monitoring every movement without compromising privacy
+                    </h2>
+                </div>
+
+                {/* Part 2: Video */}
+                <div className="mobile-apple-video-container">
+                    <div className="mobile-apple-video">
+                        <video
+                            ref={videoRef}
+                            src={entry.videoSrc || "/videos/privacy.mp4"}
+                            playsInline
+                            muted
+                            autoPlay
+                            loop
+                            controls={false}
+                        />
+                    </div>
+                </div>
+
+                {/* Part 3: Content section */}
+                <div className="mobile-apple-part3">
+                    <h3 className="mobile-apple-title">
+                        No cameras. No wearables. Privacy.
+                    </h3>
+                    <div className="mobile-apple-content">
+                        <p>Empower the care team with automated alerts.</p>
+                        <p>
+                            Monitor residents' well-being without invasive
+                            cameras or uncomfortable wearables.
+                        </p>
+                        <p>
+                            Respect privacy while ensuring comprehensive care
+                            monitoring.
+                        </p>
+                    </div>
+                    <button className="mobile-apple-button">
+                        + Learn more about how we protect privacy
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // Special mobile rendering for AI Insights section (ID 4)
+    if (entry.id === 4 && !isDesktop) {
+        return (
+            <div id={sectionId} className="mobile-apple-component white-bg">
+                {/* Part 1: Text above video */}
+                <div className="mobile-apple-part1">
+                    <div className="mobile-apple-small-title">
+                        AI Revolution
+                    </div>
+                    <h2 className="mobile-apple-subtitle">
+                        Stay ahead with cutting-edge AI insights from our
+                        sensors and an array of smart data
+                    </h2>
+                </div>
+
+                {/* Part 2: Video */}
+                <div className="mobile-apple-video-container">
+                    <div className="mobile-apple-video">
+                        <video
+                            ref={videoRef}
+                            src={entry.videoSrc || "/videos/ai-insights.mp4"}
+                            playsInline
+                            muted
+                            autoPlay
+                            loop
+                            controls={false}
+                        />
+                    </div>
+                </div>
+
+                {/* Part 3: Content section */}
+                <div className="mobile-apple-part3">
+                    <h3 className="mobile-apple-title">
+                        Actionable insights. Smarter staffing. Safer residents.
+                    </h3>
+                    <div className="mobile-apple-content">
+                        <p>Analyze trends to detect risk.</p>
+                        <p>Enhancing staff efficiency</p>
+                        <p>Ensure Care Plan Compliance</p>
+                    </div>
+                    <button className="mobile-apple-button">
+                        + Learn more about AI insights
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // Special mobile rendering for Personalized Care section (ID 6)
+    if (entry.id === 6 && !isDesktop) {
+        return (
+            <div id={sectionId} className="mobile-apple-component">
+                {/* Part 1: Text above video */}
+                <div className="mobile-apple-part1">
+                    <div className="mobile-apple-small-title">
+                        Personalize care
+                    </div>
+                    <h2 className="mobile-apple-subtitle">
+                        Experience the power of immediate, accurate insights for
+                        truly personalized care.
+                    </h2>
+                </div>
+
+                {/* Part 2: Video */}
+                <div className="mobile-apple-video-container">
+                    <div className="mobile-apple-video">
+                        <video
+                            ref={videoRef}
+                            src={
+                                entry.videoSrc || "/videos/personalize-care.mp4"
+                            }
+                            playsInline
+                            muted
+                            autoPlay
+                            loop
+                            controls={false}
+                        />
+                    </div>
+                </div>
+
+                {/* Part 3: Content section */}
+                <div className="mobile-apple-part3">
+                    <h3 className="mobile-apple-title">
+                        The right strategy. At the right return.
+                    </h3>
+                    <div className="mobile-apple-content">
+                        <p>
+                            Uncover hidden efficiencies that reduce unnecessary
+                            labor hours and care mismatches.
+                        </p>
+                        <p>
+                            Align care levels with reimbursement potential to
+                            support justified rate increases.
+                        </p>
+                        <p>
+                            Optimize NOI by transforming real-time insights into
+                            smarter operational decisions.
+                        </p>
+                    </div>
+                    <button className="mobile-apple-button">
+                        + Learn more about Personalized Care
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // Special mobile rendering for Increase NOI section (ID 8)
+    if (entry.id === 8 && !isDesktop) {
+        return (
+            <div id={sectionId} className="mobile-apple-component white-bg">
+                {/* Part 1: Text above video */}
+                <div className="mobile-apple-part1">
+                    <div className="mobile-apple-small-title">Improve NOI</div>
+                    <h2 className="mobile-apple-subtitle">
+                        Boost your NOI and maximize returns through trusted,
+                        data-driven care plans.
+                    </h2>
+                </div>
+
+                {/* Part 2: Video */}
+                <div className="mobile-apple-video-container">
+                    <div className="mobile-apple-video">
+                        <video
+                            ref={videoRef}
+                            src={entry.videoSrc || "/videos/increase-noi.mp4"}
+                            playsInline
+                            muted
+                            autoPlay
+                            loop
+                            controls={false}
+                        />
+                    </div>
+                </div>
+
+                {/* Part 3: Content section */}
+                <div className="mobile-apple-part3">
+                    <h3 className="mobile-apple-title">Built to scale.</h3>
+                    <div className="mobile-apple-content">
+                        <p>
+                            Turn insights into enterprise-wide transformation.
+                        </p>
+                        <p>
+                            Maximize returns through data-driven care
+                            optimization.
+                        </p>
+                        <p>
+                            Scale efficient operations across your entire
+                            facility network.
+                        </p>
+                    </div>
+                    <button className="mobile-apple-button">
+                        + Learn more about increase NOI
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     if (
         (entry.type === "scrolly-video" ||
             entry.type === "scrolly-video-fixed") &&
-        !((entry.id === 1.6 || entry.id === 2) && !isDesktop)
+        !(
+            (entry.id === 1.6 ||
+                entry.id === 2 ||
+                entry.id === 3.2 ||
+                entry.id === 4 ||
+                entry.id === 6 ||
+                entry.id === 8) &&
+            !isDesktop
+        )
     ) {
         return (
             <div
@@ -630,7 +848,10 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     if (
         entry.type === "text" &&
         !(entry.id === 1 && !isDesktop) &&
-        !(entry.id === 3 && !isDesktop)
+        !(entry.id === 3 && !isDesktop) &&
+        !(entry.id === 3.5 && !isDesktop) &&
+        !(entry.id === 5 && !isDesktop) &&
+        !(entry.id === 7 && !isDesktop)
     ) {
         // Get all text sections to calculate proper zebra striping
         const textSections = homeSections.filter((s) => s.type === "text");
@@ -739,7 +960,14 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     }
 
     // Don't render hidden mobile sections as video fallback
-    if ((entry.id === 1 || entry.id === 3) && !isDesktop) {
+    if (
+        (entry.id === 1 ||
+            entry.id === 3 ||
+            entry.id === 3.5 ||
+            entry.id === 5 ||
+            entry.id === 7) &&
+        !isDesktop
+    ) {
         return null;
     }
 
