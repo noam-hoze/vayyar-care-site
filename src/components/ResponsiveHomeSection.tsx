@@ -7,8 +7,8 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
 import "@/styles/theater-mode.css";
 import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styles
+import styles from "./ResponsiveHomeSection.module.css";
 
-// Register both ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 interface ResponsiveHomeSectionProps {
@@ -439,10 +439,8 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
                         nextSectionElement.querySelector("video");
                     if (videoElement) {
                         // Use the correct start time from the next section
-                        // @ts-expect-error HTMLVideoElement type narrowing at runtime
                         videoElement.currentTime = nextSectionStartTime;
                         // Set playing state to ensure video starts playing
-                        // @ts-expect-error HTMLVideoElement type narrowing at runtime
                         videoElement.play();
                     }
 
@@ -491,25 +489,11 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
 
     if (section.type === "scroll-scrub-video") {
         return (
-            <div
-                id={sectionId}
-                style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100vh",
-                    backgroundColor: "#ffffff",
-                    scrollMarginTop: "64px",
-                    overflow: "hidden",
-                }}
-            >
+            <div id={sectionId} className={`${styles.scrubSection}`}>
                 <video
                     ref={videoRef}
                     src={videoSrc || section.videoSrc}
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                    }}
+                    className={styles.scrubVideo}
                     playsInline
                     muted
                     preload="auto"
@@ -520,25 +504,11 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
 
     if (section.type === "image") {
         return (
-            <div
-                id={sectionId}
-                style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100vh",
-                    backgroundColor: "#ffffff",
-                    scrollMarginTop: "64px",
-                    overflow: "hidden",
-                }}
-            >
+            <div id={sectionId} className={styles.imageSection}>
                 <img
                     src={section.imageSrc}
                     alt={section.title}
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                    }}
+                    className={styles.fullBleedImage}
                 />
             </div>
         );
@@ -552,100 +522,45 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
             (s) => s.id === section.id
         );
         // Determine background color based on text section index
-        const sectionBgColor =
-            textSectionIndex % 2 === 0 ? "#ffffff" : "#f5f5f7";
+        const isLightTextBg = textSectionIndex % 2 === 0;
 
         if (isDesktop) {
             return (
                 <div
                     id={sectionId}
-                    className="flex justify-center items-center"
-                    style={{
-                        width: "100%",
-                        zIndex: 10,
-                        backgroundColor: sectionBgColor,
-                        color: "#1d1d1f",
-                        padding: "128px 0",
-                        minHeight: "50vh",
-                        scrollMarginTop: "64px",
-                        fontFamily:
-                            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-                    }}
+                    className={`flex justify-center items-center ${
+                        styles.textSectionDesktop
+                    } ${isLightTextBg ? styles.bgLight : styles.bgGray}`}
                 >
-                    <div
-                        style={{
-                            maxWidth: "980px",
-                            margin: "0 auto",
-                            padding: "0 22px",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: "repeat(5, 1fr)",
-                                gap: "64px",
-                                alignItems: "start",
-                            }}
-                        >
+                    <div className={styles.textContainerDesktop}>
+                        <div className={styles.textGridDesktop}>
                             {/* Left Column: Title */}
-                            <div style={{ gridColumn: "span 2 / span 2" }}>
-                                <h2
-                                    style={{
-                                        fontSize: "28px",
-                                        fontWeight: "700",
-                                        lineHeight: 1.1,
-                                        letterSpacing: "0em",
-                                        margin: 0,
-                                    }}
-                                >
+                            <div className={styles.textLeft}>
+                                <h2 className={styles.desktopTitle}>
                                     {section.header}
                                 </h2>
                             </div>
                             {/* Right Column: Content */}
-                            <div
-                                style={{
-                                    gridColumn: "span 3 / span 3",
-                                    marginTop: "4px",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        fontSize: "18px",
-                                        color: "#6e6e73",
-                                        lineHeight: 1.47,
-                                        fontWeight: 700,
-                                    }}
-                                >
+                            <div className={styles.textRight}>
+                                <div className={styles.textContentDesktop}>
                                     {section.content}
                                 </div>
                                 {section.buttonText && nextSectionId && (
-                                    <div style={{ marginTop: "20px" }}>
+                                    <div
+                                        className={
+                                            styles.learnMoreWrapperDesktop
+                                        }
+                                    >
                                         <button
                                             onClick={handleLearnMore}
-                                            style={{
-                                                marginTop: "20px",
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                gap: "10px", // Increased from 8px
-                                                padding: "16px 32px", // Increased from 12px 24px
-                                                fontSize: "19px", // Increased from 17px
-                                                fontWeight: "600",
-                                                color: "#fff",
-                                                backgroundColor: "#f56300",
-                                                borderRadius: "9999px",
-                                                border: "none",
-                                                cursor: "pointer",
-                                                boxShadow:
-                                                    "0 4px 12px rgba(245, 99, 0, 0.3)", // Added shadow for more prominence
-                                                transition: "all 0.2s ease",
-                                            }}
+                                            className={
+                                                styles.learnMoreButtonDesktop
+                                            }
                                         >
                                             <svg
-                                                style={{
-                                                    width: "20px",
-                                                    height: "20px",
-                                                }}
+                                                className={
+                                                    styles.learnMoreIconDesktop
+                                                }
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20"
                                                 fill="currentColor"
@@ -669,77 +584,35 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
             );
         }
 
+        // Mobile only
         return (
             <div
                 id={sectionId}
-                style={{
-                    fontSize: 18,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    scrollMarginTop: "64px",
-                    backgroundColor: sectionBgColor,
-                }}
+                className={`${styles.textSectionMobile} ${
+                    isLightTextBg ? styles.bgLight : styles.bgGray
+                }`}
             >
                 {section.title && (
-                    <div
-                        style={{
-                            padding: "60px 24px 30px",
-                            textAlign: "center",
-                            borderBottom: "1px solid rgba(0,0,0,0.08)",
-                        }}
-                    >
-                        <h3
-                            style={{
-                                fontSize: "2.2rem",
-                                fontWeight: "bold",
-                                color: "#171717",
-                                marginBottom: "0",
-                            }}
-                        >
-                            {section.title}
-                        </h3>
+                    <div className={styles.mobileTitleContainer}>
+                        <h3 className={styles.mobileTitle}>{section.title}</h3>
                     </div>
                 )}
-                <div style={{ padding: "40px 24px 24px" }}>
+                <div className={styles.mobileContentContainer}>
                     {section.header && (
-                        <h2
-                            style={{
-                                fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
-                                fontWeight: "bold",
-                                marginBottom: "24px",
-                                lineHeight: "1.2",
-                            }}
-                        >
+                        <h2 className={styles.mobileHeader}>
                             {section.header}
                         </h2>
                     )}
-                    <div style={{ lineHeight: "1.6" }}>{section.content}</div>
+                    <div className={styles.mobileBody}>{section.content}</div>
 
                     {/* Learn more about button */}
                     {section.buttonText && nextSectionId && (
                         <button
                             onClick={handleLearnMore}
-                            style={{
-                                marginTop: "24px",
-                                backgroundColor: "#FF7A00", // Changed from #05aae9 to orange #FF7A00
-                                color: "white",
-                                border: "none",
-                                borderRadius: "8px",
-                                padding: "16px 28px", // Increased from 12px 20px
-                                fontSize: "18px", // Increased from 16px
-                                fontWeight: "bold",
-                                cursor: "pointer",
-                                alignSelf: "flex-start",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px", // Increased from 8px
-                                boxShadow: "0 4px 12px rgba(255, 122, 0, 0.3)", // Added shadow for more prominence
-                                transition: "all 0.2s ease",
-                            }}
+                            className={styles.learnMoreButtonMobile}
                         >
                             Learn about {section.buttonText}
-                            <span style={{ fontWeight: "bold" }}>&#8250;</span>
+                            <span className={styles.mobileArrow}>&#8250;</span>
                         </button>
                     )}
                 </div>
@@ -752,16 +625,14 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
     const videoSectionIndex = videoSections.findIndex(
         (s) => s.id === section.id
     );
-    const videoBgColor = videoSectionIndex % 2 === 0 ? "#ffffff" : "#f5f5f7";
+    const isLightVideoBg = videoSectionIndex % 2 === 0;
 
     return (
         <div
             id={sectionId}
-            className="relative"
-            style={{
-                scrollMarginTop: "64px",
-                backgroundColor: videoBgColor,
-            }}
+            className={`${styles.videoSection} ${
+                isLightVideoBg ? styles.bgLight : styles.bgGray
+            } relative`}
         >
             {/* Theater mode overlay is now a global component, removed from individual sections */}
 
@@ -775,8 +646,7 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
                             isActiveVideo && theaterMode
                                 ? "theater-mode-current-video"
                                 : ""
-                        }`}
-                        style={{ objectFit: "cover", aspectRatio: "16/9" }}
+                        } ${styles.productImage}`}
                     />
                 ) : (
                     <video
@@ -796,14 +666,7 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
                 )}
 
                 {/* Dark overlay to make buttons more prominent */}
-                <div
-                    className="absolute inset-0 rounded-xl pointer-events-none"
-                    style={{
-                        background:
-                            "linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%)",
-                        zIndex: 1,
-                    }}
-                />
+                <div className={styles.videoDarkOverlay} />
 
                 {/* Exit theater mode button - only show for active video */}
                 {isActiveVideo && theaterMode && (
@@ -845,9 +708,7 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
                                 20 *
                                 (1 - Math.max(0, Math.min(1, progress)))
                             }
-                            style={{
-                                transition: "stroke-dashoffset 0.2s linear",
-                            }}
+                            className={styles.progressCircle}
                             strokeLinecap="round"
                         />
                     </svg>
@@ -869,5 +730,3 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
 };
 
 export default ResponsiveHomeSection;
-
-

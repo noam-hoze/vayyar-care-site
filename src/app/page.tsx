@@ -1,13 +1,12 @@
-"use client"; // Mark this as a Client Component
+"use client"; 
 
 import React from "react";
 import { homeSections } from "@/data/homeSections";
 import ResponsiveHomeSection from "@/components/ResponsiveHomeSection";
 import ResponsiveHeroSection from "@/components/ResponsiveHeroSection";
-import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay"; // Import the TheaterModeOverlay component
-import ContactForm from "@/components/ContactForm"; // Import the new Breather component
+import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay"; 
+import ContactForm from "@/components/ContactForm"; 
 
-// Renamed function to match Next.js convention (can be any name, but default export is the page)
 export default function HomePage() {
     return (
         <div style={{ margin: "0 auto", background: "#fff" }}>

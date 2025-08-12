@@ -1,0 +1,221 @@
+.scrollMarginTop {
+  scroll-margin-top: 64px;
+}
+
+/* Shared zebra backgrounds to replace JS-computed colors */
+.bgLight {
+  background-color: #ffffff;
+}
+
+.bgGray {
+  background-color: #f5f5f7;
+}
+
+/* Scroll-scrub video section */
+.scrubSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff;
+  overflow: hidden;
+  scroll-margin-top: 64px;
+}
+
+.scrubVideo,
+.fullBleedVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Image section */
+.imageSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff;
+  overflow: hidden;
+  scroll-margin-top: 64px;
+}
+
+.fullBleedImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text sections - Desktop */
+.textSectionDesktop {
+  width: 100%;
+  z-index: 10;
+  color: #1d1d1f;
+  padding: 128px 0;
+  min-height: 50vh;
+  scroll-margin-top: 64px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+.textContainerDesktop {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+.textGridDesktop {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 64px;
+  align-items: start;
+}
+
+.textLeft {
+  grid-column: span 2 / span 2;
+}
+
+.desktopTitle {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.textRight {
+  grid-column: span 3 / span 3;
+  margin-top: 4px;
+}
+
+.textContentDesktop {
+  font-size: 18px;
+  color: #6e6e73;
+  line-height: 1.47;
+  font-weight: 700;
+}
+
+.learnMoreWrapperDesktop {
+  margin-top: 20px;
+}
+
+.learnMoreButtonDesktop {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 32px;
+  font-size: 19px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #f56300;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(245, 99, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.learnMoreButtonDesktop:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+}
+
+.learnMoreIconDesktop {
+  width: 20px;
+  height: 20px;
+}
+
+/* Text sections - Mobile */
+.textSectionMobile {
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-margin-top: 64px;
+}
+
+.mobileTitleContainer {
+  padding: 60px 24px 30px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.mobileTitle {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #171717;
+  margin-bottom: 0;
+}
+
+.mobileContentContainer {
+  padding: 40px 24px 24px;
+}
+
+.mobileHeader {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: bold;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.mobileBody {
+  line-height: 1.6;
+}
+
+.learnMoreButtonMobile {
+  margin-top: 24px;
+  background-color: #ff7a00;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.learnMoreButtonMobile:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+}
+
+/* Video sections */
+.videoSection {
+  position: relative;
+  scroll-margin-top: 64px;
+}
+
+.videoDarkOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem; /* matches rounded-xl */
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+  z-index: 1;
+}
+
+.productImage {
+  width: 100%;
+  border-radius: 0.75rem;
+  background: #000;
+  object-fit: cover;
+  aspect-ratio: 16/9;
+}
+
+/* Video progress ring circle transition */
+.progressCircle {
+  transition: stroke-dashoffset 0.2s linear;
+}
+
+/* Mobile arrow in learn more button */
+.mobileArrow {
+  font-weight: bold;
+}
+
+
