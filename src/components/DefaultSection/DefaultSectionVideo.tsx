@@ -15,6 +15,8 @@ interface MediaVideoProps {
     productImageSrc?: string;
     isExitVisible?: boolean;
     onExitTheater?: () => void;
+    // Mobile-specific
+    isDesktop?: boolean;
 }
 
 const DefaultSectionVideo: React.FC<MediaVideoProps> = ({
@@ -30,7 +32,28 @@ const DefaultSectionVideo: React.FC<MediaVideoProps> = ({
     productImageSrc,
     isExitVisible,
     onExitTheater,
+    isDesktop = true, // Default to desktop behavior
 }) => {
+    // Mobile: simple 16:9 video, no controls, no theater mode
+    if (!isDesktop) {
+        return (
+            <div id={sectionId} className={styles.mobileVideo16x9}>
+                <video
+                    ref={videoRef}
+                    src={videoSrc}
+                    className="w-full h-full object-cover rounded-xl"
+                    controls={false}
+                    playsInline
+                    muted
+                    autoPlay
+                    loop
+                    preload="auto"
+                />
+            </div>
+        );
+    }
+
+    // Desktop: original behavior with controls and theater mode
     return (
         <div id={sectionId} className={`${styles.videoSection} relative`}>
             <div className="relative">

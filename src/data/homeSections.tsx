@@ -28,6 +28,9 @@ export interface HomeSection {
     // This is a timecode that indicate where
     // the orange button will scroll to
     scrollToTimeValue?: string;
+    // Mobile-specific properties
+    mobileVariant?: "default" | "narrow-text";
+    eyebrow?: string;
 }
 
 export const homeSections: HomeSection[] = [

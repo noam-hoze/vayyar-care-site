@@ -62,6 +62,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         if (
             (entry.type === "scrolly-video" ||
                 entry.type === "scrolly-video-fixed") &&
+            isDesktop &&
             scrollyContainerRef.current &&
             scrollyOverlayRef.current
         ) {
@@ -200,6 +201,16 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             entry.type !== "scroll-scrub-video"
         )
             return;
+
+        // Skip ScrollTrigger setup for scrolly videos on mobile
+        if (
+            !isDesktop &&
+            (entry.type === "scrolly-video" ||
+                entry.type === "scrolly-video-fixed")
+        ) {
+            return;
+        }
+
         const video = videoRef.current;
         if (!video) return;
 
@@ -464,30 +475,78 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         entry.type === "scrolly-video" ||
         entry.type === "scrolly-video-fixed"
     ) {
-        return (
-            <div
-                id={sectionId}
-                ref={scrollyContainerRef}
-                className="scrolly-container"
-            >
-                <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
-                <div className="scrolly-video">
-                    <video
-                        ref={videoRef}
-                        src={
+        if (isDesktop) {
+            // Desktop: original scrolly behavior with overlaid text
+            return (
+                <div
+                    id={sectionId}
+                    ref={scrollyContainerRef}
+                    className="scrolly-container"
+                >
+                    <div
+                        ref={scrollyOverlayRef}
+                        className="scrolly-overlay"
+                    ></div>
+                    <div className="scrolly-video">
+                        <video
+                            ref={videoRef}
+                            src={
+                                videoSrc ||
+                                entry.videoSrc ||
+                                defaultConfig.videoSrc.split("?")[0]
+                            }
+                            className="w-full h-full object-cover"
+                            playsInline
+                            muted
+                            loop
+                        />
+                    </div>
+                    <div className="scrolly-text">{entry.content}</div>
+                </div>
+            );
+        } else {
+            // Mobile: separate text above video (no overlay, no GSAP)
+            return (
+                <>
+                    <DefaultSectionIntroText
+                        sectionId={sectionId}
+                        header={entry.header}
+                        content={entry.content}
+                        learnMoreEnabled={Boolean(
+                            entry.buttonText && nextSectionId
+                        )}
+                        learnMoreLabel={
+                            entry.buttonText
+                                ? `Learn about ${entry.buttonText}`
+                                : undefined
+                        }
+                        onLearnMore={handleLearnMore}
+                        isLightBg={true} // You can adjust this based on your zebra striping logic
+                        variant={entry.mobileVariant || "narrow-text"} // Default to narrow-text for scrolly sections
+                        eyebrow={entry.eyebrow}
+                    />
+                    <DefaultSectionVideo
+                        sectionId={`${sectionId}-video`}
+                        videoRef={videoRef}
+                        videoSrc={
                             videoSrc ||
                             entry.videoSrc ||
                             defaultConfig.videoSrc.split("?")[0]
                         }
-                        className="w-full h-full object-cover"
-                        playsInline
-                        muted
-                        loop
+                        isActiveVideo={false} // No theater mode interactions on mobile scrolly videos
+                        theaterMode={false}
+                        progress={0}
+                        playing={false}
+                        onTogglePlay={() => {}} // No manual controls for mobile scrolly videos
+                        showImage={false}
+                        productImageSrc=""
+                        isExitVisible={false}
+                        onExitTheater={() => {}}
+                        isDesktop={false} // This will trigger 16:9 mobile video behavior
                     />
-                </div>
-                <div className="scrolly-text">{entry.content}</div>
-            </div>
-        );
+                </>
+            );
+        }
     }
 
     if (entry.type === "scroll-scrub-video") {
