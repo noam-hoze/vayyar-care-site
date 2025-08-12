@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "@/styles/main.css";
 import "./globals.css";
-import MainLayout from "@/components/MainLayout";
+import AppShell from "@/components/AppShell";
 import { VideoTimeProvider } from "@/contexts/VideoTimeContext";
 import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
 
@@ -33,7 +33,7 @@ export default function RootLayout({
             >
                 <VideoTimeProvider>
                     <MobileHomeVideoProvider>
-                        <MainLayout>{children}</MainLayout>
+                        <AppShell>{children}</AppShell>
                     </MobileHomeVideoProvider>
                 </VideoTimeProvider>
             </body>

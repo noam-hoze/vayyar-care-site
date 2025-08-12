@@ -1,18 +1,17 @@
-"use client"; // Ensure it's a client component
+"use client";
 
 import React from "react";
-import { usePathname } from "next/navigation"; // Import usePathname
-import NavBar from "./navigation"; // Assuming NavBar is in the same directory
+import { usePathname } from "next/navigation";
+import NavBar from "./navigation";
 import { homeSections } from "@/data/homeSections";
 import { scrollToSection } from "@/lib/scrollUtils";
 
-interface MainLayoutProps {
+interface AppShellProps {
     children: React.ReactNode;
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-    const pathname = usePathname(); // Get current path
-    // Determine if NavBar should be shown (hide on /demo)
+const AppShell: React.FC<AppShellProps> = ({ children }) => {
+    const pathname = usePathname();
     const showNavBar = !["/demo"].includes(pathname);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
     const [sectionProgress, setSectionProgress] = React.useState<
@@ -44,7 +43,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         };
 
         window.addEventListener("scroll", handleScroll, { passive: true });
-        handleScroll(); // Initial calculation
+        handleScroll();
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -66,7 +65,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     />
                 </div>
             )}
-            {/* Mobile overlay menu rendered here, outside NavBar */}
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center transition-all duration-300 lg:hidden">
                     <button
@@ -106,4 +104,4 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     );
 };
 
-export default MainLayout;
+export default AppShell;
