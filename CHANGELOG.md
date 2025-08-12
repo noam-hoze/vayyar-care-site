@@ -1,3 +1,7 @@
+## 0.1.2 – Mobile video full-width
+
+- Mobile video in `DefaultSectionVideo` now scales edge-to-edge using 100vw with safe bleed (`margin-left: calc(50% - 50vw)`), maintaining 16:9 aspect ratio.
+
 ## 0.1.1 – Mobile Narrow Variant, Inter font, and CSS-only padding
 
 - Implemented narrow mobile intro text variant with Inter typography (17px, 400, 1.47) using global classes: `mobileNarrowContainer`, `mobileNarrowHeading`, `mobileNarrowBody`.
