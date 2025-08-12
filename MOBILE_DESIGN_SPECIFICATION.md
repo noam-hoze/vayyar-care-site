@@ -9,72 +9,72 @@ This document specifies the exact pixel-perfect design for the mobile view of th
 ### Design Principles
 
 -   **Mobile-First**: All changes apply only to mobile view, desktop remains untouched
--   **Clean & Modern**: White backgrounds with black text and orange accents
+-   **Clean & Modern**: White backgrounds with near‑black text; subtle, consistent accent usage
 -   **Consistent Spacing**: Generous vertical padding between sections
 -   **Centered Layout**: Single-column mobile-optimized design
--   **Typography Hierarchy**: Clear distinction between headings and body text
--   **Content Preservation**: Keep all existing VayyarCare content and messaging - only apply Apple's design principles and CSS rules
+-   **Typography Hierarchy**: Clear distinction between eyebrow label, headline, section titles, and body text
+-   **Content Preservation**: Keep all existing VayyarCare content and messaging – apply Apple-style layout and CSS only
 
 ---
 
 ## Section Breakdown
 
-### 1. Hero Section
+### Standard Mobile Section Pattern (Vision Pro–style)
+
+-   **Part 1 — Text (default)**
+    -   Eyebrow label above the headline (e.g., “Entertainment”), uppercase/small caps
+    -   Large, bold, centered multi‑line headline
+    -   White background
+    -   This is the default for mobile. The “narrow text” variant below is a special case used only when explicitly flagged.
+-   **Part 2 — Video**
+    -   Plain 16:9 video immediately below Part 1
+    -   No scroll‑scrub, no GSAP, no pinning; standard inline playback
+-   **Part 3 — Title + Content**
+    -   Left‑aligned title and paragraphs below the video
+    -   Apple‑style spacing and typography (details below)
+
+### 1. Hero Section (Mobile)
 
 **Background**: White (#FFFFFF)
 **Content**:
 
--   **Image**: Centered image of VayyarCare system/technology
-    -   Size: Full width of mobile container
-    -   Position: Centered horizontally
-    -   Style: Professional, healthcare-focused imagery
--   **Text Layout**:
-    -   **Primary Headline**: Large, bold, near-black text (#1D1D1F), centered
-        -   Font Family: SF Pro Display or Magistral
-        -   Font Size: 48px-56px for main headlines
-        -   Font Weight: Bold (700)
-        -   Line Height: 1.2
-        -   Keep existing VayyarCare content and messaging
-    -   **Subtitle**: Orange text (#FF6B35) below headline
-        -   Font Family: SF Pro Display or Magistral
-        -   Font Size: 24px-28px
-        -   Font Weight: Medium (500)
-        -   Line Height: 1.3
-        -   Keep existing VayyarCare subtitle content
--   **Spacing**: 120px+ top/bottom padding for maximum impact
+-   **Eyebrow label (optional)**: Small, near‑black text above the headline (e.g., “Entertainment”)
+    -   Font Family: SF Pro Display or Magistral
+    -   Font Size: 14px–16px
+    -   Font Weight: 600
+    -   Letter‑spacing: 0.3–0.5px; uppercase/small caps styling
+-   **Primary Headline**: Large, bold, near‑black text (#1D1D1F), centered, multi‑line
+    -   Font Family: SF Pro Display or Magistral
+    -   Font Size: 40px–44px
+    -   Font Weight: Bold (700)
+    -   Line Height: 1.1–1.2
+    -   Keep existing VayyarCare headline copy
+-   **Spacing**: 64px–96px top/bottom padding
 
-### 2. Narrow Text Section (Double Spacing)
+### 2. Narrow Text Section (Special‑case variant)
+
+Use only when explicitly enabled for a section. Replaces the default Part 1 text block on mobile.
 
 **Background**: White
 **Content**:
 
--   **Text Container**: Narrow width (approximately 80% of mobile container)
--   **Content**:
-    -   Large, bold, black heading
-    -   Multiple paragraphs with double spacing between them
-    -   Left-aligned text within the narrow container
--   **Typography**:
-    -   **Headings**: Large, bold, near-black text (#1D1D1F)
-        -   Font Family: SF Pro Display or Magistral
-        -   Font Size: 32px-40px
-        -   Font Weight: Bold (700)
-        -   Line Height: 1.3
-    -   **Body text**: Regular weight, near-black text (#1D1D1F)
-        -   Font Family: SF Pro Display or Magistral
-        -   Font Size: 17px-19px
-        -   Font Weight: Regular (400)
-        -   Line height: 1.5-1.6 for body text
-    -   **Paragraph spacing**: 2x normal spacing (48px-64px between paragraphs)
+-   **Text Container**: Narrow width (80%–85% of the mobile content width), left‑aligned
+-   **Heading**: Large, bold, near‑black text (#1D1D1F)
+    -   Font Size: 32px–36px, Line Height: 1.25–1.3
+-   **Body**: Regular weight, near‑black text (#1D1D1F)
+    -   Font Size: 17px–19px, Line Height: 1.5–1.6
+-   **Paragraph spacing**: Double spacing (48px–64px between paragraphs)
 
-### 3. Full-Width Video
+### 3. Video (Mobile)
 
 **Background**: White (#FFFFFF)
 **Content**:
 
--   **Video**: Stretches full width of mobile container
--   **Aspect Ratio**: Maintains video proportions
--   **Controls**: Standard video player controls
--   **Spacing**: 80px-120px top/bottom padding
+-   **Video**: Full width of mobile container
+-   **Aspect Ratio**: Fixed 16:9 using CSS (`aspect-ratio: 16 / 9` or equivalent wrapper)
+-   **Behavior**: Plain inline video; no GSAP/ScrollTrigger, no scrubbing/pinning
+-   **Controls**: Standard video player controls (playsInline, muted/autoplay as needed)
+-   **Spacing**: 32px–56px above/below
 
 ### 4. Product View Section
 
@@ -194,11 +194,11 @@ This document specifies the exact pixel-perfect design for the mobile view of th
 
 **Font Size Scale**:
 
--   Hero Headlines: 48px-56px
--   Section Headers: 32px-40px
--   Subheadings: 24px-28px
--   Body Text: 17px-19px
--   Small Text: 18px-20px
+-   Mobile Hero Headlines (default Part 1): 40px–44px
+-   Section Headers (Part 3 titles): 24px–28px
+-   Eyebrow Label: 14px–16px
+-   Body Text: 17px–19px
+-   Small Text: 18px–20px
 
 **Line Heights**:
 
@@ -224,10 +224,10 @@ This document specifies the exact pixel-perfect design for the mobile view of th
 ### Layout
 
 -   **Container Width**: 100% of mobile viewport
--   **Content Width**: 90-95% of container (centered)
--   **Text Container**: 80-85% of content width for narrow sections (Apple's style)
--   **Centering**: All content horizontally centered
--   **Hero Section**: 120px+ top/bottom padding for impact
+-   **Content Width**: 90%–95% of container (centered)
+-   **Text Container**: 80%–85% of content width for narrow‑text variant only
+-   **Centering**: Content horizontally centered unless using narrow‑text variant (left‑aligned)
+-   **Hero Section**: 64px–96px top/bottom padding
 
 ### Responsive Behavior
 
@@ -244,8 +244,9 @@ This document specifies the exact pixel-perfect design for the mobile view of th
 Each section should be implemented as a separate React component with consistent props:
 
 -   `background` - Background color/style
--   `title` - Section title
--   `subtitle` - Section subtitle (if applicable)
+-   `eyebrow` - Optional small label above headline (default Part 1 only)
+-   `headline` - Default Part 1 headline text
+-   `narrowText` - Optional narrow‑text content (special‑case variant)
 -   `content` - Main content (text, video, image)
 -   `buttonText` - Button text (if applicable)
 -   `buttonAction` - Button click handler
@@ -255,6 +256,8 @@ Each section should be implemented as a separate React component with consistent
 -   Video playback states
 -   Scroll position tracking
 -   Section visibility states
+
+For mobile top sections, avoid scroll‑based video state; render as plain video.
 
 ### Performance Considerations
 
@@ -269,9 +272,9 @@ Each section should be implemented as a separate React component with consistent
 
 ### New Components to Create
 
-1. `MobileHeroSection.tsx` - Hero section with image and text
-2. `MobileTextSection.tsx` - Narrow text with double spacing
-3. `MobileVideoSection.tsx` - Full-width video section
+1. `MobileHeroText.tsx` - Default Part 1 text (eyebrow + headline, centered)
+2. `MobileNarrowText.tsx` - Special‑case narrow text with double spacing
+3. `MobileVideo16x9.tsx` - Plain 16:9 video section (no GSAP)
 4. `MobileProductSection.tsx` - Product showcase section
 5. `MobileComponentSection.tsx` - Reusable component section (grey/white variants)
 
@@ -279,17 +282,30 @@ Each section should be implemented as a separate React component with consistent
 
 1. `MobileHomeSection.tsx` - Update to use new component structure
 2. `mobile-styles.css` - Add new styling for components
-3. `homeSections.tsx` - Update data structure for new sections
+3. `homeSections.tsx` - Add flags for mobile variants:
+    - `mobileVariant: "narrow-text" | "default"` (default is "default")
+    - `mobileVideoMode: "plain-16x9"` (enforced for mobile top sections)
 
 ### CSS Classes
 
 -   `.mobile-hero-section`
+-   `.mobile-hero-eyebrow`
+-   `.mobile-hero-headline`
+-   `.mobile-video-16x9`
+-   `.mobile-section-title`
+-   `.mobile-section-body`
 -   `.mobile-text-section`
--   `.mobile-video-section`
+-   `.mobile-text-narrow`
+-   `.mobile-text-double-spacing`
 -   `.mobile-product-section`
 -   `.mobile-component-section`
 -   `.mobile-component-grey`
 -   `.mobile-component-white`
 -   `.mobile-button-orange`
--   `.mobile-text-narrow`
--   `.mobile-text-double-spacing`
+
+### Mobile Behavior Overrides
+
+-   For mobile rendering of the top section and any sections following this pattern:
+    -   Always render Part 2 as a simple 16:9 video; disable scrolly/scrub/pinning behaviors
+    -   If a section is marked as `mobileVariant: "narrow-text"`, replace the default Part 1 text block with the narrow‑text variant
+    -   Keep desktop behavior and order unchanged

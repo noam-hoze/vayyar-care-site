@@ -8,6 +8,8 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlug
 import "@/styles/theater-mode.css";
 import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styles
 import styles from "./HomePageSection.module.css";
+import IntroText from "./parts/IntroText";
+import MediaVideo from "./parts/MediaVideo";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -526,61 +528,21 @@ const HomePageSection: React.FC<HomePageSectionProps> = ({
 
         if (isDesktop) {
             return (
-                <div
-                    id={sectionId}
-                    className={`flex justify-center items-center ${
-                        styles.textSectionDesktop
-                    } ${isLightTextBg ? styles.bgLight : styles.bgGray}`}
-                >
-                    <div className={styles.textContainerDesktop}>
-                        <div className={styles.textGridDesktop}>
-                            {/* Left Column: Title */}
-                            <div className={styles.textLeft}>
-                                <h2 className={styles.desktopTitle}>
-                                    {section.header}
-                                </h2>
-                            </div>
-                            {/* Right Column: Content */}
-                            <div className={styles.textRight}>
-                                <div className={styles.textContentDesktop}>
-                                    {section.content}
-                                </div>
-                                {section.buttonText && nextSectionId && (
-                                    <div
-                                        className={
-                                            styles.learnMoreWrapperDesktop
-                                        }
-                                    >
-                                        <button
-                                            onClick={handleLearnMore}
-                                            className={
-                                                styles.learnMoreButtonDesktop
-                                            }
-                                        >
-                                            <svg
-                                                className={
-                                                    styles.learnMoreIconDesktop
-                                                }
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
-                                            <span>
-                                                Learn about {section.buttonText}
-                                            </span>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <IntroText
+                    sectionId={sectionId}
+                    header={section.header}
+                    content={section.content}
+                    learnMoreEnabled={Boolean(
+                        section.buttonText && nextSectionId
+                    )}
+                    learnMoreLabel={
+                        section.buttonText
+                            ? `Learn about ${section.buttonText}`
+                            : undefined
+                    }
+                    onLearnMore={handleLearnMore}
+                    isLightBg={isLightTextBg}
+                />
             );
         }
 
@@ -628,104 +590,20 @@ const HomePageSection: React.FC<HomePageSectionProps> = ({
     const isLightVideoBg = videoSectionIndex % 2 === 0;
 
     return (
-        <div
-            id={sectionId}
-            className={`${styles.videoSection} ${
-                isLightVideoBg ? styles.bgLight : styles.bgGray
-            } relative`}
-        >
-            {/* Theater mode overlay is now a global component, removed from individual sections */}
-
-            <div className="relative">
-                {/* Conditional rendering: show image if it's the product video and user has scrolled away */}
-                {showImage ? (
-                    <img
-                        src="/images/product.png"
-                        alt="Product overview"
-                        className={`w-full rounded-xl bg-black ${
-                            isActiveVideo && theaterMode
-                                ? "theater-mode-current-video"
-                                : ""
-                        } ${styles.productImage}`}
-                    />
-                ) : (
-                    <video
-                        ref={videoRef}
-                        src={videoSrc}
-                        className={`w-full rounded-xl bg-black ${
-                            isActiveVideo && theaterMode
-                                ? "theater-mode-current-video"
-                                : ""
-                        }`}
-                        controls={false}
-                        playsInline
-                        muted
-                        preload="auto"
-                        data-section-video="true"
-                    />
-                )}
-
-                {/* Dark overlay to make buttons more prominent */}
-                <div className={styles.videoDarkOverlay} />
-
-                {/* Exit theater mode button - only show for active video */}
-                {isActiveVideo && theaterMode && (
-                    <button
-                        onClick={() => setTheaterMode(false)}
-                        className="theater-mode-controls absolute top-3 left-3 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 text-white cursor-pointer"
-                        aria-label="Exit theater mode"
-                    >
-                        ✕
-                    </button>
-                )}
-
-                {/* Play/Pause button with circular progress */}
-                <div className="theater-mode-controls absolute top-3 right-3 w-12 h-12 flex items-center justify-center">
-                    <svg
-                        width={48}
-                        height={48}
-                        className="absolute top-0 left-0 -rotate-90"
-                    >
-                        <circle
-                            cx={24}
-                            cy={24}
-                            r={20}
-                            stroke="rgba(255,255,255,0.25)"
-                            strokeWidth={4}
-                            fill="none"
-                        />
-                        <circle
-                            cx={24}
-                            cy={24}
-                            r={20}
-                            stroke="#fff"
-                            strokeWidth={4}
-                            fill="none"
-                            strokeDasharray={2 * Math.PI * 20}
-                            strokeDashoffset={
-                                2 *
-                                Math.PI *
-                                20 *
-                                (1 - Math.max(0, Math.min(1, progress)))
-                            }
-                            className={styles.progressCircle}
-                            strokeLinecap="round"
-                        />
-                    </svg>
-                    <button
-                        onClick={togglePlay}
-                        className="relative bg-transparent border-0 rounded-full w-10 h-10 text-white text-xl flex items-center justify-center cursor-pointer z-10"
-                        aria-label={playing ? "Pause video" : "Play video"}
-                    >
-                        {playing ? (
-                            <span className="font-bold">&#10073;&#10073;</span> // Pause icon
-                        ) : (
-                            <span className="font-bold">&#9654;</span> // Play icon
-                        )}
-                    </button>
-                </div>
-            </div>
-        </div>
+        <MediaVideo
+            sectionId={sectionId}
+            videoRef={videoRef}
+            videoSrc={videoSrc}
+            isActiveVideo={isActiveVideo}
+            theaterMode={theaterMode}
+            progress={progress}
+            playing={playing}
+            onTogglePlay={togglePlay}
+            showImage={showImage}
+            productImageSrc="/images/product.png"
+            isExitVisible={isActiveVideo && theaterMode}
+            onExitTheater={() => setTheaterMode(false)}
+        />
     );
 };
 
