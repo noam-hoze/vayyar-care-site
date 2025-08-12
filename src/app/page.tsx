@@ -4,6 +4,7 @@ import React from "react";
 import { homeSections } from "@/data/homeSections";
 import MobileHomeSection from "@/components/mobile/MobileHomeSection";
 import MobileHeroSection from "@/components/mobile/MobileHeroSection";
+import MobileNarrowTextSection from "@/components/mobile/MobileNarrowTextSection";
 import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay"; // Import the TheaterModeOverlay component
 import ContactModal from "@/components/ContactModal"; // Import the new Breather component
 
@@ -12,6 +13,7 @@ export default function HomePage() {
     return (
         <div style={{ margin: "0 auto", background: "#fff" }}>
             <MobileHeroSection />
+            <MobileNarrowTextSection />
             {homeSections.map((section, idx) => (
                 <MobileHomeSection
                     key={idx}

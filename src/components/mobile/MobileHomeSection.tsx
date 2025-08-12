@@ -59,6 +59,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
         if (
             (section.type === "scrolly-video" ||
                 section.type === "scrolly-video-fixed") &&
+            isDesktop &&
             scrollyContainerRef.current &&
             scrollyOverlayRef.current
         ) {
@@ -159,7 +160,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                 };
             }
         }
-    }, [section.type]);
+    }, [section.type, isDesktop]);
 
     useEffect(() => {
         const checkDesktop = () => {
@@ -458,6 +459,44 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     };
 
     if (
+        (section.type === "scrolly-video" ||
+            section.type === "scrolly-video-fixed") &&
+        !isDesktop
+    ) {
+        // Mobile: simple 16:9 video, no sticky, no overlay/text
+        return (
+            <div
+                id={sectionId}
+                className="mobile-only"
+                style={{
+                    width: "100%",
+                    backgroundColor: "#ffffff",
+                    scrollMarginTop: "64px",
+                }}
+            >
+                <video
+                    ref={videoRef}
+                    src={
+                        videoSrc ||
+                        section.videoSrc ||
+                        defaultConfig.videoSrc.split("?")[0]
+                    }
+                    style={{
+                        width: "100%",
+                        height: "auto",
+                        aspectRatio: "16/9",
+                        objectFit: "cover",
+                        display: "block",
+                    }}
+                    playsInline
+                    muted
+                    loop
+                />
+            </div>
+        );
+    }
+
+    if (
         section.type === "scrolly-video" ||
         section.type === "scrolly-video-fixed"
     ) {
@@ -465,7 +504,7 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
             <div
                 id={sectionId}
                 ref={scrollyContainerRef}
-                className="scrolly-container"
+                className="scrolly-container mobile-only"
             >
                 <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
                 <div className="scrolly-video">
@@ -480,9 +519,13 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                         playsInline
                         muted
                         loop
+                        style={{ aspectRatio: "16/9" }}
                     />
                 </div>
-                <div className="scrolly-text">{section.content}</div>
+                {/* Hide any overlay text on mobile for Apple-style hero */}
+                <div className="scrolly-text" style={{ display: "none" }}>
+                    {section.content}
+                </div>
             </div>
         );
     }

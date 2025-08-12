@@ -154,6 +154,30 @@ body {
     max-width: 80%;
 }
 
+/* Mobile overrides: make scrolly videos small (Apple-style) */
+@media (max-width: 768px) {
+  .scrolly-container {
+    height: auto; /* no long scroll section */
+  }
+  .scrolly-video {
+    position: relative; /* disable sticky */
+    top: auto;
+    height: auto;
+    width: 100%;
+    background: #000;
+    aspect-ratio: 16/9; /* enforce 16:9 */
+  }
+  .scrolly-video video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 16/9;
+  }
+  .scrolly-text {
+    display: none !important; /* no overlay text on mobile */
+  }
+}
+
 
 @layer base {
   /* Example: Custom base styles if you have them */

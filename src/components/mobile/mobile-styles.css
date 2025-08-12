@@ -71,3 +71,19 @@
 .mobile-content::-webkit-scrollbar-thumb:hover {
   background: #a0a0a0;
 } 
+
+/* Mobile-only utility to avoid touching desktop */
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Narrow text helpers per spec */
+.mobile-text-narrow {
+  margin: 0 auto;
+}
+
+.mobile-text-double-spacing + .mobile-text-double-spacing {
+  margin-top: 56px; /* ~2x paragraph spacing */
+}
