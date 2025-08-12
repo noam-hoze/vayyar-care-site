@@ -4,7 +4,7 @@ import { scrollToSection } from "@/lib/scrollUtils";
 const VAYYAR_BLUE = "#06aeef";
 const ORANGE = "#f56300";
 
-const ResponsiveHeroSection: React.FC = () => {
+const HeroSection: React.FC = () => {
     const [hasSeenHero, setHasSeenHero] = useState(false);
     const heroSectionRef = useRef<HTMLElement>(null);
 
@@ -91,4 +91,4 @@ const ResponsiveHeroSection: React.FC = () => {
     );
 };
 
-export default ResponsiveHeroSection;
+export default HeroSection;

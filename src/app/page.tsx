@@ -1,18 +1,18 @@
-"use client"; 
+"use client";
 
 import React from "react";
 import { homeSections } from "@/data/homeSections";
-import ResponsiveHomeSection from "@/components/ResponsiveHomeSection";
-import ResponsiveHeroSection from "@/components/ResponsiveHeroSection";
-import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay"; 
-import ContactForm from "@/components/ContactForm"; 
+import HomePageSection from "@/components/HomePageSection";
+import HeroSection from "@/components/HeroSection";
+import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay";
+import ContactForm from "@/components/ContactForm";
 
 export default function HomePage() {
     return (
         <div style={{ margin: "0 auto", background: "#fff" }}>
-            <ResponsiveHeroSection />
+            <HeroSection />
             {homeSections.map((section, idx) => (
-                <ResponsiveHomeSection
+                <HomePageSection
                     key={idx}
                     section={section}
                     index={idx}

@@ -7,11 +7,11 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
 import "@/styles/theater-mode.css";
 import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styles
-import styles from "./ResponsiveHomeSection.module.css";
+import styles from "./HomePageSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-interface ResponsiveHomeSectionProps {
+interface HomePageSectionProps {
     section: HomeSection;
     index?: number;
     sectionId?: string;
@@ -19,7 +19,7 @@ interface ResponsiveHomeSectionProps {
     nextSectionId?: string; // Keep for backward compatibility
 }
 
-const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
+const HomePageSection: React.FC<HomePageSectionProps> = ({
     section,
     index,
     sectionId,
@@ -729,4 +729,4 @@ const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
     );
 };
 
-export default ResponsiveHomeSection;
+export default HomePageSection;
