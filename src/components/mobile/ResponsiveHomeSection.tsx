@@ -11,7 +11,7 @@ import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styl
 // Register both ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-interface MobileHomeSectionProps {
+interface ResponsiveHomeSectionProps {
     section: HomeSection;
     index?: number;
     sectionId?: string;
@@ -19,7 +19,7 @@ interface MobileHomeSectionProps {
     nextSectionId?: string; // Keep for backward compatibility
 }
 
-const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
+const ResponsiveHomeSection: React.FC<ResponsiveHomeSectionProps> = ({
     section,
     index,
     sectionId,
@@ -439,8 +439,10 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
                         nextSectionElement.querySelector("video");
                     if (videoElement) {
                         // Use the correct start time from the next section
+                        // @ts-expect-error HTMLVideoElement type narrowing at runtime
                         videoElement.currentTime = nextSectionStartTime;
                         // Set playing state to ensure video starts playing
+                        // @ts-expect-error HTMLVideoElement type narrowing at runtime
                         videoElement.play();
                     }
 
@@ -866,4 +868,6 @@ const MobileHomeSection: React.FC<MobileHomeSectionProps> = ({
     );
 };
 
-export default MobileHomeSection;
+export default ResponsiveHomeSection;
+
+
