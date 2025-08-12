@@ -2,7 +2,7 @@
 
 import React from "react";
 import { homeSections } from "@/data/homeSections";
-import DefaultSection from "@/components/DefaultSection";
+import DefaultSection from "@/components/DefaultSection/DefaultSection";
 import HomePageHeroSection from "@/components/HeroSection";
 import TheaterModeOverlay from "@/components/mobile/TheaterModeOverlay";
 import ContactForm from "@/components/ContactForm";

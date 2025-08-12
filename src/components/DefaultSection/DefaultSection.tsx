@@ -1,16 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import { defaultConfig } from "@/config/videoConfig";
 import { HomeSection, homeSections } from "@/data/homeSections";
-import { useMobileHomeVideo } from "./mobile/MobileHomeVideoContext";
+import { useMobileHomeVideo } from "../mobile/MobileHomeVideoContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
 import "@/styles/theater-mode.css";
 import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styles
 import styles from "./DefaultSection.module.css";
-import DefaultSectionIntroText from "./DefaultSectionIntroText";
-import DefaultSectionVideo from "./DefaultSectionVideo";
-import DefaultSectionDetails from "./DefaultSectionDetails";
+import DefaultSectionIntroText from "../DefaultSection/DefaultSectionIntroText";
+import DefaultSectionVideo from "../DefaultSection/DefaultSectionVideo";
+import DefaultSectionDetails from "../DefaultSection/DefaultSectionDetails";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
