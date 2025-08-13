@@ -208,4 +208,90 @@
 
 .mobile-apple-part3 .mobile-apple-button {
   align-self: center;
+}
+
+/* Narrow Text Section Styles (Special-case variant) */
+.mobile-narrow-text-section {
+  background: #ffffff;
+  padding: 80px 24px;
+  width: 100%;
+}
+
+.mobile-narrow-text-container {
+  width: 70%; /* Reduced width for more side padding */
+  margin: 0 auto; /* Centered instead of left-aligned */
+}
+
+.mobile-narrow-heading {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Magistral', sans-serif;
+  font-size: 30px; /* Updated to 30px as requested */
+  font-weight: 800; /* Updated to 800 as requested */
+  line-height: 1.275; /* 1.25-1.3 range */
+  color: #1d1d1f;
+  margin: 0 0 48px 0; /* Double spacing before body */
+  text-align: center; /* Centered text */
+}
+
+.mobile-narrow-body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Magistral', sans-serif;
+  font-size: 24px; /* 17px-19px range */
+  font-weight: 800;
+  line-height: 1.55; /* 1.5-1.6 range */
+  color: #1d1d1f;
+  text-align: center; /* Centered text */
+}
+
+.mobile-narrow-body p {
+  margin: 0 0 56px 0; /* Double spacing between paragraphs (48px-64px) */
+}
+
+.mobile-narrow-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Handle JSX content with proper spacing */
+.mobile-narrow-body ul {
+  margin: 0 0 56px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mobile-narrow-body ul:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-narrow-body li {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 0.5em;
+}
+
+.mobile-narrow-body li:last-child {
+  margin-bottom: 0;
+}
+
+/* Default Hero Section Styles (for non-narrow text scrolly-video conversions) */
+.mobile-hero-section {
+  background: #ffffff;
+  padding: 80px 24px;
+  width: 100%;
+  text-align: center;
+}
+
+.mobile-hero-content {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.mobile-hero-content p {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Magistral', sans-serif;
+  font-size: 42px; /* 40px-44px range */
+  font-weight: 700;
+  line-height: 1.15; /* 1.1-1.2 range */
+  color: #1d1d1f;
+  margin: 0 0 32px 0;
+}
+
+.mobile-hero-content p:last-child {
+  margin-bottom: 0;
 } 

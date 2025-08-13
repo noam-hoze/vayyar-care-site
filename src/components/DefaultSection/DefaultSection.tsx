@@ -11,6 +11,7 @@ import styles from "./DefaultSection.module.css";
 import DefaultSectionIntroText from "../DefaultSection/DefaultSectionIntroText";
 import DefaultSectionVideo from "../DefaultSection/DefaultSectionVideo";
 import DefaultSectionDetails from "../DefaultSection/DefaultSectionDetails";
+import MobileNarrowText from "../mobile/MobileNarrowText";
 import "../mobile/mobile-styles.css";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -780,7 +781,8 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         (entry.type === "scrolly-video" ||
             entry.type === "scrolly-video-fixed") &&
         !(
-            (entry.id === 1.6 ||
+            (entry.id === 0 ||
+                entry.id === 1.6 ||
                 entry.id === 2 ||
                 entry.id === 3.2 ||
                 entry.id === 4 ||
@@ -811,6 +813,66 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     />
                 </div>
                 <div className="scrolly-text">{entry.content}</div>
+            </div>
+        );
+    }
+
+    // Handle scrolly-video sections converted to mobile Apple-style layout
+    if (
+        (entry.type === "scrolly-video" ||
+            entry.type === "scrolly-video-fixed") &&
+        (entry.id === 0 ||
+            entry.id === 1.6 ||
+            entry.id === 2 ||
+            entry.id === 3.2 ||
+            entry.id === 4 ||
+            entry.id === 6 ||
+            entry.id === 8) &&
+        !isDesktop
+    ) {
+        // Part 1: Text section (narrow or default)
+        const textSection = (
+            <div key={`${sectionId}-text`}>
+                {entry.mobileVariant === "narrow-text" ? (
+                    <MobileNarrowText section={entry} />
+                ) : (
+                    <div className="mobile-hero-section">
+                        <div className="mobile-hero-content">
+                            {entry.content}
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+
+        // Part 2: Plain 16:9 video
+        const videoSection = (
+            <div
+                key={`${sectionId}-video`}
+                className="mobile-apple-video-container"
+            >
+                <div className="mobile-apple-video">
+                    <video
+                        ref={videoRef}
+                        src={
+                            videoSrc ||
+                            entry.videoSrc ||
+                            defaultConfig.videoSrc.split("?")[0]
+                        }
+                        className="w-full h-full object-cover"
+                        playsInline
+                        muted
+                        autoPlay
+                        loop
+                    />
+                </div>
+            </div>
+        );
+
+        return (
+            <div id={sectionId}>
+                {textSection}
+                {videoSection}
             </div>
         );
     }
@@ -883,7 +945,12 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             );
         }
 
-        // Mobile only
+        // Mobile only - Check for narrow text variant
+        if (entry.mobileVariant === "narrow-text") {
+            return <MobileNarrowText section={entry} />;
+        }
+
+        // Default mobile text rendering
         return (
             <div
                 id={sectionId}

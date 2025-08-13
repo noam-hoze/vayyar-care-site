@@ -28,6 +28,9 @@ export interface HomeSection {
     // This is a timecode that indicate where
     // the orange button will scroll to
     scrollToTimeValue?: string;
+    // Mobile-specific variant flags
+    mobileVariant?: "narrow-text" | "default";
+    mobileVideoMode?: "plain-16x9";
 }
 
 export const homeSections: HomeSection[] = [
@@ -35,6 +38,7 @@ export const homeSections: HomeSection[] = [
         id: 0,
         type: "scrolly-video",
         title: "Video 1",
+        mobileVariant: "narrow-text",
         // Controls the progress bar of the navigation buttons
         video: { start: "00:04:12", end: "00:09:15" },
         content: (
@@ -243,6 +247,7 @@ export const homeSections: HomeSection[] = [
         id: 3.5,
         type: "text",
         title: "Privacy",
+        mobileVariant: "narrow-text",
         header: (
             <>
                 <span
@@ -442,6 +447,7 @@ export const homeSections: HomeSection[] = [
         id: 7,
         type: "text",
         title: "Personalized Care",
+        mobileVariant: "narrow-text",
         header: (
             <>
                 The <span style={{ color: "#05aae9" }}>right</span> strategy.{" "}

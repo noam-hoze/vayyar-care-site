@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2024-12-21
+
+### Added
+- **NEW**: Narrow Text Section variant for Apple-style mobile layouts
+- MobileNarrowText component with left-aligned, narrow-width text layout
+- Support for `mobileVariant: "narrow-text"` property in HomeSection interface
+- Comprehensive CSS styles for narrow text variant following Apple design principles
+- Scrolly-video to mobile conversion system for hero sections
+
+### Enhanced
+- **Hero Section Mobile Conversion**: Section 0 (main hero) now renders as Apple-style mobile layout
+- **Advanced Text Styling**: 
+  - Font weight: 800 (extra bold)
+  - Font size: 30px for headings, 24px for body text
+  - Centered text with 70% width container for optimal mobile reading
+  - Double spacing between paragraphs (56px)
+- **Smart Section Detection**: Automatic conversion of scrolly-video sections to mobile Apple-style layout
+- **Privacy & Personalized Care**: Now use narrow text variant for better content presentation
+
+### Technical Implementation
+- Added `mobileVariant` and `mobileVideoMode` properties to HomeSection interface
+- Created MobileNarrowText component with proper TypeScript integration
+- Extended DefaultSection logic to handle scrolly-video mobile conversions
+- Added conditional rendering for narrow vs. default text variants
+- Implemented three-part mobile structure: narrow text + plain video + details
+
+### Design Specifications
+- **Typography**: SF Pro Display/Magistral fonts with proper weight hierarchy
+- **Layout**: 80%-85% width containers with left-alignment for narrow text
+- **Spacing**: Apple-style generous padding (80px sections, 48px-64px paragraphs)
+- **Colors**: Near-black text (#1D1D1F) on white backgrounds
+- **Mobile-First**: All changes apply only to mobile view, desktop completely preserved
+
+### Sections Updated
+- Section 0: Hero section with narrow text variant
+- Section 3.5: Privacy section with narrow text variant  
+- Section 7: Personalized Care section with narrow text variant
+
 ## [0.2.0] - 2024-12-21
 
 ### Added
