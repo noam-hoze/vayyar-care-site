@@ -7,6 +7,7 @@ const ORANGE = "#f56300";
 const HomePageHeroSection: React.FC = () => {
     const [hasSeenHero, setHasSeenHero] = useState(false);
     const heroSectionRef = useRef<HTMLElement>(null);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
     // Mapping for hero section items to their corresponding sections
     const heroItemMapping = {
@@ -38,8 +39,25 @@ const HomePageHeroSection: React.FC = () => {
         return () => observer.disconnect();
     }, []);
 
-    // Determine which video to show
-    const videoSrc = "/videos/hero-section.mp4";
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        // Set initial state immediately
+        setIsMobile(window.innerWidth < 768);
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // Determine which video to show - don't render video until we know device type
+    const videoSrc =
+        isMobile === null
+            ? null
+            : isMobile
+            ? "/videos/hero-section-mobile.mp4"
+            : "/videos/hero-section.mp4";
 
     return (
         <section
@@ -61,23 +79,25 @@ const HomePageHeroSection: React.FC = () => {
                 marginTop: "calc(var(--spacing) * -16)",
             }}
         >
-            <video
-                key={videoSrc} // Force re-mount when video changes
-                autoPlay
-                muted
-                playsInline
-                src={videoSrc}
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    zIndex: 0,
-                    pointerEvents: "none",
-                }}
-            />
+            {videoSrc && (
+                <video
+                    key={videoSrc} // Force re-mount when video changes
+                    autoPlay
+                    muted
+                    playsInline
+                    src={videoSrc}
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        zIndex: 0,
+                        pointerEvents: "none",
+                    }}
+                />
+            )}
             {/* Dark overlay to make buttons more prominent */}
             <div
                 style={{
