@@ -58,7 +58,7 @@ export default function NavBar({
                 }}
             ></div>
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-7">
-                <div className="flex items-center h-16">
+                <div className="grid items-center h-16 relative grid-cols-[auto_1fr_auto] lg:flex">
                     <div className="flex-shrink-0">
                         <Link href="/">
                             <VayyarLogo
@@ -87,8 +87,20 @@ export default function NavBar({
                             </button>
                         ))}
                     </div>
+                    {/* Book a Demo: centered between logo and hamburger on mobile */}
+                    <div className="justify-self-center ml-2">
+                        <button
+                            onClick={handleBookADemo}
+                            className="text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden hover:scale-105 cursor-pointer lg:static"
+                            style={{
+                                backgroundColor: bookADemoBackgroundColor,
+                            }}
+                        >
+                            <span className="inline-block">Book a Demo</span>
+                        </button>
+                    </div>
                     {/* Mobile menu button */}
-                    <div className="flex-1 flex justify-end items-center lg:hidden">
+                    <div className="justify-self-end flex items-center lg:hidden">
                         <button
                             className="ml-2 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-200 focus:outline-none mobile-menu"
                             aria-label="Open menu"
@@ -99,18 +111,6 @@ export default function NavBar({
                                 <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-4"></span>
                                 <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-6"></span>
                             </span>
-                        </button>
-                    </div>
-                    {/* Book a Demo always visible */}
-                    <div className="flex-shrink-0 ml-2">
-                        <button
-                            onClick={handleBookADemo}
-                            className="relative text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden transform hover:scale-105 cursor-pointer"
-                            style={{
-                                backgroundColor: bookADemoBackgroundColor,
-                            }}
-                        >
-                            <span className="inline-block">Book a Demo</span>
                         </button>
                     </div>
                 </div>

@@ -13,10 +13,10 @@ const Footer: React.FC = () => {
 
     return (
         <footer
-            className="w-full text-white mt-16"
+            className="w-full text-white mt-16 relative z-20"
             style={{ backgroundColor: "#0a4450" }}
         >
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 pt-12 pb-12">
                 {/* Divider */}
                 <div
                     className="h-px w-full"

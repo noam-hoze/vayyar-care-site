@@ -37,6 +37,14 @@ All notable changes to this project will be documented in this file.
 
 -   Mobile videos now render full width without overflow and with square corners (removed scale and rounded corners in `.mobile-apple-video*` styles)
 
+## [0.3.7] - 2025-08-13
+
+### Changed
+
+-   Header (mobile): switched to a 3-column grid so "Book a Demo" is centered between the logo and hamburger menu
+-   Footer: adjusted stacking context and padding so the top row (logo + socials) is no longer covered
+-   Contact form: added mobile divider and spacing; use `minHeight: 100vh` to avoid footer overlap
+
 ### Notes
 
 -   Mobile: "Vayyar Care" and "Support" sections now fold/unfold with +/- controls; "Contact Us" is always visible

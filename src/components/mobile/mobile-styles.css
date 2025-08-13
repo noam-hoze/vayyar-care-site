@@ -92,7 +92,7 @@
 .mobile-apple-small-title {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Magistral', sans-serif;
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.4;
   color: #1d1d1f;
   margin-bottom: 8px;
@@ -222,7 +222,7 @@
 }
 
 .mobile-narrow-text-container {
-  width: 70%; /* Reduced width for more side padding */
+  width: 84%; /* Reduced width for more side padding */
   margin: 0 auto; /* Centered instead of left-aligned */
 }
 
@@ -238,7 +238,7 @@
 
 .mobile-narrow-body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Magistral', sans-serif;
-  font-size: 24px; /* 17px-19px range */
+  font-size: 28px; /* 17px-19px range */
   font-weight: 800;
   line-height: 1.55; /* 1.5-1.6 range */
   color: #1d1d1f;

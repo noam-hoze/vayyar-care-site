@@ -65,9 +65,11 @@ const ContactForm: React.FC<ContactModalProps> = ({
     const formContent = (
         <div
             id="contact-section"
-            className="relative z-10"
-            style={{ height: "100vh" }}
+            className="relative z-10 mt-12 md:mt-20"
+            style={{ minHeight: "100vh" }}
         >
+            {/* Mobile divider to separate from previous section */}
+            <div className="md:hidden w-full max-w-4xl mx-auto h-px bg-gray-200 mb-6"></div>
             <div
                 className={
                     asPageElement
