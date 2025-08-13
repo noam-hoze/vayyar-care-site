@@ -509,9 +509,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                         <p>Reduce Administrative tasks</p>
                         <p>Improved Operational Efficiencies</p>
                     </div>
-                    <button className="mobile-apple-button">
+                    {defaultConfig.showLearnMoreButtons && (
+                        <button className="mobile-apple-button">
                         + Learn more about Staff optimization
-                    </button>
+                        </button>
+                    )}
                 </div>
             </div>
         );
@@ -566,9 +568,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                             real-time notifications tailored for elderly care.
                         </p>
                     </div>
-                    <button className="mobile-apple-button">
+                    {defaultConfig.showLearnMoreButtons && (
+                        <button className="mobile-apple-button">
                         + Learn more about Real-time Alerts
-                    </button>
+                        </button>
+                    )}
                 </div>
             </div>
         );
@@ -617,9 +621,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                             monitoring.
                         </p>
                     </div>
-                    <button className="mobile-apple-button">
+                    {defaultConfig.showLearnMoreButtons && (
+                        <button className="mobile-apple-button">
                         + Learn more about how we protect privacy
-                    </button>
+                        </button>
+                    )}
                 </div>
             </div>
         );
@@ -665,9 +671,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                         <p>Enhancing staff efficiency</p>
                         <p>Ensure Care Plan Compliance</p>
                     </div>
-                    <button className="mobile-apple-button">
+                    {defaultConfig.showLearnMoreButtons && (
+                        <button className="mobile-apple-button">
                         + Learn more about AI insights
-                    </button>
+                        </button>
+                    )}
                 </div>
             </div>
         );
@@ -724,9 +732,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                             smarter operational decisions.
                         </p>
                     </div>
-                    <button className="mobile-apple-button">
+                    {defaultConfig.showLearnMoreButtons && (
+                        <button className="mobile-apple-button">
                         + Learn more about Personalized Care
-                    </button>
+                        </button>
+                    )}
                 </div>
             </div>
         );
@@ -776,9 +786,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                             facility network.
                         </p>
                     </div>
-                    <button className="mobile-apple-button">
+                    {defaultConfig.showLearnMoreButtons && (
+                        <button className="mobile-apple-button">
                         + Learn more about increase NOI
-                    </button>
+                        </button>
+                    )}
                 </div>
             </div>
         );
@@ -960,7 +972,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     <div className={styles.mobileBody}>{entry.content}</div>
 
                     {/* Learn more about button */}
-                    {entry.buttonText && nextSectionId && (
+                    {defaultConfig.showLearnMoreButtons && entry.buttonText && nextSectionId && (
                         <button
                             onClick={handleLearnMore}
                             className={styles.learnMoreButtonMobile}
