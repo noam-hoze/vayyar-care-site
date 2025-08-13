@@ -5,6 +5,7 @@ interface MediaVideoProps {
     sectionId?: string;
     videoRef: MutableRefObject<HTMLVideoElement | null>;
     videoSrc: string;
+    variant?: "desktop" | "mobile";
     isActiveVideo: boolean;
     theaterMode: boolean;
     progress: number;
@@ -21,6 +22,7 @@ const DefaultSectionVideo: React.FC<MediaVideoProps> = ({
     sectionId,
     videoRef,
     videoSrc,
+    variant,
     isActiveVideo,
     theaterMode,
     progress,
@@ -31,6 +33,24 @@ const DefaultSectionVideo: React.FC<MediaVideoProps> = ({
     isExitVisible,
     onExitTheater,
 }) => {
+    if (variant === "mobile") {
+        return (
+            <div className="mobile-apple-video-container">
+                <div className="mobile-apple-video">
+                    <video
+                        ref={videoRef}
+                        src={videoSrc}
+                        playsInline
+                        muted
+                        autoPlay
+                        loop
+                        controls={false}
+                    />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div id={sectionId} className={`${styles.videoSection} relative`}>
             <div className="relative">

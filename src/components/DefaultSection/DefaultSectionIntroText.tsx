@@ -9,6 +9,9 @@ interface IntroTextProps {
     learnMoreLabel?: string;
     onLearnMore?: () => void;
     isLightBg: boolean;
+    // New: prepare for unified mobile/desktop rendering
+    variant?: "desktop" | "mobile";
+    smallTitle?: React.ReactNode;
 }
 
 const DefaultSectionIntroText: React.FC<IntroTextProps> = ({
@@ -19,7 +22,23 @@ const DefaultSectionIntroText: React.FC<IntroTextProps> = ({
     learnMoreLabel,
     onLearnMore,
     isLightBg,
+    // variant is intentionally unused for now to avoid behavioral changes
+    // and will be leveraged in the next step to switch markup/styling.
+    variant,
+    smallTitle,
 }) => {
+    // Mobile variant output (keeps current mobile CSS result)
+    if (variant === "mobile") {
+        return (
+            <div className="mobile-apple-part1">
+                {smallTitle && (
+                    <div className="mobile-apple-small-title">{smallTitle}</div>
+                )}
+                {header && <h2 className="mobile-apple-subtitle">{header}</h2>}
+            </div>
+        );
+    }
+
     return (
         <div
             id={sectionId}

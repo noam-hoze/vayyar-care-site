@@ -20,6 +20,21 @@ All notable changes to this project will be documented in this file.
 
 -   Prevented duplicate mobile content by temporarily skipping legacy standalone text sections on mobile during migration
 
+## [0.3.3] - 2025-08-13
+
+### Added
+
+-   Introduced `variant` prop (desktop/mobile) to `DefaultSectionIntroText`, `DefaultSectionVideo`, and `DefaultSectionDetails` to support unified 3-part rendering across devices
+
+### Changed
+
+-   Efficiency (mobile) now uses the 3-part components (IntroText, Video, Details) with identical styling to the previous Apple-style markup
+-   Mobile Details variant can render the CTA; CTA text for Efficiency is sourced from its paired text section
+
+### Fixed
+
+-   Mobile CTA gating for Efficiency: button now shows when `defaultConfig.showLearnMoreButtons` is true by using paired text section `buttonText`
+
 ## [0.3.1] - 2024-12-21
 
 ### Fixed

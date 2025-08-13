@@ -473,48 +473,50 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
 
     // Special mobile rendering for Efficiency section (ID 1.6)
     if (entry.id === 1.6 && !isDesktop) {
+        const pairedText = homeSections.find((s) => s.id === 1);
         return (
             <div id={sectionId} className="mobile-apple-component">
-                {/* Part 1: Text above video */}
-                <div className="mobile-apple-part1">
-                    <div className="mobile-apple-small-title">Efficiency</div>
-                    <h2 className="mobile-apple-subtitle">
-                        Optimize your staff work and reduce their burden
-                    </h2>
-                </div>
-
-                {/* Part 2: Video */}
-                <div className="mobile-apple-video-container">
-                    <div className="mobile-apple-video">
-                        <video
-                            ref={videoRef}
-                            src={entry.videoSrc || "/videos/optimize-staff.mp4"}
-                            playsInline
-                            muted
-                            autoPlay
-                            loop
-                            controls={false}
-                        />
-                    </div>
-                </div>
-
-                {/* Part 3: Content section */}
-                <div className="mobile-apple-part3">
-                    <h3 className="mobile-apple-title">Do more with less.</h3>
-                    <div className="mobile-apple-content">
-                        <p>
-                            Use predictive insights to address potential patient
-                            complications
-                        </p>
-                        <p>Reduce Administrative tasks</p>
-                        <p>Improved Operational Efficiencies</p>
-                    </div>
-                    {defaultConfig.showLearnMoreButtons && (
-                        <button className="mobile-apple-button">
-                        + Learn more about Staff optimization
-                        </button>
+                <DefaultSectionIntroText
+                    variant="mobile"
+                    smallTitle={"Efficiency"}
+                    header={"Optimize your staff work and reduce their burden"}
+                    isLightBg={true}
+                />
+                <DefaultSectionVideo
+                    variant="mobile"
+                    sectionId={sectionId}
+                    videoRef={videoRef}
+                    videoSrc={entry.videoSrc || "/videos/optimize-staff.mp4"}
+                    isActiveVideo={isActiveVideo}
+                    theaterMode={theaterMode}
+                    progress={progress}
+                    playing={playing}
+                    onTogglePlay={togglePlay}
+                />
+                <DefaultSectionDetails
+                    variant="mobile"
+                    mobileTitle={"Do more with less."}
+                    content={
+                        <>
+                            <p>
+                                Use predictive insights to address potential
+                                patient complications
+                            </p>
+                            <p>Reduce Administrative tasks</p>
+                            <p>Improved Operational Efficiencies</p>
+                        </>
+                    }
+                    isLightBg={true}
+                    learnMoreEnabled={Boolean(
+                        pairedText?.buttonText && nextSectionId
                     )}
-                </div>
+                    learnMoreLabel={
+                        pairedText?.buttonText
+                            ? `+ Learn more about ${pairedText.buttonText}`
+                            : "+ Learn more"
+                    }
+                    onLearnMore={handleLearnMore}
+                />
             </div>
         );
     }
@@ -570,7 +572,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     </div>
                     {defaultConfig.showLearnMoreButtons && (
                         <button className="mobile-apple-button">
-                        + Learn more about Real-time Alerts
+                            + Learn more about Real-time Alerts
                         </button>
                     )}
                 </div>
@@ -623,7 +625,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     </div>
                     {defaultConfig.showLearnMoreButtons && (
                         <button className="mobile-apple-button">
-                        + Learn more about how we protect privacy
+                            + Learn more about how we protect privacy
                         </button>
                     )}
                 </div>
@@ -673,7 +675,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     </div>
                     {defaultConfig.showLearnMoreButtons && (
                         <button className="mobile-apple-button">
-                        + Learn more about AI insights
+                            + Learn more about AI insights
                         </button>
                     )}
                 </div>
@@ -734,7 +736,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     </div>
                     {defaultConfig.showLearnMoreButtons && (
                         <button className="mobile-apple-button">
-                        + Learn more about Personalized Care
+                            + Learn more about Personalized Care
                         </button>
                     )}
                 </div>
@@ -788,7 +790,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     </div>
                     {defaultConfig.showLearnMoreButtons && (
                         <button className="mobile-apple-button">
-                        + Learn more about increase NOI
+                            + Learn more about increase NOI
                         </button>
                     )}
                 </div>
@@ -972,15 +974,19 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     <div className={styles.mobileBody}>{entry.content}</div>
 
                     {/* Learn more about button */}
-                    {defaultConfig.showLearnMoreButtons && entry.buttonText && nextSectionId && (
-                        <button
-                            onClick={handleLearnMore}
-                            className={styles.learnMoreButtonMobile}
-                        >
-                            Learn about {entry.buttonText}
-                            <span className={styles.mobileArrow}>&#8250;</span>
-                        </button>
-                    )}
+                    {defaultConfig.showLearnMoreButtons &&
+                        entry.buttonText &&
+                        nextSectionId && (
+                            <button
+                                onClick={handleLearnMore}
+                                className={styles.learnMoreButtonMobile}
+                            >
+                                Learn about {entry.buttonText}
+                                <span className={styles.mobileArrow}>
+                                    &#8250;
+                                </span>
+                            </button>
+                        )}
                 </div>
             </div>
         );
