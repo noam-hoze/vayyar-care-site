@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - 2025-08-13
+
+### Added
+
+-   Source of truth: `home-page-design.md` describing desktop vs mobile layouts and component kinds
+-   `mobileMediaType` and `detailsSectionId` fields in `HomeSection` to support blueprint-driven rendering
+
+### Changed
+
+-   `DefaultSection.tsx` now computes an `effectiveType` so scrolly behavior is disabled on mobile (plain video)
+-   Removed mobile ID-specific branches; mobile now stacks intro → video → details for default sections
+-   Desktop video sections can render details from linked text via `detailsSectionId`
+-   Hero: removed dark overlay to match design
+
+### Fixed
+
+-   Prevented duplicate mobile content by temporarily skipping legacy standalone text sections on mobile during migration
+
 ## [0.3.1] - 2024-12-21
 
 ### Fixed

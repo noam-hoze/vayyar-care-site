@@ -10,6 +10,16 @@ export interface HomeSection {
         | "scrolly-video-fixed"
         | "scroll-scrub-video"
         | "image";
+    /**
+     * Optional override for how media behaves on mobile.
+     * Used to disable scrolly behavior on mobile while keeping desktop behavior.
+     */
+    mobileMediaType?: "video" | "scrolly-video" | "scroll-scrub-video";
+    /**
+     * If this section is a media section, you can link a separate text section
+     * that should be rendered as the Details/CTA (Part 3) for this concept.
+     */
+    detailsSectionId?: number;
     title: string;
     header?: React.ReactNode;
     content?: string | JSX.Element; // for text
@@ -37,6 +47,7 @@ export const homeSections: HomeSection[] = [
     {
         id: 0,
         type: "scrolly-video",
+        mobileMediaType: "video",
         title: "Video 1",
         mobileVariant: "narrow-text",
         // Controls the progress bar of the navigation buttons
@@ -58,14 +69,17 @@ export const homeSections: HomeSection[] = [
     {
         id: 1.5,
         type: "scroll-scrub-video",
+        mobileMediaType: "scroll-scrub-video",
         title: "Product Overview",
         videoSrc: "/videos/product-new.mp4",
     },
     {
         id: 1.6,
         type: "scrolly-video",
-        title: "Video 2",
+        mobileMediaType: "video",
+        title: "Efficiency",
         videoSrc: "/videos/optimize-staff.mp4",
+        detailsSectionId: 1,
         content: (
             <p
                 style={{
@@ -140,8 +154,10 @@ export const homeSections: HomeSection[] = [
     {
         id: 2,
         type: "scrolly-video",
-        title: "Video 2",
+        mobileMediaType: "video",
+        title: "Real-time Alerts",
         videoSrc: "/videos/real-time-alerts.mp4",
+        detailsSectionId: 3,
         content: (
             <p
                 style={{
@@ -216,8 +232,10 @@ export const homeSections: HomeSection[] = [
     {
         id: 3.2,
         type: "scrolly-video",
-        title: "Video 2",
+        mobileMediaType: "video",
+        title: "Privacy",
         videoSrc: "/videos/privacy.mp4",
+        detailsSectionId: 3.5,
         content: (
             <p
                 style={{
@@ -336,8 +354,10 @@ export const homeSections: HomeSection[] = [
     {
         id: 4,
         type: "scrolly-video",
-        title: "Video 2",
+        mobileMediaType: "video",
+        title: "AI Revolution",
         videoSrc: "/videos/ai-insights.mp4",
+        detailsSectionId: 5,
         content: (
             <p
                 style={{
@@ -415,8 +435,10 @@ export const homeSections: HomeSection[] = [
     {
         id: 6,
         type: "scrolly-video",
-        title: "Video 2",
+        mobileMediaType: "video",
+        title: "Personalize care",
         videoSrc: "videos/personalize-care.mp4",
+        detailsSectionId: 7,
         content: (
             <p
                 style={{
@@ -502,7 +524,8 @@ export const homeSections: HomeSection[] = [
     {
         id: 8,
         type: "scrolly-video",
-        title: "Video 2",
+        mobileMediaType: "video",
+        title: "Improve NOI",
         videoSrc: "videos/increase-noi.mp4",
         content: (
             <p
