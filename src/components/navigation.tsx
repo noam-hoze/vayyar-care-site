@@ -1,6 +1,7 @@
 "use client"; // Add this for useState
 import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Changed from react-router-dom
+import VayyarLogo from "@/components/VayyarLogo";
 import ContactForm from "@/components/ContactForm";
 import { useMobileHomeVideo } from "@/components/mobile/MobileHomeVideoContext";
 import { homeSections } from "@/data/homeSections";
@@ -60,10 +61,9 @@ export default function NavBar({
                 <div className="flex items-center h-16">
                     <div className="flex-shrink-0">
                         <Link href="/">
-                            <img
+                            <VayyarLogo
                                 className="h-8 w-auto"
-                                src="/images/vayyar-logo-text.png"
-                                alt="Vayyar Logo"
+                                ariaLabel="Vayyar Care"
                             />
                         </Link>
                     </div>

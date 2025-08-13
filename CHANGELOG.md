@@ -20,6 +20,23 @@ All notable changes to this project will be documented in this file.
 
 -   Prevented duplicate mobile content by temporarily skipping legacy standalone text sections on mobile during migration
 
+## [0.3.5] - 2025-08-13
+
+### Added
+
+-   New `VayyarLogo` component rendering the official SVG; used in the header and footer
+-   Footer component added globally with social links and mobile-friendly collapsible sections
+-   Support links extended with Customer T&C and B2B T&C
+
+### Changed
+
+-   Replaced raster logos with `VayyarLogo`
+-   Updated footer address and external links; fixed casing of "Terms Of Use"
+
+### Notes
+
+-   Mobile: "Vayyar Care" and "Support" sections now fold/unfold with +/- controls; "Contact Us" is always visible
+
 ## [0.3.4] - 2025-08-13
 
 ### Changed

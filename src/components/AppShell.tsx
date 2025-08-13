@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import NavBar from "./navigation";
 import { homeSections } from "@/data/homeSections";
 import { scrollToSection } from "@/lib/scrollUtils";
+import Footer from "@/components/Footer";
 
 interface AppShellProps {
     children: React.ReactNode;
@@ -100,6 +101,7 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
             <main key={pathname} className="flex-grow page-fade-in">
                 {children}
             </main>
+            <Footer />
         </div>
     );
 };
