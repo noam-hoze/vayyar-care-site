@@ -33,6 +33,10 @@ All notable changes to this project will be documented in this file.
 -   Replaced raster logos with `VayyarLogo`
 -   Updated footer address and external links; fixed casing of "Terms Of Use"
 
+### Fixed
+
+-   Mobile videos now render full width without overflow and with square corners (removed scale and rounded corners in `.mobile-apple-video*` styles)
+
 ### Notes
 
 -   Mobile: "Vayyar Care" and "Support" sections now fold/unfold with +/- controls; "Contact Us" is always visible
