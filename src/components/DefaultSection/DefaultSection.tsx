@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import { defaultConfig } from "@/config/videoConfig";
 import { HomeSection, homeSections } from "@/data/homeSections";
 import { useMobileHomeVideo } from "../mobile/MobileHomeVideoContext";
@@ -62,6 +62,14 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     const scrollyOverlayRef = useRef(null);
     const hasSwappedSrc = useRef(false);
 
+    useLayoutEffect(() => {
+        if (isDesktop) {
+            setVideoSrc("/videos/hero-section.mp4");
+        } else {
+            //setVideoSrc("/videos/hero-section-mobile.mp4");
+        }
+    }, [isDesktop]);
+    
     useEffect(() => {
         if (
             (entry.type === "scrolly-video" ||
@@ -307,11 +315,13 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             if (!video) return;
 
             const handleTimeUpdate = () => {
-                if (!video.duration) return;
-                const progressRatio = video.currentTime / video.duration;
-                if (progressRatio >= 0.9 && !hasSwappedSrc.current) {
-                    hasSwappedSrc.current = true;
-                    setVideoSrc("/videos/just-product.mp4");
+                if (isDesktop) {
+                    if (!video.duration) return;
+                    const progressRatio = video.currentTime / video.duration;
+                    if (progressRatio >= 0.9 && !hasSwappedSrc.current) {
+                        hasSwappedSrc.current = true;
+                        setVideoSrc("/videos/just-product.mp4");
+                    }
                 }
             };
 
@@ -877,10 +887,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         );
     }
 
-    if (
-        entry.type === "scroll-scrub-video" &&
-        !(entry.id === 1.5 && !isDesktop)
-    ) {
+    if (entry.type === "scroll-scrub-video") {
         return (
             <div id={sectionId} className={`${styles.scrubSection}`}>
                 <video
