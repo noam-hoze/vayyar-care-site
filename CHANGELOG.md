@@ -20,6 +20,17 @@ All notable changes to this project will be documented in this file.
 
 -   Prevented duplicate mobile content by temporarily skipping legacy standalone text sections on mobile during migration
 
+## [0.3.4] - 2025-08-13
+
+### Changed
+
+-   Centralized Learn More CTA gating in `DefaultSectionDetails` only; verified with `showLearnMoreButtons = false` on both desktop and mobile.
+-   No refactor applied (reverted exploratory changes) to avoid regressions; desktop scrolly overlays and mobile layouts remain as before.
+
+### Fixed
+
+-   Ensured no duplicate CTAs when global flag is off; desktop and mobile are consistent.
+
 ## [0.3.3] - 2025-08-13
 
 ### Added
