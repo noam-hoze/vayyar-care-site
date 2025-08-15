@@ -8,8 +8,9 @@ import { scrollToSection } from "@/lib/scrollUtils";
 
 const Footer: React.FC = () => {
     const textSections = homeSections.filter((s) => s.type === "text");
-    const [isCareOpen, setIsCareOpen] = React.useState(true);
-    const [isSupportOpen, setIsSupportOpen] = React.useState(true);
+    const [isCareOpen, setIsCareOpen] = React.useState(false);
+    const [isSupportOpen, setIsSupportOpen] = React.useState(false);
+    const [isContactOpen, setIsContactOpen] = React.useState(false);
 
     return (
         <footer
@@ -18,13 +19,10 @@ const Footer: React.FC = () => {
         >
             <div className="max-w-7xl mx-auto px-6 sm:px-8 pt-12 pb-12">
                 {/* Divider */}
-                <div
-                    className="h-px w-full"
-                    style={{ backgroundColor: "#35717e" }}
-                />
+                <div className="h-px w-full bg-white" />
 
                 {/* Top row: brand + social + columns */}
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-10 items-start">
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-10 items-start">
                     {/* Brand + Social */}
                     <div className="space-y-6">
                         <VayyarLogo
@@ -106,7 +104,9 @@ const Footer: React.FC = () => {
                     </div>
 
                     {/* Vayyar Care links */}
-                    <div className="space-y-4">
+                    <div className="space-y-2">
+                        {/* Divider above section */}
+                        <div className="md:hidden h-px w-full bg-white mt-4"></div>
                         <div className="flex items-center justify-between">
                             <h4
                                 className="text-base font-semibold"
@@ -123,7 +123,8 @@ const Footer: React.FC = () => {
                                 }
                                 aria-expanded={isCareOpen}
                                 onClick={() => setIsCareOpen((v) => !v)}
-                                className="w-8 h-8 rounded-full flex items-center justify-center text-white border border-white/40"
+                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white"
+                                style={{ color: "#01adef" }}
                             >
                                 <span className="text-xl leading-none">
                                     {isCareOpen ? "−" : "+"}
@@ -151,7 +152,9 @@ const Footer: React.FC = () => {
                     </div>
 
                     {/* Support */}
-                    <div className="space-y-4">
+                    <div className="space-y-2">
+                        {/* Divider above section */}
+                        <div className="md:hidden h-px w-full bg-white"></div>
                         <div className="flex items-center justify-between">
                             <h4
                                 className="text-base font-semibold"
@@ -168,7 +171,8 @@ const Footer: React.FC = () => {
                                 }
                                 aria-expanded={isSupportOpen}
                                 onClick={() => setIsSupportOpen((v) => !v)}
-                                className="w-8 h-8 rounded-full flex items-center justify-center text-white border border-white/40"
+                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white"
+                                style={{ color: "#01adef" }}
                             >
                                 <span className="text-xl leading-none">
                                     {isSupportOpen ? "−" : "+"}
@@ -253,15 +257,39 @@ const Footer: React.FC = () => {
                         </ul>
                     </div>
 
-                    {/* Contact (no toggle icon on mobile) */}
-                    <div className="space-y-4">
-                        <h4
-                            className="text-base font-semibold"
-                            style={{ fontFamily: "Magistral" }}
+                    {/* Contact Us */}
+                    <div className="space-y-2">
+                        {/* Divider above section */}
+                        <div className="md:hidden h-px w-full bg-white"></div>
+                        <div className="flex items-center justify-between">
+                            <h4
+                                className="text-base font-semibold"
+                                style={{ fontFamily: "Magistral" }}
+                            >
+                                Contact Us
+                            </h4>
+                            <button
+                                type="button"
+                                aria-label={
+                                    isContactOpen
+                                        ? "Collapse Contact Us"
+                                        : "Expand Contact Us"
+                                }
+                                aria-expanded={isContactOpen}
+                                onClick={() => setIsContactOpen((v) => !v)}
+                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white"
+                                style={{ color: "#01adef" }}
+                            >
+                                <span className="text-xl leading-none">
+                                    {isContactOpen ? "−" : "+"}
+                                </span>
+                            </button>
+                        </div>
+                        <div
+                            className={`text-gray-100/90 leading-relaxed ${
+                                isContactOpen ? "block" : "hidden"
+                            } md:block`}
                         >
-                            Contact Us
-                        </h4>
-                        <p className="text-gray-100/90 leading-relaxed">
                             Vayyar Imaging Ltd
                             <br />
                             Hahoresh 4,
@@ -271,17 +299,14 @@ const Footer: React.FC = () => {
                             5647003
                             <br />
                             Israel
-                        </p>
+                        </div>
                     </div>
                 </div>
 
                 {/* Bottom bar */}
-                <div className="mt-12">
-                    <div
-                        className="h-px w-full"
-                        style={{ backgroundColor: "#35717e" }}
-                    />
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 text-sm text-gray-100/80">
+                <div className="mt-2">
+                    <div className="h-px w-full bg-white" />
+                    <div className="flex flex-col items-center justify-center gap-4 py-6 text-sm text-gray-100/80">
                         <div className="flex items-center gap-4">
                             <a
                                 href="https://vayyar.com/cookie-notice/"
@@ -291,6 +316,7 @@ const Footer: React.FC = () => {
                             >
                                 Cookies
                             </a>
+                            <span>|</span>
                             <a
                                 href="https://vayyar.com/care/b2c/privacy-policy-old/"
                                 target="_blank"
@@ -299,6 +325,7 @@ const Footer: React.FC = () => {
                             >
                                 Privacy policy
                             </a>
+                            <span>|</span>
                             <a
                                 href="https://vayyar.com/evk/terms-and-conditions/"
                                 target="_blank"

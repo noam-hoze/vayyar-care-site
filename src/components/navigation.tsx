@@ -106,10 +106,9 @@ export default function NavBar({
                             aria-label="Open menu"
                             onClick={onOpenMobileMenu}
                         >
-                            <span className="block w-5 h-8 relative">
-                                <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-2"></span>
-                                <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-4"></span>
-                                <span className="block w-1 h-1 bg-gray-700 rounded-full absolute left-2 top-6"></span>
+                            <span className="block w-5 h-3 relative">
+                                <span className="block w-5 h-0.5 bg-gray-700 absolute top-0"></span>
+                                <span className="block w-5 h-0.5 bg-gray-700 absolute top-2.5"></span>
                             </span>
                         </button>
                     </div>

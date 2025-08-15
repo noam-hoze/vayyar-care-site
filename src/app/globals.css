@@ -120,6 +120,73 @@ body {
   animation: modalFadeOut 0.2s ease-out forwards;
 }
 
+/* Apple-style Mobile Menu Animations */
+@keyframes mobileMenuFadeIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.98) translateY(-10px);
+    backdrop-filter: blur(0px);
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1) translateY(0);
+    backdrop-filter: blur(20px);
+  }
+}
+
+@keyframes mobileMenuFadeOut {
+  from { 
+    opacity: 1; 
+    transform: scale(1) translateY(0);
+    backdrop-filter: blur(20px);
+  }
+  to { 
+    opacity: 0; 
+    transform: scale(0.98) translateY(-10px);
+    backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes menuItemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes menuItemSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.animate-fade-in {
+  animation: mobileMenuFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.animate-fade-out {
+  animation: mobileMenuFadeOut 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.animate-menu-item {
+  animation: menuItemSlideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+}
+
+.animate-menu-item-out {
+  animation: menuItemSlideOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 1;
+}
+
 .scrolly-container {
   position: relative;
   height: 150vh; /* Provides scrollable space */

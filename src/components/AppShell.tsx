@@ -15,6 +15,7 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
     const pathname = usePathname();
     const showNavBar = !["/demo"].includes(pathname);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    const [isMenuClosing, setIsMenuClosing] = React.useState(false);
     const [sectionProgress, setSectionProgress] = React.useState<
         Record<string, number>
     >({});
@@ -48,6 +49,14 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const handleCloseMobileMenu = () => {
+        setIsMenuClosing(true);
+        setTimeout(() => {
+            setIsMobileMenuOpen(false);
+            setIsMenuClosing(false);
+        }, 400); // Match animation duration
+    };
+
     const buttonDisplayData = homeSections
         .filter((section) => section.type === "text")
         .map((section) => ({
@@ -67,16 +76,23 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 </div>
             )}
             {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center transition-all duration-300 lg:hidden">
+                <div
+                    className={`fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center lg:hidden ${
+                        isMenuClosing ? "animate-fade-out" : "animate-fade-in"
+                    }`}
+                >
                     <button
-                        className="absolute top-6 right-6 text-black text-3xl focus:outline-none"
+                        className="absolute top-6 right-6 text-black text-2xl focus:outline-none hover:opacity-60 transition-opacity duration-200"
                         aria-label="Close menu"
-                        onClick={() => setIsMobileMenuOpen(false)}
+                        onClick={handleCloseMobileMenu}
                     >
-                        &times;
+                        <span className="block w-6 h-6 relative">
+                            <span className="block w-6 h-0.5 bg-black absolute top-1/2 left-0 transform -translate-y-1/2 rotate-45"></span>
+                            <span className="block w-6 h-0.5 bg-black absolute top-1/2 left-0 transform -translate-y-1/2 -rotate-45"></span>
+                        </span>
                     </button>
                     <div
-                        className="flex flex-col gap-8 w-full max-w-xs mx-auto"
+                        className="flex flex-col gap-6 w-full max-w-sm mx-auto px-8"
                         style={{ fontFamily: "Magistral" }}
                     >
                         {homeSections
@@ -88,9 +104,26 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
                                         scrollToSection(
                                             `section-${section.id}`
                                         );
-                                        setIsMobileMenuOpen(false);
+                                        handleCloseMobileMenu();
                                     }}
-                                    className="w-full py-4 text-2xl font-semibold rounded-full border border-black text-black bg-transparent hover:bg-[#06aeef] hover:text-white transition-all duration-150 relative"
+                                    className={`w-full py-5 text-xl font-medium text-black bg-transparent hover:bg-gray-50 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-lg ${
+                                        isMenuClosing
+                                            ? "animate-menu-item-out"
+                                            : "animate-menu-item"
+                                    }`}
+                                    style={{
+                                        animationDelay: isMenuClosing
+                                            ? `${
+                                                  (homeSections.filter(
+                                                      (s) => s.type === "text"
+                                                  ).length -
+                                                      idx -
+                                                      1) *
+                                                  50
+                                              }ms`
+                                            : `${idx * 100}ms`,
+                                        animationFillMode: "both",
+                                    }}
                                 >
                                     {section.title}
                                 </button>

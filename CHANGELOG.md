@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.8] - 2025-01-23
+
+### Enhanced
+
+-   **Mobile Navigation**: Redesigned hamburger menu from 3 lines to 2 lines for cleaner appearance
+-   **Apple Vision Pro Style Animations**: Added smooth, premium animations for mobile menu opening and closing
+-   **Menu Interactions**: Implemented elegant X close button with rotated lines design
+-   **Staggered Animations**: Menu items now animate in/out with staggered timing for polished UX
+-   **Apple-style Easing**: Used cubic-bezier curves matching Apple's design philosophy for fluid motion
+-   **Footer Mobile Experience**: Improved collapsible sections with better UX and visual consistency
+
+### Technical Implementation
+
+-   Added `mobileMenuFadeIn/Out` and `menuItemSlideIn/Out` keyframe animations
+-   Implemented proper animation state management with `isMenuClosing` state
+-   Enhanced menu items with hover effects, scaling, and smooth transitions
+-   Applied reverse-order animation timing for natural closing sequence
+-   Added backdrop blur effects for premium visual depth
+
+### Footer Improvements
+
+-   **Collapsible Sections**: All footer sections now collapse by default on mobile for cleaner initial view
+-   **Contact Us Toggle**: Added collapsible functionality to Contact Us section with +/- controls
+-   **Visual Consistency**: Updated toggle buttons with white background and blue text for better contrast
+-   **Section Dividers**: Added white divider lines between mobile footer sections
+-   **Bottom Bar Layout**: Centered bottom links with pipe separators for better organization
+-   **Improved Spacing**: Reduced gaps on mobile for more compact, organized appearance
+
+### Design
+
+-   Clean 2-line hamburger icon following modern mobile design trends
+-   Smooth 400ms animation duration with Apple-style cubic-bezier easing
+-   Refined close button with proper X icon using CSS transforms
+-   Consistent with Apple Vision Pro website animation patterns
+-   Enhanced footer mobile layout with improved visual hierarchy
+
 ## [0.3.2] - 2025-08-13
 
 ### Added
