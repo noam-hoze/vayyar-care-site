@@ -265,7 +265,7 @@ const ContactForm: React.FC<ContactModalProps> = ({
     // If rendering as a page element, just return the form content
     if (asPageElement) {
         return (
-            <div className="w-full h-full flex items-center justify-center bg-white">
+            <div className="w-full max-w-4xl mx-auto px-4 flex items-center justify-center bg-white">
                 {formContent}
             </div>
         );
