@@ -917,7 +917,8 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 entry.id === 3 ||
                 entry.id === 3.5 ||
                 entry.id === 5 ||
-                entry.id === 7);
+                entry.id === 7 ||
+                entry.id === 9);
         if (hideTextOnMobile) return null;
         // Get all text sections to calculate proper zebra striping
         const textSections = homeSections.filter((s) => s.type === "text");

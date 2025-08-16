@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 2025-01-23
+
+### Mobile UI Fixes
+
+-   **Mobile Navigation Button**: Fixed "Book a Demo" button overflow on mobile devices
+    -   Added responsive sizing: smaller on mobile (`px-3 py-1.5 text-xs`), larger on desktop
+    -   Progressive sizing for different screen sizes (mobile → tablet → desktop)
+-   **Mobile Section Visibility**: Fixed unwanted "Built to scale" section appearing on mobile
+    -   Added section ID 9 to mobile exclusion list to prevent text section from showing
+    -   Maintains desktop functionality while cleaning up mobile experience
+
+### Technical Implementation
+
+-   Updated `navigation.tsx` with responsive Tailwind classes for button sizing
+-   Modified `DefaultSection.tsx` to hide section ID 9 on mobile devices
+-   Improved mobile user experience without affecting desktop layout
+
 ## [0.4.0] - 2025-01-23
 
 ### Mobile Navigation Enhancement

@@ -91,7 +91,7 @@ export default function NavBar({
                     <div className="justify-self-center ml-2">
                         <button
                             onClick={handleBookADemo}
-                            className="text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden hover:scale-105 cursor-pointer lg:static"
+                            className="text-white px-3 py-1.5 sm:px-4 sm:py-2 lg:px-5 lg:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-opacity-80 transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden hover:scale-105 cursor-pointer lg:static"
                             style={{
                                 backgroundColor: bookADemoBackgroundColor,
                             }}
