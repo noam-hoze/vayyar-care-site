@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2025-01-23
+
+### Mobile Navigation Enhancement
+
+-   **Mobile Navigation Links**: Updated mobile hamburger menu to match desktop navigation behavior
+    -   Staff Optimization → redirects to section 1.6 (Efficiency video)
+    -   Real-time Alerts → redirects to section 2 (Real-time Alerts video)
+    -   Privacy → redirects to section 3.2 (Privacy video)
+    -   AI Insights → redirects to section 4 (AI Revolution video)
+    -   Personalized Care → redirects to section 6 (Personalize care video)
+    -   Improve NOI → redirects to section 8 (Improve NOI video)
+-   **Cross-Platform Consistency**: Mobile and desktop navigation now use identical section mapping logic
+-   **Preserved Functionality**: Desktop navigation remains unchanged, mobile-specific enhancements only
+
+### Technical Implementation
+
+-   Updated `AppShell.tsx` mobile menu click handlers with conditional mapping logic
+-   Added mobile-specific section ID mapping that mirrors desktop behavior
+-   Maintained existing mobile menu animations and close functionality
+-   No impact on desktop navigation or other mobile features
+
 ## [0.3.9] - 2025-01-23
 
 ### Navigation Updates

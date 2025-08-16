@@ -108,37 +108,55 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
                     >
                         {homeSections
                             .filter((section) => section.type === "text")
-                            .map((section, idx) => (
-                                <button
-                                    key={section.title + idx}
-                                    onClick={() => {
-                                        scrollToSection(
-                                            `section-${section.id}`
-                                        );
-                                        handleCloseMobileMenu();
-                                    }}
-                                    className={`w-full py-5 text-xl font-medium text-black bg-transparent hover:bg-gray-50 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-lg ${
-                                        isMenuClosing
-                                            ? "animate-menu-item-out"
-                                            : "animate-menu-item"
-                                    }`}
-                                    style={{
-                                        animationDelay: isMenuClosing
-                                            ? `${
-                                                  (homeSections.filter(
-                                                      (s) => s.type === "text"
-                                                  ).length -
-                                                      idx -
-                                                      1) *
-                                                  50
-                                              }ms`
-                                            : `${idx * 100}ms`,
-                                        animationFillMode: "both",
-                                    }}
-                                >
-                                    {section.title}
-                                </button>
-                            ))}
+                            .map((section, idx) => {
+                                // Map mobile navigation links to specific section IDs (same as desktop)
+                                let targetId = section.id;
+                                if (section.title === "Staff Optimization")
+                                    targetId = 1.6;
+                                else if (section.title === "Real-time Alerts")
+                                    targetId = 2;
+                                else if (section.title === "Privacy")
+                                    targetId = 3.2;
+                                else if (section.title === "AI insights")
+                                    targetId = 4;
+                                else if (section.title === "Personalized Care")
+                                    targetId = 6;
+                                else if (section.title === "Improve NOI")
+                                    targetId = 8;
+
+                                return (
+                                    <button
+                                        key={section.title + idx}
+                                        onClick={() => {
+                                            scrollToSection(
+                                                `section-${targetId}`
+                                            );
+                                            handleCloseMobileMenu();
+                                        }}
+                                        className={`w-full py-5 text-xl font-medium text-black bg-transparent hover:bg-gray-50 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-lg ${
+                                            isMenuClosing
+                                                ? "animate-menu-item-out"
+                                                : "animate-menu-item"
+                                        }`}
+                                        style={{
+                                            animationDelay: isMenuClosing
+                                                ? `${
+                                                      (homeSections.filter(
+                                                          (s) =>
+                                                              s.type === "text"
+                                                      ).length -
+                                                          idx -
+                                                          1) *
+                                                      50
+                                                  }ms`
+                                                : `${idx * 100}ms`,
+                                            animationFillMode: "both",
+                                        }}
+                                    >
+                                        {section.title}
+                                    </button>
+                                );
+                            })}
                     </div>
                 </div>
             )}
