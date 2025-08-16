@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.9] - 2025-01-23
+
+### Navigation Updates
+
+-   **Desktop Navigation Links**: Updated navigation button targets to improve user experience
+    -   Staff Optimization → redirects to section 1.6 (Efficiency video)
+    -   Real-time Alerts → redirects to section 2 (Real-time Alerts video)
+    -   Privacy → redirects to section 3.2 (Privacy video)
+    -   AI Insights → redirects to section 4 (AI Revolution video)
+    -   Personalized Care → redirects to section 6 (Personalize care video)
+    -   **NEW**: Improve NOI → redirects to section 8 (Improve NOI video)
+-   **Book a Demo Button**: Improved scroll positioning with -80px offset to properly show contact form headline
+-   **Section Mapping**: Added new "Improve NOI" text section (id: 9) to support navigation
+
+### Technical Implementation
+
+-   Updated `AppShell.tsx` navigation mapping logic to redirect text section buttons to corresponding video sections
+-   Added conditional mapping for navigation titles to target specific section IDs
+-   Enhanced scroll utility usage with precise offset positioning for contact form
+
 ## [0.3.8] - 2025-01-23
 
 ### Enhanced

@@ -553,6 +553,34 @@ export const homeSections: HomeSection[] = [
             </p>
         ),
     },
+    {
+        id: 9,
+        type: "text",
+        title: "Improve NOI",
+        header: (
+            <>
+                Built to <span style={{ color: "#05aae9" }}>scale</span>.
+            </>
+        ),
+        buttonText: "increase NOI",
+        scrollToTimeValue: "00:01:32:33",
+        content: (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Turn insights into enterprise-wide transformation.
+                    </span>
+                </li>
+            </ul>
+        ),
+    },
     // {
     //     id: 9,
     //     type: "text",

@@ -44,7 +44,7 @@ export default function NavBar({
         // Smooth, Apple-like scroll to the contact form section
         scrollToSectionUtil("contact-section", setTheaterMode, {
             durationMs: 1000,
-            offsetPx: 0,
+            offsetPx: -80,
         });
     };
 

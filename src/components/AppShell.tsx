@@ -59,11 +59,22 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
     const buttonDisplayData = homeSections
         .filter((section) => section.type === "text")
-        .map((section) => ({
-            name: section.title,
-            id: `section-${section.id}`,
-            progress: sectionProgress[`section-${section.id}`] || 0,
-        }));
+        .map((section) => {
+            // Map navigation links to specific section IDs
+            let targetId = section.id;
+            if (section.title === "Staff Optimization") targetId = 1.6;
+            else if (section.title === "Real-time Alerts") targetId = 2;
+            else if (section.title === "Privacy") targetId = 3.2;
+            else if (section.title === "AI insights") targetId = 4;
+            else if (section.title === "Personalized Care") targetId = 6;
+            else if (section.title === "Improve NOI") targetId = 8;
+
+            return {
+                name: section.title,
+                id: `section-${targetId}`,
+                progress: sectionProgress[`section-${section.id}`] || 0,
+            };
+        });
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
