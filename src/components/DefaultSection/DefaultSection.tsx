@@ -305,29 +305,6 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         };
     }, [effectiveType, start, end]);
 
-    // Swap video source when scrub reaches 90% (keep video, no image)
-    useEffect(() => {
-        if (effectiveType === "scroll-scrub-video") {
-            const video = videoRef.current;
-            if (!video) return;
-
-            const handleTimeUpdate = () => {
-                if (isDesktop) {
-                    if (!video.duration) return;
-                    const progressRatio = video.currentTime / video.duration;
-                    if (progressRatio >= 0.9 && !hasSwappedSrc.current) {
-                        hasSwappedSrc.current = true;
-                        setVideoSrc("/videos/just-product.mp4");
-                    }
-                }
-            };
-
-            video.addEventListener("timeupdate", handleTimeUpdate);
-            return () =>
-                video.removeEventListener("timeupdate", handleTimeUpdate);
-        }
-    }, [entry.id, effectiveType, isDesktop]);
-
     // Restrict playback to [start, end] for video
     useEffect(() => {
         if (
