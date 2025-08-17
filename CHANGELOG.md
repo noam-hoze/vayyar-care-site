@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.4.3 - 2024-08-16
+### Changed
+- Slowed down the scrubbing effect on the product video by increasing the scroll distance required to play through it.
+- Made the text overlays on the product video more prominent with a larger font size and a stronger text shadow.
+- Added a slide-up animation for the second text overlay on the product video for a more dynamic appearance.
+- Fixed a bug where the second text overlay would flicker due to repeated animations.
+
+## 0.4.2 - 2024-08-16
+### Fixed
+- Rewind Context initialization to ensure proper state management of video playback.
+- Initial state of `hasSeenEfficiencySection` to `false` for consistent behavior.
+- Video rewind logic to correctly restart the product video when scrolling back.
+
+### Changed
+- Refactored `DefaultSection` to improve readability and maintainability.
+- Updated GSAP scroll trigger to handle video rewind more efficiently.
+- Modified mobile layout for "Efficiency" and "Real-time Alerts" sections for better presentation.
+- Replaced direct video source manipulation with a state-driven approach.
+
+## 0.4.1 - 2024-08-15
+### Added
+- Rewind functionality for the product video when scrolling.
+
+### Fixed
+- Video playback issues on mobile devices.
+- Scroll trigger configurations for smoother animations.
+
 All notable changes to this project will be documented in this file.
 
 ## [0.4.2] - 2024-08-14

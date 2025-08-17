@@ -41,6 +41,11 @@ export interface HomeSection {
     // Mobile-specific variant flags
     mobileVariant?: "narrow-text" | "default";
     mobileVideoMode?: "plain-16x9";
+    textOverlays?: {
+        text: string;
+        start: number; // in seconds
+        end: number; // in seconds
+    }[];
 }
 
 export const homeSections: HomeSection[] = [
@@ -72,6 +77,18 @@ export const homeSections: HomeSection[] = [
         mobileMediaType: "scroll-scrub-video",
         title: "Product Overview",
         videoSrc: "/videos/product-new.mp4",
+        textOverlays: [
+            {
+                text: "Actionable data starts at the room level.",
+                start: 0.4,
+                end: 6,
+            },
+            {
+                text: "Scaled seamlessly across the entire facility.",
+                start: 3,
+                end: 6,
+            },
+        ],
     },
     {
         id: 1.6,

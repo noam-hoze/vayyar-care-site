@@ -42,6 +42,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     const [progress, setProgress] = useState(0); // 0 to 1
     const [hasSeenVideo, setHasSeenVideo] = useState(false);
     const [showImage, setShowImage] = useState(false);
+    const [currentOverlayTexts, setCurrentOverlayTexts] = useState<string[]>(
+        []
+    );
+    const overlayContainerRef = useRef<HTMLDivElement>(null);
+    const prevOverlayTextsRef = useRef<string[]>([]);
     const [videoSrc, setVideoSrc] = useState(
         entry.type === "video" ||
             entry.type === "scrolly-video" ||
@@ -281,7 +286,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 // Calculate pin distance based on video duration (e.g., 1 second of video = 1 viewport height of scroll)
                 const videoDurationMultiplier = video.duration || 9; // Default to 9 seconds for our product video
                 const pinDistance = Math.max(
-                    videoDurationMultiplier * 100,
+                    videoDurationMultiplier * 300,
                     window.innerHeight
                 ); // At least 1 viewport height
 
@@ -309,6 +314,17 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                             const targetTime =
                                 startTime + progress * availableDuration;
                             video.currentTime = targetTime;
+
+                            // Update text overlay
+                            const activeOverlays =
+                                entry.textOverlays?.filter(
+                                    (overlay) =>
+                                        targetTime >= overlay.start &&
+                                        targetTime < overlay.end
+                                ) || [];
+                            setCurrentOverlayTexts(
+                                activeOverlays.map((o) => o.text)
+                            );
                         }
                     },
                 });
@@ -354,6 +370,49 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             scrollTriggerRef.current?.kill();
         };
     }, [effectiveType, start, end]);
+
+    useEffect(() => {
+        if (overlayContainerRef.current) {
+            const textElements =
+                overlayContainerRef.current.querySelectorAll("p");
+            const prevTexts = prevOverlayTextsRef.current;
+
+            textElements.forEach((el, index) => {
+                const text = el.innerText;
+                const isActive = currentOverlayTexts.includes(text);
+                const wasActive = prevTexts.includes(text);
+
+                if (isActive && !wasActive) {
+                    // Text just appeared
+                    // It it's the second text, do a slide up animation
+                    if (index === 1) {
+                        gsap.fromTo(
+                            el,
+                            { y: 20, opacity: 0 },
+                            {
+                                y: 0,
+                                opacity: 1,
+                                duration: 0.5,
+                                ease: "power2.out",
+                            }
+                        );
+                    } else {
+                        gsap.to(el, {
+                            opacity: 1,
+                            duration: 0.5,
+                        });
+                    }
+                } else if (!isActive && wasActive) {
+                    // Text just disappeared
+                    gsap.to(el, {
+                        opacity: 0,
+                        duration: 0.5,
+                    });
+                }
+            });
+        }
+        prevOverlayTextsRef.current = currentOverlayTexts;
+    }, [currentOverlayTexts]);
 
     // Restrict playback to [start, end] for video
     useEffect(() => {
@@ -929,6 +988,18 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     muted
                     preload="auto"
                 />
+                {entry.textOverlays && entry.textOverlays.length > 0 && (
+                    <div
+                        ref={overlayContainerRef}
+                        className={styles.scrubOverlayText}
+                    >
+                        {entry.textOverlays.map((overlay) => (
+                            <p key={overlay.text} style={{ opacity: 0 }}>
+                                {overlay.text}
+                            </p>
+                        ))}
+                    </div>
+                )}
             </div>
         );
     }
