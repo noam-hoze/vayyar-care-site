@@ -42,6 +42,19 @@
     width: 80%;
 }
 
+@media (max-width: 768px) {
+    .scrubOverlayText {
+        font-size: 30px;
+        display: grid;
+        place-items: center;
+    }
+
+    .scrubOverlayText p {
+        grid-area: 1 / 1;
+        margin: 0;
+    }
+}
+
 /* Image section */
 .imageSection {
   position: relative;

@@ -46,6 +46,11 @@ export interface HomeSection {
         start: number; // in seconds
         end: number; // in seconds
     }[];
+    mobileTextOverlays?: {
+        text: string;
+        start: number; // in seconds
+        end: number; // in seconds
+    }[];
 }
 
 export const homeSections: HomeSection[] = [
@@ -86,6 +91,18 @@ export const homeSections: HomeSection[] = [
             {
                 text: "Scaled seamlessly across the entire facility.",
                 start: 3,
+                end: 6,
+            },
+        ],
+        mobileTextOverlays: [
+            {
+                text: "Actionable data starts at the room level.",
+                start: 0.4,
+                end: 3,
+            },
+            {
+                text: "Scaled seamlessly across the entire facility.",
+                start: 3.6,
                 end: 6,
             },
         ],

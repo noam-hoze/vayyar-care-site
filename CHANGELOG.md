@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.4 - 2024-08-16
+### Changed
+- Enabled reverse video playback on mobile to match the desktop experience.
+- Adjusted mobile text overlays to replace each other without vertical animation for a cleaner look.
+- Corrected text overlay positioning on mobile to ensure perfect centering.
+- Fixed an issue where desktop text overlay timings were incorrectly applied to mobile.
+
 ## 0.4.3 - 2024-08-16
 ### Changed
 - Slowed down the scrubbing effect on the product video by increasing the scroll distance required to play through it.

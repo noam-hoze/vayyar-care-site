@@ -77,8 +77,8 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     }, [hasSeenEfficiencySection]);
 
     const { ref: intersectionRef, inView: sectionInView } = useInView({
-        triggerOnce: false, // Only trigger once
-        threshold: 1, // Trigger when 50% of the section is visible
+        triggerOnce: false,
+        threshold: 0.5, // Trigger when 50% of the section is visible
     });
 
     // Use mobile-aware media type to avoid scrolly behavior on mobile per blueprint
@@ -87,14 +87,9 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         : entry.mobileMediaType || entry.type;
 
     useEffect(() => {
-        if (!isDesktop) return;
-
         if (entry.id === 1.6 && sectionInView) {
             // This is the event handler for the "Efficiency" section
             setHasSeenEfficiencySection(true);
-            console.log(
-                "Efficiency section is in view on desktop! Rewind enabled."
-            );
             const productVideo = document.querySelector(
                 "#section-1\\.5 video"
             ) as HTMLVideoElement | null;
@@ -103,7 +98,6 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             }
         } else if (entry.id === 0 && sectionInView) {
             setHasSeenEfficiencySection(false);
-            console.log("Hero section is in view on desktop! Rewind disabled.");
             const productVideo = document.querySelector(
                 "#section-1\\.5 video"
             ) as HTMLVideoElement | null;
@@ -111,7 +105,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 productVideo.currentTime = 0;
             }
         }
-    }, [sectionInView, isDesktop, entry.id, setHasSeenEfficiencySection]);
+    }, [sectionInView, entry.id, setHasSeenEfficiencySection]);
 
     useEffect(() => {
         if (
@@ -315,13 +309,18 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                                 startTime + progress * availableDuration;
                             video.currentTime = targetTime;
 
-                            // Update text overlay
+                            const overlays =
+                                !isDesktop && entry.mobileTextOverlays
+                                    ? entry.mobileTextOverlays
+                                    : entry.textOverlays;
+
                             const activeOverlays =
-                                entry.textOverlays?.filter(
+                                overlays?.filter(
                                     (overlay) =>
                                         targetTime >= overlay.start &&
                                         targetTime < overlay.end
                                 ) || [];
+
                             setCurrentOverlayTexts(
                                 activeOverlays.map((o) => o.text)
                             );
@@ -385,7 +384,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 if (isActive && !wasActive) {
                     // Text just appeared
                     // It it's the second text, do a slide up animation
-                    if (index === 1) {
+                    if (index === 1 && isDesktop) {
                         gsap.fromTo(
                             el,
                             { y: 20, opacity: 0 },
@@ -412,7 +411,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             });
         }
         prevOverlayTextsRef.current = currentOverlayTexts;
-    }, [currentOverlayTexts]);
+    }, [currentOverlayTexts, isDesktop]);
 
     // Restrict playback to [start, end] for video
     useEffect(() => {
@@ -561,7 +560,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     if (entry.id === 1.6 && !isDesktop) {
         const pairedText = homeSections.find((s) => s.id === 1);
         return (
-            <div id={sectionId} className="mobile-apple-component">
+            <div
+                id={sectionId}
+                ref={intersectionRef}
+                className="mobile-apple-component"
+            >
                 <DefaultSectionIntroText
                     variant="mobile"
                     smallTitle={"Efficiency"}
@@ -970,7 +973,10 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         );
 
         return (
-            <div id={sectionId}>
+            <div
+                id={sectionId}
+                ref={entry.id === 0 ? intersectionRef : undefined}
+            >
                 {textSection}
                 {videoSection}
             </div>
@@ -988,18 +994,27 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     muted
                     preload="auto"
                 />
-                {entry.textOverlays && entry.textOverlays.length > 0 && (
-                    <div
-                        ref={overlayContainerRef}
-                        className={styles.scrubOverlayText}
-                    >
-                        {entry.textOverlays.map((overlay) => (
-                            <p key={overlay.text} style={{ opacity: 0 }}>
-                                {overlay.text}
-                            </p>
-                        ))}
-                    </div>
-                )}
+                {(() => {
+                    const overlays =
+                        !isDesktop && entry.mobileTextOverlays
+                            ? entry.mobileTextOverlays
+                            : entry.textOverlays;
+
+                    if (!overlays) return null;
+
+                    return (
+                        <div
+                            ref={overlayContainerRef}
+                            className={styles.scrubOverlayText}
+                        >
+                            {overlays.map((overlay) => (
+                                <p key={overlay.text} style={{ opacity: 0 }}>
+                                    {overlay.text}
+                                </p>
+                            ))}
+                        </div>
+                    );
+                })()}
             </div>
         );
     }
