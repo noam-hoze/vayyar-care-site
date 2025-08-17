@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.2] - 2024-08-14
+
+### Added
+- Implemented a "rewind" effect for the product video, which plays the video from the beginning when scrolling up after viewing the "Efficiency" section.
+- Added symmetrical behavior to reset the rewind effect when scrolling back to the hero section.
+
+### Fixed
+- Resolved a scroll jump issue that occurred when the video's playback direction changed.
+- Fixed a bug where the last frame of the product video would flicker before the rewind effect started.
+- Corrected the video's start time to ensure it always begins from the correct first frame.
+
 ## [0.4.1] - 2025-01-23
 
 ### Mobile UI Fixes

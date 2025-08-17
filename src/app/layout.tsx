@@ -5,6 +5,7 @@ import "./globals.css";
 import AppShell from "@/components/AppShell";
 import { VideoTimeProvider } from "@/contexts/VideoTimeContext";
 import { MobileHomeVideoProvider } from "@/components/mobile/MobileHomeVideoContext";
+import { RewindProvider } from "@/contexts/RewindContext";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -33,7 +34,9 @@ export default function RootLayout({
             >
                 <VideoTimeProvider>
                     <MobileHomeVideoProvider>
-                        <AppShell>{children}</AppShell>
+                        <RewindProvider>
+                            <AppShell>{children}</AppShell>
+                        </RewindProvider>
                     </MobileHomeVideoProvider>
                 </VideoTimeProvider>
             </body>

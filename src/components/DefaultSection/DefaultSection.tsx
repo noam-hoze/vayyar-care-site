@@ -5,6 +5,8 @@ import { useMobileHomeVideo } from "../mobile/MobileHomeVideoContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import the ScrollToPlugin
+import { useInView } from "react-intersection-observer";
+import { useRewind } from "@/contexts/RewindContext";
 import "@/styles/theater-mode.css";
 import { timecodeToSeconds } from "@/lib/utils"; // Import the theater mode styles
 import styles from "./DefaultSection.module.css";
@@ -61,11 +63,50 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     const scrollyContainerRef = useRef(null);
     const scrollyOverlayRef = useRef(null);
     const hasSwappedSrc = useRef(false);
+    const { setHasSeenEfficiencySection, hasSeenEfficiencySection } =
+        useRewind();
+    const hasSeenRef = useRef(hasSeenEfficiencySection);
+
+    useEffect(() => {
+        hasSeenRef.current = hasSeenEfficiencySection;
+    }, [hasSeenEfficiencySection]);
+
+    const { ref: intersectionRef, inView: sectionInView } = useInView({
+        triggerOnce: false, // Only trigger once
+        threshold: 1, // Trigger when 50% of the section is visible
+    });
 
     // Use mobile-aware media type to avoid scrolly behavior on mobile per blueprint
     const effectiveType = isDesktop
         ? entry.type
         : entry.mobileMediaType || entry.type;
+
+    useEffect(() => {
+        if (!isDesktop) return;
+
+        if (entry.id === 1.6 && sectionInView) {
+            // This is the event handler for the "Efficiency" section
+            setHasSeenEfficiencySection(true);
+            console.log(
+                "Efficiency section is in view on desktop! Rewind enabled."
+            );
+            const productVideo = document.querySelector(
+                "#section-1\\.5 video"
+            ) as HTMLVideoElement | null;
+            if (productVideo) {
+                productVideo.currentTime = 0;
+            }
+        } else if (entry.id === 0 && sectionInView) {
+            setHasSeenEfficiencySection(false);
+            console.log("Hero section is in view on desktop! Rewind disabled.");
+            const productVideo = document.querySelector(
+                "#section-1\\.5 video"
+            ) as HTMLVideoElement | null;
+            if (productVideo) {
+                productVideo.currentTime = 0;
+            }
+        }
+    }, [sectionInView, isDesktop, entry.id, setHasSeenEfficiencySection]);
 
     useEffect(() => {
         if (
@@ -220,7 +261,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 if (end > 0) {
                     video.currentTime = start;
                 } else if (effectiveType === "scroll-scrub-video") {
-                    video.currentTime = 2.6; // Start from 2.6 seconds for scroll-scrub-video
+                    video.currentTime = 0; // Start from 2.6 seconds for scroll-scrub-video
                 } else {
                     video.currentTime = 0; // Start from beginning for other videos
                 }
@@ -250,14 +291,23 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     end: `+=${pinDistance}`, // Pin distance based on video duration
                     pin: videoContainer, // Pin the video container
                     scrub: 1, // Smooth scrubbing
+                    onEnterBack: () => {
+                        if (hasSeenRef.current && video) {
+                            video.currentTime = 0;
+                        }
+                    },
                     onUpdate: (self) => {
                         if (video.duration) {
                             // Start from 2 seconds and map scroll progress through the remaining duration
-                            const startTime = 2.6; // Start from 2.6 seconds
+                            const startTime = 0; // Start from 2.6 seconds
                             const availableDuration =
                                 video.duration - startTime;
+                            let progress = self.progress;
+                            if (hasSeenRef.current) {
+                                progress = 1 - self.progress;
+                            }
                             const targetTime =
-                                startTime + self.progress * availableDuration;
+                                startTime + progress * availableDuration;
                             video.currentTime = targetTime;
                         }
                     },
@@ -788,7 +838,16 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
                 <div className="scrolly-video">
                     <video
-                        ref={videoRef}
+                        ref={(el) => {
+                            (
+                                videoRef as React.MutableRefObject<HTMLVideoElement | null>
+                            ).current = el;
+                            if (entry.id === 1.6 || entry.id === 0) {
+                                (
+                                    intersectionRef as React.RefCallback<HTMLVideoElement>
+                                )(el);
+                            }
+                        }}
                         src={
                             videoSrc ||
                             entry.videoSrc ||
