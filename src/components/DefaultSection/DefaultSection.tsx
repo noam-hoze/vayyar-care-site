@@ -383,7 +383,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
 
                 if (isActive && !wasActive) {
                     // Text just appeared
-                    // It it's the second text, do a slide up animation
+                    // If it's the second text, do a slide up animation
                     if (index === 1 && isDesktop) {
                         gsap.fromTo(
                             el,

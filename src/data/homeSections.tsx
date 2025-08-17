@@ -115,7 +115,7 @@ export const homeSections: HomeSection[] = [
         videoSrc: "/videos/optimize-staff.mp4",
         detailsSectionId: 1,
         content: (
-            <p
+            <div
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -136,7 +136,7 @@ export const homeSections: HomeSection[] = [
                 >
                     Optimize your staff work and reduce their burden
                 </p>
-            </p>
+            </div>
         ),
     },
     {
@@ -193,7 +193,7 @@ export const homeSections: HomeSection[] = [
         videoSrc: "/videos/real-time-alerts.mp4",
         detailsSectionId: 3,
         content: (
-            <p
+            <div
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -214,7 +214,7 @@ export const homeSections: HomeSection[] = [
                 >
                     Alert your staff as things happen
                 </p>
-            </p>
+            </div>
         ),
     },
     {
@@ -271,7 +271,7 @@ export const homeSections: HomeSection[] = [
         videoSrc: "/videos/privacy.mp4",
         detailsSectionId: 3.5,
         content: (
-            <p
+            <div
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -292,7 +292,7 @@ export const homeSections: HomeSection[] = [
                 >
                     Monitoring every movement without compromising privacy
                 </p>
-            </p>
+            </div>
         ),
     },
     {
@@ -393,7 +393,7 @@ export const homeSections: HomeSection[] = [
         videoSrc: "/videos/ai-insights.mp4",
         detailsSectionId: 5,
         content: (
-            <p
+            <div
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -415,7 +415,7 @@ export const homeSections: HomeSection[] = [
                     Stay ahead with cutting-edge AI insights from our sensors
                     and an array of smart data
                 </p>
-            </p>
+            </div>
         ),
     },
     {
@@ -474,7 +474,7 @@ export const homeSections: HomeSection[] = [
         videoSrc: "videos/personalize-care.mp4",
         detailsSectionId: 7,
         content: (
-            <p
+            <div
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -496,7 +496,7 @@ export const homeSections: HomeSection[] = [
                     Experience the power of immediate, accurate insights for
                     truly personalized care.
                 </p>
-            </p>
+            </div>
         ),
     },
     {
@@ -561,8 +561,9 @@ export const homeSections: HomeSection[] = [
         mobileMediaType: "video",
         title: "Improve NOI",
         videoSrc: "videos/increase-noi.mp4",
+        detailsSectionId: 9,
         content: (
-            <p
+            <div
                 style={{
                     position: "absolute",
                     top: "20%",
@@ -584,7 +585,7 @@ export const homeSections: HomeSection[] = [
                     Boost your NOI and maximize returns through trusted,
                     data-driven care plans.
                 </p>
-            </p>
+            </div>
         ),
     },
     {
