@@ -133,23 +133,12 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
                                             );
                                             handleCloseMobileMenu();
                                         }}
-                                        className={`w-full py-5 text-xl font-medium text-black bg-transparent hover:bg-gray-50 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-lg ${
+                                        className={`w-full py-3 text-3xl font-bold text-black bg-transparent hover:bg-gray-50 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] rounded-2xl ${
                                             isMenuClosing
                                                 ? "animate-menu-item-out"
                                                 : "animate-menu-item"
                                         }`}
                                         style={{
-                                            animationDelay: isMenuClosing
-                                                ? `${
-                                                      (homeSections.filter(
-                                                          (s) =>
-                                                              s.type === "text"
-                                                      ).length -
-                                                          idx -
-                                                          1) *
-                                                      50
-                                                  }ms`
-                                                : `${idx * 100}ms`,
                                             animationFillMode: "both",
                                         }}
                                     >

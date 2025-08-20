@@ -178,13 +178,33 @@ body {
 }
 
 .animate-menu-item {
-  animation: menuItemSlideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  opacity: 0;
+    animation: fadeIn 0.4s ease-out forwards;
 }
 
 .animate-menu-item-out {
-  animation: menuItemSlideOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  opacity: 1;
+    animation: fadeOut 0.3s ease-in forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 }
 
 .scrolly-container {

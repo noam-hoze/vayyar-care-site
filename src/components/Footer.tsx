@@ -256,6 +256,26 @@ const Footer: React.FC = () => {
                                             CS Sign Up
                                         </a>
                                     </li>
+                                    <li>
+                                        <a
+                                            href="https://vayyar.com/care/customer/tc/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            Customer T&C
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://vayyar.com/care/b2b/tc/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            Business T&C
+                                        </a>
+                                    </li>
                                 </div>
                             </ul>
                         </div>

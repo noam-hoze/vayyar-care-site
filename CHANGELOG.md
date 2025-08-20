@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.6] - 2024-08-11
+### Changed
+- Updated desktop footer to match the new design specification.
+- Made the entire row of collapsible sections in the mobile footer clickable.
+- Implemented a smooth, Apple-like folding and unfolding animation for mobile footer sections.
+- Removed borders from mobile header menu buttons for a cleaner look.
+- Updated mobile header menu item animations to be simultaneous and smoother.
+- Increased font size to 30px and font weight to 700 for mobile menu links.
+
+## [0.4.5] - 2024-08-01
+### Changed
+- Updated the product video with a new version.
+
+## [0.4.4] - 2024-07-29
+### Changed
+- Updated the mobile hero section video.
+
 ## 0.4.5 - 2024-08-16
 ### Added
 - Dedicated mobile-optimized product video (`product-mobile.mp4`).
