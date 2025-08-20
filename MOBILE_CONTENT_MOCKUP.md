@@ -30,8 +30,7 @@ Video source: `/videos/hero-section.mp4`
 
 ### 4) Product View (White)
 
--   Media: Product video: `public/images/product-new.mp4` 
--   Media: Switches to video: `public/images/just-product.mp4` after 90% of scrolling 
+-   Media: Product video: `public/images/product.mp4`
 
 
 ### 5) Component (background #f5f5f7)

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.5 - 2024-08-16
+### Added
+- Dedicated mobile-optimized product video (`product-mobile.mp4`).
+- `mobileVideoSrc` field to `HomeSection` interface to support distinct mobile video assets.
+
+### Changed
+- Updated product video text overlays to emphasize privacy and scalability.
+- `DefaultSection` now loads `mobileVideoSrc` when available on mobile devices for a better viewing experience.
+
 ## 0.4.4 - 2024-08-16
 ### Changed
 - Enabled reverse video playback on mobile to match the desktop experience.

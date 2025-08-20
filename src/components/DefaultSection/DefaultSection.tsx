@@ -52,7 +52,9 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             entry.type === "scrolly-video" ||
             entry.type === "scrolly-video-fixed" ||
             entry.type === "scroll-scrub-video"
-            ? entry.videoSrc || defaultConfig.videoSrc.split("?")[0]
+            ? (!isDesktop && entry.mobileVideoSrc) ||
+                  entry.videoSrc ||
+                  defaultConfig.videoSrc.split("?")[0]
             : ""
     );
     const {

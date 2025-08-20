@@ -25,6 +25,7 @@ export interface HomeSection {
     content?: string | JSX.Element; // for text
     imageSrc?: string; // for image sections
     videoSrc?: string; // for custom video source
+    mobileVideoSrc?: string; // for custom mobile video source
     video?: {
         start: string;
         end: string;
@@ -81,27 +82,28 @@ export const homeSections: HomeSection[] = [
         type: "scroll-scrub-video",
         mobileMediaType: "scroll-scrub-video",
         title: "Product Overview",
-        videoSrc: "/videos/product-new.mp4",
+        videoSrc: "/videos/product.mp4",
+        mobileVideoSrc: "/videos/product-mobile.mp4",
         textOverlays: [
             {
-                text: "Actionable data starts at the room level.",
+                text: "Seamless monitoring while preserving full privacy.",
                 start: 0.4,
                 end: 6,
             },
             {
-                text: "Scaled seamlessly across the entire facility.",
+                text: "Scaled across the entire facility.",
                 start: 3,
                 end: 6,
             },
         ],
         mobileTextOverlays: [
             {
-                text: "Actionable data starts at the room level.",
+                text: "Seamless monitoring while preserving full privacy.",
                 start: 0.4,
                 end: 3,
             },
             {
-                text: "Scaled seamlessly across the entire facility.",
+                text: "Scaled across the entire facility.",
                 start: 3.6,
                 end: 6,
             },
