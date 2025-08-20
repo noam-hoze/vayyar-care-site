@@ -1,77 +1,98 @@
 # Changelog
 
 ## [0.4.6] - 2024-08-11
+
 ### Changed
-- Updated desktop footer to match the new design specification.
-- Made the entire row of collapsible sections in the mobile footer clickable.
-- Implemented a smooth, Apple-like folding and unfolding animation for mobile footer sections.
-- Removed borders from mobile header menu buttons for a cleaner look.
-- Updated mobile header menu item animations to be simultaneous and smoother.
-- Increased font size to 30px and font weight to 700 for mobile menu links.
+
+-   Updated desktop footer to match the new design specification.
+-   Made the entire row of collapsible sections in the mobile footer clickable.
+-   Implemented a smooth, Apple-like folding and unfolding animation for mobile footer sections.
+-   Removed borders from mobile header menu buttons for a cleaner look.
+-   Updated mobile header menu item animations to be simultaneous and smoother.
+-   Increased font size to 30px and font weight to 700 for mobile menu links.
 
 ## [0.4.5] - 2024-08-01
+
 ### Changed
-- Updated the product video with a new version.
+
+-   Updated the product video with a new version.
 
 ## [0.4.4] - 2024-07-29
+
 ### Changed
-- Updated the mobile hero section video.
+
+-   Updated the mobile hero section video.
 
 ## 0.4.5 - 2024-08-16
+
 ### Added
-- Dedicated mobile-optimized product video (`product-mobile.mp4`).
-- `mobileVideoSrc` field to `HomeSection` interface to support distinct mobile video assets.
+
+-   Dedicated mobile-optimized product video (`product-mobile.mp4`).
+-   `mobileVideoSrc` field to `HomeSection` interface to support distinct mobile video assets.
 
 ### Changed
-- Updated product video text overlays to emphasize privacy and scalability.
-- `DefaultSection` now loads `mobileVideoSrc` when available on mobile devices for a better viewing experience.
+
+-   Updated product video text overlays to emphasize privacy and scalability.
+-   `DefaultSection` now loads `mobileVideoSrc` when available on mobile devices for a better viewing experience.
 
 ## 0.4.4 - 2024-08-16
+
 ### Changed
-- Enabled reverse video playback on mobile to match the desktop experience.
-- Adjusted mobile text overlays to replace each other without vertical animation for a cleaner look.
-- Corrected text overlay positioning on mobile to ensure perfect centering.
-- Fixed an issue where desktop text overlay timings were incorrectly applied to mobile.
+
+-   Enabled reverse video playback on mobile to match the desktop experience.
+-   Adjusted mobile text overlays to replace each other without vertical animation for a cleaner look.
+-   Corrected text overlay positioning on mobile to ensure perfect centering.
+-   Fixed an issue where desktop text overlay timings were incorrectly applied to mobile.
 
 ## 0.4.3 - 2024-08-16
+
 ### Changed
-- Slowed down the scrubbing effect on the product video by increasing the scroll distance required to play through it.
-- Made the text overlays on the product video more prominent with a larger font size and a stronger text shadow.
-- Added a slide-up animation for the second text overlay on the product video for a more dynamic appearance.
-- Fixed a bug where the second text overlay would flicker due to repeated animations.
+
+-   Slowed down the scrubbing effect on the product video by increasing the scroll distance required to play through it.
+-   Made the text overlays on the product video more prominent with a larger font size and a stronger text shadow.
+-   Added a slide-up animation for the second text overlay on the product video for a more dynamic appearance.
+-   Fixed a bug where the second text overlay would flicker due to repeated animations.
 
 ## 0.4.2 - 2024-08-16
+
 ### Fixed
-- Rewind Context initialization to ensure proper state management of video playback.
-- Initial state of `hasSeenEfficiencySection` to `false` for consistent behavior.
-- Video rewind logic to correctly restart the product video when scrolling back.
+
+-   Rewind Context initialization to ensure proper state management of video playback.
+-   Initial state of `hasSeenEfficiencySection` to `false` for consistent behavior.
+-   Video rewind logic to correctly restart the product video when scrolling back.
 
 ### Changed
-- Refactored `DefaultSection` to improve readability and maintainability.
-- Updated GSAP scroll trigger to handle video rewind more efficiently.
-- Modified mobile layout for "Efficiency" and "Real-time Alerts" sections for better presentation.
-- Replaced direct video source manipulation with a state-driven approach.
+
+-   Refactored `DefaultSection` to improve readability and maintainability.
+-   Updated GSAP scroll trigger to handle video rewind more efficiently.
+-   Modified mobile layout for "Efficiency" and "Real-time Alerts" sections for better presentation.
+-   Replaced direct video source manipulation with a state-driven approach.
 
 ## 0.4.1 - 2024-08-15
+
 ### Added
-- Rewind functionality for the product video when scrolling.
+
+-   Rewind functionality for the product video when scrolling.
 
 ### Fixed
-- Video playback issues on mobile devices.
-- Scroll trigger configurations for smoother animations.
+
+-   Video playback issues on mobile devices.
+-   Scroll trigger configurations for smoother animations.
 
 All notable changes to this project will be documented in this file.
 
 ## [0.4.2] - 2024-08-14
 
 ### Added
-- Implemented a "rewind" effect for the product video, which plays the video from the beginning when scrolling up after viewing the "Efficiency" section.
-- Added symmetrical behavior to reset the rewind effect when scrolling back to the hero section.
+
+-   Implemented a "rewind" effect for the product video, which plays the video from the beginning when scrolling up after viewing the "Efficiency" section.
+-   Added symmetrical behavior to reset the rewind effect when scrolling back to the hero section.
 
 ### Fixed
-- Resolved a scroll jump issue that occurred when the video's playback direction changed.
-- Fixed a bug where the last frame of the product video would flicker before the rewind effect started.
-- Corrected the video's start time to ensure it always begins from the correct first frame.
+
+-   Resolved a scroll jump issue that occurred when the video's playback direction changed.
+-   Fixed a bug where the last frame of the product video would flicker before the rewind effect started.
+-   Corrected the video's start time to ensure it always begins from the correct first frame.
 
 ## [0.4.1] - 2025-01-23
 
