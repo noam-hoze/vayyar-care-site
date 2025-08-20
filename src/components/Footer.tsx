@@ -7,7 +7,19 @@ import { homeSections } from "@/data/homeSections";
 import { scrollToSection } from "@/lib/scrollUtils";
 
 const Footer: React.FC = () => {
-    const textSections = homeSections.filter((s) => s.type === "text");
+    const navSections = homeSections
+        .filter((section) => section.type === "text")
+        .map((section) => {
+            let targetId = section.id;
+            if (section.title === "Staff Optimization") targetId = 1.6;
+            else if (section.title === "Real-time Alerts") targetId = 2;
+            else if (section.title === "Privacy") targetId = 3.2;
+            else if (section.title === "AI insights") targetId = 4;
+            else if (section.title === "Personalized Care") targetId = 6;
+            else if (section.title === "Improve NOI") targetId = 8;
+            return { ...section, targetId };
+        });
+
     const [isCareOpen, setIsCareOpen] = React.useState(false);
     const [isSupportOpen, setIsSupportOpen] = React.useState(false);
     const [isContactOpen, setIsContactOpen] = React.useState(false);
@@ -19,10 +31,10 @@ const Footer: React.FC = () => {
         >
             <div className="max-w-7xl mx-auto px-6 sm:px-8 pt-12 pb-12">
                 {/* Divider */}
-                <div className="h-px w-full bg-white" />
+                <div className="hidden md:block h-px w-full bg-white" />
 
                 {/* Top row: brand + social + columns */}
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-10 items-start">
+                <div className="mt-10 md:flex md:justify-between">
                     {/* Brand + Social */}
                     <div className="space-y-6">
                         <VayyarLogo
@@ -103,210 +115,192 @@ const Footer: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Vayyar Care links */}
-                    <div className="space-y-2">
-                        {/* Divider above section */}
-                        <div className="md:hidden h-px w-full bg-white mt-4"></div>
-                        <div className="flex items-center justify-between">
-                            <h4
-                                className="text-base font-semibold"
-                                style={{ fontFamily: "Magistral" }}
+                    <div className="md:flex md:gap-x-28">
+                        {/* Vayyar Care links */}
+                        <div className="space-y-2 mt-8 md:mt-0">
+                            {/* Divider above section */}
+                            <div className="md:hidden h-px w-full bg-white mt-4"></div>
+                            <div className="flex items-center justify-between">
+                                <h4
+                                    className="text-base font-semibold"
+                                    style={{ fontFamily: "Magistral" }}
+                                >
+                                    Vayyar Care
+                                </h4>
+                                <button
+                                    type="button"
+                                    aria-label={
+                                        isCareOpen
+                                            ? "Collapse Vayyar Care"
+                                            : "Expand Vayyar Care"
+                                    }
+                                    aria-expanded={isCareOpen}
+                                    onClick={() => setIsCareOpen((v) => !v)}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
+                                    style={{ color: "#01adef" }}
+                                >
+                                    <span className="text-xl leading-none">
+                                        {isCareOpen ? "−" : "+"}
+                                    </span>
+                                </button>
+                            </div>
+                            <ul
+                                className={`space-y-2 text-gray-100/90 ${
+                                    isCareOpen ? "block" : "hidden"
+                                } md:block`}
                             >
-                                Vayyar Care
-                            </h4>
-                            <button
-                                type="button"
-                                aria-label={
-                                    isCareOpen
-                                        ? "Collapse Vayyar Care"
-                                        : "Expand Vayyar Care"
-                                }
-                                aria-expanded={isCareOpen}
-                                onClick={() => setIsCareOpen((v) => !v)}
-                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white"
-                                style={{ color: "#01adef" }}
-                            >
-                                <span className="text-xl leading-none">
-                                    {isCareOpen ? "−" : "+"}
-                                </span>
-                            </button>
+                                {navSections.map((s) => (
+                                    <li key={s.id}>
+                                        <button
+                                            onClick={() =>
+                                                scrollToSection(
+                                                    `section-${s.targetId}`
+                                                )
+                                            }
+                                            className="hover:underline text-left"
+                                        >
+                                            {s.title}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                        <ul
-                            className={`space-y-2 text-gray-100/90 ${
-                                isCareOpen ? "block" : "hidden"
-                            } md:block`}
-                        >
-                            {textSections.map((s) => (
-                                <li key={s.id}>
-                                    <button
-                                        onClick={() =>
-                                            scrollToSection(`section-${s.id}`)
-                                        }
-                                        className="hover:underline text-left"
+
+                        {/* Support */}
+                        <div className="space-y-2 mt-4 md:mt-0">
+                            {/* Divider above section */}
+                            <div className="md:hidden h-px w-full bg-white"></div>
+                            <div className="flex items-center justify-between">
+                                <h4
+                                    className="text-base font-semibold"
+                                    style={{ fontFamily: "Magistral" }}
+                                >
+                                    Support
+                                </h4>
+                                <button
+                                    type="button"
+                                    aria-label={
+                                        isSupportOpen
+                                            ? "Collapse Support"
+                                            : "Expand Support"
+                                    }
+                                    aria-expanded={isSupportOpen}
+                                    onClick={() => setIsSupportOpen((v) => !v)}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
+                                    style={{ color: "#01adef" }}
+                                >
+                                    <span className="text-xl leading-none">
+                                        {isSupportOpen ? "−" : "+"}
+                                    </span>
+                                </button>
+                            </div>
+                            <ul
+                                className={`space-y-2 text-gray-100/90 ${
+                                    isSupportOpen ? "block" : "hidden"
+                                } md:block`}
+                            >
+                                <li>
+                                    <a
+                                        href="https://vayyar.com/care/b2c/privacy-policy-old/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:underline"
                                     >
-                                        {s.title}
-                                    </button>
+                                        Privacy Policy Old
+                                    </a>
                                 </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Support */}
-                    <div className="space-y-2">
-                        {/* Divider above section */}
-                        <div className="md:hidden h-px w-full bg-white"></div>
-                        <div className="flex items-center justify-between">
-                            <h4
-                                className="text-base font-semibold"
-                                style={{ fontFamily: "Magistral" }}
-                            >
-                                Support
-                            </h4>
-                            <button
-                                type="button"
-                                aria-label={
-                                    isSupportOpen
-                                        ? "Collapse Support"
-                                        : "Expand Support"
-                                }
-                                aria-expanded={isSupportOpen}
-                                onClick={() => setIsSupportOpen((v) => !v)}
-                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white"
-                                style={{ color: "#01adef" }}
-                            >
-                                <span className="text-xl leading-none">
-                                    {isSupportOpen ? "−" : "+"}
-                                </span>
-                            </button>
+                                <li>
+                                    <a
+                                        href="https://vayyar.com/care/b2c/eula/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:underline"
+                                    >
+                                        Terms of use
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://support.vayyarcare.com/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:underline"
+                                    >
+                                        FAQ
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://vayyar.com/cookie-notice/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:underline"
+                                    >
+                                        Cookie Notice
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://vayyar.com/care/cssignupform/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:underline"
+                                    >
+                                        CS Sign Up
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <ul
-                            className={`space-y-2 text-gray-100/90 ${
-                                isSupportOpen ? "block" : "hidden"
-                            } md:block`}
-                        >
-                            <li>
-                                <a
-                                    href="https://vayyar.com/care/b2c/privacy-policy-old/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline"
-                                >
-                                    Privacy Policy
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://vayyar.com/care/b2c/eula/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline"
-                                >
-                                    Terms Of Use
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://vayyar.com/care/customer/tc/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline"
-                                >
-                                    Customer Terms and Conditions
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://vayyar.com/care/b2b/tc/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline"
-                                >
-                                    B2B Terms and Conditions
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://support.vayyarcare.com/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline"
-                                >
-                                    FAQ
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://vayyar.com/cookie-notice/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline"
-                                >
-                                    Cookie Notice
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://vayyar.com/care/cssignupform/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline"
-                                >
-                                    CS Sign Up
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
 
-                    {/* Contact Us */}
-                    <div className="space-y-2">
-                        {/* Divider above section */}
-                        <div className="md:hidden h-px w-full bg-white"></div>
-                        <div className="flex items-center justify-between">
-                            <h4
-                                className="text-base font-semibold"
-                                style={{ fontFamily: "Magistral" }}
+                        {/* Contact Us */}
+                        <div className="space-y-2 mt-4 md:mt-0">
+                            {/* Divider above section */}
+                            <div className="md:hidden h-px w-full bg-white"></div>
+                            <div className="flex items-center justify-between">
+                                <h4
+                                    className="text-base font-semibold"
+                                    style={{ fontFamily: "Magistral" }}
+                                >
+                                    Contact Us
+                                </h4>
+                                <button
+                                    type="button"
+                                    aria-label={
+                                        isContactOpen
+                                            ? "Collapse Contact Us"
+                                            : "Expand Contact Us"
+                                    }
+                                    aria-expanded={isContactOpen}
+                                    onClick={() => setIsContactOpen((v) => !v)}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
+                                    style={{ color: "#01adef" }}
+                                >
+                                    <span className="text-xl leading-none">
+                                        {isContactOpen ? "−" : "+"}
+                                    </span>
+                                </button>
+                            </div>
+                            <div
+                                className={`text-gray-100/90 leading-relaxed ${
+                                    isContactOpen ? "block" : "hidden"
+                                } md:block`}
                             >
-                                Contact Us
-                            </h4>
-                            <button
-                                type="button"
-                                aria-label={
-                                    isContactOpen
-                                        ? "Collapse Contact Us"
-                                        : "Expand Contact Us"
-                                }
-                                aria-expanded={isContactOpen}
-                                onClick={() => setIsContactOpen((v) => !v)}
-                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white"
-                                style={{ color: "#01adef" }}
-                            >
-                                <span className="text-xl leading-none">
-                                    {isContactOpen ? "−" : "+"}
-                                </span>
-                            </button>
-                        </div>
-                        <div
-                            className={`text-gray-100/90 leading-relaxed ${
-                                isContactOpen ? "block" : "hidden"
-                            } md:block`}
-                        >
-                            Vayyar Imaging Ltd
-                            <br />
-                            Hahoresh 4,
-                            <br />
-                            Yehud
-                            <br />
-                            5647003
-                            <br />
-                            Israel
+                                Hahoresh 4,
+                                <br />
+                                Yehud
+                                <br />
+                                5647003
+                                <br />
+                                Israel
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Bottom bar */}
-                <div className="mt-2">
+                <div className="mt-12">
                     <div className="h-px w-full bg-white" />
-                    <div className="flex flex-col items-center justify-center gap-4 py-6 text-sm text-gray-100/80">
+                    <div className="flex flex-col md:flex-row items-center md:justify-between gap-4 py-6 text-sm text-gray-100/80">
                         <div className="flex items-center gap-4">
                             <a
                                 href="https://vayyar.com/cookie-notice/"
@@ -337,10 +331,16 @@ const Footer: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <span>©2024</span>
-                            <VayyarLogo
-                                className="h-5 w-auto opacity-90"
-                                ariaLabel="Vayyar"
-                            />
+                            <a
+                                href="https://vayyar.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <VayyarLogo
+                                    className="h-5 w-auto opacity-90"
+                                    ariaLabel="Vayyar"
+                                />
+                            </a>
                         </div>
                     </div>
                 </div>
