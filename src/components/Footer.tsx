@@ -133,8 +133,13 @@ const Footer: React.FC = () => {
                                     Vayyar Care
                                 </h4>
                                 <div
-                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
-                                    style={{ color: "#01adef" }}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden transition-transform duration-300"
+                                    style={{
+                                        color: "#01adef",
+                                        transform: isCareOpen
+                                            ? "rotate(180deg)"
+                                            : "rotate(0deg)",
+                                    }}
                                 >
                                     <span className="text-xl leading-none">
                                         {isCareOpen ? "−" : "+"}
@@ -142,24 +147,26 @@ const Footer: React.FC = () => {
                                 </div>
                             </button>
                             <ul
-                                className={`space-y-2 text-gray-100/90 ${
-                                    isCareOpen ? "block" : "hidden"
-                                } md:block`}
+                                className={`overflow-hidden md:overflow-visible transition-max-height duration-500 ease-in-out md:max-h-none ${
+                                    isCareOpen ? "max-h-96" : "max-h-0"
+                                }`}
                             >
-                                {navSections.map((s) => (
-                                    <li key={s.id}>
-                                        <button
-                                            onClick={() =>
-                                                scrollToSection(
-                                                    `section-${s.targetId}`
-                                                )
-                                            }
-                                            className="hover:underline text-left"
-                                        >
-                                            {s.title}
-                                        </button>
-                                    </li>
-                                ))}
+                                <div className="space-y-2 text-gray-100/90 pt-2 md:pt-0">
+                                    {navSections.map((s) => (
+                                        <li key={s.id}>
+                                            <button
+                                                onClick={() =>
+                                                    scrollToSection(
+                                                        `section-${s.targetId}`
+                                                    )
+                                                }
+                                                className="hover:underline text-left"
+                                            >
+                                                {s.title}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </div>
                             </ul>
                         </div>
 
@@ -180,8 +187,13 @@ const Footer: React.FC = () => {
                                     Support
                                 </h4>
                                 <div
-                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
-                                    style={{ color: "#01adef" }}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden transition-transform duration-300"
+                                    style={{
+                                        color: "#01adef",
+                                        transform: isSupportOpen
+                                            ? "rotate(180deg)"
+                                            : "rotate(0deg)",
+                                    }}
                                 >
                                     <span className="text-xl leading-none">
                                         {isSupportOpen ? "−" : "+"}
@@ -189,60 +201,62 @@ const Footer: React.FC = () => {
                                 </div>
                             </button>
                             <ul
-                                className={`space-y-2 text-gray-100/90 ${
-                                    isSupportOpen ? "block" : "hidden"
-                                } md:block`}
+                                className={`overflow-hidden md:overflow-visible transition-max-height duration-500 ease-in-out md:max-h-none ${
+                                    isSupportOpen ? "max-h-96" : "max-h-0"
+                                }`}
                             >
-                                <li>
-                                    <a
-                                        href="https://vayyar.com/care/b2c/privacy-policy-old/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:underline"
-                                    >
-                                        Privacy Policy Old
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://vayyar.com/care/b2c/eula/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:underline"
-                                    >
-                                        Terms of use
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://support.vayyarcare.com/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:underline"
-                                    >
-                                        FAQ
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://vayyar.com/cookie-notice/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:underline"
-                                    >
-                                        Cookie Notice
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://vayyar.com/care/cssignupform/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:underline"
-                                    >
-                                        CS Sign Up
-                                    </a>
-                                </li>
+                                <div className="space-y-2 text-gray-100/90 pt-2 md:pt-0">
+                                    <li>
+                                        <a
+                                            href="https://vayyar.com/care/b2c/privacy-policy-old/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            Privacy Policy Old
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://vayyar.com/care/b2c/eula/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            Terms of use
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://support.vayyarcare.com/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            FAQ
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://vayyar.com/cookie-notice/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            Cookie Notice
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://vayyar.com/care/cssignupform/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            CS Sign Up
+                                        </a>
+                                    </li>
+                                </div>
                             </ul>
                         </div>
 
@@ -263,8 +277,13 @@ const Footer: React.FC = () => {
                                     Contact Us
                                 </h4>
                                 <div
-                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
-                                    style={{ color: "#01adef" }}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden transition-transform duration-300"
+                                    style={{
+                                        color: "#01adef",
+                                        transform: isContactOpen
+                                            ? "rotate(180deg)"
+                                            : "rotate(0deg)",
+                                    }}
                                 >
                                     <span className="text-xl leading-none">
                                         {isContactOpen ? "−" : "+"}
@@ -272,17 +291,19 @@ const Footer: React.FC = () => {
                                 </div>
                             </button>
                             <div
-                                className={`text-gray-100/90 leading-relaxed ${
-                                    isContactOpen ? "block" : "hidden"
+                                className={`overflow-hidden transition-max-height duration-500 ease-in-out md:max-h-none ${
+                                    isContactOpen ? "max-h-96" : "max-h-0"
                                 } md:block`}
                             >
-                                Hahoresh 4,
-                                <br />
-                                Yehud
-                                <br />
-                                5647003
-                                <br />
-                                Israel
+                                <div className="text-gray-100/90 leading-relaxed pt-2 md:pt-0">
+                                    Hahoresh 4,
+                                    <br />
+                                    Yehud
+                                    <br />
+                                    5647003
+                                    <br />
+                                    Israel
+                                </div>
                             </div>
                         </div>
                     </div>
