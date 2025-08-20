@@ -120,30 +120,27 @@ const Footer: React.FC = () => {
                         <div className="space-y-2 mt-8 md:mt-0">
                             {/* Divider above section */}
                             <div className="md:hidden h-px w-full bg-white mt-4"></div>
-                            <div className="flex items-center justify-between">
+                            <button
+                                type="button"
+                                aria-expanded={isCareOpen}
+                                onClick={() => setIsCareOpen((v) => !v)}
+                                className="w-full flex items-center justify-between text-left md:pointer-events-none"
+                            >
                                 <h4
                                     className="text-base font-semibold"
                                     style={{ fontFamily: "Magistral" }}
                                 >
                                     Vayyar Care
                                 </h4>
-                                <button
-                                    type="button"
-                                    aria-label={
-                                        isCareOpen
-                                            ? "Collapse Vayyar Care"
-                                            : "Expand Vayyar Care"
-                                    }
-                                    aria-expanded={isCareOpen}
-                                    onClick={() => setIsCareOpen((v) => !v)}
+                                <div
                                     className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
                                     style={{ color: "#01adef" }}
                                 >
                                     <span className="text-xl leading-none">
                                         {isCareOpen ? "−" : "+"}
                                     </span>
-                                </button>
-                            </div>
+                                </div>
+                            </button>
                             <ul
                                 className={`space-y-2 text-gray-100/90 ${
                                     isCareOpen ? "block" : "hidden"
@@ -170,30 +167,27 @@ const Footer: React.FC = () => {
                         <div className="space-y-2 mt-4 md:mt-0">
                             {/* Divider above section */}
                             <div className="md:hidden h-px w-full bg-white"></div>
-                            <div className="flex items-center justify-between">
+                            <button
+                                type="button"
+                                aria-expanded={isSupportOpen}
+                                onClick={() => setIsSupportOpen((v) => !v)}
+                                className="w-full flex items-center justify-between text-left md:pointer-events-none"
+                            >
                                 <h4
                                     className="text-base font-semibold"
                                     style={{ fontFamily: "Magistral" }}
                                 >
                                     Support
                                 </h4>
-                                <button
-                                    type="button"
-                                    aria-label={
-                                        isSupportOpen
-                                            ? "Collapse Support"
-                                            : "Expand Support"
-                                    }
-                                    aria-expanded={isSupportOpen}
-                                    onClick={() => setIsSupportOpen((v) => !v)}
+                                <div
                                     className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
                                     style={{ color: "#01adef" }}
                                 >
                                     <span className="text-xl leading-none">
                                         {isSupportOpen ? "−" : "+"}
                                     </span>
-                                </button>
-                            </div>
+                                </div>
+                            </button>
                             <ul
                                 className={`space-y-2 text-gray-100/90 ${
                                     isSupportOpen ? "block" : "hidden"
@@ -256,30 +250,27 @@ const Footer: React.FC = () => {
                         <div className="space-y-2 mt-4 md:mt-0">
                             {/* Divider above section */}
                             <div className="md:hidden h-px w-full bg-white"></div>
-                            <div className="flex items-center justify-between">
+                            <button
+                                type="button"
+                                aria-expanded={isContactOpen}
+                                onClick={() => setIsContactOpen((v) => !v)}
+                                className="w-full flex items-center justify-between text-left md:pointer-events-none"
+                            >
                                 <h4
                                     className="text-base font-semibold"
                                     style={{ fontFamily: "Magistral" }}
                                 >
                                     Contact Us
                                 </h4>
-                                <button
-                                    type="button"
-                                    aria-label={
-                                        isContactOpen
-                                            ? "Collapse Contact Us"
-                                            : "Expand Contact Us"
-                                    }
-                                    aria-expanded={isContactOpen}
-                                    onClick={() => setIsContactOpen((v) => !v)}
+                                <div
                                     className="w-8 h-8 rounded-full flex items-center justify-center bg-white md:hidden"
                                     style={{ color: "#01adef" }}
                                 >
                                     <span className="text-xl leading-none">
                                         {isContactOpen ? "−" : "+"}
                                     </span>
-                                </button>
-                            </div>
+                                </div>
+                            </button>
                             <div
                                 className={`text-gray-100/90 leading-relaxed ${
                                     isContactOpen ? "block" : "hidden"
