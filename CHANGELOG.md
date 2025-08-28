@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0] - 2024-08-28
+
+### Added
+
+-   **"Closer Look" Modal**: Implemented an interactive, full-screen modal for the product section.
+-   **Tabbed Content**: The modal features a dynamic tab system to display different product aspects, including images, video, and detailed descriptions.
+-   **Scroll Lock**: The main page scroll is now locked when the modal is active, improving user experience.
+
+### Fixed
+
+-   **Layout Stability**: Corrected the modal's layout to ensure the tab bar remains in a fixed position, regardless of the description's text length.
+-   **Content Alignment**: Refined the modal's internal alignment to correctly center content and ensure full-width backgrounds as per the design.
+
 ## [0.5.0] - 2024-08-28
 
 ### Added

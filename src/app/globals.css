@@ -26,6 +26,10 @@ body {
   font-family: var(--font-sans), sans-serif;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(0);
