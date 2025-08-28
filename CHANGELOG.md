@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.0] - 2024-08-28
+
+### Added
+
+-   **Product Intro Section**: Implemented a new, Apple-inspired product introduction section.
+-   **New Component**: Created a dedicated `ProductSection` component to display the product with a clean, centered layout.
+-   **Styling**: Added a new CSS module for the `ProductSection` with styles that mimic the Apple Vision Pro product page.
+
+### Changed
+
+-   **Homepage Layout**: Updated the homepage to include the new product intro section.
+-   **Button Styling**: Refined the "Take a closer look" button with a thicker border, bolder font, and a smooth hover effect.
+-   **Logo and Image Sizing**: Adjusted the size and spacing of the logo and product image for a more balanced and visually appealing layout.
+
 ## [0.4.6] - 2024-08-11
 
 ### Changed
