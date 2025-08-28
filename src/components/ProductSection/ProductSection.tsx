@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import VayyarLogo from "../VayyarLogo";
 import styles from "./ProductSection.module.css";
@@ -16,19 +16,40 @@ const ProductSection: React.FC<ProductSectionProps> = ({
 }) => {
     const [isCloserLookActive, setIsCloserLookActive] = useState(false);
     const [activeTabIndex, setActiveTabIndex] = useState(0);
+    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+    const scrollPositionRef = useRef(0);
 
     useEffect(() => {
         if (isCloserLookActive) {
+            scrollPositionRef.current = window.scrollY;
             document.body.classList.add("modal-open");
+            document.body.style.top = `-${scrollPositionRef.current}px`;
         } else {
             document.body.classList.remove("modal-open");
+            document.body.style.top = "";
+            window.scrollTo(0, scrollPositionRef.current);
         }
 
-        // Cleanup function to remove the class if the component unmounts
         return () => {
             document.body.classList.remove("modal-open");
+            document.body.style.top = "";
         };
     }, [isCloserLookActive]);
+
+    useEffect(() => {
+        if (!isCloserLookActive) return;
+
+        videoRefs.current.forEach((video, index) => {
+            if (video) {
+                if (index === activeTabIndex) {
+                    video.currentTime = 0;
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }
+        });
+    }, [activeTabIndex, isCloserLookActive]);
 
     const activeTab = productDetails[activeTabIndex];
 
@@ -68,6 +89,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                                     />
                                 ) : (
                                     <video
+                                        ref={(el) =>
+                                            (videoRefs.current[index] = el)
+                                        }
                                         src={tab.mediaSrc}
                                         className={styles.productImage}
                                         autoPlay
@@ -107,12 +131,16 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                                     onClick={() => setActiveTabIndex(index)}
                                 >
                                     {tab.title}
-                                    {index === activeTabIndex && (
-                                        <motion.div
-                                            className={styles.activeTabLine}
-                                            layoutId="activeTabLine"
-                                        />
-                                    )}
+                                    <motion.div
+                                        className={styles.activeTabLine}
+                                        animate={{
+                                            opacity:
+                                                index === activeTabIndex
+                                                    ? 1
+                                                    : 0,
+                                        }}
+                                        transition={{ duration: 0.3 }}
+                                    />
                                 </button>
                             ))}
                         </div>
