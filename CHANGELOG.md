@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.10.0] - 2024-08-28
+
+### Added
+
+-   **Symmetrical Modal Animations**: Implemented a fade-out animation for the product modal that mirrors the fade-in effect, creating a consistent user experience when opening and closing.
+
+### Fixed
+
+-   **Modal Animation Specificity**: Corrected a CSS specificity issue that prevented the modal's fade-out animation from running.
+
 ## [0.9.0] - 2024-08-28
 
 ### Fixed

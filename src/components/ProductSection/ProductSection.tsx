@@ -15,6 +15,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
     sectionId,
 }) => {
     const [isCloserLookActive, setIsCloserLookActive] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
     const [activeTabIndex, setActiveTabIndex] = useState(0);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const scrollPositionRef = useRef(0);
@@ -54,8 +55,16 @@ const ProductSection: React.FC<ProductSectionProps> = ({
     const activeTab = productDetails[activeTabIndex];
 
     const handleToggleCloserLook = () => {
-        setIsCloserLookActive(!isCloserLookActive);
-        setActiveTabIndex(0); // Reset to the first tab when opening/closing
+        if (isCloserLookActive) {
+            setIsClosing(true);
+            setTimeout(() => {
+                setIsCloserLookActive(false);
+                setIsClosing(false);
+                setActiveTabIndex(0);
+            }, 400); // Match the animation duration
+        } else {
+            setIsCloserLookActive(true);
+        }
     };
 
     return (
@@ -65,7 +74,11 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                 isCloserLookActive ? styles.modalActive : ""
             }`}
         >
-            <div className={styles.modalContent}>
+            <div
+                className={`${styles.modalContent} ${
+                    isClosing ? styles.modalContentClosing : ""
+                }`}
+            >
                 <div className={`${styles.logoContainer} ${styles.fadeIn}`}>
                     <VayyarLogo />
                 </div>
