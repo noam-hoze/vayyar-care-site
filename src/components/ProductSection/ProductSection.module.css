@@ -127,10 +127,16 @@
     justify-content: center;
 }
 
+.mediaWrapper video {
+    scale: 2.89;
+    z-index: -1;
+}
+
 .noamClass {
     width: 100vw;
     max-height: 265px;
     background-color: #ffffff;
+    z-index: 1;
 }
 
 .detailsContainer {
