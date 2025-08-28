@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0] - 2024-08-28
+
+### Added
+
+-   **Product Modal Animations**: Implemented smooth animations in the product modal for a more polished user experience.
+    -   Description text now fades in and out when switching between tabs.
+    -   The active tab indicator line now slides smoothly between tabs.
+
+### Fixed
+
+-   **Tab Indicator Position**: Adjusted the positioning of the active tab indicator line to sit perfectly on top of the divider.
+
 ## [0.7.0] - 2024-08-28
 
 ### Fixed

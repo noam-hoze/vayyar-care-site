@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import VayyarLogo from "../VayyarLogo";
 import styles from "./ProductSection.module.css";
 import { HomeSection } from "@/data/homeSections";
@@ -106,12 +107,27 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                                     onClick={() => setActiveTabIndex(index)}
                                 >
                                     {tab.title}
+                                    {index === activeTabIndex && (
+                                        <motion.div
+                                            className={styles.activeTabLine}
+                                            layoutId="activeTabLine"
+                                        />
+                                    )}
                                 </button>
                             ))}
                         </div>
-                        <p className={styles.descriptionText}>
-                            {activeTab.description}
-                        </p>
+                        <AnimatePresence mode="wait">
+                            <motion.p
+                                key={activeTab.description}
+                                className={styles.descriptionText}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {activeTab.description}
+                            </motion.p>
+                        </AnimatePresence>
                     </div>
                 </div>
             ) : (

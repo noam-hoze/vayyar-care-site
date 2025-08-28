@@ -137,14 +137,13 @@
     font-weight: 600;
 }
 
-.activeTab::after {
-    content: "";
+.activeTabLine {
     position: absolute;
-    bottom: -3px; /* Position it on the border */
+    bottom: -8px;
     left: 0;
-    width: 100%;
+    right: 0;
     height: 3px;
-    background-color: #000;
+    background: #000;
 }
 
 .descriptionText {
