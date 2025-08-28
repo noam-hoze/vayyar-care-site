@@ -14,6 +14,7 @@ import DefaultSectionIntroText from "../DefaultSection/DefaultSectionIntroText";
 import DefaultSectionVideo from "../DefaultSection/DefaultSectionVideo";
 import DefaultSectionDetails from "../DefaultSection/DefaultSectionDetails";
 import MobileNarrowText from "../mobile/MobileNarrowText";
+import ProductSection from "../ProductSection/ProductSection";
 import "../mobile/mobile-styles.css";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -73,6 +74,10 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     const { setHasSeenEfficiencySection, hasSeenEfficiencySection } =
         useRewind();
     const hasSeenRef = useRef(hasSeenEfficiencySection);
+
+    if (entry.type === "product-intro") {
+        return <ProductSection entry={entry} sectionId={sectionId} />;
+    }
 
     useEffect(() => {
         hasSeenRef.current = hasSeenEfficiencySection;

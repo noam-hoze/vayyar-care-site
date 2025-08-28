@@ -21,7 +21,7 @@ export default function HomePage() {
                 />
             ))}
             <ContactForm isOpen={true} asPageElement={true} />
-            <TheaterModeOverlay />
+            {/* <TheaterModeOverlay /> */}
         </div>
     );
 }

@@ -9,6 +9,7 @@ export interface HomeSection {
         | "scrolly-video"
         | "scrolly-video-fixed"
         | "scroll-scrub-video"
+        | "product-intro"
         | "image";
     /**
      * Optional override for how media behaves on mobile.
@@ -79,35 +80,9 @@ export const homeSections: HomeSection[] = [
     },
     {
         id: 1.5,
-        type: "scroll-scrub-video",
-        mobileMediaType: "scroll-scrub-video",
+        type: "product-intro",
         title: "Product Overview",
-        videoSrc: "/videos/product.mp4",
-        mobileVideoSrc: "/videos/product-mobile.mp4",
-        textOverlays: [
-            {
-                text: "Seamless monitoring while preserving full privacy.",
-                start: 0.4,
-                end: 6,
-            },
-            {
-                text: "Scaled across the entire facility.",
-                start: 3,
-                end: 6,
-            },
-        ],
-        mobileTextOverlays: [
-            {
-                text: "Seamless monitoring while preserving full privacy.",
-                start: 0.4,
-                end: 3,
-            },
-            {
-                text: "Scaled across the entire facility.",
-                start: 3.6,
-                end: 6,
-            },
-        ],
+        imageSrc: "/images/product.png",
     },
     {
         id: 1.6,
