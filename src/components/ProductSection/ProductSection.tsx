@@ -43,11 +43,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                 isCloserLookActive ? styles.modalActive : ""
             }`}
         >
-            <div
-                className={`${styles.logoContainer} ${
-                    isCloserLookActive ? styles.fadeOut : styles.fadeIn
-                }`}
-            >
+            <div className={`${styles.logoContainer} ${styles.fadeIn}`}>
                 <VayyarLogo />
             </div>
 

@@ -29,6 +29,7 @@
 /* New styles for modal content layout */
 .modalActive .imageContainer {
     height: 60%; /* Fixed height to prevent content shifts */
+    max-height: 293px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,6 +95,7 @@
 
 .noamClass {
     width: 100vw;
+    max-height: 265px;
     background-color: #ffffff;
 }
 
@@ -152,6 +154,7 @@
     color: #1d1d1f;
     max-width: 60%; /* Adjusted for better readability on wide screens */
     text-align: center;
+    min-height: 4.8em; /* 3 lines * 1.6 line-height */
 }
 
 .closeButton {

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0] - 2024-08-28
+
+### Fixed
+
+-   **Product Modal Layout**: Corrected an issue where the details section of the product modal would be pushed down by larger media assets, ensuring a stable and consistent layout.
+-   **Vayyar Logo Visibility**: Modified the product modal to keep the Vayyar logo visible at all times, removing the fade-out effect that occurred when the modal was active.
+
 ## [0.6.0] - 2024-08-28
 
 ### Added
