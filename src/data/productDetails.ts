@@ -8,58 +8,38 @@ export interface ProductDetailTab {
 
 export const productDetails: ProductDetailTab[] = [
     {
-        title: "Vayyar Care",
-        mediaType: "image",
-        mediaSrc: "/images/product.png",
-        mobileMediaSrc: "/images/product-mobile.png",
-        description:
-            "Vayyar Care is a comprehensive resident monitoring solution that provides real-time fall detection and activity insights. Our touchless RF sensors offer 24/7 visibility, ensuring resident safety and dignity while enhancing staff efficiency.",
-    },
-    {
-        title: "Features",
-        mediaType: "image",
-        mediaSrc: "/images/product.png", // Placeholder
-        mobileMediaSrc: "/images/product-mobile.png",
-        description:
-            "Unlock powerful AI-driven insights with 24/7 monitoring and facility-wide visibility. Track resident patterns, analyze fall history, and generate data-rich graphs to optimize care plans.",
-    },
-    {
-        title: "The Sensor",
-        mediaType: "image",
-        mediaSrc: "/images/product.png",
-        mobileMediaSrc: "/images/product-mobile.png",
-        description:
-            "Our advanced RF sensor technology ensures complete privacy by design. It sees through steam and darkness, monitoring residents without cameras by imaging them as point clouds. This provides critical data without ever capturing a single photo.",
-    },
-    {
-        title: "Future Integration", // Placeholder Title
-        mediaType: "image",
-        mediaSrc: "/images/product.png", // Placeholder
-        mobileMediaSrc: "/images/product-mobile.png",
-        description:
-            "Content for this section is currently in development. Stay tuned for future updates on our expanding capabilities.", // Placeholder Description
-    },
-    {
-        title: "Future Integration", // Placeholder Title
-        mediaType: "image",
-        mediaSrc: "/images/product.png", // Placeholder
-        mobileMediaSrc: "/images/product-mobile.png",
-        description:
-            "Content for this section is currently in development. Stay tuned for future updates on our expanding capabilities.", // Placeholder Description
-    },
-    {
-        title: "Future Integration", // Placeholder Title
-        mediaType: "image",
-        mediaSrc: "/images/product.png", // Placeholder
-        mobileMediaSrc: "/images/product-mobile.png",
-        description:
-            "Content for this section is currently in development. Stay tuned for future updates on our expanding capabilities.", // Placeholder Description
-    },
-    {
-        title: "The Full System",
+        title: "AI Assistant",
         mediaType: "video",
-        mediaSrc: "/videos/product.mp4",
+        mediaSrc: "/videos/optimize-staff.mp4",
         description:
-            "See how the entire Vayyar Care ecosystem works together, from the discreetly mounted sensors to the powerful analytics dashboard, to provide a seamless and comprehensive monitoring solution for your facility.",
+            "Vayyar Care is an intelligent assistant that enhances resident safety and empowers your staff. It works silently in the background, providing a new layer of data-driven insight to elevate the quality of care.",
+    },
+    {
+        title: "Silent Sensing",
+        mediaType: "video",
+        mediaSrc: "/videos/privacy.mp4",
+        description:
+            "The system gathers information using advanced, wall-mounted sensors instead of intrusive cameras. This method respects resident dignity and ensures complete privacy while collecting crucial activity data around the clock.",
+    },
+    {
+        title: "Instant Alerts",
+        mediaType: "video",
+        mediaSrc: "/videos/real-time-alerts.mp4",
+        description:
+            "Vayyar Care's AI instantly recognizes when a fall occurs and automatically alerts caregivers through your nurse call system. This ensures rapid response, preventing long lies and improving resident outcomes.",
+    },
+    {
+        title: "Predictive Insights",
+        mediaType: "video",
+        mediaSrc: "/videos/ai-insights.mp4",
+        description:
+            "Beyond fall detection, the system analyzes behavioral patterns to predict health risks and offer proactive insights. It helps you identify underlying conditions early, enabling preventative care and reducing hospitalizations.",
+    },
+    {
+        title: "Higher NOI",
+        mediaType: "video",
+        mediaSrc: "/videos/increase-noi.mp4",
+        description:
+            "Prevent costly fall-related move-outs and attract new residents with best-in-class safety. The system's data justifies care levels and optimizes staff, directly boosting your Net Operating Income (NOI).",
     },
 ];
