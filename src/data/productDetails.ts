@@ -2,6 +2,7 @@ export interface ProductDetailTab {
     title: string;
     mediaType: "image" | "video";
     mediaSrc: string;
+    mobileMediaSrc?: string;
     description: string;
 }
 
@@ -10,6 +11,7 @@ export const productDetails: ProductDetailTab[] = [
         title: "Vayyar Care",
         mediaType: "image",
         mediaSrc: "/images/product.png",
+        mobileMediaSrc: "/images/product-mobile.png",
         description:
             "Vayyar Care is a comprehensive resident monitoring solution that provides real-time fall detection and activity insights. Our touchless RF sensors offer 24/7 visibility, ensuring resident safety and dignity while enhancing staff efficiency.",
     },
@@ -17,6 +19,7 @@ export const productDetails: ProductDetailTab[] = [
         title: "Features",
         mediaType: "image",
         mediaSrc: "/images/product.png", // Placeholder
+        mobileMediaSrc: "/images/product-mobile.png",
         description:
             "Unlock powerful AI-driven insights with 24/7 monitoring and facility-wide visibility. Track resident patterns, analyze fall history, and generate data-rich graphs to optimize care plans.",
     },
@@ -24,6 +27,7 @@ export const productDetails: ProductDetailTab[] = [
         title: "The Sensor",
         mediaType: "image",
         mediaSrc: "/images/product.png",
+        mobileMediaSrc: "/images/product-mobile.png",
         description:
             "Our advanced RF sensor technology ensures complete privacy by design. It sees through steam and darkness, monitoring residents without cameras by imaging them as point clouds. This provides critical data without ever capturing a single photo.",
     },
@@ -31,6 +35,7 @@ export const productDetails: ProductDetailTab[] = [
         title: "Future Integration", // Placeholder Title
         mediaType: "image",
         mediaSrc: "/images/product.png", // Placeholder
+        mobileMediaSrc: "/images/product-mobile.png",
         description:
             "Content for this section is currently in development. Stay tuned for future updates on our expanding capabilities.", // Placeholder Description
     },
@@ -38,6 +43,7 @@ export const productDetails: ProductDetailTab[] = [
         title: "Future Integration", // Placeholder Title
         mediaType: "image",
         mediaSrc: "/images/product.png", // Placeholder
+        mobileMediaSrc: "/images/product-mobile.png",
         description:
             "Content for this section is currently in development. Stay tuned for future updates on our expanding capabilities.", // Placeholder Description
     },
@@ -45,6 +51,7 @@ export const productDetails: ProductDetailTab[] = [
         title: "Future Integration", // Placeholder Title
         mediaType: "image",
         mediaSrc: "/images/product.png", // Placeholder
+        mobileMediaSrc: "/images/product-mobile.png",
         description:
             "Content for this section is currently in development. Stay tuned for future updates on our expanding capabilities.", // Placeholder Description
     },

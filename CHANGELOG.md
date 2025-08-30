@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.1] - 2024-08-28
+
+### Changed
+
+-   **Responsive Product Image**: The product section now displays a mobile-specific image (`product-mobile.png`) on smaller screens for both the main view and the expanded modal view.
+-   **Mobile-Specific Styling**: Added a Vayyar blue border to the product image on mobile.
+-   **Layout Adjustments**:
+    -   Modified the product section layout on mobile to remove `justify-content: center` and `min-height` for better content flow.
+    -   Adjusted margins and padding for the product image and section on mobile devices.
+-   **Modal Overflow Fix**: Corrected a layout issue where the product modal would overflow on mobile screens by adjusting font sizes, spacing, and container heights to ensure all content fits within the viewport.
+
 ## [0.10.0] - 2024-08-28
 
 ### Added

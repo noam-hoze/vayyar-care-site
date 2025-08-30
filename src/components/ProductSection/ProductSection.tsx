@@ -96,16 +96,25 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                                     }`}
                                 >
                                     {tab.mediaType === "image" ? (
-                                        <img
-                                            src={tab.mediaSrc}
-                                            alt={tab.title}
-                                            className={styles.productImage}
-                                        />
+                                        <picture>
+                                            <source
+                                                media="(max-width: 768px)"
+                                                srcSet={
+                                                    tab.mobileMediaSrc ||
+                                                    tab.mediaSrc
+                                                }
+                                            />
+                                            <img
+                                                src={tab.mediaSrc}
+                                                alt={tab.title}
+                                                className={styles.productImage}
+                                            />
+                                        </picture>
                                     ) : (
                                         <video
-                                            ref={(el) =>
-                                                (videoRefs.current[index] = el)
-                                            }
+                                            ref={(el) => {
+                                                videoRefs.current[index] = el;
+                                            }}
                                             src={tab.mediaSrc}
                                             className={styles.productImage}
                                             autoPlay
@@ -119,11 +128,17 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                         </>
                     ) : (
                         <div className={styles.mediaWrapper}>
-                            <img
-                                src="/images/product.png"
-                                alt="Vayyar Care Product"
-                                className={styles.productImage}
-                            />
+                            <picture>
+                                <source
+                                    media="(max-width: 768px)"
+                                    srcSet="/images/product-mobile.png"
+                                />
+                                <img
+                                    src="/images/product.png"
+                                    alt="Vayyar Care Product"
+                                    className={styles.productImage}
+                                />
+                            </picture>
                         </div>
                     )}
                 </div>
