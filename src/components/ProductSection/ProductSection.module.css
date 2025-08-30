@@ -301,3 +301,9 @@
     font-weight: 600; /* makes the plus thinner */
     margin-top: -2px; /* vertical alignment */
 }
+
+@media (min-width: 769px) {
+    .modalActive .logoContainer {
+        display: none;
+    }
+}
