@@ -358,6 +358,31 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         }
     };
 
+    useEffect(() => {
+        let raf: number;
+
+        const tick = () => {
+            const p = streamRef.current;
+            if (
+                p &&
+                typeof p.currentTime === "number" &&
+                typeof p.duration === "number" &&
+                p.duration > 0
+            ) {
+                setProgress(p.currentTime / p.duration);
+            }
+            raf = requestAnimationFrame(tick);
+        };
+
+        if (playing) {
+            raf = requestAnimationFrame(tick);
+        }
+
+        return () => {
+            cancelAnimationFrame(raf);
+        };
+    }, [playing]);
+
     // Add body class for theater mode to hide all videos
     useEffect(() => {
         if (theaterMode) {
@@ -786,20 +811,46 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 ref={scrollyContainerRef}
                 className="scrolly-container"
             >
-                <div className={styles.localStickyControls}>
-                    <button
-                        className={styles.playPauseButton}
-                        onClick={handleManualPlayPause}
-                    >
-                        {playing ? (
-                            <div className={styles.pauseIcon} />
-                        ) : (
-                            <div className={styles.playIcon} />
-                        )}
-                    </button>
-                </div>
-                <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
                 <div className="scrolly-video">
+                    <div
+                        ref={scrollyOverlayRef}
+                        className="scrolly-overlay"
+                    ></div>
+                    <div className={styles.localStickyControls}>
+                        <div className={styles.controlsBox}>
+                            <svg
+                                className={styles.ring}
+                                viewBox="0 0 44 44"
+                                aria-hidden="true"
+                            >
+                                <circle
+                                    className={styles.ringTrack}
+                                    cx="22"
+                                    cy="22"
+                                    r="20"
+                                    pathLength={1}
+                                />
+                                <circle
+                                    className={styles.ringProgress}
+                                    cx="22"
+                                    cy="22"
+                                    r="20"
+                                    pathLength={1}
+                                    style={{ ["--p" as any]: progress }}
+                                />
+                            </svg>
+                            <button
+                                className={styles.playPauseButton}
+                                onClick={handleManualPlayPause}
+                            >
+                                {playing ? (
+                                    <div className={styles.pauseIcon} />
+                                ) : (
+                                    <div className={styles.playIcon} />
+                                )}
+                            </button>
+                        </div>
+                    </div>
                     <Stream
                         streamRef={
                             streamRef as React.MutableRefObject<
@@ -868,16 +919,41 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                             autoplay
                             loop
                         />
-                        <button
-                            className={styles.playPauseButton}
-                            onClick={handleManualPlayPause}
-                        >
-                            {playing ? (
-                                <div className={styles.pauseIcon} />
-                            ) : (
-                                <div className={styles.playIcon} />
-                            )}
-                        </button>
+                        <div className={styles.localStickyControls}>
+                            <div className={styles.controlsBox}>
+                                <svg
+                                    className={styles.ring}
+                                    viewBox="0 0 44 44"
+                                    aria-hidden="true"
+                                >
+                                    <circle
+                                        className={styles.ringTrack}
+                                        cx="22"
+                                        cy="22"
+                                        r="20"
+                                        pathLength={1}
+                                    />
+                                    <circle
+                                        className={styles.ringProgress}
+                                        cx="22"
+                                        cy="22"
+                                        r="20"
+                                        pathLength={1}
+                                        style={{ ["--p" as any]: progress }}
+                                    />
+                                </svg>
+                                <button
+                                    className={styles.playPauseButton}
+                                    onClick={handleManualPlayPause}
+                                >
+                                    {playing ? (
+                                        <div className={styles.pauseIcon} />
+                                    ) : (
+                                        <div className={styles.playIcon} />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -904,6 +980,41 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                         height: "100%",
                     }}
                 >
+                    <div className={styles.localStickyControls}>
+                        <div className={styles.controlsBox}>
+                            <svg
+                                className={styles.ring}
+                                viewBox="0 0 44 44"
+                                aria-hidden="true"
+                            >
+                                <circle
+                                    className={styles.ringTrack}
+                                    cx="22"
+                                    cy="22"
+                                    r="20"
+                                    pathLength={1}
+                                />
+                                <circle
+                                    className={styles.ringProgress}
+                                    cx="22"
+                                    cy="22"
+                                    r="20"
+                                    pathLength={1}
+                                    style={{ ["--p" as any]: progress }}
+                                />
+                            </svg>
+                            <button
+                                className={styles.playPauseButton}
+                                onClick={handleManualPlayPause}
+                            >
+                                {playing ? (
+                                    <div className={styles.pauseIcon} />
+                                ) : (
+                                    <div className={styles.playIcon} />
+                                )}
+                            </button>
+                        </div>
+                    </div>
                     <video
                         ref={videoRef}
                         src={videoSrc || entry.videoSrc}
@@ -912,16 +1023,6 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                         muted
                         preload="auto"
                     />
-                    <button
-                        className={styles.playPauseButton}
-                        onClick={handleManualPlayPause}
-                    >
-                        {playing ? (
-                            <div className={styles.pauseIcon} />
-                        ) : (
-                            <div className={styles.playIcon} />
-                        )}
-                    </button>
                 </div>
                 {(() => {
                     const overlays =
