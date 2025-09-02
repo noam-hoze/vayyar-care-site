@@ -12,6 +12,7 @@
         "deploy": "pnpm run build && firebase deploy --only functions,hosting"
     },
     "dependencies": {
+        "@cloudflare/stream-react": "^1.9.1",
         "@heroicons/react": "^2.2.0",
         "firebase": "^11.6.0",
         "framer-motion": "^12.9.2",
