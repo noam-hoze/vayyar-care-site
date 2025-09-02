@@ -73,6 +73,7 @@
 
 /* Text sections - Desktop */
 .textSectionDesktop {
+  position: relative;
   width: 100%;
   z-index: 10;
   color: #1d1d1f;
