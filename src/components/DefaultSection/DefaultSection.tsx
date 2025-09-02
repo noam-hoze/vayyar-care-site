@@ -57,28 +57,45 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     );
     const overlayContainerRef = useRef<HTMLDivElement>(null);
     const prevOverlayTextsRef = useRef<string[]>([]);
-    const [videoSrc, setVideoSrc] = useState(() => {
+    const [videoSrc, setVideoSrc] = useState("");
+    useEffect(() => {
         if (
             entry.type === "video" ||
             entry.type === "scrolly-video" ||
             entry.type === "scrolly-video-fixed" ||
             entry.type === "scroll-scrub-video"
         ) {
-            const fileName = (entry.videoSrc || "").split("/").pop();
+            // 1. Determine the correct video source based on device type
+            const baseSrc = !isDesktop ? entry.mobileVideoSrc : entry.videoSrc;
+
+            if (!baseSrc) {
+                setVideoSrc(""); // No source provided
+                return;
+            }
+
+            const fileName = (baseSrc || "").split("/").pop()?.split("?")[0];
+
+            // 2. Prioritize Cloudflare Stream if a UID exists
             if (
                 fileName &&
                 cloudflareStreamUids[
                     fileName as keyof typeof cloudflareStreamUids
                 ]
             ) {
-                return cloudflareStreamUids[
-                    fileName as keyof typeof cloudflareStreamUids
-                ];
+                setVideoSrc(
+                    cloudflareStreamUids[
+                        fileName as keyof typeof cloudflareStreamUids
+                    ]
+                );
+                return;
             }
-            return cloudflareStreamUids["output_vid_960_new_new.mp4"];
+
+            // 3. Fallback to the local video file if no Stream UID is found
+            setVideoSrc(baseSrc);
+        } else {
+            setVideoSrc("");
         }
-        return "";
-    });
+    }, [isDesktop, entry.type, entry.videoSrc, entry.mobileVideoSrc]);
     const {
         manualOverrideIndex,
         requestPlay,
@@ -251,22 +268,8 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     }, []);
 
     // Only relevant for video sections
-    const start =
-        effectiveType === "video" ||
-        effectiveType === "scrolly-video" ||
-        effectiveType === "scrolly-video-fixed"
-            ? entry.video
-                ? timecodeToSeconds(entry.video.start)
-                : 0
-            : 0;
-    const end =
-        effectiveType === "video" ||
-        effectiveType === "scrolly-video" ||
-        effectiveType === "scrolly-video-fixed"
-            ? entry.video
-                ? timecodeToSeconds(entry.video.end)
-                : 0
-            : 0;
+    const start = 0; // All videos start from the beginning
+    const end = 0; // No end time for standalone videos
 
     // Initialize video and ScrollTrigger
     useEffect(() => {
@@ -286,14 +289,14 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 end: "bottom 20%",
                 onEnter: () => {
                     if (streamRef.current) {
-                        streamRef.current.currentTime = start;
+                        streamRef.current.currentTime = 0;
                         streamRef.current.play();
                     }
                     setPlaying(true);
                 },
                 onEnterBack: () => {
                     if (streamRef.current) {
-                        streamRef.current.currentTime = start;
+                        streamRef.current.currentTime = 0;
                         streamRef.current.play();
                     }
                     setPlaying(true);
@@ -301,14 +304,14 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 onLeave: () => {
                     if (streamRef.current) {
                         streamRef.current.pause();
-                        streamRef.current.currentTime = start;
+                        streamRef.current.currentTime = 0;
                     }
                     setPlaying(false);
                 },
                 onLeaveBack: () => {
                     if (streamRef.current) {
                         streamRef.current.pause();
-                        streamRef.current.currentTime = start;
+                        streamRef.current.currentTime = 0;
                     }
                     setPlaying(false);
                 },
@@ -318,24 +321,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         return () => {
             scrollTriggerRef.current?.kill();
         };
-    }, [effectiveType, start, end]);
-
-    const handleTimeUpdate = (e: Event) => {
-        const videoElement = e.target as HTMLVideoElement;
-        const currentTime = videoElement.currentTime;
-        if (end > 0) {
-            // If outside the designated segment, seek back to the start.
-            if (currentTime < start - 0.1 || currentTime > end) {
-                if (streamRef.current) {
-                    streamRef.current.currentTime = start;
-                }
-            }
-            setProgress((currentTime - start) / (end - start));
-        } else {
-            // Fallback for videos without a specific end time.
-            setProgress(currentTime / (streamRef.current?.duration || 1));
-        }
-    };
+    }, [effectiveType]);
 
     // Manual play/pause handler
     const togglePlay = () => {
@@ -351,13 +337,8 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             }
         } else {
             requestPlay(index, { manual: true });
-            if (end > 0 && video.currentTime >= end - 0.01) {
-                video.currentTime = start;
-            } else if (
-                end === 0 &&
-                video.currentTime >= (video.duration || 0) - 0.01
-            ) {
-                video.currentTime = 0; // Restart from beginning for videos without timing
+            if (video.currentTime >= (video.duration || 0) - 0.01) {
+                video.currentTime = 0; // Restart from beginning
             }
             video.play();
             setPlaying(true);
@@ -803,10 +784,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                         src={videoSrc}
                         className="w-full h-full object-cover"
                         muted
-                        loop={!entry.video} // Loop if it's a standalone video, don't if it's a segment
-                        onTimeUpdate={
-                            entry.video ? handleTimeUpdate : undefined
-                        }
+                        loop={true} // All scrolly videos should loop
                         preload="auto"
                     />
                 </div>
@@ -844,17 +822,11 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 className="mobile-apple-video-container"
             >
                 <div className="mobile-apple-video">
-                    <video
-                        ref={videoRef}
-                        src={
-                            videoSrc ||
-                            entry.videoSrc ||
-                            defaultConfig.videoSrc.split("?")[0]
-                        }
+                    <Stream
+                        src={videoSrc}
                         className="w-full h-full object-cover"
-                        playsInline
                         muted
-                        autoPlay
+                        autoplay
                         loop
                     />
                 </div>

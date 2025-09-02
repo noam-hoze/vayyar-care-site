@@ -62,8 +62,8 @@ export const homeSections: HomeSection[] = [
         mobileMediaType: "video",
         title: "Video 1",
         mobileVariant: "narrow-text",
-        // Controls the progress bar of the navigation buttons
-        video: { start: "00:04:12", end: "00:09:15" },
+        videoSrc: "/videos/intro.mp4",
+        mobileVideoSrc: "/videos/intro.mp4",
         content: (
             <>
                 <p>
@@ -91,30 +91,6 @@ export const homeSections: HomeSection[] = [
         title: "Efficiency",
         videoSrc: "/videos/optimize-staff.mp4",
         detailsSectionId: 1,
-        content: (
-            <div
-                style={{
-                    position: "absolute",
-                    top: "20%",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "100%",
-                }}
-            >
-                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
-                    Efficiency
-                </h1>
-                <p
-                    style={{
-                        lineHeight: "1.1",
-                        textAlign: "center",
-                        display: "inline-block",
-                    }}
-                >
-                    Optimize your staff work and reduce their burden
-                </p>
-            </div>
-        ),
     },
     {
         id: 1,
@@ -128,7 +104,6 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "Staff optimization",
-        scrollToTimeValue: "00:12:25",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -160,7 +135,6 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 5, end: 11 },
     },
     {
         id: 2,
@@ -200,7 +174,6 @@ export const homeSections: HomeSection[] = [
         title: "Real-time Alerts",
         header: <>Real-time Alerts.</>,
         buttonText: "Real-time Alerts",
-        scrollToTimeValue: "00:12:25",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -238,7 +211,6 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: { start: 5, end: 11 },
     },
     {
         id: 3.2,
@@ -319,10 +291,6 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "how we protect privacy",
-        scrollToTimeValue: videoConfig.calculateTextTime(
-            "00:46:03",
-            videoConfig.compensation
-        ),
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -357,10 +325,6 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: {
-            start: 36 + videoConfig.compensation,
-            end: 46 + videoConfig.compensation,
-        },
     },
     {
         id: 4,
@@ -409,7 +373,6 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "AI insights",
-        scrollToTimeValue: "01:41:21",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -438,10 +401,6 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: {
-            start: 80 + videoConfig.compensation,
-            end: 92 + videoConfig.compensation,
-        },
     },
     {
         id: 6,
@@ -489,7 +448,6 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "Personalized Care",
-        scrollToTimeValue: "02:53:06",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
@@ -527,10 +485,6 @@ export const homeSections: HomeSection[] = [
                 </li>
             </ul>
         ),
-        text: {
-            start: 2 * 60 + 41,
-            end: 2 * 60 + 50,
-        },
     },
     {
         id: 8,
@@ -575,7 +529,6 @@ export const homeSections: HomeSection[] = [
             </>
         ),
         buttonText: "increase NOI",
-        scrollToTimeValue: "00:01:32:33",
         content: (
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li
