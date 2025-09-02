@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.11.0] - 2024-09-02
+
+### Refactor
+
+-   **Video Playback Overhaul**: Migrated video hosting and playback from a single, locally hosted, segmented video to individual videos served by Cloudflare Stream.
+-   **Simplified Configuration**: Removed the complex timing and segmentation logic from `videoConfig.ts`, including obsolete properties like `compensation`, `calculateTextTime`, and `sceneTiming`.
+-   **Component Refactoring**: Updated the `DefaultSection` component to remove all legacy code related to video timings and segments. The component now handles all videos as standalone clips.
+
+### Fixed
+
+-   **Mobile Video Playback**: Resolved a critical bug where the incorrect video (or no video) was loading on mobile devices due to flawed server-side rendering logic. The component now correctly identifies the device and serves the appropriate video from Cloudflare Stream.
+-   **Autoplay Consistency**: Corrected an issue where the mobile hero video was not autoplaying, while other mobile videos were. All mobile videos now follow a consistent autoplay behavior.
+-   **Video Overlay**: Fixed a CSS bug that caused the video overlay to be incorrectly sized and not cover the entire video area.
+
 ## [0.10.1] - 2024-08-28
 
 ### Changed
