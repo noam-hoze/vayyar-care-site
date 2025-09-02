@@ -36,7 +36,10 @@ const DefaultSectionVideo: React.FC<MediaVideoProps> = ({
     if (variant === "mobile") {
         return (
             <div className="mobile-apple-video-container">
-                <div className="mobile-apple-video">
+                <div
+                    className="mobile-apple-video"
+                    style={{ position: "relative" }}
+                >
                     <video
                         ref={videoRef}
                         src={videoSrc}
@@ -46,6 +49,16 @@ const DefaultSectionVideo: React.FC<MediaVideoProps> = ({
                         loop
                         controls={false}
                     />
+                    <button
+                        className={styles.playPauseButton}
+                        onClick={onTogglePlay}
+                    >
+                        {playing ? (
+                            <div className={styles.pauseIcon} />
+                        ) : (
+                            <div className={styles.playIcon} />
+                        )}
+                    </button>
                 </div>
             </div>
         );

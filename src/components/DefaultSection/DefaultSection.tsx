@@ -345,6 +345,19 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         }
     };
 
+    const handleManualPlayPause = () => {
+        const videoElement = streamRef.current || videoRef.current;
+        if (videoElement) {
+            if (playing) {
+                videoElement.pause();
+                setPlaying(false);
+            } else {
+                videoElement.play();
+                setPlaying(true);
+            }
+        }
+    };
+
     // Add body class for theater mode to hide all videos
     useEffect(() => {
         if (theaterMode) {
@@ -773,6 +786,18 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 ref={scrollyContainerRef}
                 className="scrolly-container"
             >
+                <div className={styles.localStickyControls}>
+                    <button
+                        className={styles.playPauseButton}
+                        onClick={handleManualPlayPause}
+                    >
+                        {playing ? (
+                            <div className={styles.pauseIcon} />
+                        ) : (
+                            <div className={styles.playIcon} />
+                        )}
+                    </button>
+                </div>
                 <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
                 <div className="scrolly-video">
                     <Stream
@@ -788,7 +813,14 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                         preload="auto"
                     />
                 </div>
-                <div className="scrolly-text">{entry.content}</div>
+                {isDesktop && (
+                    <div
+                        className="scrolly-text"
+                        style={{ pointerEvents: "none" }}
+                    >
+                        {entry.content}
+                    </div>
+                )}
             </div>
         );
     }
@@ -822,13 +854,31 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                 className="mobile-apple-video-container"
             >
                 <div className="mobile-apple-video">
-                    <Stream
-                        src={videoSrc}
-                        className="w-full h-full object-cover"
-                        muted
-                        autoplay
-                        loop
-                    />
+                    <div
+                        style={{
+                            position: "relative",
+                            width: "100%",
+                            height: "100%",
+                        }}
+                    >
+                        <Stream
+                            src={videoSrc}
+                            className="w-full h-full object-cover"
+                            muted
+                            autoplay
+                            loop
+                        />
+                        <button
+                            className={styles.playPauseButton}
+                            onClick={handleManualPlayPause}
+                        >
+                            {playing ? (
+                                <div className={styles.pauseIcon} />
+                            ) : (
+                                <div className={styles.playIcon} />
+                            )}
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -847,14 +897,32 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     if (effectiveType === "scroll-scrub-video") {
         return (
             <div id={sectionId} className={`${styles.scrubSection}`}>
-                <video
-                    ref={videoRef}
-                    src={videoSrc || entry.videoSrc}
-                    className={styles.scrubVideo}
-                    playsInline
-                    muted
-                    preload="auto"
-                />
+                <div
+                    style={{
+                        position: "relative",
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    <video
+                        ref={videoRef}
+                        src={videoSrc || entry.videoSrc}
+                        className={styles.scrubVideo}
+                        playsInline
+                        muted
+                        preload="auto"
+                    />
+                    <button
+                        className={styles.playPauseButton}
+                        onClick={handleManualPlayPause}
+                    >
+                        {playing ? (
+                            <div className={styles.pauseIcon} />
+                        ) : (
+                            <div className={styles.playIcon} />
+                        )}
+                    </button>
+                </div>
                 {(() => {
                     const overlays =
                         !isDesktop && entry.mobileTextOverlays

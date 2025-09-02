@@ -3326,6 +3326,7 @@ nav button:not(.mobile-menu) {
     z-index: 2;
     text-align: center;
     padding: 2rem;
+    pointer-events: none;
 }
 
 .scrolly-text p {

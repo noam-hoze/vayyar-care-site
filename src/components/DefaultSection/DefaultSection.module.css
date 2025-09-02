@@ -246,4 +246,72 @@
   font-weight: bold;
 }
 
+.playPauseButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.playPauseButton:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.pauseIcon {
+    width: 14px;
+    height: 14px;
+    position: relative;
+}
+
+.pauseIcon::before,
+.pauseIcon::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 14px;
+    background-color: white;
+}
+
+.pauseIcon::before {
+    left: 0;
+}
+
+.pauseIcon::after {
+    right: 0;
+}
+
+.playIcon {
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 14px solid white;
+    margin-left: 4px; /* to center it better */
+}
+
+.localStickyControls {
+    position: sticky;
+    top: 80px;
+    z-index: 3;
+    display: flex;
+    justify-content: flex-end;
+    pointer-events: none;
+    padding-right: 20px;
+}
+
+.localStickyControls > * {
+    pointer-events: auto;
+}
+
 
