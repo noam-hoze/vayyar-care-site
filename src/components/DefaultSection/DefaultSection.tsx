@@ -278,12 +278,6 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         )
             return;
 
-        const video = streamRef.current; // This effect is for the Stream player
-        if (!video) return;
-
-        // The Stream component autoplays, so we manage play/pause with GSAP
-        video.pause();
-
         const triggerElement = scrollyContainerRef.current;
         if (triggerElement) {
             scrollTriggerRef.current = ScrollTrigger.create({
@@ -298,15 +292,24 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     setPlaying(true);
                 },
                 onEnterBack: () => {
-                    streamRef.current?.play();
+                    if (streamRef.current) {
+                        streamRef.current.currentTime = start;
+                        streamRef.current.play();
+                    }
                     setPlaying(true);
                 },
                 onLeave: () => {
-                    streamRef.current?.pause();
+                    if (streamRef.current) {
+                        streamRef.current.pause();
+                        streamRef.current.currentTime = start;
+                    }
                     setPlaying(false);
                 },
                 onLeaveBack: () => {
-                    streamRef.current?.pause();
+                    if (streamRef.current) {
+                        streamRef.current.pause();
+                        streamRef.current.currentTime = start;
+                    }
                     setPlaying(false);
                 },
             });
@@ -783,65 +786,33 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         effectiveType === "scrolly-video-fixed"
     ) {
         // If the entry has start/end times, it uses the main Cloudflare video.
-        if (entry.video) {
-            return (
-                <div
-                    id={sectionId}
-                    ref={scrollyContainerRef}
-                    className="scrolly-container"
-                >
-                    <div
-                        ref={scrollyOverlayRef}
-                        className="scrolly-overlay"
-                    ></div>
-                    <div className="scrolly-video">
-                        <Stream
-                            streamRef={
-                                streamRef as React.MutableRefObject<
-                                    StreamPlayerApi | undefined
-                                >
-                            }
-                            src={videoSrc}
-                            className="w-full h-full object-cover"
-                            muted
-                            loop={end === 0} // Only loop full videos
-                            onTimeUpdate={handleTimeUpdate}
-                            preload="auto"
-                        />
-                    </div>
-                    <div className="scrolly-text">{entry.content}</div>
+        return (
+            <div
+                id={sectionId}
+                ref={scrollyContainerRef}
+                className="scrolly-container"
+            >
+                <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
+                <div className="scrolly-video">
+                    <Stream
+                        streamRef={
+                            streamRef as React.MutableRefObject<
+                                StreamPlayerApi | undefined
+                            >
+                        }
+                        src={videoSrc}
+                        className="w-full h-full object-cover"
+                        muted
+                        loop={!entry.video} // Loop if it's a standalone video, don't if it's a segment
+                        onTimeUpdate={
+                            entry.video ? handleTimeUpdate : undefined
+                        }
+                        preload="auto"
+                    />
                 </div>
-            );
-        } else {
-            // Otherwise, it's a section with its own video source.
-            return (
-                <div
-                    id={sectionId}
-                    ref={scrollyContainerRef}
-                    className="scrolly-container"
-                >
-                    <div
-                        ref={scrollyOverlayRef}
-                        className="scrolly-overlay"
-                    ></div>
-                    <div className="scrolly-video">
-                        <Stream
-                            streamRef={
-                                streamRef as React.MutableRefObject<
-                                    StreamPlayerApi | undefined
-                                >
-                            }
-                            src={videoSrc}
-                            className="w-full h-full object-cover"
-                            muted
-                            loop
-                            autoplay
-                        />
-                    </div>
-                    <div className="scrolly-text">{entry.content}</div>
-                </div>
-            );
-        }
+                <div className="scrolly-text">{entry.content}</div>
+            </div>
+        );
     }
 
     // Generic mobile layout for scrolly-video: text then plain 16:9 video
