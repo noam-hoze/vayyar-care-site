@@ -945,41 +945,6 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                             autoplay
                             loop
                         />
-                        <div className={styles.localStickyControls}>
-                            <div className={styles.controlsBox}>
-                                <svg
-                                    ref={ringSvgRef}
-                                    className={styles.ring}
-                                    viewBox="0 0 44 44"
-                                    aria-hidden="true"
-                                >
-                                    <circle
-                                        className={styles.ringTrack}
-                                        cx="22"
-                                        cy="22"
-                                        r="20"
-                                        pathLength={1}
-                                    />
-                                    <circle
-                                        className={styles.ringProgress}
-                                        cx="22"
-                                        cy="22"
-                                        r="20"
-                                        pathLength={1}
-                                    />
-                                </svg>
-                                <button
-                                    className={styles.playPauseButton}
-                                    onClick={handleManualPlayPause}
-                                >
-                                    {playing ? (
-                                        <div className={styles.pauseIcon} />
-                                    ) : (
-                                        <div className={styles.playIcon} />
-                                    )}
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
