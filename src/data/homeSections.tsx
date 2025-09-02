@@ -1,5 +1,4 @@
 import { JSX } from "react";
-import { videoConfig } from "@/config/videoConfig";
 
 export interface HomeSection {
     id: number;
@@ -91,6 +90,30 @@ export const homeSections: HomeSection[] = [
         title: "Efficiency",
         videoSrc: "/videos/optimize-staff.mp4",
         detailsSectionId: 1,
+        content: (
+            <div
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+                    Efficiency
+                </h1>
+                <p
+                    style={{
+                        lineHeight: "1.1",
+                        textAlign: "center",
+                        display: "inline-block",
+                    }}
+                >
+                    Optimize your staff work and reduce their burden
+                </p>
+            </div>
+        ),
     },
     {
         id: 1,
