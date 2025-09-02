@@ -159,7 +159,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 100vh;
   scroll-margin-top: 64px;
+  padding-bottom: 60px;
 }
 
 .mobileTitleContainer {
@@ -177,6 +179,10 @@
 
 .mobileContentContainer {
   padding: 40px 24px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .mobileHeader {

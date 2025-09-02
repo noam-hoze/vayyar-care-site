@@ -107,6 +107,20 @@
   margin: 0;
 }
 
+/* Narrow text styling variants for apple components */
+.mobile-apple-part1.narrow-text {
+  text-align: center;
+  padding: 80px 24px 32px;
+}
+
+.mobile-apple-subtitle.narrow-subtitle {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.275;
+  margin: 0 0 48px 0;
+  text-align: center;
+}
+
 /* Part 2: Video */
 .mobile-apple-video-container {
   /* Make the video full-bleed on mobile */
@@ -135,7 +149,7 @@
 .mobile-apple-part3 {
   text-align: left;
   max-width: 90%;
-  margin: 80px auto 0px auto;
+  margin: 35px auto 0px auto;
 }
 
 .mobile-apple-title {
@@ -216,8 +230,7 @@
 
 /* Narrow Text Section Styles (Special-case variant) */
 .mobile-narrow-text-section {
-  background: #ffffff;
-  padding: 80px 24px;
+  padding: 0px 24px 80px 24px;
   width: 100%;
 }
 

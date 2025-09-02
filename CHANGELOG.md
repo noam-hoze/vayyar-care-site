@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.13.0] - 2024-12-20
+
+### Tag: stable but still without play/pause on mobile
+
+### Added
+- **Modular Architecture**: Completely refactored `DefaultSection.tsx` into smaller, focused modules
+  - `useVideoState.ts` - Centralized video state management
+  - `useScrollAnimations.ts` - GSAP ScrollTrigger logic
+  - `SectionRouter.tsx` - Conditional rendering logic
+  - `SectionRenderer.tsx` - Main orchestrator component
+- **Enhanced MobileVideoSection**: Added support for different text styling modes
+- **Improved Ring Animation**: Restored smooth progress ring animation around play/pause buttons
+
+### Fixed
+- **Mobile Text Regressions**: Restored proper mobile text styling and layout
+- **Video Loading Issues**: Fixed video source loading from Cloudflare Stream
+- **UI Consistency**: Play/pause button now shows correct initial state (pause for autoplay)
+- **Ring Animation**: Beautiful progress ring animation working again
+- **Narrow Text Section**: Intro section now displays with proper narrow text styling
+- **HTML Rendering**: Fixed [object Object] issues with JSX rendering
+
+### Changed
+- **Component Structure**: Reduced `DefaultSection.tsx` from 828 lines to 135 lines
+- **Code Organization**: Better separation of concerns with hooks and focused components
+- **Video State Management**: Centralized video logic with proper autoplay handling
+
 ## [0.12.0] - 2024-08-13
 
 ### Added

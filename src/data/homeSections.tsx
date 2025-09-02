@@ -59,7 +59,7 @@ export const homeSections: HomeSection[] = [
         id: 0,
         type: "scrolly-video",
         mobileMediaType: "video",
-        title: "Video 1",
+        title: "Intro",
         mobileVariant: "narrow-text",
         videoSrc: "/videos/intro.mp4",
         mobileVideoSrc: "/videos/intro.mp4",
@@ -122,8 +122,6 @@ export const homeSections: HomeSection[] = [
         header: (
             <>
                 <span style={{ color: "#05aae9" }}></span>Do More With Less.
-                {/* <br />
-                Higher <span style={{ color: "#05aae9" }}>returns.</span> */}
             </>
         ),
         buttonText: "Staff optimization",
@@ -566,74 +564,32 @@ export const homeSections: HomeSection[] = [
                         Turn insights into enterprise-wide transformation.
                     </span>
                 </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Maximize returns through data-driven care optimization.{" "}
+                    </span>
+                </li>
+                <li
+                    style={{
+                        display: "flex",
+                        gap: "0.5em",
+                        marginBottom: "0.5rem",
+                    }}
+                >
+                    <span style={{ color: "#05aae9" }}>›</span>
+                    <span>
+                        Scale efficient operations across your entire facility
+                        network.{" "}
+                    </span>
+                </li>
             </ul>
         ),
     },
-    // {
-    //     id: 9,
-    //     type: "text",
-    //     title: "Increase NOI",
-    //     header: (
-    //         <>
-    //             Built to <span style={{ color: "#05aae9" }}>scale</span>.
-    //         </>
-    //     ),
-    //     buttonText: "increase NOI",
-    //     scrollToTimeValue: "00:01:32:33",
-    //     content: (
-    //         <ul style={{ listStyle: "none", padding: 0 }}>
-    //             <li
-    //                 style={{
-    //                     display: "flex",
-    //                     gap: "0.5em",
-    //                     marginBottom: "0.5rem",
-    //                 }}
-    //             >
-    //                 <span style={{ color: "#05aae9" }}>›</span>
-    //                 <span>
-    //                     Turn insights into enterprise-wide transformation.
-    //                 </span>
-    //             </li>
-    //         </ul>
-    //     ),
-    // },
-    // {
-    //     id: 10,
-    //     type: "scrolly-video",
-    //     title: "Video 2",
-    //     video: {
-    //         start: videoConfig.calculateTextTime(
-    //             "00:35:04",
-    //             videoConfig.compensation
-    //         ),
-    //         end: videoConfig.calculateTextTime(
-    //             "01:17:26",
-    //             videoConfig.compensation
-    //         ),
-    //     },
-    //     content: (
-    //         <span
-    //             style={{
-    //                 position: "absolute",
-    //                 top: "20%",
-    //                 left: "50%",
-    //                 transform: "translateX(-50%)",
-    //                 width: "100%",
-    //             }}
-    //         >
-    //             <h1 style={{ fontSize: "25px", textAlign: "center" }}>
-    //                 Efficiency
-    //             </h1>
-    //             <p
-    //                 style={{
-    //                     lineHeight: "1.1",
-    //                     textAlign: "center",
-    //                     display: "inline-block",
-    //                 }}
-    //             >
-    //                 Optimize your staff work and reduce their burden
-    //             </p>
-    //         </span>
-    //     ),
-    // },
 ];
