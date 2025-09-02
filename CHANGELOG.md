@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.12.0] - 2024-08-13
+
+### Added
+- Implemented a stable, Apple-style play/pause button with a smooth progress ring animation for all videos.
+- The animation is driven by a `requestAnimationFrame` loop for buttery-smooth visual feedback, accurately synced to video playback.
+- Refactored video components to remove obsolete timing logic and simplify state management.
+
+### Fixed
+- Resolved numerous CSS layering issues to ensure the play/pause button is always visible and clickable, especially during "scrolly-telling" sections.
+- Fixed video caching issues and ensured correct videos are loaded for both mobile and desktop views.
+- Corrected regressions related to text overlay and dark overlay appearance.
+
 ## [0.11.0] - 2024-09-02
 
 ### Refactor

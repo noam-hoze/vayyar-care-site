@@ -112,6 +112,8 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     const { setHasSeenEfficiencySection, hasSeenEfficiencySection } =
         useRewind();
     const hasSeenRef = useRef(hasSeenEfficiencySection);
+    const ringSvgRef = useRef<SVGSVGElement | null>(null);
+    const ringProgressRef = useRef<SVGCircleElement | null>(null);
 
     if (entry.type === "product-intro") {
         return <ProductSection entry={entry} sectionId={sectionId} />;
@@ -359,29 +361,52 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     };
 
     useEffect(() => {
-        let raf: number;
+        let raf = 0;
+        let smoothed = 0; // displayed progress (0..1)
+        let lastNow = performance.now();
+        let lastVideoTime = 0;
+        let frameCount = 0;
+
+        const BASE_SMOOTHING = 0.12; // 0.08 (floaty) … 0.2 (snappier)
 
         const tick = () => {
-            const p = streamRef.current;
-            if (
-                p &&
-                typeof p.currentTime === "number" &&
-                typeof p.duration === "number" &&
-                p.duration > 0
-            ) {
-                setProgress(p.currentTime / p.duration);
+            const now = performance.now();
+            const dt = Math.min(0.25, (now - lastNow) / 1000); // cap huge deltas
+            lastNow = now;
+
+            // Cloudflare Stream API exposes currentTime/duration on the player ref
+            const v = streamRef.current as unknown as {
+                currentTime?: number;
+                duration?: number;
+            } | null;
+            const ring = ringProgressRef.current;
+
+            if (v?.duration && v.duration > 0 && ring) {
+                const t = v.currentTime ?? 0;
+
+                // Handle loops/seek backwards gracefully
+                if (t < lastVideoTime - 0.05) smoothed = 0;
+                lastVideoTime = t;
+
+                const target = t / v.duration; // raw 0..1
+
+                // Framerate-independent EMA: convert a 60fps alpha to dt
+                const alpha = 1 - Math.pow(1 - BASE_SMOOTHING, dt * 60);
+                smoothed += (target - smoothed) * alpha;
+
+                // Drive the ring without re-render
+                ring.style.setProperty("--p", smoothed.toFixed(4));
+
+                // (Optional) Throttle React state updates so children can read progress
+                if ((frameCount++ & 7) === 0) setProgress(smoothed); // every 8 frames
             }
+
             raf = requestAnimationFrame(tick);
         };
 
-        if (playing) {
-            raf = requestAnimationFrame(tick);
-        }
-
-        return () => {
-            cancelAnimationFrame(raf);
-        };
-    }, [playing]);
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+    }, [videoSrc]);
 
     // Add body class for theater mode to hide all videos
     useEffect(() => {
@@ -819,6 +844,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     <div className={styles.localStickyControls}>
                         <div className={styles.controlsBox}>
                             <svg
+                                ref={ringSvgRef}
                                 className={styles.ring}
                                 viewBox="0 0 44 44"
                                 aria-hidden="true"
@@ -831,12 +857,12 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                                     pathLength={1}
                                 />
                                 <circle
+                                    ref={ringProgressRef}
                                     className={styles.ringProgress}
                                     cx="22"
                                     cy="22"
                                     r="20"
                                     pathLength={1}
-                                    style={{ ["--p" as any]: progress }}
                                 />
                             </svg>
                             <button
@@ -922,6 +948,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                         <div className={styles.localStickyControls}>
                             <div className={styles.controlsBox}>
                                 <svg
+                                    ref={ringSvgRef}
                                     className={styles.ring}
                                     viewBox="0 0 44 44"
                                     aria-hidden="true"
@@ -939,7 +966,6 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                                         cy="22"
                                         r="20"
                                         pathLength={1}
-                                        style={{ ["--p" as any]: progress }}
                                     />
                                 </svg>
                                 <button
@@ -983,6 +1009,7 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                     <div className={styles.localStickyControls}>
                         <div className={styles.controlsBox}>
                             <svg
+                                ref={ringSvgRef}
                                 className={styles.ring}
                                 viewBox="0 0 44 44"
                                 aria-hidden="true"
@@ -1000,7 +1027,6 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
                                     cy="22"
                                     r="20"
                                     pathLength={1}
-                                    style={{ ["--p" as any]: progress }}
                                 />
                             </svg>
                             <button

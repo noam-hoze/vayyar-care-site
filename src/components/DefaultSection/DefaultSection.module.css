@@ -329,8 +329,7 @@
     stroke-width: 2.5;
     stroke-linecap: round;
     stroke-dasharray: 1;
-    stroke-dashoffset: calc(1 - var(--p));
-    transition: stroke-dashoffset 120ms linear;
+    stroke-dashoffset: calc(1 - var(--p, 0));
     filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.35));
 }
 
