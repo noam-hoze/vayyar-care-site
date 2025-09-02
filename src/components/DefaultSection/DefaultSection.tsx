@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
+import React, {
+    useRef,
+    useState,
+    useEffect,
+    useLayoutEffect,
+    MutableRefObject,
+} from "react";
 import { defaultConfig } from "@/config/videoConfig";
 import { HomeSection, homeSections } from "@/data/homeSections";
 import { useMobileHomeVideo } from "../mobile/MobileHomeVideoContext";
@@ -16,6 +22,8 @@ import DefaultSectionDetails from "../DefaultSection/DefaultSectionDetails";
 import MobileNarrowText from "../mobile/MobileNarrowText";
 import ProductSection from "../ProductSection/ProductSection";
 import "../mobile/mobile-styles.css";
+import { Stream, StreamPlayerApi } from "@cloudflare/stream-react";
+import { cloudflareStreamUids } from "@/config/streamConfig";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -37,7 +45,8 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     const [isDesktop, setIsDesktop] = useState(
         typeof window !== "undefined" ? window.innerWidth >= 1024 : true
     );
-    const videoRef = useRef<HTMLVideoElement>(null);
+    const streamRef = useRef<StreamPlayerApi | null>(null);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const [playing, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0); // 0 to 1
@@ -48,16 +57,28 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
     );
     const overlayContainerRef = useRef<HTMLDivElement>(null);
     const prevOverlayTextsRef = useRef<string[]>([]);
-    const [videoSrc, setVideoSrc] = useState(
-        entry.type === "video" ||
+    const [videoSrc, setVideoSrc] = useState(() => {
+        if (
+            entry.type === "video" ||
             entry.type === "scrolly-video" ||
             entry.type === "scrolly-video-fixed" ||
             entry.type === "scroll-scrub-video"
-            ? (!isDesktop && entry.mobileVideoSrc) ||
-                  entry.videoSrc ||
-                  defaultConfig.videoSrc.split("?")[0]
-            : ""
-    );
+        ) {
+            const fileName = (entry.videoSrc || "").split("/").pop();
+            if (
+                fileName &&
+                cloudflareStreamUids[
+                    fileName as keyof typeof cloudflareStreamUids
+                ]
+            ) {
+                return cloudflareStreamUids[
+                    fileName as keyof typeof cloudflareStreamUids
+                ];
+            }
+            return cloudflareStreamUids["output_vid_960_new_new.mp4"];
+        }
+        return "";
+    });
     const {
         manualOverrideIndex,
         requestPlay,
@@ -256,118 +277,37 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
             effectiveType !== "scroll-scrub-video"
         )
             return;
-        const video = videoRef.current;
+
+        const video = streamRef.current; // This effect is for the Stream player
         if (!video) return;
 
-        const initializeVideo = async () => {
-            try {
-                // Load the video
-                await video.load();
-                // Set initial time only if timing is specified
-                if (end > 0) {
-                    video.currentTime = start;
-                } else if (effectiveType === "scroll-scrub-video") {
-                    video.currentTime = 0; // Start from 2.6 seconds for scroll-scrub-video
-                } else {
-                    video.currentTime = 0; // Start from beginning for other videos
-                }
-                // Pause the video
-                video.pause();
-            } catch (error) {
-                console.error("Error initializing video:", error);
-            }
-        };
+        // The Stream component autoplays, so we manage play/pause with GSAP
+        video.pause();
 
-        initializeVideo();
-
-        // Handle scroll-scrub-video differently
-        if (effectiveType === "scroll-scrub-video") {
-            const videoContainer = video.parentElement;
-            if (videoContainer) {
-                // Calculate pin distance based on video duration (e.g., 1 second of video = 1 viewport height of scroll)
-                const videoDurationMultiplier = video.duration || 9; // Default to 9 seconds for our product video
-                const pinDistance = Math.max(
-                    videoDurationMultiplier * 300,
-                    window.innerHeight
-                ); // At least 1 viewport height
-
-                scrollTriggerRef.current = ScrollTrigger.create({
-                    trigger: videoContainer,
-                    start: "top top", // When video reaches top of viewport
-                    end: `+=${pinDistance}`, // Pin distance based on video duration
-                    pin: videoContainer, // Pin the video container
-                    scrub: 1, // Smooth scrubbing
-                    onEnterBack: () => {
-                        if (hasSeenRef.current && video) {
-                            video.currentTime = 0;
-                        }
-                    },
-                    onUpdate: (self) => {
-                        if (video.duration) {
-                            // Start from 2 seconds and map scroll progress through the remaining duration
-                            const startTime = 0; // Start from 2.6 seconds
-                            const availableDuration =
-                                video.duration - startTime;
-                            let progress = self.progress;
-                            if (hasSeenRef.current) {
-                                progress = 1 - self.progress;
-                            }
-                            const targetTime =
-                                startTime + progress * availableDuration;
-                            video.currentTime = targetTime;
-
-                            const overlays =
-                                !isDesktop && entry.mobileTextOverlays
-                                    ? entry.mobileTextOverlays
-                                    : entry.textOverlays;
-
-                            const activeOverlays =
-                                overlays?.filter(
-                                    (overlay) =>
-                                        targetTime >= overlay.start &&
-                                        targetTime < overlay.end
-                                ) || [];
-
-                            setCurrentOverlayTexts(
-                                activeOverlays.map((o) => o.text)
-                            );
-                        }
-                    },
-                });
-            }
-        } else {
-            // Original behavior for other video types
+        const triggerElement = scrollyContainerRef.current;
+        if (triggerElement) {
             scrollTriggerRef.current = ScrollTrigger.create({
-                trigger: video,
+                trigger: triggerElement,
                 start: "top 80%",
-                end:
-                    effectiveType === "scrolly-video"
-                        ? "bottom -20%"
-                        : "bottom 20%",
+                end: "bottom 20%",
                 onEnter: () => {
-                    // Restart from beginning when entering from top (scrolling down)
-                    video.currentTime = end > 0 ? start : 0;
-                    video.play();
+                    if (streamRef.current) {
+                        streamRef.current.currentTime = start;
+                        streamRef.current.play();
+                    }
                     setPlaying(true);
                 },
                 onEnterBack: () => {
-                    // Just play from current position when entering from bottom (scrolling up)
-                    video.play();
+                    streamRef.current?.play();
                     setPlaying(true);
                 },
                 onLeave: () => {
-                    // Only pause regular video sections, let scrolly-video continue looping
-                    if (effectiveType === "video") {
-                        video.pause();
-                        setPlaying(false);
-                    }
+                    streamRef.current?.pause();
+                    setPlaying(false);
                 },
                 onLeaveBack: () => {
-                    // Only pause regular video sections, let scrolly-video continue looping
-                    if (effectiveType === "video") {
-                        video.pause();
-                        setPlaying(false);
-                    }
+                    streamRef.current?.pause();
+                    setPlaying(false);
                 },
             });
         }
@@ -377,83 +317,27 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         };
     }, [effectiveType, start, end]);
 
-    useEffect(() => {
-        if (overlayContainerRef.current) {
-            const textElements =
-                overlayContainerRef.current.querySelectorAll("p");
-            const prevTexts = prevOverlayTextsRef.current;
-
-            textElements.forEach((el, index) => {
-                const text = el.innerText;
-                const isActive = currentOverlayTexts.includes(text);
-                const wasActive = prevTexts.includes(text);
-
-                if (isActive && !wasActive) {
-                    // Text just appeared
-                    // If it's the second text, do a slide up animation
-                    if (index === 1 && isDesktop) {
-                        gsap.fromTo(
-                            el,
-                            { y: 20, opacity: 0 },
-                            {
-                                y: 0,
-                                opacity: 1,
-                                duration: 0.5,
-                                ease: "power2.out",
-                            }
-                        );
-                    } else {
-                        gsap.to(el, {
-                            opacity: 1,
-                            duration: 0.5,
-                        });
-                    }
-                } else if (!isActive && wasActive) {
-                    // Text just disappeared
-                    gsap.to(el, {
-                        opacity: 0,
-                        duration: 0.5,
-                    });
+    const handleTimeUpdate = (e: Event) => {
+        const videoElement = e.target as HTMLVideoElement;
+        const currentTime = videoElement.currentTime;
+        if (end > 0) {
+            // If outside the designated segment, seek back to the start.
+            if (currentTime < start - 0.1 || currentTime > end) {
+                if (streamRef.current) {
+                    streamRef.current.currentTime = start;
                 }
-            });
-        }
-        prevOverlayTextsRef.current = currentOverlayTexts;
-    }, [currentOverlayTexts, isDesktop]);
-
-    // Restrict playback to [start, end] for video
-    useEffect(() => {
-        if (
-            effectiveType !== "video" &&
-            effectiveType !== "scrolly-video" &&
-            effectiveType !== "scrolly-video-fixed"
-        )
-            return;
-        const video = videoRef.current;
-        if (!video) return;
-
-        const onTimeUpdate = () => {
-            // Only apply timing restrictions if both start and end are specified
-            if (end > 0) {
-                if (video.currentTime < start) video.currentTime = start;
-                if (video.currentTime > end) {
-                    video.currentTime = start; // Loop back to start instead of pausing
-                    // Keep playing, don't pause
-                }
-                setProgress((video.currentTime - start) / (end - start));
-            } else {
-                // For videos without timing restrictions, show natural progress
-                setProgress(video.currentTime / (video.duration || 1));
             }
-        };
-
-        video.addEventListener("timeupdate", onTimeUpdate);
-        return () => video.removeEventListener("timeupdate", onTimeUpdate);
-    }, [start, end, effectiveType]);
+            setProgress((currentTime - start) / (end - start));
+        } else {
+            // Fallback for videos without a specific end time.
+            setProgress(currentTime / (streamRef.current?.duration || 1));
+        }
+    };
 
     // Manual play/pause handler
     const togglePlay = () => {
         if (typeof index !== "number") return;
-        const video = videoRef.current;
+        const video = streamRef.current; // This handler is for the Stream player
         if (!video) return;
 
         if (playing) {
@@ -898,39 +782,66 @@ const DefaultSection: React.FC<DefaultSectionProps> = ({
         effectiveType === "scrolly-video" ||
         effectiveType === "scrolly-video-fixed"
     ) {
-        return (
-            <div
-                id={sectionId}
-                ref={scrollyContainerRef}
-                className="scrolly-container"
-            >
-                <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
-                <div className="scrolly-video">
-                    <video
-                        ref={(el) => {
-                            (
-                                videoRef as React.MutableRefObject<HTMLVideoElement | null>
-                            ).current = el;
-                            if (entry.id === 1.6 || entry.id === 0) {
-                                (
-                                    intersectionRef as React.RefCallback<HTMLVideoElement>
-                                )(el);
+        // If the entry has start/end times, it uses the main Cloudflare video.
+        if (entry.video) {
+            return (
+                <div
+                    id={sectionId}
+                    ref={scrollyContainerRef}
+                    className="scrolly-container"
+                >
+                    <div
+                        ref={scrollyOverlayRef}
+                        className="scrolly-overlay"
+                    ></div>
+                    <div className="scrolly-video">
+                        <Stream
+                            streamRef={
+                                streamRef as React.MutableRefObject<
+                                    StreamPlayerApi | undefined
+                                >
                             }
-                        }}
-                        src={
-                            videoSrc ||
-                            entry.videoSrc ||
-                            defaultConfig.videoSrc.split("?")[0]
-                        }
-                        className="w-full h-full object-cover"
-                        playsInline
-                        muted
-                        loop
-                    />
+                            src={videoSrc}
+                            className="w-full h-full object-cover"
+                            muted
+                            loop={end === 0} // Only loop full videos
+                            onTimeUpdate={handleTimeUpdate}
+                            preload="auto"
+                        />
+                    </div>
+                    <div className="scrolly-text">{entry.content}</div>
                 </div>
-                <div className="scrolly-text">{entry.content}</div>
-            </div>
-        );
+            );
+        } else {
+            // Otherwise, it's a section with its own video source.
+            return (
+                <div
+                    id={sectionId}
+                    ref={scrollyContainerRef}
+                    className="scrolly-container"
+                >
+                    <div
+                        ref={scrollyOverlayRef}
+                        className="scrolly-overlay"
+                    ></div>
+                    <div className="scrolly-video">
+                        <Stream
+                            streamRef={
+                                streamRef as React.MutableRefObject<
+                                    StreamPlayerApi | undefined
+                                >
+                            }
+                            src={videoSrc}
+                            className="w-full h-full object-cover"
+                            muted
+                            loop
+                            autoplay
+                        />
+                    </div>
+                    <div className="scrolly-text">{entry.content}</div>
+                </div>
+            );
+        }
     }
 
     // Generic mobile layout for scrolly-video: text then plain 16:9 video
