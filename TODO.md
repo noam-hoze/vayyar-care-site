@@ -1,6 +1,9 @@
 # TODO
 
+-   [ ] Hero section on mobile should play automatically
+-   [ ] Add video controls to modal videos
 -   [ ] Take videos from Stream on mobile
+-   [ ] Take videos from Stream also the ones on modal (desktop and mobile)
 -   [ ] Add loading spiner on the pause/play button
 -   [ ] Videos on mobile are not starting over upon intersection
 -   [ ] Videos on mobile are not looping
