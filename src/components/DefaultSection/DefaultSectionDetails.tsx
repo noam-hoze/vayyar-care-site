@@ -1,6 +1,6 @@
 import React from "react";
 import { defaultConfig } from "@/config/videoConfig";
-import styles from "./DefaultSection.module.css";
+import styles from "./sectionRenderer.module.css";
 
 interface DefaultSectionDetailsProps {
     sectionId?: string;

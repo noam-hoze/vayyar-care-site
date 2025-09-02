@@ -1,12 +1,13 @@
 import React from "react";
 import { HomeSection } from "@/data/homeSections";
-import styles from "./DefaultSection.module.css";
+import VideoControls from "./VideoControls";
 
 interface MobileVideoSectionProps {
     entry: HomeSection;
     sectionId: string;
     videoRef: React.MutableRefObject<HTMLVideoElement | null>;
     ringSvgRef: React.MutableRefObject<SVGSVGElement | null>;
+    ringProgressRef: React.MutableRefObject<SVGCircleElement | null>;
     playing: boolean;
     handleManualPlayPause: () => void;
     nextSectionId?: string;
@@ -28,6 +29,7 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
     sectionId,
     videoRef,
     ringSvgRef,
+    ringProgressRef,
     playing,
     handleManualPlayPause,
     nextSectionId,
@@ -78,41 +80,13 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
                         loop
                         controls={false}
                     />
-                    <div className={styles.mobileControls}>
-                        <div className={styles.controlsBox}>
-                            <svg
-                                ref={ringSvgRef}
-                                className={styles.ring}
-                                viewBox="0 0 44 44"
-                                aria-hidden="true"
-                            >
-                                <circle
-                                    className={styles.ringTrack}
-                                    cx="22"
-                                    cy="22"
-                                    r="20"
-                                    pathLength={1}
-                                />
-                                <circle
-                                    className={styles.ringProgress}
-                                    cx="22"
-                                    cy="22"
-                                    r="20"
-                                    pathLength={1}
-                                />
-                            </svg>
-                            <button
-                                className={styles.playPauseButton}
-                                onClick={handleManualPlayPause}
-                            >
-                                {playing ? (
-                                    <div className={styles.pauseIcon} />
-                                ) : (
-                                    <div className={styles.playIcon} />
-                                )}
-                            </button>
-                        </div>
-                    </div>
+                    <VideoControls
+                        ringSvgRef={ringSvgRef}
+                        ringProgressRef={ringProgressRef}
+                        playing={playing}
+                        handleManualPlayPause={handleManualPlayPause}
+                        positioning="absolute"
+                    />
                 </div>
             </div>
 

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./DefaultSection.module.css";
+import styles from "./sectionRenderer.module.css";
 import { videoConfig } from "@/config/videoConfig";
 
 interface IntroTextProps {
@@ -56,7 +56,7 @@ const DefaultSectionIntroText: React.FC<IntroTextProps> = ({
                         <div className={styles.textContentDesktop}>
                             {content}
                         </div>
-                        { videoConfig.showLearnMoreButtons && (
+                        {videoConfig.showLearnMoreButtons && (
                             <div className={styles.learnMoreWrapperDesktop}>
                                 <button
                                     onClick={onLearnMore}

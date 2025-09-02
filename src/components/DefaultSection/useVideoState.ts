@@ -19,7 +19,7 @@ export const useVideoState = (
     entry: HomeSection,
     isDesktop: boolean
 ): VideoStateReturn => {
-    const [playing, setPlaying] = useState(isDesktop ? true : false);
+    const [playing, setPlaying] = useState(true); // Both desktop and mobile videos autoplay
     const [progress, setProgress] = useState(0);
     const [videoSrc, setVideoSrc] = useState("");
     const streamRef = useRef<StreamPlayerApi | null>(null);

@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.14.0] - 2024-12-21
+
+### Tag: with video controls
+
+### Added
+- **Video Controls Component**: Extracted video controls into a dedicated `VideoControls.tsx` component for better maintainability
+- **Enhanced Play/Pause Button**: Added pointer cursor on hover for better user experience
+- **CSS Module Renaming**: Renamed `DefaultSection.module.css` to `sectionRenderer.module.css` for clearer naming convention
+
+### Fixed
+- **Import References**: Updated all import statements across 6 files to reference the new CSS module name
+- **Component Organization**: Improved code organization with cleaner separation of concerns
+
+### Changed
+- **File Structure**: Better organized CSS modules with more descriptive naming
+- **Component Architecture**: Enhanced modularity with dedicated video controls component
+
 ## [0.13.0] - 2024-12-20
 
 ### Tag: stable but still without play/pause on mobile

@@ -137,6 +137,7 @@
   aspect-ratio: 16 / 9;
   border-radius: 0px; /* full-bleed */
   overflow: hidden;
+  position: relative; /* For positioning mobile controls */
 }
 
 .mobile-apple-video video {

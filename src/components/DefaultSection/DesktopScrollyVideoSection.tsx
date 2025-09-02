@@ -1,7 +1,7 @@
 import React from "react";
 import { HomeSection } from "@/data/homeSections";
-import styles from "./DefaultSection.module.css";
 import { Stream, StreamPlayerApi } from "@cloudflare/stream-react";
+import VideoControls from "./VideoControls";
 
 interface DesktopScrollyVideoSectionProps {
     entry: HomeSection;
@@ -36,42 +36,13 @@ const DesktopScrollyVideoSection: React.FC<DesktopScrollyVideoSectionProps> = ({
         >
             <div className="scrolly-video">
                 <div ref={scrollyOverlayRef} className="scrolly-overlay"></div>
-                <div className={styles.localStickyControls}>
-                    <div className={styles.controlsBox}>
-                        <svg
-                            ref={ringSvgRef}
-                            className={styles.ring}
-                            viewBox="0 0 44 44"
-                            aria-hidden="true"
-                        >
-                            <circle
-                                className={styles.ringTrack}
-                                cx="22"
-                                cy="22"
-                                r="20"
-                                pathLength={1}
-                            />
-                            <circle
-                                ref={ringProgressRef}
-                                className={styles.ringProgress}
-                                cx="22"
-                                cy="22"
-                                r="20"
-                                pathLength={1}
-                            />
-                        </svg>
-                        <button
-                            className={styles.playPauseButton}
-                            onClick={handleManualPlayPause}
-                        >
-                            {playing ? (
-                                <div className={styles.pauseIcon} />
-                            ) : (
-                                <div className={styles.playIcon} />
-                            )}
-                        </button>
-                    </div>
-                </div>
+                <VideoControls
+                    ringSvgRef={ringSvgRef}
+                    ringProgressRef={ringProgressRef}
+                    playing={playing}
+                    handleManualPlayPause={handleManualPlayPause}
+                    positioning="sticky"
+                />
                 <Stream
                     streamRef={
                         streamRef as React.MutableRefObject<

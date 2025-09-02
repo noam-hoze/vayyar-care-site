@@ -262,6 +262,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .pauseIcon {
@@ -303,6 +304,15 @@
     right: 20px;
     z-index: 3;
     pointer-events: none;
+}
+
+/* Mobile controls - positioned in top-right corner, not sticky */
+.mobileControls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 20; /* Higher z-index to appear above video */
+    pointer-events: auto;
 }
 
 .controlsBox {

@@ -9,7 +9,7 @@ import DefaultSectionIntroText from "./DefaultSectionIntroText";
 import DefaultSectionDetails from "./DefaultSectionDetails";
 import { Stream } from "@cloudflare/stream-react";
 import { useInView } from "react-intersection-observer";
-import styles from "./DefaultSection.module.css";
+import styles from "./sectionRenderer.module.css";
 
 interface SectionRouterProps {
     entry: HomeSection;
@@ -116,6 +116,7 @@ const SectionRouter: React.FC<SectionRouterProps> = ({
                 sectionId={sectionId || `section-${entry.id}`}
                 videoRef={videoRef}
                 ringSvgRef={ringSvgRef}
+                ringProgressRef={ringProgressRef}
                 playing={playing}
                 handleManualPlayPause={handleManualPlayPause}
                 nextSectionId={nextSectionId}
@@ -123,7 +124,13 @@ const SectionRouter: React.FC<SectionRouterProps> = ({
                 smallTitle={title}
                 subtitle={subtitle}
                 videoSrc={entry.videoSrc || ""}
-                detailsTitle={detailsSection?.header || entry.title}
+                detailsTitle={
+                    typeof detailsSection?.header === "string"
+                        ? detailsSection.header
+                        : typeof entry.title === "string"
+                        ? entry.title
+                        : String(entry.title)
+                }
                 detailsContent={detailsSection?.content || entry.content}
                 backgroundClass={backgroundClass}
                 isLightBg={true}
