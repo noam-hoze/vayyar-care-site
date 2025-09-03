@@ -13,7 +13,6 @@ export default function HomePage() {
             <HomePageHeroSection />
             <SectionRenderer />
             <ContactForm isOpen={true} asPageElement={true} />
-            {/* <TheaterModeOverlay /> */}
         </div>
     );
 }

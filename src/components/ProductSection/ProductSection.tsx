@@ -4,6 +4,7 @@ import VayyarLogo from "../VayyarLogo";
 import styles from "./ProductSection.module.css";
 import { HomeSection } from "@/data/homeSections";
 import { productDetails } from "@/data/productDetails";
+import { useIOSVideoAutoplayMultiple } from "@/lib/useIOSVideoAutoplay";
 
 interface ProductSectionProps {
     entry: HomeSection;
@@ -57,6 +58,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({
             }
         });
     }, [activeTabIndex, isCloserLookActive]);
+
+    // iOS Safari optimization for modal videos
+    useIOSVideoAutoplayMultiple(videoRefs, { logPrefix: "Modal video" });
 
     // Check scroll position for arrow visibility
     const checkScrollPosition = useCallback(() => {
@@ -241,6 +245,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                                             muted
                                             loop
                                             playsInline
+                                            preload="auto"
                                         />
                                     )}
                                 </div>

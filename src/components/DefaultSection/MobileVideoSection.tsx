@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HomeSection } from "@/data/homeSections";
 import VideoControls from "./VideoControls";
+import { useIOSVideoAutoplay } from "@/lib/useIOSVideoAutoplay";
 
 interface MobileVideoSectionProps {
     entry: HomeSection;
@@ -45,6 +46,9 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
     learnMoreLabel = "+ Learn more",
     textStyle = "regular",
 }) => {
+    // iOS Safari optimization
+    useIOSVideoAutoplay(videoRef, { logPrefix: "MobileVideoSection" });
+
     return (
         <div
             id={sectionId}
@@ -78,6 +82,7 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
                         muted
                         autoPlay
                         loop
+                        preload="auto"
                         controls={false}
                     />
                     <VideoControls

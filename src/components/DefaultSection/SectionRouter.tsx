@@ -208,6 +208,7 @@ const SectionRouter: React.FC<SectionRouterProps> = ({
                             muted
                             autoplay
                             loop
+                            preload="auto"
                         />
                     </div>
                 </div>
