@@ -90,7 +90,11 @@ const ContactForm: React.FC<ContactModalProps> = ({
                     Fill in your details below to get started with a live
                     demonstration, either online or in person.
                 </p>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-6"
+                    suppressHydrationWarning={true}
+                >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
                         <div className="flex flex-col text-left">
                             <label
