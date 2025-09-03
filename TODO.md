@@ -1,5 +1,6 @@
 # TODO
 
+-   [ ] Connect the contact us form
 -   [ ] Fix bug where you exit modal on mobile and then you see a blue circle
 -   [ ] Add loading spiner on the pause/play button
 -   [ ] Load all videos from Stream
