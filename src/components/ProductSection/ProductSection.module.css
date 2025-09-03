@@ -95,6 +95,7 @@
     align-items: center;
     justify-content: flex-start;
     padding-top: 2rem;
+    padding-bottom: 4rem; /* Add bottom padding to prevent text from being too close to bottom */
     width: 100%;
 }
 
@@ -115,9 +116,26 @@
     .imageContainer {
         margin-top: 2.5rem;
     }
-    
+
+    .modalActive {
+        background-color: #ffffff; /* Change to white to eliminate grey gap */
+        padding: 2rem 0 0 0; /* Reduce top padding for mobile */
+    }
+
     .modalActive .imageContainer {
         scale: 0.5;
+        margin-top: 1rem; /* Reduce top margin */
+        margin-bottom: 1rem; /* Reduce bottom margin */
+    }
+
+    .modalActive .detailsContainer {
+        padding-top: 1rem; /* Reduce top padding */
+        padding-bottom: 3rem; /* Add bottom padding for mobile to prevent text from being too close to bottom */
+        gap: 1rem; /* Reduce gap between elements */
+    }
+
+    .noamClass {
+        background-color: transparent; /* Make background transparent to show modal background */
     }
 }
 
