@@ -148,11 +148,11 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Reduce Administrative tasks</span>
+                    <span>Reduce administrative tasks</span>
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Improved Operational Efficiencies</span>
+                    <span>Improved operational efficiencies</span>
                 </li>
             </ul>
         ),
@@ -322,7 +322,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Empower the care team with automated alerts.</span>
+                    <span>Empower the care team with automated alerts</span>
                 </li>
                 <li
                     style={{
@@ -332,7 +332,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Ensure Care Plan Compliance</span>
+                    <span>Ensure care plan compliance</span>
                 </li>
                 <li
                     style={{
@@ -342,7 +342,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Real Time Detection</span>
+                    <span>Real time detection</span>
                 </li>
             </ul>
         ),
@@ -404,7 +404,7 @@ export const homeSections: HomeSection[] = [
                     }}
                 >
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Analyze trends to detect risk.</span>
+                    <span>Analyze trends to detect risk</span>
                 </li>
                 <li
                     style={{
@@ -418,7 +418,7 @@ export const homeSections: HomeSection[] = [
                 </li>
                 <li style={{ display: "flex", gap: "0.5em" }}>
                     <span style={{ color: "#05aae9" }}>›</span>
-                    <span>Ensure Care Plan Compliance</span>
+                    <span>Ensure care plan compliance</span>
                 </li>
             </ul>
         ),

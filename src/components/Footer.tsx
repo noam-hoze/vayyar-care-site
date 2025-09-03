@@ -61,23 +61,6 @@ const Footer: React.FC = () => {
                                     <path d="M20.45 20.45h-3.55v-5.6c0-1.34-.02-3.07-1.87-3.07-1.88 0-2.17 1.47-2.17 2.97v5.7H9.31v-11.5h3.41v1.57h.05c.47-.9 1.62-1.85 3.33-1.85 3.56 0 4.21 2.34 4.21 5.38v6.4zM5.34 7.38c-1.14 0-2.06-.93-2.06-2.06 0-1.14.93-2.06 2.06-2.06 1.14 0 2.06.93 2.06 2.06 0 1.14-.92 2.06-2.06 2.06zM7.12 20.45H3.55v-11.5h3.57v11.5z" />
                                 </svg>
                             </a>
-                            {/* X/Twitter */}
-                            <a
-                                aria-label="Twitter"
-                                href="https://x.com/vayyarinc"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-full flex items-center justify-center"
-                                style={{ backgroundColor: "#0aa7dc" }}
-                            >
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-5 h-5 text-white"
-                                >
-                                    <path d="M18.244 2.25h3.18l-6.95 7.94 8.17 11.56h-6.39l-4.99-6.53-5.71 6.53H1.29l7.41-8.48L.75 2.25h6.56l4.49 5.94 6.44-5.94zM16.97 19.77h1.76L6.11 4.06H4.24l12.73 15.71z" />
-                                </svg>
-                            </a>
                             {/* Facebook */}
                             <a
                                 aria-label="Facebook"
