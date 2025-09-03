@@ -10,6 +10,7 @@ const HomePageHeroSection: React.FC = () => {
     const heroSectionRef = useRef<HTMLElement>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     // Mapping for hero section items to their corresponding sections
     const heroItemMapping = {
@@ -55,6 +56,37 @@ const HomePageHeroSection: React.FC = () => {
 
     // iOS Safari optimization
     useIOSVideoAutoplay(videoRef, { logPrefix: "Hero video" });
+
+    // Track video playing state
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const handlePlay = () => setIsPlaying(true);
+        const handlePause = () => setIsPlaying(false);
+        const handleEnded = () => setIsPlaying(false);
+        const handleLoadedData = () => {
+            // Initialize state based on video's initial state
+            setIsPlaying(!video.paused);
+        };
+
+        video.addEventListener("play", handlePlay);
+        video.addEventListener("pause", handlePause);
+        video.addEventListener("ended", handleEnded);
+        video.addEventListener("loadeddata", handleLoadedData);
+
+        // Set initial state
+        if (video.readyState >= 1) {
+            setIsPlaying(!video.paused);
+        }
+
+        return () => {
+            video.removeEventListener("play", handlePlay);
+            video.removeEventListener("pause", handlePause);
+            video.removeEventListener("ended", handleEnded);
+            video.removeEventListener("loadeddata", handleLoadedData);
+        };
+    }, []);
 
     // Determine which video to show - don't render video until we know device type
     const videoSrc =
@@ -105,6 +137,79 @@ const HomePageHeroSection: React.FC = () => {
                             pointerEvents: "none",
                         }}
                     />
+
+                    {/* Simple grey play button - mobile only */}
+                    {isMobile && (
+                        <button
+                            onClick={() => {
+                                const video = videoRef.current;
+                                if (!video) return;
+                                if (video.paused) {
+                                    video.play();
+                                    setIsPlaying(true);
+                                } else {
+                                    video.pause();
+                                    setIsPlaying(false);
+                                }
+                            }}
+                            style={{
+                                position: "absolute",
+                                top: "100px",
+                                right: "20px",
+                                width: "50px",
+                                height: "50px",
+                                borderRadius: "50%",
+                                backgroundColor: "transparent",
+                                border: "3px solid grey",
+                                cursor: "pointer",
+                                zIndex: 20,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                padding: 0,
+                            }}
+                        >
+                            {isPlaying ? (
+                                // Pause icon (two vertical bars)
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: "3px",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: "4px",
+                                            height: "16px",
+                                            backgroundColor: "grey",
+                                            borderRadius: "1px",
+                                        }}
+                                    />
+                                    <div
+                                        style={{
+                                            width: "4px",
+                                            height: "16px",
+                                            backgroundColor: "grey",
+                                            borderRadius: "1px",
+                                        }}
+                                    />
+                                </div>
+                            ) : (
+                                // Play icon (triangle)
+                                <div
+                                    style={{
+                                        width: 0,
+                                        height: 0,
+                                        borderLeft: "12px solid grey",
+                                        borderTop: "8px solid transparent",
+                                        borderBottom: "8px solid transparent",
+                                        marginLeft: "2px",
+                                    }}
+                                />
+                            )}
+                        </button>
+                    )}
                 </>
             )}
             {/* Dark overlay to make buttons more prominent */}
