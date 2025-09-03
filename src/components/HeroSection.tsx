@@ -54,15 +54,41 @@ const HomePageHeroSection: React.FC = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    // Determine which video to show - don't render video until we know device type
+    const videoSrc =
+        isMobile === null
+            ? null
+            : isMobile
+            ? "/videos/hero-section-mobile.mp4"
+            : "/videos/hero-section.mp4";
+
     // iOS Safari optimization
     useIOSVideoAutoplay(videoRef, { logPrefix: "Hero video" });
 
     // Track video playing state
     useEffect(() => {
         const video = videoRef.current;
-        if (!video) return;
+        if (!video) {
+            console.log("❌ Hero video: No video element found");
+            return;
+        }
 
-        const handlePlay = () => setIsPlaying(true);
+        console.log(
+            "🔍 Hero video: Setting up event listeners, current state:",
+            {
+                paused: video.paused,
+                readyState: video.readyState,
+                currentTime: video.currentTime,
+                duration: video.duration,
+            }
+        );
+
+        const handlePlay = () => {
+            setIsPlaying(true);
+            console.log(
+                "🎬 Hero video: PLAY event fired - video is now playing"
+            );
+        };
         const handlePause = () => setIsPlaying(false);
         const handleEnded = () => setIsPlaying(false);
         const handleLoadedData = () => {
@@ -75,9 +101,15 @@ const HomePageHeroSection: React.FC = () => {
         video.addEventListener("ended", handleEnded);
         video.addEventListener("loadeddata", handleLoadedData);
 
-        // Set initial state
+        // Set initial state and check if video is already playing
         if (video.readyState >= 1) {
-            setIsPlaying(!video.paused);
+            const isCurrentlyPlaying = !video.paused;
+            setIsPlaying(isCurrentlyPlaying);
+            if (isCurrentlyPlaying) {
+                console.log(
+                    "🎬 Hero video: Already playing when listeners were set up - autoplay happened before event listeners!"
+                );
+            }
         }
 
         return () => {
@@ -86,15 +118,7 @@ const HomePageHeroSection: React.FC = () => {
             video.removeEventListener("ended", handleEnded);
             video.removeEventListener("loadeddata", handleLoadedData);
         };
-    }, []);
-
-    // Determine which video to show - don't render video until we know device type
-    const videoSrc =
-        isMobile === null
-            ? null
-            : isMobile
-            ? "/videos/hero-section-mobile.mp4"
-            : "/videos/hero-section.mp4";
+    }, [videoSrc]); // Re-run when videoSrc changes (when video becomes available)
 
     return (
         <section
@@ -138,8 +162,8 @@ const HomePageHeroSection: React.FC = () => {
                         }}
                     />
 
-                    {/* Simple grey play button - mobile only */}
-                    {isMobile && (
+                    {/* Simple grey play/pause button - mobile and desktop */}
+                    {isMobile !== null && (
                         <button
                             onClick={() => {
                                 const video = videoRef.current;

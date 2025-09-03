@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.15.0] - 2024-12-21
+
+### Tag: rc_1
+
+### Added
+- **Desktop Play/Pause Button**: Added the grey play/pause button to desktop version of hero section (previously mobile-only)
+- **Enhanced Video Controls**: Extended video control functionality to both mobile and desktop platforms
+- **Autoplay Detection**: Added comprehensive console logging to track video autoplay events and timing
+
+### Fixed
+- **Hydration Errors**: Resolved browser extension injection conflicts in ContactForm with `suppressHydrationWarning`
+- **Video Event Listeners**: Fixed timing issues with video event listener attachment for proper autoplay detection
+- **Component Rendering**: Corrected conditional rendering logic for video controls across different screen sizes
+
+### Changed
+- **Version Update**: Bumped version from 0.14.0 to 0.15.0 for release candidate
+- **Component Architecture**: Improved useEffect dependencies for better video state management
+
 ## [0.14.0] - 2024-12-21
 
 ### Tag: with video controls
