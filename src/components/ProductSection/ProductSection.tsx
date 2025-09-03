@@ -17,6 +17,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
 }) => {
     const [isCloserLookActive, setIsCloserLookActive] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const [showCloseButton, setShowCloseButton] = useState(false);
     const [activeTabIndex, setActiveTabIndex] = useState(0);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const scrollPositionRef = useRef(0);
@@ -181,13 +182,16 @@ const ProductSection: React.FC<ProductSectionProps> = ({
     const handleToggleCloserLook = () => {
         if (isCloserLookActive) {
             setIsClosing(true);
+            // Keep close button visible during closing animation
             setTimeout(() => {
                 setIsCloserLookActive(false);
                 setIsClosing(false);
+                setShowCloseButton(false);
                 setActiveTabIndex(0);
             }, 400); // Match the animation duration
         } else {
             setIsCloserLookActive(true);
+            setShowCloseButton(true);
         }
     };
 
@@ -396,9 +400,11 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                     </div>
                 )}
 
-                {isCloserLookActive && (
+                {showCloseButton && (
                     <button
-                        className={`${styles.closeButton} ${styles.fadeIn}`}
+                        className={`${styles.closeButton} ${
+                            isClosing ? styles.fadeOut : styles.fadeIn
+                        }`}
                         onClick={handleToggleCloserLook}
                     >
                         <div className={styles.closeIcon}></div>
