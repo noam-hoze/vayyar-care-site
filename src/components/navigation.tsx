@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Changed from react-router-dom
 import VayyarLogo from "@/components/VayyarLogo";
-import ContactForm from "@/components/ContactForm";
 import { useMobileHomeVideo } from "@/components/mobile/MobileHomeVideoContext";
-import { homeSections } from "@/data/homeSections";
 import { scrollToSection as scrollToSectionUtil } from "@/lib/scrollUtils";
 
 const VAYYAR_ORANGE = "#f56300";
