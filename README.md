@@ -1,7 +1,6 @@
 ![Vayyar Logo](public/images/vayyar-logo-text.png)
 ![Clinical Hero Image](public/images/clinical/clinical-hero.jpg)
 
-
 ## Project Purpose
 
 This website serves as the primary online presence for Vayyar's **VayyarCare** service (see [vayyar.com](https://vayyar.com) for more information about Vayyar). It aims to inform potential users and stakeholders about the capabilities and benefits of the VayyarCare system.
@@ -81,6 +80,27 @@ These scripts are located in the `tools/` directory and are used for asset prepa
 -   `make_scrubbable.sh`: Processes video files (likely MP4) to ensure they are easily scrubbable in web video players, possibly by adjusting keyframes or using `ffmpeg`.
 
 Make sure you have `ffmpeg` installed and configured in your environment if you need to use these shell scripts.
+
+## HubSpot form submission
+
+Set the following environment variables in a local `.env.local` file:
+
+```
+HUBSPOT_PORTAL_ID=your_portal_id
+HUBSPOT_FORM_ID=your_form_id
+HUBSPOT_PRIVATE_APP_TOKEN=pat-xxxx
+```
+
+The contact form posts to `/api/hubspot/contact`, which forwards to the HubSpot Forms API and includes the visitor `hubspotutk` cookie when present. A hidden `hp` field acts as a honeypot.
+
+### Production setup
+
+Set the same variables in your production environment:
+
+-   Vercel: Project Settings → Environment Variables → add `HUBSPOT_PORTAL_ID`, `HUBSPOT_FORM_ID`, `HUBSPOT_PRIVATE_APP_TOKEN` and redeploy.
+-   Self-hosting: define them in the process manager or container runtime (e.g., systemd `Environment=...`, Docker `-e` flags, or `.env.production` loaded by your deployment).
+
+No client exposure is required; these are read by the server API route only.
 
 ## Contributing
 
