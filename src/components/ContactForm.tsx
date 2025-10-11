@@ -42,6 +42,7 @@ const ContactForm: React.FC<ContactModalProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const [successAnimClass, setSuccessAnimClass] = useState("");
+    const errorRef = React.useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -146,6 +147,18 @@ const ContactForm: React.FC<ContactModalProps> = ({
             setSuccess(true);
         } catch (err: any) {
             setError(String(err?.message || err));
+            // Ensure the error banner is visible in the viewport
+            setTimeout(() => {
+                try {
+                    const el = errorRef.current;
+                    if (!el) return;
+                    el.focus();
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    if (typeof window !== "undefined") {
+                        window.scrollBy({ top: -80, behavior: "smooth" });
+                    }
+                } catch {}
+            }, 50);
         } finally {
             setSubmitting(false);
         }
@@ -225,7 +238,7 @@ const ContactForm: React.FC<ContactModalProps> = ({
                             aria-hidden="true"
                         />
                         {error && (
-                            <div className="rounded-xl border border-red-200 bg-red-50 text-red-700 p-3 text-sm flex items-start gap-2" role="alert" aria-live="assertive">
+                            <div ref={errorRef} id="contact-form-error" tabIndex={-1} className="rounded-xl border border-red-200 bg-red-50 text-red-700 p-3 text-sm flex items-start gap-2" role="alert" aria-live="assertive">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="mt-0.5">
                                     <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
