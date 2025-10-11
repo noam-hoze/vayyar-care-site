@@ -9,6 +9,7 @@ type ContactFormBody = {
     country: string;
     phoneNumber: string;
     message: string;
+    solutions?: string;
     pageUri?: string;
     pageName?: string;
     hp?: string; // honeypot
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
     const portalId = process.env.HUBSPOT_PORTAL_ID;
     const formId = process.env.HUBSPOT_FORM_ID;
     const privateAppToken = process.env.HUBSPOT_PRIVATE_APP_TOKEN;
+    const solutionsField = process.env.HUBSPOT_SOLUTIONS_FIELD || "market";
 
     if (!portalId || !formId || !privateAppToken) {
         return NextResponse.json(
@@ -63,10 +65,14 @@ export async function POST(request: Request) {
         { name: "email", value: body.email },
         { name: "company", value: body.companyName },
         { name: "jobtitle", value: body.jobTitle },
-        { name: "country", value: body.country },
+        { name: "country_d", value: body.country },
         { name: "phone", value: body.phoneNumber },
         { name: "message", value: body.message },
     ];
+
+    if (body.solutions) {
+        fields.push({ name: solutionsField, value: body.solutions });
+    }
 
     const context: Record<string, string | undefined> = {
         pageUri: body.pageUri,
