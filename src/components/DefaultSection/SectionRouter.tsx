@@ -115,6 +115,7 @@ const SectionRouter: React.FC<SectionRouterProps> = ({
                 entry={entry}
                 sectionId={sectionId || `section-${entry.id}`}
                 videoRef={videoRef}
+                streamRef={streamRef}
                 ringSvgRef={ringSvgRef}
                 ringProgressRef={ringProgressRef}
                 playing={playing}
@@ -123,7 +124,7 @@ const SectionRouter: React.FC<SectionRouterProps> = ({
                 handleLearnMore={() => {}}
                 smallTitle={title}
                 subtitle={subtitle}
-                videoSrc={entry.videoSrc || ""}
+                videoSrc={videoSrc}
                 detailsTitle={
                     typeof detailsSection?.header === "string"
                         ? detailsSection.header
@@ -202,14 +203,16 @@ const SectionRouter: React.FC<SectionRouterProps> = ({
                             height: "100%",
                         }}
                     >
-                        <Stream
-                            src={videoSrc}
-                            className="w-full h-full object-cover"
-                            muted
-                            autoplay
-                            loop
-                            preload="auto"
-                        />
+                        {videoSrc && (
+                            <Stream
+                                src={videoSrc}
+                                className="w-full h-full object-cover"
+                                muted
+                                autoplay
+                                loop
+                                preload="auto"
+                            />
+                        )}
                     </div>
                 </div>
             </div>

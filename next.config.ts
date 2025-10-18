@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Mount the app at /care (no redirects; URL stays /care/…)
   basePath: "/care",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: "/care",
+  },
 
   // Good production defaults
   reactStrictMode: true,

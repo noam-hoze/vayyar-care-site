@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { HomeSection } from "@/data/homeSections";
 import VideoControls from "./VideoControls";
 import { useIOSVideoAutoplay } from "@/lib/useIOSVideoAutoplay";
+import { Stream, StreamPlayerApi } from "@cloudflare/stream-react";
 
 interface MobileVideoSectionProps {
     entry: HomeSection;
     sectionId: string;
     videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+    streamRef: React.MutableRefObject<StreamPlayerApi | null>;
     ringSvgRef: React.MutableRefObject<SVGSVGElement | null>;
     ringProgressRef: React.MutableRefObject<SVGCircleElement | null>;
     playing: boolean;
@@ -29,6 +31,7 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
     entry,
     sectionId,
     videoRef,
+    streamRef,
     ringSvgRef,
     ringProgressRef,
     playing,
@@ -46,7 +49,7 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
     learnMoreLabel = "+ Learn more",
     textStyle = "regular",
 }) => {
-    // iOS Safari optimization
+    // iOS Safari optimization for native video; harmless no-op when ref is null
     useIOSVideoAutoplay(videoRef, { logPrefix: "MobileVideoSection" });
 
     return (
@@ -75,15 +78,18 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
             {/* Part 2: Video */}
             <div className="mobile-apple-video-container">
                 <div className="mobile-apple-video">
-                    <video
-                        ref={videoRef}
+                    <Stream
+                        streamRef={
+                            streamRef as React.MutableRefObject<
+                                StreamPlayerApi | undefined
+                            >
+                        }
                         src={videoSrc}
-                        playsInline
+                        className="w-full h-full object-cover"
                         muted
-                        autoPlay
+                        autoplay
                         loop
                         preload="auto"
-                        controls={false}
                     />
                     <VideoControls
                         ringSvgRef={ringSvgRef}

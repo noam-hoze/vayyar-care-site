@@ -59,8 +59,8 @@ const HomePageHeroSection: React.FC = () => {
         isMobile === null
             ? null
             : isMobile
-            ? "/videos/hero-section-mobile.mp4"
-            : "/videos/hero-section.mp4";
+            ? `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/videos/hero-section-mobile.mp4`
+            : `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/videos/hero-section.mp4`;
 
     // iOS Safari optimization
     useIOSVideoAutoplay(videoRef, { logPrefix: "Hero video" });

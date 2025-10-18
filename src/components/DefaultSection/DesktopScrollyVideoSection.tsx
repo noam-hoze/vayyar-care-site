@@ -43,6 +43,7 @@ const DesktopScrollyVideoSection: React.FC<DesktopScrollyVideoSectionProps> = ({
                     handleManualPlayPause={handleManualPlayPause}
                     positioning="sticky"
                 />
+                {videoSrc && (
                 <Stream
                     streamRef={
                         streamRef as React.MutableRefObject<
@@ -54,7 +55,7 @@ const DesktopScrollyVideoSection: React.FC<DesktopScrollyVideoSectionProps> = ({
                     muted
                     loop={true} // All scrolly videos should loop
                     preload="auto"
-                />
+                />)}
             </div>
             <div className="scrolly-text" style={{ pointerEvents: "none" }}>
                 {entry.content}
