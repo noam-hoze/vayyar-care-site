@@ -37,7 +37,9 @@ export const useVideoState = (
             entry.type === "scrolly-video-fixed" ||
             entry.type === "scroll-scrub-video"
         ) {
-            const baseSrc = !isDesktop ? entry.mobileVideoSrc : entry.videoSrc;
+            // Prefer mobile source on mobile, but fall back to desktop source if missing
+            const preferredSrc = !isDesktop ? entry.mobileVideoSrc : entry.videoSrc;
+            const baseSrc = preferredSrc || entry.videoSrc || entry.mobileVideoSrc || "";
 
             if (!baseSrc) {
                 setVideoSrc("");
