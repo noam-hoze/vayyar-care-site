@@ -1,33 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Mount the app at /care (no redirects; URL stays /care/…)
-  basePath: "/care",
   env: {
     NEXT_PUBLIC_BASE_PATH: "/care",
   },
-
-  // Good production defaults
-  reactStrictMode: true,
-  poweredByHeader: false,
-  compress: true,
-
-  // Easiest way to run with `npm run start` or via systemd
-  output: "standalone",
-
-  // Keep your current build relaxations
+  /* config options here */
   eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
   typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
     ignoreBuildErrors: true,
   },
-
-  // Image optimizer works under /care by default.
-  // Uncomment if you prefer to skip optimization:
-  // images: { unoptimized: true },
-
-  // If you use rewrites/redirects, they’ll be relative to /care automatically.
 };
 
 export default nextConfig;
