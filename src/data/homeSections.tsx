@@ -61,8 +61,8 @@ export const homeSections: HomeSection[] = [
         mobileMediaType: "video",
         title: "Intro",
         mobileVariant: "narrow-text",
-        videoSrc: "/videos/intro.mp4",
-        mobileVideoSrc: "/videos/intro.mp4",
+        videoSrc: "videos/intro.mp4",
+        mobileVideoSrc: "videos/intro.mp4",
         content: (
             <>
                 <p>
@@ -81,14 +81,14 @@ export const homeSections: HomeSection[] = [
         id: 1.5,
         type: "product-intro",
         title: "Product Overview",
-        imageSrc: "/images/product.png",
+        imageSrc: "images/product.png",
     },
     {
         id: 1.6,
         type: "scrolly-video",
         mobileMediaType: "video",
         title: "Efficiency",
-        videoSrc: "/videos/optimize-staff.mp4",
+        videoSrc: "videos/optimize-staff.mp4",
         detailsSectionId: 1,
         content: (
             <div
@@ -162,7 +162,7 @@ export const homeSections: HomeSection[] = [
         type: "scrolly-video",
         mobileMediaType: "video",
         title: "Real-time Alerts",
-        videoSrc: "/videos/real-time-alerts.mp4",
+        videoSrc: "videos/real-time-alerts.mp4",
         detailsSectionId: 3,
         content: (
             <div
@@ -238,7 +238,7 @@ export const homeSections: HomeSection[] = [
         type: "scrolly-video",
         mobileMediaType: "video",
         title: "Privacy",
-        videoSrc: "/videos/privacy.mp4",
+        videoSrc: "videos/privacy.mp4",
         detailsSectionId: 3.5,
         content: (
             <div
@@ -352,7 +352,7 @@ export const homeSections: HomeSection[] = [
         type: "scrolly-video",
         mobileMediaType: "video",
         title: "AI Revolution",
-        videoSrc: "/videos/ai-insights.mp4",
+        videoSrc: "videos/ai-insights.mp4",
         detailsSectionId: 5,
         content: (
             <div

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     icons: [
         {
             rel: "icon",
-            url: "/images/vayyar-logo.png",
+            url: "images/vayyar-logo.png",
         },
     ],
 };
