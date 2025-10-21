@@ -211,16 +211,6 @@ const Footer: React.FC = () => {
                                     </li>
                                     <li>
                                         <a
-                                            href="https://support.vayyarcare.com/"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="hover:underline"
-                                        >
-                                            FAQ
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a
                                             href="https://vayyar.com/cookie-notice/"
                                             target="_blank"
                                             rel="noopener noreferrer"
