@@ -243,7 +243,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                                             ref={(el) => {
                                                 videoRefs.current[index] = el;
                                             }}
-                                            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${tab.mediaSrc}`}
+                                            src={tab.mediaSrc.startsWith("/") ? tab.mediaSrc.slice(1) : tab.mediaSrc}
                                             className={styles.productImage}
                                             autoPlay
                                             muted
@@ -260,10 +260,10 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                             <picture>
                                 <source
                                     media="(max-width: 768px)"
-                                    srcSet={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/product-mobile.png`}
+                                    srcSet="images/product-mobile.png"
                                 />
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/product.png`}
+                                    src="images/product.png"
                                     alt="Vayyar Care Product"
                                     className={`${styles.productImage} ${styles.regularProductImage}`}
                                 />
