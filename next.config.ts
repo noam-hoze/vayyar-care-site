@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: "/care",
+    FOR_TESTING: "true"
   },
   /* config options here */
   eslint: {
