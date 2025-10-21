@@ -336,16 +336,10 @@ const Footer: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <span>©2024</span>
-                            <a
-                                href="https://vayyar.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <VayyarLogo
-                                    className="h-5 w-auto opacity-90"
-                                    ariaLabel="Vayyar"
-                                />
-                            </a>
+                            <VayyarLogo
+                                className="h-5 w-auto opacity-90"
+                                ariaLabel="Vayyar"
+                            />
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,5 @@
 "use client"; // Add this for useState
 import React, { useState, useEffect } from "react";
-import Link from "next/link"; // Changed from react-router-dom
 import VayyarLogo from "@/components/VayyarLogo";
 import { useMobileHomeVideo } from "@/components/mobile/MobileHomeVideoContext";
 import { scrollToSection as scrollToSectionUtil } from "@/lib/scrollUtils";
@@ -58,12 +57,10 @@ export default function NavBar({
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-7">
                 <div className="grid items-center h-16 relative grid-cols-[auto_1fr_auto] lg:flex">
                     <div className="flex-shrink-0">
-                        <Link href="/">
-                            <VayyarLogo
-                                className="h-8 w-auto"
-                                ariaLabel="Vayyar Care"
-                            />
-                        </Link>
+                        <VayyarLogo
+                            className="h-8 w-auto"
+                            ariaLabel="Vayyar Care"
+                        />
                     </div>
                     {/* Desktop nav buttons */}
                     <div className="flex-1 justify-center items-center space-x-4 hidden lg:flex">
