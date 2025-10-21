@@ -191,7 +191,7 @@ const Footer: React.FC = () => {
                                 <div className="space-y-2 text-gray-100/90 pt-2 md:pt-0">
                                     <li>
                                         <a
-                                            href="https://vayyar.com/care/b2c/privacy-policy-old/"
+                                            href="https://vayyar.com/care-docs/b2c/privacy-policy-old/"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="hover:underline"
@@ -201,7 +201,7 @@ const Footer: React.FC = () => {
                                     </li>
                                     <li>
                                         <a
-                                            href="https://vayyar.com/care/b2c/eula/"
+                                            href="https://vayyar.com/care-docs/b2c/eula/"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="hover:underline"
@@ -231,7 +231,7 @@ const Footer: React.FC = () => {
                                     </li>
                                     <li>
                                         <a
-                                            href="https://vayyar.com/care/cssignupform/"
+                                            href="https://vayyar.com/care-docs/cssignupform/"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="hover:underline"
@@ -241,7 +241,7 @@ const Footer: React.FC = () => {
                                     </li>
                                     <li>
                                         <a
-                                            href="https://vayyar.com/care/customer/tc/"
+                                            href="https://vayyar.com/care-docs/customer/tc/"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="hover:underline"
@@ -251,7 +251,7 @@ const Footer: React.FC = () => {
                                     </li>
                                     <li>
                                         <a
-                                            href="https://vayyar.com/care/b2b/tc/"
+                                            href="https://vayyar.com/care-docs/b2b/tc/"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="hover:underline"
@@ -327,7 +327,7 @@ const Footer: React.FC = () => {
                             </a>
                             <span>|</span>
                             <a
-                                href="https://vayyar.com/care/b2c/privacy-policy-old/"
+                                href="https://vayyar.com/care-docs/b2c/privacy-policy-old/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="hover:underline"
