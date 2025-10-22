@@ -191,12 +191,12 @@ const Footer: React.FC = () => {
                                 <div className="space-y-2 text-gray-100/90 pt-2 md:pt-0">
                                     <li>
                                         <a
-                                            href="https://vayyar.com/care-docs/b2c/privacy-policy-old/"
+                                            href="https://vayyar.com/care-docs/b2c/privacy-policy/"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="hover:underline"
                                         >
-                                            Privacy Policy Old
+                                            Privacy Policy
                                         </a>
                                     </li>
                                     <li>
@@ -305,42 +305,12 @@ const Footer: React.FC = () => {
                 {/* Bottom bar */}
                 <div className="mt-12">
                     <div className="h-px w-full bg-white" />
-                    <div className="flex flex-col md:flex-row items-center md:justify-between gap-4 py-6 text-sm text-gray-100/80">
-                        <div className="flex items-center gap-4">
-                            <a
-                                href="https://vayyar.com/cookie-notice/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:underline"
-                            >
-                                Cookies
-                            </a>
-                            <span>|</span>
-                            <a
-                                href="https://vayyar.com/care-docs/b2c/privacy-policy-old/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:underline"
-                            >
-                                Privacy policy
-                            </a>
-                            <span>|</span>
-                            <a
-                                href="https://vayyar.com/evk/terms-and-conditions/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:underline"
-                            >
-                                Terms & conditions
-                            </a>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span>©2024</span>
-                            <VayyarLogo
-                                className="h-5 w-auto opacity-90"
-                                ariaLabel="Vayyar"
-                            />
-                        </div>
+                    <div className="mt-8 flex items-center justify-center gap-2 border-t border-gray-700 pt-8 text-sm text-gray-400">
+                        <span>©2024</span>
+                        <VayyarLogo
+                            className="h-5 w-auto opacity-90"
+                            ariaLabel="Vayyar"
+                        />
                     </div>
                 </div>
             </div>
