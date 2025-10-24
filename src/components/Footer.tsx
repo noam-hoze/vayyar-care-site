@@ -306,7 +306,7 @@ const Footer: React.FC = () => {
                 <div className="mt-12">
                     <div className="h-px w-full bg-white" />
                     <div className="mt-8 flex items-center justify-center gap-2 border-t border-gray-700 pt-8 text-sm text-gray-400">
-                        <span>©2024</span>
+                        <span>2025</span>
                         <VayyarLogo
                             className="h-5 w-auto opacity-90"
                             ariaLabel="Vayyar"
