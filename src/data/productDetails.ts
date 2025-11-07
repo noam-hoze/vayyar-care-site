@@ -17,7 +17,7 @@ export const productDetails: ProductDetailTab[] = [
     {
         title: "Sensor",
         mediaType: "video",
-        mediaSrc: "videos/sensor-not-hd.mp4",
+        mediaSrc: "videos/sensor.mp4",
         description:
             "The system gathers information using advanced, wall-mounted sensors instead of intrusive cameras. This method respects resident dignity and ensures complete privacy while collecting crucial activity data around the clock.",
     },
