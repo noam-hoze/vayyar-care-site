@@ -78,19 +78,32 @@ const MobileVideoSection: React.FC<MobileVideoSectionProps> = ({
             {/* Part 2: Video */}
             <div className="mobile-apple-video-container">
                 <div className="mobile-apple-video">
-                    <Stream
-                        streamRef={
-                            streamRef as React.MutableRefObject<
-                                StreamPlayerApi | undefined
-                            >
-                        }
-                        src={videoSrc}
-                        className="w-full h-full object-cover"
-                        muted
-                        autoplay
-                        loop
-                        preload="auto"
-                    />
+                    {videoSrc.startsWith('videos/') ? (
+                        <video
+                            ref={videoRef}
+                            src={videoSrc}
+                            className="w-full h-full object-cover"
+                            muted
+                            autoPlay
+                            loop
+                            playsInline
+                            preload="auto"
+                        />
+                    ) : (
+                        <Stream
+                            streamRef={
+                                streamRef as React.MutableRefObject<
+                                    StreamPlayerApi | undefined
+                                >
+                            }
+                            src={videoSrc}
+                            className="w-full h-full object-cover"
+                            muted
+                            autoplay
+                            loop
+                            preload="auto"
+                        />
+                    )}
                     <VideoControls
                         ringSvgRef={ringSvgRef}
                         ringProgressRef={ringProgressRef}

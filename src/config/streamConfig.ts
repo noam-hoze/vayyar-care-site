@@ -1,5 +1,5 @@
 export const cloudflareStreamUids = {
-    "intro.mp4": "acc64e72dc5401f97f6bb2407301fce3",
+    // "intro.mp4": "acc64e72dc5401f97f6bb2407301fce3", // Now loading locally
     "ai-insights.mp4": "20239df6aa8184e773ec329710bd71c4",
     "hero-section-mobile.mp4": "105daa6e7e9f7472956d23db9d479de6",
     "hero-section.mp4": "bbab767ade2fd863d9b9b449f30391b8",

@@ -44,18 +44,32 @@ const DesktopScrollyVideoSection: React.FC<DesktopScrollyVideoSectionProps> = ({
                     positioning="sticky"
                 />
                 {videoSrc && (
-                <Stream
-                    streamRef={
-                        streamRef as React.MutableRefObject<
-                            StreamPlayerApi | undefined
-                        >
-                    }
-                    src={videoSrc}
-                    className="w-full h-full object-cover"
-                    muted
-                    loop={true} // All scrolly videos should loop
-                    preload="auto"
-                />)}
+                    videoSrc.startsWith('videos/') ? (
+                        <video
+                            ref={streamRef as unknown as React.MutableRefObject<HTMLVideoElement>}
+                            src={videoSrc}
+                            className="w-full h-full object-cover"
+                            muted
+                            autoPlay
+                            loop
+                            playsInline
+                            preload="auto"
+                        />
+                    ) : (
+                        <Stream
+                            streamRef={
+                                streamRef as React.MutableRefObject<
+                                    StreamPlayerApi | undefined
+                                >
+                            }
+                            src={videoSrc}
+                            className="w-full h-full object-cover"
+                            muted
+                            loop={true}
+                            preload="auto"
+                        />
+                    )
+                )}
             </div>
             <div className="scrolly-text" style={{ pointerEvents: "none" }}>
                 {entry.content}
