@@ -289,7 +289,7 @@ const Footer: React.FC = () => {
                                 } md:block`}
                             >
                                 <div className="text-gray-100/90 leading-relaxed pt-2 md:pt-0">
-                                    Hahoresh 4,
+                                    Derech Hahoresh 4,
                                     <br />
                                     Yehud
                                     <br />
